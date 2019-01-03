@@ -4,6 +4,8 @@ b $60DC UDG E0
 b $6149 UDG E1
 b $61B6 UDG E2
 b $6224 UDG E3
+w $6292 Offsets for safe blowing graphics
+b $62A2 Frames until the safe door should be removed
 c $62A3 Blow the safe up
 g $62D6 Dan's current working graphic
 w $632A Dan's graphic addresses

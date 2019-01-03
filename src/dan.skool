@@ -92,9 +92,20 @@ b$6224 DEFB $03,$04,$00,$00,$00,$00,$00,$10
  $6274 DEFB $00,$02,$00,$20,$00,$00,$01,$04
  $627C DEFB $40,$00,$20,$00,$00,$00,$10,$00
  $6284 DEFB $00,$00,$02,$01,$07,$03,$07,$07
- $628C DEFB $07,$04,$07,$02,$02,$07,$DE,$DF
- $6294 DEFB $DE,$DF,$E2,$E0,$E2,$E1,$E0,$DF
- $629C DEFB $E2,$E1,$E3,$E0,$E2,$E3,$50
+ $628C DEFB $07,$04,$07,$02,$02,$07
+
+; Offsets for safe blowing graphics
+w$6292 DEFW $DFDE
+ $6294 DEFW $DFDE
+ $6296 DEFW $E0E2
+ $6298 DEFW $E1E2
+ $629A DEFW $DFE0
+ $629C DEFW $E1E2
+ $629E DEFW $E0E3
+ $62A0 DEFW $E3E2
+
+; Frames until the safe door should be removed
+b$62A2 DEFB $50
 
 ; Blow the safe up
 ;
