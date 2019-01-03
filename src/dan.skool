@@ -5198,7 +5198,7 @@ c$CB9C LD A,($CA5A)  ;
 ; Used by the routines at #R$C881, #R$D3EC, #R$D4B5, #R$D567, #R$D607, #R$DBEE
 ; and #R$E663.
 ;
-; New room
+; A New room
 c$CBBD LD ($CFCA),A   ;
  $CBC0 ADD A,A        ;
  $CBC1 ADD A,A        ;
@@ -6396,7 +6396,9 @@ b$D3AC DEFB $17,$14,$7C,$17,$09,$7D,$14,$0A
  $D3C4 DEFB $FE,$01,$08,$15,$16,$98,$FE,$02
  $D3CC DEFB $05,$17,$16,$98,$FE,$02,$05,$FF
 
-; Data block at D3D4
+; Text for display area
+;
+; "ENERGY" / "SC0RE:" / "HI:"
 b$D3D4 DEFB $16,$02,$0E,$17,$0E,$1A,$10,$21
  $D3DC DEFB $FE,$15,$0A,$1B,$0C,$00,$1A,$0E
  $D3E4 DEFB $23,$FE,$16,$0D,$11,$12,$23,$FF
@@ -6714,12 +6716,15 @@ c$D567 EXX           ;
  $D5F2 INC HL        ;
  $D5F3 CALL $D655    ;
  $D5F6 JR $D605      ;
-
-; Data block at D5F8
-;
-; Used by the routine at #R$D567.
-b$D5F8 DEFB $D9,$CB,$80,$CB,$A0,$2E,$00,$D9
- $D600 DEFB $3E,$0D,$32,$ED,$DB,$D9,$C9
+*$D5F8 EXX           ;
+ $D5F9 RES 0,B       ;
+ $D5FB RES 4,B       ;
+ $D5FD LD L,$00      ;
+ $D5FF EXX           ;
+ $D600 LD A,$0D      ;
+ $D602 LD ($DBED),A  ;
+*$D605 EXX           ;
+ $D606 RET           ;
 
 ; Fall through the air, moving onto one screen down if necessary
 ;
@@ -6858,8 +6863,11 @@ c$D677 LD A,(DE)     ;
  $D6B8 LDIR          ;
  $D6BA RET           ;
 
-; Data block at D6BB
-b$D6BB DEFB $00,$00,$DA,$DE
+; Pointer to working graphic buffer
+w$D6BB DEFW $0000
+
+; Pointer to working graphic buffer
+w$D6BD DEFW $DEDA
 
 ; Initialize vertical moving objects in the room
 ;
@@ -6924,10 +6932,10 @@ c$D6BF AND A         ;
  $D72B DJNZ $D6C2    ;
  $D72D RET           ;
 
-; Data block at D72E
-b$D72E DEFB $00,$00
+; Pointer to working graphic buffer
+w$D72E DEFW $0000
 
-; Pointer to current working graphic buffer
+; Pointer to working graphic buffer
 w$D730 DEFW $E0BE
 
 ; Initialize horizontal moving objects in the room
@@ -7826,8 +7834,11 @@ c$DBEE LD HL,$DA8A   ;
  $DC65 CALL $E87A    ;
  $DC68 RET           ;
 
-; Data block at DC69
-b$DC69 DEFB $03,$05,$06,$07,$00,$01,$02,$04
+; List of Dan's frames that mark the lift as moving
+b$DC69 DEFB $03,$05,$06,$07
+
+; List of Dan's frames that mark the lift as stopped
+b$DC6D DEFB $00,$01,$02,$04
 
 ; Check if Dan is standing by the lift
 ;
@@ -7916,7 +7927,7 @@ c$DCE8 ADD A,A       ;
  $DCF3 LD L,A        ;
  $DCF4 RET           ;
 
-; Data block at DCF5
+; Set bit 0 to denote items are only being drawn for instructions
 b$DCF5 DEFB $00
 
 ; Display instructions
@@ -8123,7 +8134,7 @@ c$DE52 LD HL,$C87E   ;
  $DE7B CALL $DB01    ;
  $DE7E RET           ;
 
-; Data block at DE7F
+; Dan's face in "lives" area
 b$DE7F DEFB $00,$02,$09,$18,$30,$60,$C0,$80
 
 ; Picked up a special item (test tube or dynamite)
@@ -8390,11 +8401,8 @@ g$E2FE DEFB $00,$00,$00,$00,$00,$00,$00,$00
  $E536 DEFB $00,$00,$00,$00,$00,$00,$00,$00
  $E53E DEFB $00,$00
 
-; Game status buffer entry at E540
-g$E540 DEFB $00,$00
-
-; Game status buffer entry at E542
-g$E542 DEFB $00,$00
+; Bitflags for object movement patterns
+g$E540 DEFB $00,$00,$00,$00
 
 ; Display moving objects
 ;
@@ -8786,11 +8794,7 @@ c$E782 LD A,($C87F)  ;
  $E7DF JR NZ,$E7D7   ;
  $E7E1 RET           ;
 
-; Data block at E7E2
-b$E7E2 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $E7EA DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $E7F2 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $E7FA DEFB $00,$00,$00,$00,$00,$00
+i$E7E2
 
 ; Current border colour
 g$E800 DEFB $00
@@ -9758,17 +9762,23 @@ c$EEF1 LD E,(HL)     ;
  $EF45 DJNZ $EF27    ;
  $EF47 RET           ;
 
-; Data block at EF48
-b$EF48 DEFB $00,$02,$01,$00,$00,$00,$00,$00
- $EF50 DEFB $00,$DF,$D9,$DF,$DA,$DF,$D8,$00
- $EF58 DEFB $00,$00,$00,$00
+; Counter to make glowing objects alternate between colour and black
+b$EF48 DEFB $00
 
-; Data block at EF5C
-b$EF5C DEFB $00,$01,$02,$2C,$2C,$2C,$2C,$2C
- $EF64 DEFB $2C,$18,$00,$00,$7E,$24,$24,$24
- $EF6C DEFB $2C,$2C,$2C,$00
+; UDG - Dynamite
+b$EF49 DEFB $02,$01,$00,$00,$00,$00,$00,$00
+ $EF51 DEFB $DF,$D9,$DF,$DA,$DF,$D8,$00,$00
+ $EF59 DEFB $00,$00,$00
 
-; Data block at EF70
+; Current attribute for dynamite
+b$EF5C DEFB $00
+
+; UDG - Test tube
+b$EF5D DEFB $01,$02,$2C,$2C,$2C,$2C,$2C,$2C
+ $EF65 DEFB $18,$00,$00,$7E,$24,$24,$24,$2C
+ $EF6D DEFB $2C,$2C,$00
+
+; Current attribute for test tube
 b$EF70 DEFB $00
 
 ; List of attributes for each state of a glowing object
@@ -9827,8 +9837,10 @@ b$EFBC DEFB $00,$00,$66,$01,$01,$2F,$FE,$01
  $F014 DEFB $01,$07,$14,$1B,$50,$FD,$01,$07
  $F01C DEFB $16,$0A,$C5,$FF
 
-; Data block at F020
-b$F020 DEFB $00
+; Current animation index for Dan dying
+;
+; Used by the routine at #R$F021
+g$F020 DEFB $00
 
 ; Animate Dan dying having been shot on the "game over" screen
 ;
@@ -10163,10 +10175,14 @@ c$F345 LD HL,$69EA   ;
  $F39C CALL $F3A4    ;
  $F39F RET           ;
 
-; Data block at F3A0
+; Bitmask for what objects to select in initialisation
+;
+; Used by the routines in #R$F345 and #R$F3A4
 b$F3A0 DEFB $00,$00
 
-; Data block at F3A2
+; Pointer to object data in current room being looked at
+;
+; Used by the routine in #R$F345
 w$F3A2 DEFW $69EA
 
 ; Put special objects randomly in a room
@@ -10315,12 +10331,12 @@ b$F485 DEFB $00,$00,$00,$00,$00,$24,$10,$00
  $F4F5 DEFB $0C,$00,$17,$1C,$12,$17,$1D,$0E
  $F4FD DEFB $FF,$17,$00,$A4,$17,$1E,$A5,$FF
 
-; Data block at F505
+; Screen positions for instructions page 3 UDGs
 b$F505 DEFB $00,$00,$00,$00,$00,$04,$02,$09
  $F50D DEFB $01,$0E,$00,$13,$00,$04,$11,$09
  $F515 DEFB $11,$0E,$11,$13,$10
 
-; Data block at F51A
+; Screen positions for instructions page 4 UDGs
 b$F51A DEFB $00,$00,$0A,$07,$30,$00,$00,$00
  $F522 DEFB $00,$10,$07
 
@@ -10347,9 +10363,12 @@ b$F577 DEFB $03,$0F,$04,$01,$00,$0E,$03,$02
 b$F587 DEFB $02,$0F,$0B,$01,$00,$0B,$03,$03
  $F58F DEFB $10,$13,$17
 
-; Data block at F592
+; Instructions page 4 UDGs to add
 b$F592 DEFB $07,$07,$CC,$04,$07,$CB,$0D,$07
- $F59A DEFB $CD,$FF,$00,$E2,$5A,$1C
+ $F59A DEFB $CD,$FF
+
+; Data for laser on start and instructions page
+b$F59C DEFB $00,$E2,$5A,$1C
 
 ; Instructions page 1 end message
 b$F5A0 DEFB $17,$0B

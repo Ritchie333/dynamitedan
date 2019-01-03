@@ -470,7 +470,7 @@ c $CA5B Display the intro screen and wait for the game to start
 c $CB8D Turn a flashing option on the intro screen off
 c $CB9C Set the zero flag if ENTER or the fire button was pressed
 c $CBBD Switch to a new room
-R $CBBD New room
+R $CBBD A New room
 c $CC36 Draw the river
 g $CC5E Current animation frame for the river (1-3)
 D $CC5E Used by the routine at #R$CC5F
@@ -544,7 +544,8 @@ N $D25C Dan has hit a moving object
 c $D2F0 Bounce off a trampoline
 c $D378 Print the display area
 b $D3AC UDGs for display area
-b $D3D4
+b $D3D4 Text for display area
+D $D3D4 "ENERGY" / "SC0RE:" / "HI:"
 c $D3EC Move Dan left
 c $D4AF Pause
 R $D4AF BC Length to pause
@@ -553,7 +554,6 @@ c $D550 Copy Dan's sprite back to the working graphic buffer
 R $D550 DE Current co-ordinates of Dan
 R $D550 HL Pointer to working graphic buffer
 c $D567 Move Dan upwards while jumping
-b $D5F8
 c $D607 Fall through the air, moving onto one screen down if necessary
 c $D61E Fall through the air one frame
 c $D655 Copy a sprite to a working buffer
@@ -565,10 +565,11 @@ R $D669 DE On exit, holds a pointer to the graphic
 c $D677 Copy a sprite's data to a graphic buffer
 R $D677 DE The sprite data
 R $D677 HL The buffer to copy the data to
-b $D6BB
+w $D6BB Pointer to working graphic buffer
+w $D6BD Pointer to working graphic buffer
 c $D6BF Initialize vertical moving objects in the room
-b $D72E
-w $D730 Pointer to current working graphic buffer
+w $D72E Pointer to working graphic buffer
+w $D730 Pointer to working graphic buffer
 c $D732 Initialize horizontal moving objects in the room
 c $D7A2 Colour in a sprite vertically
 R $D7A2 IY Pointer to the sprite attribute data
@@ -625,14 +626,15 @@ g $DBED Height (in lines) of Dan above the river waterline
 c $DBEE Dan has fallen in the river
 N $DC41 Dan has drowned. Game over.
 N $DC45 Dan is submerged; display the "air bubble" graphic while drowning
-b $DC69
+b $DC69 List of Dan's frames that mark the lift as moving
+b $DC6D List of Dan's frames that mark the lift as stopped
 c $DC71 Check if Dan is standing by the lift
 c $DCC1 Draw a food item
 R $DCC1 IX Pointer to room data
 c $DCE8 Convert a food item ID to its graphic address
 R $DCE8 R A ID of the food item
 R $DCE8 HL On return, holds the address for the graphic data
-b $DCF5
+b $DCF5 Set bit 0 to denote items are only being drawn for instructions
 c $DCF6 Display instructions
 N $DCFB Page 1
 N $DD13 Page 2
@@ -647,7 +649,7 @@ c $DE1B Picked up a credit card
 c $DE28 Picked up an aerosol
 b $DE51 Time left for the aerosol to run
 c $DE52 Update "aerosol immunity" if it is still active
-b $DE7F
+b $DE7F Dan's face in "lives" area
 c $DE87 Picked up a special item (test tube or dynamite)
 R $DE87 IX Pointer to current room data
 g $DED8 Moving graphics buffer 0
@@ -658,8 +660,7 @@ g $E0BC Moving graphics buffer 2
 D $E0BC Used by the routine at #R$D815
 g $E2FE Moving graphics buffer 3
 D $E2FE Used by the routine at #R$D815
-g $E540
-g $E542
+g $E540 Bitflags for object movement patterns
 c $E544 Display moving objects
 R $E544 IY Pointer to moving object data
 c $E592 Draw a moving object
@@ -684,7 +685,7 @@ c $E775 Play a laser sound effect
 c $E782 Move the laser bolt one frame
 R $E782 IY Current room data
 N $E7D7 Pause for a short interval. This entry point is also used by the routine at #R$E6DC.
-b $E7E2
+i $E7E2
 g $E800 Current border colour
 c $E801 Clear the screen
 c $E820 Clear the screen to cyan ink / black paper
@@ -766,16 +767,19 @@ b $EE8B "Picked up dynamite" tune
 b $EEBD "Picked up test tube" tune
 c $EEF1 Print a string at a location
 R $EEF1 HL Pointer to a buffer containing x,y,string
-b $EF48
-b $EF5C
-b $EF70
+b $EF48 Counter to make glowing objects alternate between colour and black
+b $EF49 UDG - Dynamite
+b $EF5C Current attribute for dynamite
+b $EF5D UDG - Test tube
+b $EF70 Current attribute for test tube
 b $EF71 List of attributes for each state of a glowing object
 D $EF71 Used by the routine at #R$EF7C
 w $EF7A Pointer to current attribute state of glowing objects
 D $EF7A Used by the routine at #R$EF7C
 c $EF7C Draw any glowing objects (dynamite or test tubes)
 b $EFBC Intro screen UDGs
-b $F020
+g $F020 Current animation index for Dan dying
+D $F020 Used by the routine at #R$F021
 c $F021 Animate Dan dying having been shot on the "game over" screen
 w $F052 Dan dying offsets
 b $F064 Dan dying 1
@@ -802,8 +806,10 @@ R $F300 D Returns the key value
 c $F30A Check all keys and return the first one found pressed
 R $F30A D Returns the key value, or FF if nothing pressed
 c $F345 Initialize game data and make all objects visible
-b $F3A0
-w $F3A2
+b $F3A0 Bitmask for what objects to select in initialisation
+D $F3A0 Used by the routines in #R$F345 and #R$F3A4
+w $F3A2 Pointer to object data in current room being looked at
+D $F3A2 Used by the routine in #R$F345
 c $F3A4 Put special objects randomly in a room
 c $F3D3 Convert a UDG ID to the address of its data
 R $F3D3 A UDG ID to look up
@@ -817,13 +823,14 @@ D $F410 Used by the routine at #R$F3E0
 c $F470 Fill lines with an attribute using data
 R $F470 HL pointer to data containing what to draw and where
 b $F485 Dan drowning graphic
-b $F505
-b $F51A
+b $F505 Screen positions for instructions page 3 UDGs
+b $F51A Screen positions for instructions page 4 UDGs
 b $F525 Instructions page 1 attributes
 b $F562 Instructions page 2 attributes
 b $F577 Instructions page 3 attributes
 b $F587 Instructions page 4 attributes
-b $F592
+b $F592 Instructions page 4 UDGs to add
+b $F59C Data for laser on start and instructions page
 b $F5A0 Instructions page 1 end message
 N $F5A2 "N0 CHANCE!"
 b $F5AD Instructions page 2 end message
