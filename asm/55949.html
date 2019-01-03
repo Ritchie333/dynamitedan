@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Dynamite Dan: Routine at DA8D</title>
+<meta charset="utf-8" />
+<link rel="stylesheet" type="text/css" href="../skoolkit.css" />
+
+</head>
+<body class="Asm-c">
+<table class="header">
+<tr>
+<td class="logo"><a href="../index.html">Dynamite Dan</a></td>
+<td class="page-header">Routines</td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev"><span class="prev-1">Prev: <a href="55947.html">DA8B</a></span></td>
+<td class="up">Up: <a href="../maps/all.html#55949">Map</a></td>
+<td class="next"><span class="next-1">Next: <a href="55966.html">DA9E</a></span></td>
+</tr>
+</table>
+<div class="description">DA8D: Play a note or a sound effect</div>
+<table class="disassembly">
+<tr>
+<td class="routine-comment" colspan="4">
+<div class="details">
+<div class="paragraph">
+Used by the routines at <a href="51200.html">C800</a>, <a href="51803.html">CA5B</a>, <a href="52691.html">CDD3</a> and <a href="56717.html">DD8D</a>.
+</div>
+</div>
+<table class="input-0">
+<tr class="asm-input-header">
+<th colspan="2">Input</th>
+</tr>
+
+</table>
+<table class="output-0">
+<tr class="asm-output-header">
+<th colspan="2">Output</th>
+</tr>
+
+</table>
+</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-2"><span id="55949"></span>DA8D</td>
+<td class="instruction">LD A,($DA8A)</td>
+<td class="comment-10" rowspan="1"></td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="55952"></span>DA90</td>
+<td class="instruction">BIT 1,A</td>
+<td class="comment-10" rowspan="1"></td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="55954"></span>DA92</td>
+<td class="instruction">JP NZ,<a href="56037.html">$DAE5</a></td>
+<td class="comment-10" rowspan="1"></td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="55957"></span>DA95</td>
+<td class="instruction">BIT 0,A</td>
+<td class="comment-10" rowspan="1"></td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="55959"></span>DA97</td>
+<td class="instruction">JP NZ,<a href="56087.html">$DB17</a></td>
+<td class="comment-10" rowspan="1"></td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="55962"></span>DA9A</td>
+<td class="instruction">LD HL,($DA8B)</td>
+<td class="comment-10" rowspan="1"></td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="55965"></span>DA9D</td>
+<td class="instruction">JP (HL)</td>
+<td class="comment-10" rowspan="1"></td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev"><span class="prev-1">Prev: <a href="55947.html">DA8B</a></span></td>
+<td class="up">Up: <a href="../maps/all.html#55949">Map</a></td>
+<td class="next"><span class="next-1">Next: <a href="55966.html">DA9E</a></span></td>
+</tr>
+</table>
+<footer>
+<div class="release"></div>
+<div class="copyright">Copyright Rod Bowkett / Mirrorsoft 1985. This dissassembly by Ritchie Swann 2019.</div>
+<div class="created">Created using <a href="http://skoolkit.ca/">SkoolKit</a> 7.0.</div>
+</footer>
+</body>
+</html>
