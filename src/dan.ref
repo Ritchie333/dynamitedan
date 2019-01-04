@@ -179,7 +179,17 @@ The animation states are copied as four bytes starting from #R$E540.
 If any of the bytes are 0, the sprite is not drawn.
 
 Following the header are a series of 8-byte structures, each dealing
-with animation and movement.
+with animation and movement. The fields are:
+#TABLE(map)
+{ 00 | Current x co-ordinate (horizontal) or y co-ordinate (vertical) }
+{ 01 | Fixed y co-ordinate (horizontal) or x co-ordinate (veritcal) }
+{ 02 | Minimum x (horizontal) or y (vertical) co-ordinate }
+{ 03 | Maximum x (horizontal) or y (vertical) co-ordinate }
+{ 04 | Bitfield of flags }
+{ 05 | Attribute to colour the sprite in }
+{ 06 | Current frame number }
+{ 07 | Total number of frames }
+TABLE#
 
 [Food:00 - Egg]
 #UDGTABLE

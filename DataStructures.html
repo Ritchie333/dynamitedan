@@ -178,7 +178,41 @@ If any of the bytes are 0, the sprite is not drawn.
 </div>
 <div class="paragraph">
 Following the header are a series of 8-byte structures, each dealing
-with animation and movement.
+with animation and movement. The fields are:
+<table class="map">
+<tr>
+<td class="" colspan="1" rowspan="1">00</td>
+<td class="" colspan="1" rowspan="1">Current x co-ordinate (horizontal) or y co-ordinate (vertical)</td>
+</tr>
+<tr>
+<td class="" colspan="1" rowspan="1">01</td>
+<td class="" colspan="1" rowspan="1">Fixed y co-ordinate (horizontal) or x co-ordinate (veritcal)</td>
+</tr>
+<tr>
+<td class="" colspan="1" rowspan="1">02</td>
+<td class="" colspan="1" rowspan="1">Minimum x (horizontal) or y (vertical) co-ordinate</td>
+</tr>
+<tr>
+<td class="" colspan="1" rowspan="1">03</td>
+<td class="" colspan="1" rowspan="1">Maximum x (horizontal) or y (vertical) co-ordinate</td>
+</tr>
+<tr>
+<td class="" colspan="1" rowspan="1">04</td>
+<td class="" colspan="1" rowspan="1">Bitfield of flags</td>
+</tr>
+<tr>
+<td class="" colspan="1" rowspan="1">05</td>
+<td class="" colspan="1" rowspan="1">Attribute to colour the sprite in</td>
+</tr>
+<tr>
+<td class="" colspan="1" rowspan="1">06</td>
+<td class="" colspan="1" rowspan="1">Current frame number</td>
+</tr>
+<tr>
+<td class="" colspan="1" rowspan="1">07</td>
+<td class="" colspan="1" rowspan="1">Total number of frames</td>
+</tr>
+</table>
 </div>
 </div>
 <footer>
