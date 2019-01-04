@@ -546,6 +546,8 @@ b$6C26 DEFB $0E,$17,$04,$06,$07,$10,$0E,$17
  $6C3E DEFB $10,$17,$03,$06,$07,$10,$2A,$17
 
 ; UDG offsets
+;
+; Used by the routines at #R$ED00 and #R$F3D3
 w$6C46 DEFW $8B2C
  $6C48 DEFW $8B48
  $6C4A DEFW $8C1B
@@ -4695,7 +4697,7 @@ c$C800 DI            ;
  $C853 CPL           ;
  $C854 AND $1F       ;
  $C856 JR NZ,$C850   ;
-; Abort the game is "Q" was pressed
+; Abort the game if "Q" was pressed
 *$C858 LD A,$FB      ;
  $C85A IN A,($FE)    ;
  $C85C RRA           ;
@@ -8145,7 +8147,7 @@ c$DE52 LD HL,$C87E   ;
  $DE7B CALL $DB01    ;
  $DE7E RET           ;
 
-; Dan's face in "lives" area
+; Dynamite graphic in status area
 b$DE7F DEFB $00,$02,$09,$18,$30,$60,$C0,$80
 
 ; Picked up a special item (test tube or dynamite)
@@ -8867,8 +8869,7 @@ c$E820 LD HL,$4000   ;
 ; Used by the routines at #R$62A3, #R$CDD3, #R$CE76, #R$DCC1, #R$DCF6, #R$ED00,
 ; #R$EF7C and #R$F3EC.
 ;
-; HL Pointer to data containing information about what to draw and where. The
-; .  buffer contains : y-size, x-size, attribute (or 0 + attribute)
+; HL Pointer to data containing information about what to draw and where.
 c$E84E LD B,(HL)     ;
  $E84F INC HL        ;
  $E850 LD C,(HL)     ;
@@ -8902,13 +8903,14 @@ c$E84E LD B,(HL)     ;
  $E877 JR NZ,$E866   ;
  $E879 RET           ;
 
-; Copy a graphic onto screen a number of times
+; Copy a graphic onto screen
 ;
 ; Used by the routines at #R$DBEE, #R$DE87, #R$E84E and #R$F021.
 ;
 ; HL Address of the graphic
 ; DE Co-ordinates to place the graphic
-; C Number of times to repeat
+; B Width
+; C Height
 c$E87A LD A,C        ;
 *$E87B EX AF,AF'     ;
  $E87C LD C,$08      ;
@@ -10672,7 +10674,7 @@ b$FD1D DEFB $00,$0B,$00,$1C,$11,$0E,$1A,$27
  $FD85 DEFB $0B,$18,$15,$0A,$17,$1B,$FE,$13
  $FD8D DEFB $16,$2C,$02,$00,$00,$FF
 
-; Redfine keys instructions text
+; Redefine keys instructions text
 b$FD93 DEFB $00,$0A,$0D,$0E,$0F,$12,$17,$0E
  $FD9B DEFB $27,$14,$0E,$21,$1B,$FE,$04,$03
  $FDA3 DEFB $0C,$11,$00,$00,$1B,$0E,$27,$03
@@ -10736,9 +10738,5 @@ b$FE77 DEFB $04,$06,$0C,$00,$17,$10,$1A,$0A
  $FF07 DEFB $1D,$1A,$27,$18,$1A,$12,$22,$0E
  $FF0F DEFB $26,$FF
 
-; Data block at FF11
-b$FF11 DEFB $00,$DB,$02,$4D,$00,$B7,$5C,$F3
- $FF19 DEFB $0D,$C3,$18,$E4
-
 ; End
-i$FF1D
+i$FF11

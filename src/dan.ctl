@@ -42,6 +42,7 @@ b $6C26 Attributes marking walls
 D $6C26 Used by the routine at #R$CBBD
 D $6C26 Each data set is 8 bytes long. The choice is stored in bits 6+7 of offset 4 in the current room's store
 w $6C46 UDG offsets
+D $6C46 Used by the routines at #R$ED00 and #R$F3D3
 b $6E0E "Blown the safe door" tune
 b $6E5F Room 00
 b $6E90 Room 01
@@ -423,7 +424,7 @@ b $C796 Sprite 32
 c $C800 Main entry point
 N $C80A Main loop starts here
 N $C83A Pause the game if "P" was pressed
-N $C858 Abort the game is "Q" was pressed
+N $C858 Abort the game if "Q" was pressed
 g $C866 Current score
 g $C86B Amount pending to add onto the current score
 g $C86C Number of lives
@@ -651,7 +652,7 @@ c $DE1B Picked up a credit card
 c $DE28 Picked up an aerosol
 b $DE51 Time left for the aerosol to run
 c $DE52 Update "aerosol immunity" if it is still active
-b $DE7F Dan's face in "lives" area
+b $DE7F Dynamite graphic in status area
 c $DE87 Picked up a special item (test tube or dynamite)
 R $DE87 IX Pointer to current room data
 g $DED8 Moving graphics buffer 0
@@ -692,11 +693,12 @@ g $E800 Current border colour
 c $E801 Clear the screen
 c $E820 Clear the screen to cyan ink / black paper
 c $E84E Draw a UDG
-R $E84E HL Pointer to data containing information about what to draw and where. The buffer contains : y-size, x-size, attribute (or 0 + attribute)
-c $E87A Copy a graphic onto screen a number of times
+R $E84E HL Pointer to data containing information about what to draw and where.
+c $E87A Copy a graphic onto screen
 R $E87A HL Address of the graphic
 R $E87A DE Co-ordinates to place the graphic
-R $E87A C Number of times to repeat
+R $E87A B Width
+R $E87A C Height
 c $E897 Remove an object from screen
 R $E897 DE Position of the object
 R $E897 BC Size of the object
@@ -849,12 +851,11 @@ b $F8C7 Instructions page 1 text
 b $FB66 Instructions page 2 text
 b $FCAA Instructions page 3 text
 b $FD1D Instructions page 4 text
-b $FD93 Redfine keys instructions text
+b $FD93 Redefine keys instructions text
 b $FE2B Picked up oxygen tank tune
 b $FE45 Picked up bank card tune
 b $FE65 Picked up aerosol tune
 b $FE71 Fought moving object while aerosol active tune
 b $FE77 Game won text
 D $FE77 Used by the routine at #R$E62F
-b $FF11
-i $FF1D End
+i $FF11 End

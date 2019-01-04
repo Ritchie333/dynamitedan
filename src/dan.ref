@@ -67,3 +67,78 @@ area code for Driffield, East Riding of Yorkshire. So if you try and
 ring the number now, nothing will happen as you will not have entered
 a number long enough; although that's probably better than annoying
 some random Yorkshireman.
+
+[Page:DataStructures]
+SectionPrefix=DataStructures
+
+[DataStructures:Rooms]
+The game has 48 rooms, from 00 to 2F. There are six levels, each with
+eight rooms that wrap around each other. The bottom rooms with the river
+are 00-07; the top ones are 28-2F. Room 2B is the starting room;
+room 1B is the room with the safe.
+
+There is therefore no need for a "next room" array as it can be
+automatically calculated. However, if you try to use a "large jump"
+cheat on one of the top rooms and jump above the screen, the game
+will crash!
+
+Each room contains 12 bytes of basic information in an array starting
+at #R$69E6. This is references when a new room is entered at the
+routine in #R$CBBD. The structure is :
+
+#TABLE(map)
+{ 00 - 01 | Pointer to list of static UDGs }
+{ 02 - 03 | Location of a test tube in the room, if any }
+{ 04 | Bits 0-2 contain an index (from 0-7) of a food item.
+Bits 6-7 are an index (0-3) into an array at #R$6C26 containing
+two custom attribute bytes that represent floors (in addition to a
+hard-coded six more) ie: can be stood on,
+followed by 6 bytes of attributes that represent
+walls ie: cannot be walked through. }
+{ 05 - 06 | The x and y co-ordinates to draw the food item }
+{ 07 - 08 | Pointer to list of moving objects }
+{ 09 - 0A | Location of dynamite in the room, if any }
+{ 0B | If bits 0, 1 or 2 are set, this prints a bank card of UDG
+CB CC or CD in the room }
+TABLE#
+
+[DataStructures:UDG format]
+UDGs are referenced in the game by ID. This is translated by a lookup
+buffer at #R$6C46, where the ID is an index into an array of pointers
+to the actual data. This lookup is done in the routines at #R$F3D3
+and #R$ED00 / #R$ED06
+
+The UDG data then contains two bytes containing the width (in bytes)
+and length (in 8 line blocks). Where a UDG's length is greater than 1
+block, the graphic data appears in reverse order ie: the bottom width x 8
+block comes first.
+
+[DataStructures:UDG lists]
+Each room contains a list of several UDGs.
+These are pointed to by the first two bytes in each room data,
+and printed by the routine at #R$ED00 / #R$ED06.
+
+The first two bytes are the co-ordinates of a UDG, followed by one bytes
+for its ID. There is then an optional sequence of :
+
+#LIST(default)
+{ FE, a, b - copy 'a' x 'b' times and move right }
+{ FD, a, b - copy 'a' x 'b' times and move left }
+{ FC, a, b - copy 'a' x 'b' times and move up }
+{ FB, a, b - copy 'a' x 'b' times and move down }
+{ FF - end of the list }
+LIST#
+
+The structure then repeats.
+
+[DataStructures:Food]
+There are 8 types of food. The graphics are stored in an array at #R$65DA.
+The entry there points to UDG data of the food.
+
+The array at #R$65EA contains the attribute of the food.
+
+[Index:DataTables:Data tables and buffers]
+GameStatusBuffer
+DataStructures
+[Links]
+DataStructures=Data structures
