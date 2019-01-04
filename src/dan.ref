@@ -1,8 +1,23 @@
 [Game]
 Game=Dynamite Dan
 Copyright=Copyright Rod Bowkett / Mirrorsoft 1985. This dissassembly by Ritchie Swann 2019.
+
+[Page:DataStructures]
+SectionPrefix=DataStructures
+
+[Page:UDGs]
+SectionPrefix=UDGs
+
+[Page:Sprites]
+SectionPrefix=Sprites
+
+[Page:Food]
+SectionPrefix=Food
+
+
 [Page:Pokes]
 SectionType=ListItems
+
 [Poke:Pokes]
 .
 
@@ -68,9 +83,6 @@ ring the number now, nothing will happen as you will not have entered
 a number long enough; although that's probably better than annoying
 some random Yorkshireman.
 
-[Page:DataStructures]
-SectionPrefix=DataStructures
-
 [DataStructures:Rooms]
 The game has 48 rooms, from 00 to 2F. There are six levels, each with
 eight rooms that wrap around each other. The bottom rooms with the river
@@ -113,12 +125,17 @@ and length (in 8 line blocks). Where a UDG's length is greater than 1
 block, the graphic data appears in reverse order ie: the bottom width x 8
 block comes first.
 
+The graphic data contains all the pixel data, followed by all the attribute
+data. The attributes are either set individually for each 8x8 square,
+or contains a sequence of 00, nn where nn is the attribute to set for
+all squares.
+
 [DataStructures:UDG lists]
 Each room contains a list of several UDGs.
 These are pointed to by the first two bytes in each room data,
 and printed by the routine at #R$ED00 / #R$ED06.
 
-The first two bytes are the co-ordinates of a UDG, followed by one bytes
+The first two bytes are the co-ordinates of a UDG, followed by one byte
 for its ID. There is then an optional sequence of :
 
 #LIST(default)
@@ -137,8 +154,201 @@ The entry there points to UDG data of the food.
 
 The array at #R$65EA contains the attribute of the food.
 
+[DataStructures:Sprites]
+Each room's sprite buffer is pointed to by offsets 7+8 in the room data.
+A room can have up to two different types of horizontal and veritical
+moving sprites each. A sprite is assigned an ID, which is an index into
+an array of pointers at #R$AE60. The lookup is done at the routine
+in #R$D669.
+
+The first byte of sprite data holds two values. Bits 0 - 1 contain the
+sprite's width in bytes; bits 2 - 7 hold the number of lines for one frame.
+Multiplied together, this gives a size of a frame, which is temporarily
+stored in #R$D675.
+
+The sprite buffer starts with a 5-byte header. The format is:
+#TABLE(map)
+{ 00 | ID of first vertical sprite }
+{ 01 | ID of second vertical sprite }
+{ 02 | ID of first horizontal sprite }
+{ 03 | ID of second horizontal sprite }
+{ 04 - 05 | Four 4-bit IDs holding number of animation states }
+TABLE#
+
+The animation states are copied as four bytes starting from #R$E540.
+If any of the bytes are 0, the sprite is not drawn.
+
+Following the header are a series of 8-byte structures, each dealing
+with animation and movement.
+
+[Food:00 - Egg]
+#UDGTABLE
+{ #UDG$65FC,$78,2 }
+{ #UDG$65F4,$70,2 }
+UDGTABLE#
+
+[Food:01 - Martini]
+#UDGTABLE
+{ #UDG$6769,$45,2,2#UDG$676A,$50,2,2 }
+{ #UDG$6759,$78,2,2#UDG$675A,$78,2,2 }
+{ #UDG$6749,$78,2,2#UDG$674A,$78,2,2 }
+UDGTABLE#
+
+[Food:02 - Fruit bowl]
+#UDGTABLE
+{ #UDG$6729,$30,2,3#UDG$672A,$58,2,2#UDG$672B,$50,2,3 }
+{ #UDG$6711,$20,2,3#UDG$6712,$20,2,3#UDG$6713,$20,2,3 }
+UDGTABLE#
+
+[Food:03 - Cheese]
+#UDGTABLE
+{ #UDG$665E,$70,2,3#UDG$665F,$70,2,3#UDG$6660,$30,2,3 }
+{ #UDG$6646,$70,2,3#UDG$6647,$70,2,3#UDG$6648,$30,2,3 }
+{ #UDG$662E,$70,2,3#UDG$662F,$70,2,3#UDG$6630,$30,2,3 }
+UDGTABLE#
+
+[Food:04 - Cake]
+#UDGTABLE
+{ #UDG$6618,$78,2,2#UDG$6619,$78,2,2 }
+{ #UDG$6608,$32,2,2#UDG$6609,$32,2,2 }
+UDGTABLE#
+
+[Food:05 - Ice cream]
+#UDGTABLE
+{ #UDG$66A1,$70,2,2#UDG$66A2,$58,2,2 }
+{ #UDG$6691,$78,2,2#UDG$6692,$70,2,2 }
+{ #UDG$6681,$50,2,2#UDG$6682,$50,2,2 }
+UDGTABLE#
+
+[Food:06 - Cup of tea]
+#UDGTABLE
+{ #UDG$66FD,$20,2,2#UDG$66FE,$20,2,2 }
+{ #UDG$66ED,$20,2,2#UDG$66EE,$20,2,2 }
+UDGTABLE#
+
+[Food:07 - Soup]
+#UDGTABLE
+{ #UDG$66D1,$28,2,3#UDG$66D2,$28,2,3#UDG$66D3,$28,2,3 }
+{ #UDG$66B9,$28,2,3#UDG$66BA,$28,2,3#UDG$66BB,$28,2,3 }
+UDGTABLE#
+
+[Sprites:Dan]
+#UDGTABLE
+{ #UDG$633A,5,2,3#UDG$633B,5,2,3#UDG$633C,5,2,3
+| #UDG$638E,5,2,3#UDG$638F,5,2,3#UDG$6390,5,2,3 
+| #UDG$63E2,5,2,3#UDG$63E3,5,2,3#UDG$63E4,5,2,3
+| #UDG$6436,5,2,3#UDG$6437,5,2,3#UDG$6438,5,2,3
+}
+{ #UDG$6352,5,2,3#UDG$6353,5,2,3#UDG$6354,5,2,3 
+| #UDG$63A6,5,2,3#UDG$63A7,5,2,3#UDG$63A8,5,2,3
+| #UDG$63FA,5,2,3#UDG$63FB,5,2,3#UDG$63FC,5,2,3
+| #UDG$644E,5,2,3#UDG$644F,5,2,3#UDG$6450,5,2,3
+}
+{ #UDG$636A,5,2,3#UDG$636B,5,2,3#UDG$636C,5,2,3 
+| #UDG$63BE,5,2,3#UDG$63BF,5,2,3#UDG$63C0,5,2,3
+| #UDG$6412,5,2,3#UDG$6413,5,2,3#UDG$6414,5,2,3
+| #UDG$6466,5,2,3#UDG$6467,5,2,3#UDG$6468,5,2,3
+}
+{ #UDG$6382,5,2,3{,,,4}#UDG$6383,5,2,3{,,,4}#UDG$6384,5,2,3{,,,4}
+| #UDG$63D6,5,2,3{,,,4}#UDG$63D7,5,2,3{,,,4}#UDG$63D8,5,2,3{,,,4}
+| #UDG$642A,5,2,3{,,,4}#UDG$642B,5,2,3{,,,4}#UDG$642C,5,2,3{,,,4}
+| #UDG$647E,5,2,3{,,,4}#UDG$647F,5,2,3{,,,4}#UDG$6480,5,2,3{,,,4}
+}
+UDGTABLE#
+
+#UDGTABLE
+{ #UDG$648A,5,2,3#UDG$648B,5,2,3#UDG$648C,5,2,3
+| #UDG$64DE,5,2,3#UDG$64DF,5,2,3#UDG$64E0,5,2,3 
+| #UDG$6532,5,2,3#UDG$6533,5,2,3#UDG$6534,5,2,3
+| #UDG$6586,5,2,3#UDG$6587,5,2,3#UDG$6588,5,2,3
+}
+{ #UDG$64A2,5,2,3#UDG$64A3,5,2,3#UDG$64A4,5,2,3 
+| #UDG$64F6,5,2,3#UDG$64F7,5,2,3#UDG$64F8,5,2,3
+| #UDG$654A,5,2,3#UDG$654B,5,2,3#UDG$654C,5,2,3
+| #UDG$659E,5,2,3#UDG$659F,5,2,3#UDG$65A0,5,2,3
+}
+{ #UDG$64BA,5,2,3#UDG$64BB,5,2,3#UDG$64BC,5,2,3 
+| #UDG$650E,5,2,3#UDG$650F,5,2,3#UDG$6510,5,2,3
+| #UDG$6562,5,2,3#UDG$6563,5,2,3#UDG$6564,5,2,3
+| #UDG$65B6,5,2,3#UDG$65B7,5,2,3#UDG$65B8,5,2,3
+}
+{ #UDG$64D2,5,2,3{,,,4}#UDG$64D3,5,2,3{,,,4}#UDG$64D4,5,2,3{,,,4}
+| #UDG$6526,5,2,3{,,,4}#UDG$6527,5,2,3{,,,4}#UDG$6528,5,2,3{,,,4}
+| #UDG$657A,5,2,3{,,,4}#UDG$657B,5,2,3{,,,4}#UDG$657C,5,2,3{,,,4}
+| #UDG$65CE,5,2,3{,,,4}#UDG$65CF,5,2,3{,,,4}#UDG$65D0,5,2,3{,,,4}
+}
+UDGTABLE#
+
+[UDGs:Dan being shot]
+#UDGTABLE
+{ #UDG$F086,5,2,2#UDG$F087,5,2,2 
+| #UDG$F0B8,5,2,2#UDG$F0B9,5,2,2
+| #UDG$F0CC,5,2,2#UDG$F0EB,5,2,2
+| #UDG$F11A,5,2,2#UDG$F11B,5,2,2
+| #UDG$F15E,5,2,3#UDG$F15F,5,2,3#UDG$F160,5,2,3
+| #UDG$F1A8,5,2,3#UDG$F1A9,5,2,3#UDG$F1AA,5,2,3
+| #UDG$F1F2,5,2,3#UDG$F1F3,5,2,3#UDG$F1F4,5,2,3
+}
+{ #UDG$F076,5,2,2#UDG$F077,5,2,2 
+| #UDG$F0A8,5,2,2#UDG$F0A9,5,2,2
+| #UDG$F0DA,5,2,2#UDG$F0DB,5,2,2
+| #UDG$F10A,5,2,2#UDG$F10B,5,2,2
+| #UDG$F146,5,2,3#UDG$F147,5,2,3#UDG$F148,5,2,3 
+| #UDG$F190,5,2,3#UDG$F191,5,2,3#UDG$F192,5,2,3
+| #UDG$F1DA,5,2,3#UDG$F1DB,5,2,3#UDG$F1DC,5,2,3
+| #UDG$F224,5,2,3#UDG$F225,5,2,3#UDG$F226,5,2,3
+| #UDG$F256,5,2,3#UDG$F257,5,2,3#UDG$F258,5,2,3
+}
+{ #UDG$F066,5,2,2#UDG$F067,5,2,2 
+| #UDG$F098,5,2,2#UDG$F099,5,2,2
+| #UDG$F0CA,5,2,2#UDG$F0CB,5,2,2
+| #UDG$F0FA,5,2,2#UDG$F0FB,5,2,2
+| #UDG$F12E,5,2,3#UDG$F12F,5,2,3#UDG$F130,5,2,3
+| #UDG$F178,5,2,3#UDG$F179,5,2,3#UDG$F17A,5,2,3 
+| #UDG$F1C2,5,2,3#UDG$F1C3,5,2,3#UDG$F1C4,5,2,3  
+| #UDG$F20C,5,2,3#UDG$F20D,5,2,3#UDG$F20E,5,2,3
+| #UDG$F23E,5,2,3#UDG$F23F,5,2,3#UDG$F240,5,2,3
+}
+UDGTABLE#
+
+[Sprites:Dr. Blitzen]
+#UDGTABLE
+{ #UDG$AFDD,$43,2,2#UDG$AFDE,$43,2,2
+| #UDG$B00D,$43,2,2#UDG$B00E,$43,2,2
+}
+{ #UDG$AFED,$43,2,2#UDG$AFEE,$43,2,2 
+| #UDG$B01D,$43,2,2#UDG$B01E,$43,2,2
+}
+{ #UDG$AFFD,$43,2,2#UDG$AFFE,$43,2,2 
+| #UDG$B02D,$43,2,2#UDG$B02E,$43,2,2
+}
+UDGTABLE#
+
+[Sprites:Donna]
+#UDGTABLE
+{ #UDG$C736,$46,2
+| #UDG$C74E,$46,2 
+| #UDG$C766,$46,2
+| #UDG$C77E,$46,2
+}
+{ #UDG$C73E,$46,2 
+| #UDG$C756,$46,2 
+| #UDG$C76E,$46,2
+| #UDG$C786,$46,2
+}
+{ #UDG$C746,$46,2 
+| #UDG$C75E,$46,2
+| #UDG$C776,$46,2
+| #UDG$C78E,$46,2
+}
+UDGTABLE#
+
 [Index:DataTables:Data tables and buffers]
 GameStatusBuffer
 DataStructures
+[Index:Graphics:Graphics]
+UDGs
+Sprites
+Food
 [Links]
 DataStructures=Data structures

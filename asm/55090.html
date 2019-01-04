@@ -20,7 +20,7 @@
 <td class="next"><span class="next-1">Next: <a href="55202.html">D7A2</a></span></td>
 </tr>
 </table>
-<div class="description">D732: Initialize horizontal moving objects in the room</div>
+<div class="description">D732: Move horizontal objects in the room</div>
 <table class="disassembly">
 <tr>
 <td class="routine-comment" colspan="4">
@@ -29,11 +29,18 @@
 Used by the routine at <a href="58770.html">E592</a>.
 </div>
 </div>
-<table class="input-0">
+<table class="input-1">
 <tr class="asm-input-header">
 <th colspan="2">Input</th>
 </tr>
-
+<tr>
+<td class="register">A</td>
+<td class="register-desc">Flags for the object</td>
+</tr>
+<tr>
+<td class="register">IY</td>
+<td class="register-desc">Pointer to the room's sprite table</td>
+</tr>
 </table>
 <table class="output-0">
 <tr class="asm-output-header">

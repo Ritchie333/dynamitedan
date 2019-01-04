@@ -419,7 +419,7 @@ b $C541 Sprite 3B
 b $C5D2 Sprite 3C
 b $C693 Sprite 28
 b $C6D4 Sprite 2A
-b $C735 Sprite 2C
+b $C735 Sprite 2C - Donna
 b $C796 Sprite 32
 c $C800 Main entry point
 N $C80A Main loop starts here
@@ -469,6 +469,7 @@ N $C984 Increase the score by 1
 b $CA1E "Good luck!"
 b $CA2B Attributes for intro screen
 b $CA3D Moving object data for intro screen
+D $CA3D Used by the routine at #R$CA5B
 c $CA5B Display the intro screen and wait for the game to start
 c $CB8D Turn a flashing option on the intro screen off
 c $CB9C Set the zero flag if ENTER or the fire button was pressed
@@ -565,15 +566,24 @@ R $D655 HL Address to copy to
 c $D669 Convert a sprite ID to its graphic address
 R $D669 A The sprite ID
 R $D669 DE On exit, holds a pointer to the graphic
+g $D675 Length (in bytes) of one frame of the currently processing sprite
 c $D677 Copy a sprite's data to a graphic buffer
 R $D677 DE The sprite data
 R $D677 HL The buffer to copy the data to
-w $D6BB Pointer to working graphic buffer
-w $D6BD Pointer to working graphic buffer
-c $D6BF Initialize vertical moving objects in the room
-w $D72E Pointer to working graphic buffer
-w $D730 Pointer to working graphic buffer
-c $D732 Initialize horizontal moving objects in the room
+g $D6BB
+g $D6BC Current frame number for the vertical sprite being drawn
+D $D6BC Used by the routine at #R$D7E7
+w $D6BD Pointer to current vertical sprite being drawn
+D $D6BD Used by the routine at #R$D7E7
+c $D6BF Move vertical objects in the room
+R $D6BF A Flags for the object
+R $D6BF IY Pointer to the room's sprite table
+g $D72E
+g $D72F Current frame number for the vertical sprite being drawn
+w $D730 Pointer to current horizontal sprite being drawn
+c $D732 Move horizontal objects in the room
+R $D732 A Flags for the object
+R $D732 IY Pointer to the room's sprite table
 c $D7A2 Colour in a sprite vertically
 R $D7A2 IY Pointer to the sprite attribute data
 c $D7B7 Draw a horizontally moving sprite
@@ -581,6 +591,7 @@ R $D7B7 E The nth sprite to draw
 c $D7D6 Colour in a sprite horizontally
 R $D7D6 IY pointer to sprite attribute data
 c $D7E7 Draw a vertically moving sprite
+R $D7E7 DE Position to draw the sprite
 w $D813 Offset for current moving object table
 c $D815 Copy a sprite's graphic into a working buffer
 R $D815 HL Buffer to copy the sprite to
@@ -664,6 +675,7 @@ D $E0BC Used by the routine at #R$D815
 g $E2FE Moving graphics buffer 3
 D $E2FE Used by the routine at #R$D815
 g $E540 Bitflags for object movement patterns
+D $E540 These are set up in the routine at #R$E544 and accessed in the routine at #R$E592
 c $E544 Display moving objects
 R $E544 IY Pointer to moving object data
 c $E592 Draw a moving object
@@ -718,7 +730,11 @@ R $E909 DE On entry, holds the screen address. On return, holds the attribute ad
 c $E916 Launch the blimp having got the plans
 c $E93F Toggle the colours on any test tubes or dynamite so they glow
 R $E93F IX Pointer to the current room's static object data
-c $E96B Draw a moving object
+c $E96B Draw a moving sprite
+R $E96B DE Position to drawn the sprite
+R $E96B HL Pointer to the current sprite data
+R $E96B B Number of frames for the sprite
+R $E96B IY Pointer to current room data
 w $E9BA Current input routine
 c $E9BC Execute the current input routine
 R $E9BC C On return holds the appropriate action : 0 - jump right, 1 - move right, 2 - jump left, 3 - move left, 4 - jump, 5 - no action

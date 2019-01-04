@@ -18,6 +18,7 @@
 <li><a href="#udg_format">UDG format</a></li>
 <li><a href="#udg_lists">UDG lists</a></li>
 <li><a href="#food">Food</a></li>
+<li><a href="#sprites">Sprites</a></li>
 </ul>
 <div><span id="rooms"></span></div>
 <div class="box box-1">
@@ -87,6 +88,12 @@ and length (in 8 line blocks). Where a UDG's length is greater than 1
 block, the graphic data appears in reverse order ie: the bottom width x 8
 block comes first.
 </div>
+<div class="paragraph">
+The graphic data contains all the pixel data, followed by all the attribute
+data. The attributes are either set individually for each 8x8 square,
+or contains a sequence of 00, nn where nn is the attribute to set for
+all squares.
+</div>
 </div>
 <div><span id="udg_lists"></span></div>
 <div class="box box-1">
@@ -97,7 +104,7 @@ These are pointed to by the first two bytes in each room data,
 and printed by the routine at <a href="asm/60672.html">ED00</a> / <a href="asm/60672.html#60678">ED06</a>.
 </div>
 <div class="paragraph">
-The first two bytes are the co-ordinates of a UDG, followed by one bytes
+The first two bytes are the co-ordinates of a UDG, followed by one byte
 for its ID. There is then an optional sequence of :
 </div>
 <div class="paragraph">
@@ -122,6 +129,56 @@ The entry there points to UDG data of the food.
 </div>
 <div class="paragraph">
 The array at <a href="asm/26090.html">65EA</a> contains the attribute of the food.
+</div>
+</div>
+<div><span id="sprites"></span></div>
+<div class="box box-1">
+<div class="box-title">Sprites</div>
+<div class="paragraph">
+Each room's sprite buffer is pointed to by offsets 7+8 in the room data.
+A room can have up to two different types of horizontal and veritical
+moving sprites each. A sprite is assigned an ID, which is an index into
+an array of pointers at <a href="asm/44640.html">AE60</a>. The lookup is done at the routine
+in <a href="asm/54889.html">D669</a>.
+</div>
+<div class="paragraph">
+The first byte of sprite data holds two values. Bits 0 - 1 contain the
+sprite's width in bytes; bits 2 - 7 hold the number of lines for one frame.
+Multiplied together, this gives a size of a frame, which is temporarily
+stored in <a href="asm/54901.html">D675</a>.
+</div>
+<div class="paragraph">
+The sprite buffer starts with a 5-byte header. The format is:
+<table class="map">
+<tr>
+<td class="" colspan="1" rowspan="1">00</td>
+<td class="" colspan="1" rowspan="1">ID of first vertical sprite</td>
+</tr>
+<tr>
+<td class="" colspan="1" rowspan="1">01</td>
+<td class="" colspan="1" rowspan="1">ID of second vertical sprite</td>
+</tr>
+<tr>
+<td class="" colspan="1" rowspan="1">02</td>
+<td class="" colspan="1" rowspan="1">ID of first horizontal sprite</td>
+</tr>
+<tr>
+<td class="" colspan="1" rowspan="1">03</td>
+<td class="" colspan="1" rowspan="1">ID of second horizontal sprite</td>
+</tr>
+<tr>
+<td class="" colspan="1" rowspan="1">04 - 05</td>
+<td class="" colspan="1" rowspan="1">Four 4-bit IDs holding number of animation states</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+The animation states are copied as four bytes starting from <a href="asm/58688.html">E540</a>.
+If any of the bytes are 0, the sprite is not drawn.
+</div>
+<div class="paragraph">
+Following the header are a series of 8-byte structures, each dealing
+with animation and movement.
 </div>
 </div>
 <footer>

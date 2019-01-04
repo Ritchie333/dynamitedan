@@ -4624,7 +4624,7 @@ b$C6D4 DEFB $0E,$00,$00,$00,$00,$00,$06,$60
  $C72C DEFB $20,$03,$C0,$00,$00,$00,$00,$00
  $C734 DEFB $00
 
-; Sprite 2C
+; Sprite 2C - Donna
 b$C735 DEFB $0D,$2A,$55,$AA,$55,$AE,$5A,$2F
  $C73D DEFB $56,$2E,$48,$A0,$5C,$98,$1C,$36
  $C745 DEFB $73,$78,$38,$00,$28,$48,$00,$86
@@ -5030,6 +5030,8 @@ b$CA2B DEFB $03,$07,$02,$05,$06,$03,$04,$07
  $CA3B DEFB $06,$05
 
 ; Moving object data for intro screen
+;
+; Used by the routine at #R$CA5B
 b$CA3D DEFB $15,$2C,$2C,$2C,$11,$00,$0A,$06
  $CA45 DEFB $05,$0D,$02,$43,$01,$02,$0A,$19
  $CA4D DEFB $05,$0D,$81,$46,$01,$02,$00,$46
@@ -6822,8 +6824,9 @@ c$D669 ADD A,A       ;
  $D672 INC HL        ;
  $D673 LD D,(HL)     ;
  $D674 RET           ;
- $D675 NOP           ;
- $D676 NOP           ;
+
+; Length (in bytes) of one frame of the currently processing sprite
+g$D675 DEFB $00,$00
 
 ; Copy a sprite's data to a graphic buffer
 ;
@@ -6876,15 +6879,25 @@ c$D677 LD A,(DE)     ;
  $D6B8 LDIR          ;
  $D6BA RET           ;
 
-; Pointer to working graphic buffer
-w$D6BB DEFW $0000
+; Game status buffer entry at D6BB
+g$D6BB DEFB $00
 
-; Pointer to working graphic buffer
+; Current frame number for the vertical sprite being drawn
+;
+; Used by the routine at #R$D7E7
+g$D6BC DEFB $00
+
+; Pointer to current vertical sprite being drawn
+;
+; Used by the routine at #R$D7E7
 w$D6BD DEFW $DEDA
 
-; Initialize vertical moving objects in the room
+; Move vertical objects in the room
 ;
 ; Used by the routine at #R$E592.
+;
+; A Flags for the object
+; IY Pointer to the room's sprite table
 c$D6BF AND A         ;
  $D6C0 RET Z         ;
  $D6C1 LD B,A        ;
@@ -6945,15 +6958,21 @@ c$D6BF AND A         ;
  $D72B DJNZ $D6C2    ;
  $D72D RET           ;
 
-; Pointer to working graphic buffer
-w$D72E DEFW $0000
+; Game status buffer entry at D72E
+g$D72E DEFB $00
 
-; Pointer to working graphic buffer
+; Current frame number for the vertical sprite being drawn
+g$D72F DEFB $00
+
+; Pointer to current horizontal sprite being drawn
 w$D730 DEFW $E0BE
 
-; Initialize horizontal moving objects in the room
+; Move horizontal objects in the room
 ;
 ; Used by the routine at #R$E592.
+;
+; A Flags for the object
+; IY Pointer to the room's sprite table
 c$D732 AND A         ;
  $D733 RET Z         ;
  $D734 LD B,A        ;
@@ -7074,6 +7093,8 @@ c$D7D6 LD D,(IY+$01) ;
 ; Draw a vertically moving sprite
 ;
 ; Used by the routine at #R$D6BF.
+;
+; DE Position to draw the sprite
 c$D7E7 LD A,($D6BC)  ;
  $D7EA LD B,A        ;
  $D7EB LD HL,($D6BD) ;
@@ -8415,6 +8436,9 @@ g$E2FE DEFB $00,$00,$00,$00,$00,$00,$00,$00
  $E53E DEFB $00,$00
 
 ; Bitflags for object movement patterns
+;
+; These are set up in the routine at #R$E544 and accessed in the routine at
+; #R$E592
 g$E540 DEFB $00,$00,$00,$00
 
 ; Display moving objects
@@ -9133,9 +9157,14 @@ c$E93F BIT 5,(IX+$04) ;
  $E969 LD (HL),A      ;
  $E96A RET            ;
 
-; Draw a moving object
+; Draw a moving sprite
 ;
 ; Used by the routines at #R$D7B7 and #R$D7E7.
+;
+; DE Position to drawn the sprite
+; HL Pointer to the current sprite data
+; B Number of frames for the sprite
+; IY Pointer to current room data
 c$E96B PUSH BC        ;
  $E96C BIT 6,(IY+$04) ;
  $E970 JR Z,$E977     ;
