@@ -83,7 +83,7 @@ cheat on one of the top rooms and jump above the screen, the game
 will crash!
 
 Each room contains 12 bytes of basic information in an array starting
-at #R$69E6. This is references when a new room is entered at the
+at #R$69E6. This is referenced when a new room is entered at the
 routine in #R$CBBD. The structure is :
 
 #TABLE(map)
