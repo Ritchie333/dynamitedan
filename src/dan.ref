@@ -172,14 +172,17 @@ The sprite buffer starts with a 5-byte header. The format is:
 { 01 | ID of second vertical sprite }
 { 02 | ID of first horizontal sprite }
 { 03 | ID of second horizontal sprite }
-{ 04 - 05 | Four 4-bit IDs holding number of animation states }
+{ 04 - 05 | Four 4-bit numbers containing the number of
+objects each of the four types defined above }
 TABLE#
 
-The animation states are copied as four bytes starting from #R$E540.
+The number of objects are copied as four bytes starting from #R$E540.
 If any of the bytes are 0, the sprite is not drawn.
 
 Following the header are a series of 8-byte structures, each dealing
-with animation and movement. The fields are:
+with animation and movement for each of the sprites defined. The total
+number of records is the sum of the item count from E540 - E543.
+The fields are:
 #TABLE(map)
 { 00 | Current x co-ordinate (horizontal) or y co-ordinate (vertical) }
 { 01 | Fixed y co-ordinate (horizontal) or x co-ordinate (veritcal) }
@@ -190,6 +193,9 @@ with animation and movement. The fields are:
 { 06 | Current frame number }
 { 07 | Total number of frames }
 TABLE#
+
+Make sure that field 2 is always lower than field 3, otherwise undefined
+behaviour will result!
 
 [Food:00 - Egg]
 #UDGTABLE

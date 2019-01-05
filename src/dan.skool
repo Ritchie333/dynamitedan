@@ -8435,7 +8435,7 @@ g$E2FE DEFB $00,$00,$00,$00,$00,$00,$00,$00
  $E536 DEFB $00,$00,$00,$00,$00,$00,$00,$00
  $E53E DEFB $00,$00
 
-; Bitflags for object movement patterns
+; Count of moving objects in the room
 ;
 ; These are set up in the routine at #R$E544 and accessed in the routine at
 ; #R$E592

@@ -168,17 +168,19 @@ The sprite buffer starts with a 5-byte header. The format is:
 </tr>
 <tr>
 <td class="" colspan="1" rowspan="1">04 - 05</td>
-<td class="" colspan="1" rowspan="1">Four 4-bit IDs holding number of animation states</td>
+<td class="" colspan="1" rowspan="1">Four 4-bit numbers containing the number of objects each of the four types defined above</td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-The animation states are copied as four bytes starting from <a href="asm/58688.html">E540</a>.
+The number of objects are copied as four bytes starting from <a href="asm/58688.html">E540</a>.
 If any of the bytes are 0, the sprite is not drawn.
 </div>
 <div class="paragraph">
 Following the header are a series of 8-byte structures, each dealing
-with animation and movement. The fields are:
+with animation and movement for each of the sprites defined. The total
+number of records is the sum of the item count from E540 - E543.
+The fields are:
 <table class="map">
 <tr>
 <td class="" colspan="1" rowspan="1">00</td>
@@ -213,6 +215,10 @@ with animation and movement. The fields are:
 <td class="" colspan="1" rowspan="1">Total number of frames</td>
 </tr>
 </table>
+</div>
+<div class="paragraph">
+Make sure that field 2 is always lower than field 3, otherwise undefined
+behaviour will result!
 </div>
 </div>
 <footer>

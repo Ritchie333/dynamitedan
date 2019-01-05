@@ -674,7 +674,7 @@ g $E0BC Moving graphics buffer 2
 D $E0BC Used by the routine at #R$D815
 g $E2FE Moving graphics buffer 3
 D $E2FE Used by the routine at #R$D815
-g $E540 Bitflags for object movement patterns
+g $E540 Count of moving objects in the room
 D $E540 These are set up in the routine at #R$E544 and accessed in the routine at #R$E592
 c $E544 Display moving objects
 R $E544 IY Pointer to moving object data
