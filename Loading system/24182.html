@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Dynamite Dan: Routine at 5E76</title>
+<meta charset="utf-8" />
+<link rel="stylesheet" type="text/css" href="../skoolkit.css" />
+
+</head>
+<body class="Loading system-Asm-c">
+<table class="header">
+<tr>
+<td class="logo"><a href="../index.html">Dynamite Dan</a></td>
+<td class="page-header">Routines</td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev"><span class="prev-1">Prev: <a href="24177.html">5E71</a></span></td>
+<td class="up">Up: <a href="Loading system.html#24182">Map</a></td>
+<td class="next"><span class="next-1">Next: <a href="24183.html">5E77</a></span></td>
+</tr>
+</table>
+<div class="description">5E76: Decrypt a data block (first run)</div>
+<table class="disassembly">
+<tr>
+<td class="routine-comment" colspan="4">
+<div class="details">
+<div class="paragraph">
+Used by the routine at <a href="24146.html">5E52</a>.
+</div>
+</div>
+<table class="input-1">
+<tr class="asm-input-header">
+<th colspan="2">Input</th>
+</tr>
+<tr>
+<td class="register">HL</td>
+<td class="register-desc">Start address</td>
+</tr>
+</table>
+<table class="output-0">
+<tr class="asm-output-header">
+<th colspan="2">Output</th>
+</tr>
+
+</table>
+</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="4">
+<span id="24182"></span>
+<div class="comments">
+<div class="paragraph">
+The length is taken as the top value on the stack. This routine is modified when run, changing the code for subsequent runs
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-2"><span id="24182"></span>5E76</td>
+<td class="instruction">POP BC</td>
+<td class="comment-11" rowspan="1">Get the length off the stack - 3A</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-2"><span id="24183"></span>5E77</td>
+<td class="instruction">LD A,(HL)</td>
+<td class="comment-11" rowspan="1">Put the next byte in A</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="24184"></span>5E78</td>
+<td class="instruction">NEG</td>
+<td class="comment-11" rowspan="1">Invert its sign</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="24186"></span>5E7A</td>
+<td class="instruction">LD (HL),A</td>
+<td class="comment-11" rowspan="1">Store it</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="24187"></span>5E7B</td>
+<td class="instruction">INC HL</td>
+<td class="comment-11" rowspan="1">Point to next byte</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="24188"></span>5E7C</td>
+<td class="instruction">DJNZ $5E77</td>
+<td class="comment-11" rowspan="1">Loop round if more to do</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="24190"></span>5E7E</td>
+<td class="instruction">POP HL</td>
+<td class="comment-11" rowspan="1">Take HL off the stack - 67ED</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="24191"></span>5E7F</td>
+<td class="instruction">LD ($5E78),HL</td>
+<td class="comment-11" rowspan="1">Modify the above instruction to read RRD (ED, 67)</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="24194"></span>5E82</td>
+<td class="instruction">POP BC</td>
+<td class="comment-11" rowspan="1">Get the next length off the stack (3A)</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="24195"></span>5E83</td>
+<td class="instruction">LD A,$C9</td>
+<td class="comment-11" rowspan="2">Change the above code to return early after the loop at 5E7C</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="24197"></span>5E85</td>
+<td class="instruction">LD ($5E7E),A</td>
+<td class="comment-01" rowspan="1"></td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="24200"></span>5E88</td>
+<td class="instruction">LD A,$00</td>
+<td class="comment-11" rowspan="2">Remove the above LD (HL), A - as RRD does a bit shift across A and (HL) it is not required</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="24202"></span>5E8A</td>
+<td class="instruction">LD ($5E7A),A</td>
+<td class="comment-01" rowspan="1"></td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="24205"></span>5E8D</td>
+<td class="instruction">PUSH DE</td>
+<td class="comment-11" rowspan="2">Restore original start of 5E12 in HL</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="24206"></span>5E8E</td>
+<td class="instruction">POP HL</td>
+<td class="comment-01" rowspan="1"></td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="24207"></span>5E8F</td>
+<td class="instruction">RET</td>
+<td class="comment-11" rowspan="1">Return to decrypt again at <a href="24182.html#24183">5E77</a></td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev"><span class="prev-1">Prev: <a href="24177.html">5E71</a></span></td>
+<td class="up">Up: <a href="Loading system.html#24182">Map</a></td>
+<td class="next"><span class="next-1">Next: <a href="24183.html">5E77</a></span></td>
+</tr>
+</table>
+<footer>
+<div class="release"></div>
+<div class="copyright">Copyright Rod Bowkett / Mirrorsoft 1985. This dissassembly by Ritchie Swann 2019.</div>
+<div class="created">Created using <a href="http://skoolkit.ca/">SkoolKit</a> 7.0.</div>
+</footer>
+</body>
+</html>

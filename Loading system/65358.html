@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Dynamite Dan: Routine at FF4E</title>
+<meta charset="utf-8" />
+<link rel="stylesheet" type="text/css" href="../skoolkit.css" />
+
+</head>
+<body class="Loading system-Asm-c">
+<table class="header">
+<tr>
+<td class="logo"><a href="../index.html">Dynamite Dan</a></td>
+<td class="page-header">Routines</td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev"><span class="prev-1">Prev: <a href="65322.html">FF2A</a></span></td>
+<td class="up">Up: <a href="Loading system.html#65358">Map</a></td>
+<td class="next"><span class="next-1">Next: <a href="65362.html">FF52</a></span></td>
+</tr>
+</table>
+<div class="description">FF4E: Get tape signal</div>
+<table class="disassembly">
+<tr>
+<td class="routine-comment" colspan="4">
+<div class="details">
+<div class="paragraph">
+Used by the routines at <a href="65195.html">FEAB</a>, <a href="65274.html">FEFA</a> and <a href="65322.html">FF2A</a>.
+</div>
+</div>
+<table class="input-1">
+<tr class="asm-input-header">
+<th colspan="2">Input</th>
+</tr>
+<tr>
+<td class="register">B</td>
+<td class="register-desc">On input, timing constant. On output, holds the time taken to find an edge change. If found before the timing constant value, a '0' bit was found, otherwise it was a '1' bit.</td>
+</tr>
+<tr>
+<td class="register">C</td>
+<td class="register-desc">Border colour and previous EAR signal bit</td>
+</tr>
+</table>
+<table class="output-0">
+<tr class="asm-output-header">
+<th colspan="2">Output</th>
+</tr>
+
+</table>
+</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-2"><span id="65358"></span>FF4E</td>
+<td class="instruction">CALL <a href="65362.html">$FF52</a></td>
+<td class="comment-10" rowspan="1"></td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="65361"></span>FF51</td>
+<td class="instruction">RET NC</td>
+<td class="comment-10" rowspan="1"></td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev"><span class="prev-1">Prev: <a href="65322.html">FF2A</a></span></td>
+<td class="up">Up: <a href="Loading system.html#65358">Map</a></td>
+<td class="next"><span class="next-1">Next: <a href="65362.html">FF52</a></span></td>
+</tr>
+</table>
+<footer>
+<div class="release"></div>
+<div class="copyright">Copyright Rod Bowkett / Mirrorsoft 1985. This dissassembly by Ritchie Swann 2019.</div>
+<div class="created">Created using <a href="http://skoolkit.ca/">SkoolKit</a> 7.0.</div>
+</footer>
+</body>
+</html>

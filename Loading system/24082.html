@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Dynamite Dan: Routine at 5E12</title>
+<meta charset="utf-8" />
+<link rel="stylesheet" type="text/css" href="../skoolkit.css" />
+
+</head>
+<body class="Loading system-Asm-c">
+<table class="header">
+<tr>
+<td class="logo"><a href="../index.html">Dynamite Dan</a></td>
+<td class="page-header">Routines</td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev"><span class="prev-1">Prev: <a href="24064.html">5E00</a></span></td>
+<td class="up">Up: <a href="Loading system.html#24082">Map</a></td>
+<td class="next"><span class="next-1">Next: <a href="24142.html">5E4E</a></span></td>
+</tr>
+</table>
+<div class="description">5E12: Clear memory and set up data to load the second block</div>
+<table class="disassembly">
+<tr>
+<td class="routine-comment" colspan="4">
+<div class="details">
+<div class="paragraph">
+Used by the routine at <a href="24182.html#24183">5E77</a>.
+</div>
+</div>
+<table class="input-0">
+<tr class="asm-input-header">
+<th colspan="2">Input</th>
+</tr>
+
+</table>
+<table class="output-0">
+<tr class="asm-output-header">
+<th colspan="2">Output</th>
+</tr>
+
+</table>
+</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-2"><span id="24082"></span>5E12</td>
+<td class="instruction">LD HL,$5FB4</td>
+<td class="comment-11" rowspan="4">Clear memory from 5FB4 - E86B</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="24085"></span>5E15</td>
+<td class="instruction">LD DE,$5FB5</td>
+<td class="comment-01" rowspan="1"></td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="24088"></span>5E18</td>
+<td class="instruction">LD BC,$88B8</td>
+<td class="comment-01" rowspan="1"></td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="24091"></span>5E1B</td>
+<td class="instruction">LDIR</td>
+<td class="comment-01" rowspan="1"></td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="24093"></span>5E1D</td>
+<td class="instruction">POP HL</td>
+<td class="comment-11" rowspan="1">Get the next value off the stack - EA61</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="24094"></span>5E1E</td>
+<td class="instruction">LD D,H</td>
+<td class="comment-11" rowspan="3">Put it in DE and add 1</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="24095"></span>5E1F</td>
+<td class="instruction">LD E,L</td>
+<td class="comment-01" rowspan="1"></td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="24096"></span>5E20</td>
+<td class="instruction">INC E</td>
+<td class="comment-01" rowspan="1"></td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="24097"></span>5E21</td>
+<td class="instruction">POP BC</td>
+<td class="comment-11" rowspan="1">Get length to clear off the stack - 159F</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="24098"></span>5E22</td>
+<td class="instruction">LDIR</td>
+<td class="comment-11" rowspan="1">Clear memory</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="24100"></span>5E24</td>
+<td class="instruction">LD B,$1E</td>
+<td class="comment-11" rowspan="1">Get length to decrypt</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="24102"></span>5E26</td>
+<td class="instruction">POP HL</td>
+<td class="comment-11" rowspan="1">Get start of memory to decrypt off the stack - 5E2E</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-2"><span id="24103"></span>5E27</td>
+<td class="instruction">LD A,(HL)</td>
+<td class="comment-11" rowspan="1">Get next byte</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="24104"></span>5E28</td>
+<td class="instruction">XOR $A3</td>
+<td class="comment-11" rowspan="1">Flip some bits</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="24106"></span>5E2A</td>
+<td class="instruction">LD (HL),A</td>
+<td class="comment-11" rowspan="1">Store it</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="24107"></span>5E2B</td>
+<td class="instruction">INC HL</td>
+<td class="comment-11" rowspan="1">Point to next byte</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="24108"></span>5E2C</td>
+<td class="instruction">DJNZ $5E27</td>
+<td class="comment-11" rowspan="1">Loop round if more to do</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="24110"></span>5E2E</td>
+<td class="instruction">POP HL</td>
+<td class="comment-11" rowspan="1">Get next value off the stack - <a href="40000.html">9C40</a></td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="24111"></span>5E2F</td>
+<td class="instruction">LD ($5E02),HL</td>
+<td class="comment-11" rowspan="1">Change the start address of the loader at <a href="24064.html">5E00</a> to this</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="24114"></span>5E32</td>
+<td class="instruction">POP HL</td>
+<td class="comment-11" rowspan="1">Get next value off the stack - 0190</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="24115"></span>5E33</td>
+<td class="instruction">LD ($5E05),HL</td>
+<td class="comment-11" rowspan="1">Change the length of the loader at <a href="24064.html">5E00</a> to this</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="24118"></span>5E36</td>
+<td class="instruction">SCF</td>
+<td class="comment-11" rowspan="1">Set carry flag to mark a load</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="24119"></span>5E37</td>
+<td class="instruction">LD A,$07</td>
+<td class="comment-11" rowspan="1">Set the flag byte</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="24121"></span>5E39</td>
+<td class="instruction">CALL <a href="24064.html">$5E00</a></td>
+<td class="comment-11" rowspan="1">Load the block</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="24124"></span>5E3C</td>
+<td class="instruction">JP NC,$0001</td>
+<td class="comment-11" rowspan="1">Reset the machine if loading failed</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="24127"></span>5E3F</td>
+<td class="instruction">LD HL,$9C40</td>
+<td class="comment-11" rowspan="1">Point to start of the block</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="24130"></span>5E42</td>
+<td class="instruction">LD B,$FF</td>
+<td class="comment-11" rowspan="2">Decrypt first part</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="24132"></span>5E44</td>
+<td class="instruction">CALL <a href="24182.html#24183">$5E77</a></td>
+<td class="comment-01" rowspan="1"></td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="24135"></span>5E47</td>
+<td class="instruction">LD B,$FF</td>
+<td class="comment-11" rowspan="2">Decrypt second part</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="24137"></span>5E49</td>
+<td class="instruction">CALL <a href="24182.html#24183">$5E77</a></td>
+<td class="comment-01" rowspan="1"></td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="24140"></span>5E4C</td>
+<td class="instruction">DI</td>
+<td class="comment-11" rowspan="1">Disable interrupts</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="24141"></span>5E4D</td>
+<td class="instruction">RET</td>
+<td class="comment-11" rowspan="1">Return to the next value on the stack - <a href="40000.html">9C40</a></td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev"><span class="prev-1">Prev: <a href="24064.html">5E00</a></span></td>
+<td class="up">Up: <a href="Loading system.html#24082">Map</a></td>
+<td class="next"><span class="next-1">Next: <a href="24142.html">5E4E</a></span></td>
+</tr>
+</table>
+<footer>
+<div class="release"></div>
+<div class="copyright">Copyright Rod Bowkett / Mirrorsoft 1985. This dissassembly by Ritchie Swann 2019.</div>
+<div class="created">Created using <a href="http://skoolkit.ca/">SkoolKit</a> 7.0.</div>
+</footer>
+</body>
+</html>

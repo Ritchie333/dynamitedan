@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Dynamite Dan: Routine at FF52</title>
+<meta charset="utf-8" />
+<link rel="stylesheet" type="text/css" href="../skoolkit.css" />
+
+</head>
+<body class="Loading system-Asm-c">
+<table class="header">
+<tr>
+<td class="logo"><a href="../index.html">Dynamite Dan</a></td>
+<td class="page-header">Routines</td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev"><span class="prev-1">Prev: <a href="65358.html">FF4E</a></span></td>
+<td class="up">Up: <a href="Loading system.html#65362">Map</a></td>
+<td class="next"><span class="next-1">Next: <a href="65392.html">FF70</a></span></td>
+</tr>
+</table>
+<div class="description">FF52: Get tape signal</div>
+<table class="disassembly">
+<tr>
+<td class="routine-comment" colspan="4">
+<div class="details">
+<div class="paragraph">
+Used by the routines at <a href="65195.html">FEAB</a> and <a href="65358.html">FF4E</a>.
+</div>
+</div>
+<table class="input-1">
+<tr class="asm-input-header">
+<th colspan="2">Input</th>
+</tr>
+<tr>
+<td class="register">B</td>
+<td class="register-desc">On input, timing constant. On output, holds the time taken to find an edge change. If found before the timing constant value, a '0' bit was found, otherwise it was a '1' bit.</td>
+</tr>
+<tr>
+<td class="register">C</td>
+<td class="register-desc">Border colour and previous EAR signal bit</td>
+</tr>
+</table>
+<table class="output-0">
+<tr class="asm-output-header">
+<th colspan="2">Output</th>
+</tr>
+
+</table>
+</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="4">
+<span id="65362"></span>
+<div class="comments">
+<div class="paragraph">
+This is similar to the ROM routine LD_EDGE_1 at 05E7.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-2"><span id="65362"></span>FF52</td>
+<td class="instruction">LD A,$0B</td>
+<td class="comment-11" rowspan="3">Wait the required length before sampling a bit</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-2"><span id="65364"></span>FF54</td>
+<td class="instruction">DEC A</td>
+<td class="comment-01" rowspan="1"></td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="65365"></span>FF55</td>
+<td class="instruction">JR NZ,$FF54</td>
+<td class="comment-01" rowspan="1"></td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="65367"></span>FF57</td>
+<td class="instruction">AND A</td>
+<td class="comment-11" rowspan="1">Clear carry flag</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-2"><span id="65368"></span>FF58</td>
+<td class="instruction">INC B</td>
+<td class="comment-11" rowspan="1">Increment pass counter</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="65369"></span>FF59</td>
+<td class="instruction">RET Z</td>
+<td class="comment-11" rowspan="1">Return if a signal wasn't found quickly enough</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="65370"></span>FF5A</td>
+<td class="instruction">LD A,$7F</td>
+<td class="comment-11" rowspan="2">Read the tape signal</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="65372"></span>FF5C</td>
+<td class="instruction">IN A,($FE)</td>
+<td class="comment-01" rowspan="1"></td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="65374"></span>FF5E</td>
+<td class="instruction">RRA</td>
+<td class="comment-11" rowspan="1">Shift right</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="65375"></span>FF5F</td>
+<td class="instruction">NOP</td>
+<td class="comment-11" rowspan="1">The ROM routine returns here; this custom loader does nothing</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="65376"></span>FF60</td>
+<td class="instruction">XOR C</td>
+<td class="comment-11" rowspan="1">Mask against expected edge type</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="65377"></span>FF61</td>
+<td class="instruction">AND $20</td>
+<td class="comment-11" rowspan="1">Test for the edge</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="65379"></span>FF63</td>
+<td class="instruction">JR Z,$FF58</td>
+<td class="comment-11" rowspan="1">Jump back if it wasn't found</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="4">
+<span id="65381"></span>
+<div class="comments">
+<div class="paragraph">
+At this point, an edge has been found
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="65381"></span>FF65</td>
+<td class="instruction">LD A,C</td>
+<td class="comment-11" rowspan="3">Flip border colour</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="65382"></span>FF66</td>
+<td class="instruction">CPL</td>
+<td class="comment-01" rowspan="1"></td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="65383"></span>FF67</td>
+<td class="instruction">LD C,A</td>
+<td class="comment-01" rowspan="1"></td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="65384"></span>FF68</td>
+<td class="instruction">AND $07</td>
+<td class="comment-11" rowspan="1">Turn off non-border bits</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="65386"></span>FF6A</td>
+<td class="instruction">OR $08</td>
+<td class="comment-11" rowspan="1">Turn off MIC input</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="65388"></span>FF6C</td>
+<td class="instruction">OUT ($FE),A</td>
+<td class="comment-11" rowspan="1">Set the border</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="65390"></span>FF6E</td>
+<td class="instruction">SCF</td>
+<td class="comment-11" rowspan="1">Set carry flag to denote success</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="65391"></span>FF6F</td>
+<td class="instruction">RET</td>
+<td class="comment-11" rowspan="1">All done</td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev"><span class="prev-1">Prev: <a href="65358.html">FF4E</a></span></td>
+<td class="up">Up: <a href="Loading system.html#65362">Map</a></td>
+<td class="next"><span class="next-1">Next: <a href="65392.html">FF70</a></span></td>
+</tr>
+</table>
+<footer>
+<div class="release"></div>
+<div class="copyright">Copyright Rod Bowkett / Mirrorsoft 1985. This dissassembly by Ritchie Swann 2019.</div>
+<div class="created">Created using <a href="http://skoolkit.ca/">SkoolKit</a> 7.0.</div>
+</footer>
+</body>
+</html>

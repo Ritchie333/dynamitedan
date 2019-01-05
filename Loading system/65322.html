@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Dynamite Dan: Routine at FF2A</title>
+<meta charset="utf-8" />
+<link rel="stylesheet" type="text/css" href="../skoolkit.css" />
+
+</head>
+<body class="Loading system-Asm-c">
+<table class="header">
+<tr>
+<td class="logo"><a href="../index.html">Dynamite Dan</a></td>
+<td class="page-header">Routines</td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev"><span class="prev-1">Prev: <a href="65274.html">FEFA</a></span></td>
+<td class="up">Up: <a href="Loading system.html#65322">Map</a></td>
+<td class="next"><span class="next-1">Next: <a href="65358.html">FF4E</a></span></td>
+</tr>
+</table>
+<div class="description">FF2A: Load a block backwards</div>
+<table class="disassembly">
+<tr>
+<td class="routine-comment" colspan="4">
+<div class="details">
+<div class="paragraph">
+Used by the routines at <a href="65093.html">FE45</a> and <a href="65145.html">FE79</a>.
+</div>
+</div>
+<table class="input-0">
+<tr class="asm-input-header">
+<th colspan="2">Input</th>
+</tr>
+
+</table>
+<table class="output-0">
+<tr class="asm-output-header">
+<th colspan="2">Output</th>
+</tr>
+
+</table>
+</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-2"><span id="65322"></span>FF2A</td>
+<td class="instruction">EX AF,AF'</td>
+<td class="comment-11" rowspan="1">Save the flags</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="65323"></span>FF2B</td>
+<td class="instruction">LD (IX+$00),L</td>
+<td class="comment-11" rowspan="1">Store the byte</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="65326"></span>FF2E</td>
+<td class="instruction">JR $FF30</td>
+<td class="comment-11" rowspan="1"></td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-2"><span id="65328"></span>FF30</td>
+<td class="instruction">DEC IX</td>
+<td class="comment-11" rowspan="1">Point to the previous byte</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="65330"></span>FF32</td>
+<td class="instruction">DEC DE</td>
+<td class="comment-11" rowspan="1">Decrease the length</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="65331"></span>FF33</td>
+<td class="instruction">EX AF,AF'</td>
+<td class="comment-11" rowspan="1">Restore flags</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="65332"></span>FF34</td>
+<td class="instruction">LD B,$E3</td>
+<td class="comment-11" rowspan="1">Set timing constant</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="65334"></span>FF36</td>
+<td class="instruction">LD L,$01</td>
+<td class="comment-11" rowspan="1">Clear bits in byte to collect</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-2"><span id="65336"></span>FF38</td>
+<td class="instruction">CALL <a href="65358.html">$FF4E</a></td>
+<td class="comment-11" rowspan="1">Get a tape edge</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="65339"></span>FF3B</td>
+<td class="instruction">RET NC</td>
+<td class="comment-11" rowspan="1">Return if it took too long</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="65340"></span>FF3C</td>
+<td class="instruction">LD A,$ED</td>
+<td class="comment-11" rowspan="2">See how quickly an edge was found. If less than ED, a 0 was found, otherwise a 1</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="65342"></span>FF3E</td>
+<td class="instruction">CP B</td>
+<td class="comment-01" rowspan="1"></td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="65343"></span>FF3F</td>
+<td class="instruction">RL L</td>
+<td class="comment-11" rowspan="1">Store the relevant bit</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="65345"></span>FF41</td>
+<td class="instruction">LD B,$E1</td>
+<td class="comment-11" rowspan="1">Set timing constant for the next bit</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="65347"></span>FF43</td>
+<td class="instruction">JP NC,$FF38</td>
+<td class="comment-11" rowspan="1">Jump back while there are still bits to retrieve</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="65350"></span>FF46</td>
+<td class="instruction">LD A,H</td>
+<td class="comment-11" rowspan="3">Update "parity matching" byte in H</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="65351"></span>FF47</td>
+<td class="instruction">XOR L</td>
+<td class="comment-01" rowspan="1"></td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="65352"></span>FF48</td>
+<td class="instruction">LD H,A</td>
+<td class="comment-01" rowspan="1"></td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="65353"></span>FF49</td>
+<td class="instruction">LD A,D</td>
+<td class="comment-11" rowspan="2">Any more bytes to load?</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="65354"></span>FF4A</td>
+<td class="instruction">OR E</td>
+<td class="comment-01" rowspan="1"></td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="65355"></span>FF4B</td>
+<td class="instruction">JR NZ,$FF2A</td>
+<td class="comment-11" rowspan="1">Loop back if there are</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="65357"></span>FF4D</td>
+<td class="instruction">RET</td>
+<td class="comment-11" rowspan="1">All done</td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev"><span class="prev-1">Prev: <a href="65274.html">FEFA</a></span></td>
+<td class="up">Up: <a href="Loading system.html#65322">Map</a></td>
+<td class="next"><span class="next-1">Next: <a href="65358.html">FF4E</a></span></td>
+</tr>
+</table>
+<footer>
+<div class="release"></div>
+<div class="copyright">Copyright Rod Bowkett / Mirrorsoft 1985. This dissassembly by Ritchie Swann 2019.</div>
+<div class="created">Created using <a href="http://skoolkit.ca/">SkoolKit</a> 7.0.</div>
+</footer>
+</body>
+</html>

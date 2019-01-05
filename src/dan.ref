@@ -362,9 +362,14 @@ UDGTABLE#
 [Index:DataTables:Data tables and buffers]
 GameStatusBuffer
 DataStructures
+
 [Index:Graphics:Graphics]
 UDGs
 Sprites
 Food
+
 [Links]
 DataStructures=Data structures
+
+[OtherCode:Loading system]
+Source=dan_loader.skool

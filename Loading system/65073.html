@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Dynamite Dan: Routine at FE31</title>
+<meta charset="utf-8" />
+<link rel="stylesheet" type="text/css" href="../skoolkit.css" />
+
+</head>
+<body class="Loading system-Asm-c">
+<table class="header">
+<tr>
+<td class="logo"><a href="../index.html">Dynamite Dan</a></td>
+<td class="page-header">Routines</td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev"><span class="prev-1">Prev: <a href="65055.html">FE1F</a></span></td>
+<td class="up">Up: <a href="Loading system.html#65073">Map</a></td>
+<td class="next"><span class="next-1">Next: <a href="65091.html">FE43</a></span></td>
+</tr>
+</table>
+<div class="description">FE31: Build up a hash value from game memory</div>
+<table class="disassembly">
+<tr>
+<td class="routine-comment" colspan="4">
+<div class="details">
+<div class="paragraph">
+Used by the routine at <a href="65392.html">FF70</a>.
+</div>
+</div>
+<table class="input-1">
+<tr class="asm-input-header">
+<th colspan="2">Input</th>
+</tr>
+<tr>
+<td class="register">A</td>
+<td class="register-desc">On exit, holds the computed hash value</td>
+</tr>
+</table>
+<table class="output-0">
+<tr class="asm-output-header">
+<th colspan="2">Output</th>
+</tr>
+
+</table>
+</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-2"><span id="65073"></span>FE31</td>
+<td class="instruction">XOR A</td>
+<td class="comment-11" rowspan="1">Initialise A to 0</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="65074"></span>FE32</td>
+<td class="instruction">LD HL,$5DC0</td>
+<td class="comment-11" rowspan="1">Start of block</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="65077"></span>FE35</td>
+<td class="instruction">LD BC,$7530</td>
+<td class="comment-11" rowspan="1">Length</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-2"><span id="65080"></span>FE38</td>
+<td class="instruction">XOR (HL)</td>
+<td class="comment-11" rowspan="1">Flip bits against the current byte</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="65081"></span>FE39</td>
+<td class="instruction">LD E,A</td>
+<td class="comment-11" rowspan="1">Remember new value</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="65082"></span>FE3A</td>
+<td class="instruction">INC HL</td>
+<td class="comment-11" rowspan="1">Point to next byte</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="65083"></span>FE3B</td>
+<td class="instruction">DEC BC</td>
+<td class="comment-11" rowspan="1">Decrease length</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="65084"></span>FE3C</td>
+<td class="instruction">LD A,B</td>
+<td class="comment-11" rowspan="2">Is length 0?</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="65085"></span>FE3D</td>
+<td class="instruction">OR C</td>
+<td class="comment-01" rowspan="1"></td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="65086"></span>FE3E</td>
+<td class="instruction">LD A,E</td>
+<td class="comment-11" rowspan="1">Restore A</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="65087"></span>FE3F</td>
+<td class="instruction">JP NZ,$FE38</td>
+<td class="comment-11" rowspan="1">Loop back if more to do</td>
+</tr>
+<tr>
+<td class="asm-label-0"></td>
+<td class="address-1"><span id="65090"></span>FE42</td>
+<td class="instruction">RET</td>
+<td class="comment-11" rowspan="1">All done</td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev"><span class="prev-1">Prev: <a href="65055.html">FE1F</a></span></td>
+<td class="up">Up: <a href="Loading system.html#65073">Map</a></td>
+<td class="next"><span class="next-1">Next: <a href="65091.html">FE43</a></span></td>
+</tr>
+</table>
+<footer>
+<div class="release"></div>
+<div class="copyright">Copyright Rod Bowkett / Mirrorsoft 1985. This dissassembly by Ritchie Swann 2019.</div>
+<div class="created">Created using <a href="http://skoolkit.ca/">SkoolKit</a> 7.0.</div>
+</footer>
+</body>
+</html>

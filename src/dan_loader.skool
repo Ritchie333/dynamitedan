@@ -1,0 +1,555 @@
+; Message
+t$5CD0 DEFB $08
+ $5CD1 DEFB $08
+ $5CD2 DEFB $08
+ $5CD3 DEFB $08
+ $5CD4 DEFB $08
+ $5CD5 DEFB $08
+ $5CD6 DEFB $08
+ $5CD7 DEFB $08
+ $5CD8 DEFB $08
+ $5CD9 DEFM "(HEY! LOOK BILL, ANOTHER PIRATE)"
+ $5CF9 DEFB $06
+ $5CFA DEFB $06
+ $5CFB DEFM "          "
+ $5D05 DEFB $12
+ $5D06 DEFB $01
+ $5D07 DEFB $13
+ $5D08 DEFB $01
+ $5D09 DEFM "POWER-LOAD48"
+ $5D15 DEFB $12
+ $5D16 DEFB $00
+ $5D17 DEFB $13
+ $5D18 DEFB $00
+ $5D19 DEFB $06
+ $5D1A DEFM "BY INCENTIVE SOFTWARE "
+ $5D30 DEFB $7F
+ $5D31 DEFM " TAG 1984"
+ $5D3A DEFB $10
+ $5D3B DEFB $07
+ $5D3C DEFB $11
+ $5D3D DEFB $07
+ $5D3E DEFB $0D
+
+; BASIC
+;
+; The listing says :
+; .
+; 10 CLEAR 60000: POKE 23693,0: POKE 23624,0: POKE 23697,0: CLS: POKE 23659,2:
+; FOR N=30 TO 36: BEEP .075,N: NEXT N: RANDOMIZE USR 24050: RANDOMIZE USR 0
+; .
+; Using the internal values, the listing should say :
+; .
+; 10 CLEAR 59999: POKE 23693,0: POKE 23624,0: POKE 23697,0: CLS: POKE 23659,0:
+; FOR N=30 TO 36: BEEP .075,N: NEXT N: RANDOMIZE USR 24146: RANDOMIZE USR 0
+b$5D3F DEFB $00,$0A,$A8,$F9,$08,$08,$08,$08
+ $5D47 DEFB $10,$07,$FD,$36,$30,$30,$30,$30
+ $5D4F DEFB $0E,$00,$00,$5F,$EA,$00,$3A,$F4
+ $5D57 DEFB $32,$33,$36,$39,$33,$0E,$00,$00
+ $5D5F DEFB $8D,$5C,$00,$2C,$30,$0E,$00,$00
+ $5D67 DEFB $00,$00,$00,$3A,$F4,$32,$33,$36
+ $5D6F DEFB $32,$34,$0E,$00,$00,$48,$5C,$00
+ $5D77 DEFB $2C,$35,$36,$0E,$00,$00,$00,$00
+ $5D7F DEFB $00,$3A,$F4,$32,$33,$36,$39,$37
+ $5D87 DEFB $0E,$00,$00,$91,$5C,$00,$2C,$30
+ $5D8F DEFB $0E,$00,$00,$00,$00,$00,$3A,$FB
+ $5D97 DEFB $3A,$F4,$32,$33,$36,$35,$39,$0E
+ $5D9F DEFB $00,$00,$6B,$5C,$00,$2C,$32,$0E
+ $5DA7 DEFB $00,$00,$00,$00,$00,$3A,$EB,$4E
+ $5DAF DEFB $3D,$33,$30,$0E,$00,$00,$1E,$00
+ $5DB7 DEFB $00,$CC,$33,$36,$0E,$00,$00,$24
+ $5DBF DEFB $00,$00,$3A,$D7,$2E,$30,$37,$35
+ $5DC7 DEFB $0E,$7D,$19,$99,$99,$99,$2C,$4E
+ $5DCF DEFB $3A,$F3,$4E,$3A,$F9,$C0,$32,$34
+ $5DD7 DEFB $30,$35,$30,$0E,$00,$00,$52,$5E
+ $5DDF DEFB $00,$3A,$F9,$C0,$30,$0E,$00,$00
+ $5DE7 DEFB $00,$00,$00,$0D
+
+i$5DEB
+
+; Copy of the initial stack pointer
+;
+; Used by the routine at #R$5E32
+w$5DF2 DEFW $EA48
+
+i$5DF4
+
+; Load the second block
+;
+; Used by the routine at #R$5E12.
+c$5E00 LD IX,$FF00   ; This is changed to #R$9C40 in the routine at #R$5E12 
+ $5E04 LD DE,$0007   ; This is changed to 0190 in the routine at #R$5E12
+ $5E07 INC D         ; { Reset the zero flag and swap AF
+ $5E08 EX AF,AF'     ;
+ $5E09 DEC D         ; }
+ $5E0A LD A,$0F      ; { Set the border to white
+ $5E0C OUT ($FE),A   ; }
+ $5E0E CALL $0562    ; Load the block
+ $5E11 RET           ; All done
+
+; Clear memory and set up data to load the second block
+;
+; Used by the routine at #R$5E77.
+c$5E12 LD HL,$5FB4   ; { Clear memory from 5FB4 - E86B
+ $5E15 LD DE,$5FB5   ;
+ $5E18 LD BC,$88B8   ;
+ $5E1B LDIR          ; }
+ $5E1D POP HL        ; Get the next value off the stack - EA61
+ $5E1E LD D,H        ; { Put it in DE and add 1
+ $5E1F LD E,L        ; 
+ $5E20 INC E         ; }
+ $5E21 POP BC        ; Get length to clear off the stack - 159F
+ $5E22 LDIR          ; Clear memory
+ $5E24 LD B,$1E      ; Get length to decrypt
+ $5E26 POP HL        ; Get start of memory to decrypt off the stack - 5E2E
+*$5E27 LD A,(HL)     ; Get next byte
+ $5E28 XOR $A3       ; Flip some bits
+ $5E2A LD (HL),A     ; Store it
+ $5E2B INC HL        ; Point to next byte
+ $5E2C DJNZ $5E27    ; Loop round if more to do
+ $5E2E POP HL        ; Get next value off the stack - #R$9C40
+ $5E2F LD ($5E02),HL ; Change the start address of the loader at #R$5E00 to this
+ $5E32 POP HL        ; Get next value off the stack - 0190
+ $5E33 LD ($5E05),HL ; Change the length of the loader at #R$5E00 to this
+ $5E36 SCF           ; Set carry flag to mark a load
+ $5E37 LD A,$07      ; Set the flag byte
+ $5E39 CALL $5E00    ; Load the block
+ $5E3C JP NC,$0001   ; Reset the machine if loading failed
+ $5E3F LD HL,$9C40   ; Point to start of the block
+ $5E42 LD B,$FF      ; { Decrypt first part 
+ $5E44 CALL $5E77    ; }
+ $5E47 LD B,$FF      ; { Decrypt second part
+ $5E49 CALL $5E77    ; }
+ $5E4C DI            ; Disable interrupts
+ $5E4D RET           ; Return to the next value on the stack - #R$9C40
+
+; Unused
+u$5E4E DEFB $EF,$10,$F5,$00
+
+; BASIC entry point
+c$5E52 DI            ; Turn off interrupts
+ $5E53 LD HL,$0000   ; { SP should be EA48.
+ $5E56 ADD HL,SP     ; This is set up in the BASIC }
+ $5E57 LD ($5DF2),HL ; Remember this value
+ $5E5A LD SP,$5E95   ; Set the stack pointer to a set of pre-loaded values at #R$5E95
+ $5E5D LD H,$5E      ; { Push 5E48 on the stack
+ $5E5F PUSH HL       ; }
+ $5E60 LD HL,$5E68   ; { Skip some code
+ $5E63 JP (HL)       ; }
+ $5E68 LD A,$12      ; { Change the top value on the stack
+ $5E6A LD ($5E93),A  ; to #R$5E12 }
+ $5E6D POP HL        ; { Store it in HL (as the start of the block to decrypt)
+ $5E6E PUSH HL       ; and DE (as a copy of it)
+ $5E6F POP DE        ; }
+ $5E70 RET           ; Take the top value off the stack (#R$5E76) and jump to it
+
+; Unused
+u$5E71 DEFB $D2,$00,$00,$C9,$C9
+
+; Decrypt a data block (first run)
+;
+; Used by the routine at #R$5E52.
+;
+; HL Start address
+; .
+;
+; The length is taken as the top value on the stack.
+; This routine is modified when run, changing the code for subsequent runs
+c$5E76 POP BC        ; Get the length off the stack - 3A
+*$5E77 LD A,(HL)     ; Put the next byte in A
+ $5E78 NEG           ; Invert its sign
+ $5E7A LD (HL),A     ; Store it
+ $5E7B INC HL        ; Point to next byte
+ $5E7C DJNZ $5E77    ; Loop round if more to do
+ $5E7E POP HL        ; Take HL off the stack - 67ED
+ $5E7F LD ($5E78),HL ; Modify the above instruction to read RRD (ED, 67) 
+ $5E82 POP BC        ; Get the next length off the stack (3A)
+ $5E83 LD A,$C9      ; { Change the above code to return early
+ $5E85 LD ($5E7E),A  ; after the loop at 5E7C }
+ $5E88 LD A,$00      ; { Remove the above LD (HL), A - as RRD
+ $5E8A LD ($5E7A),A  ; does a bit shift across A and (HL) it is not required }
+ $5E8D PUSH DE       ; { Restore original start of 5E12 in HL
+ $5E8E POP HL        ; }
+ $5E8F RET           ; Return to decrypt again at #R$5E77
+
+; Decrypt a data block (second run)
+;
+; Used by the routines at #R$5E76 and #R$5E12.
+;
+; HL Start address
+; B Length
+c$5E77 LD A,(HL)     ; Get the byte
+ $5E78 RRD           ; Shift and store it
+ $5E7A NOP           ;
+ $5E7B INC HL        ; Point to next byte
+ $5E7C DJNZ $5E77    ; Loop round if more to do
+ $5E7E RET           ; When run from #R$5E76, control returns to the start of the decrypter at #R$5E12.
+                     ; Otherwise it returns back to the calling point inside that routine.
+
+; Stack values
+;
+; These values are important for the loading system to work. The BASIC entry point at #R$5E52
+; initialises SP to 5E95, and the various values are then popped off the stack as and when
+; required.
+w$5E95 DEFW $5E76    ; Routine to return to from the main entry point at #R$5E52
+ $5E97 DEFW $3AFF    ; Length of the first data block to decrypt (3A)
+ $5E99 DEFW $67ED    ; Modified instructions for the routine at #R$5E76 - machine code for RRD
+ $5E9B DEFW $3AC5    ; Length of the second data block to decrypt (3A)
+ $5E9D DEFW $5E77    ; Routine to return to from the first decryption run at #R$5E76 
+ $5E9F DEFW $5E12    ; Routine to return to from the second decrypter run at #R$5E77
+ $5EA1 DEFW $EA61    ; Start of memory to clear. Used by the routine at #R$5E12
+ $5EA3 DEFW $159F    ; Length of memory to clear. Used by the routine at #R$5E12
+ $5EA5 DEFW $5E2E    ; Start address of first block to decrypt by the routine at #R$5E12
+ $5EA7 DEFW $9C40    ; Start address of second tape block
+ $5EA9 DEFW $0190    ; Length of second block
+ $5EAB DEFW $9C40    ; Entry point into second tape block
+
+i$5EAD
+
+; Second tape block entry point
+c$9C40 LD HL,$9C52   ; Start of block to decrypt
+ $9C43 LD BC,$0190   ; Length of block
+ $9C46 LD D,$A5      ; Set initial salt
+*$9C48 LD A,(HL)     ; Get the next byte
+ $9C49 XOR D         ; Flip bits against the salt
+ $9C4A LD (HL),A     ; Store this
+ $9C4B INC HL        ; Point to next byte
+ $9C4C DEC BC        ; Decrease length
+ $9C4D LD A,B        ; { Is the length 0?
+ $9C4E OR C          ; }
+ $9C4F JP NZ,$9C48   ; Loop back if it isn't
+; After this decrypter runs, the block now contains executable code
+ $9C52 LD HL,$9C63   ; Start of block to copy
+ $9C55 LD DE,$FE45   ; Destination address
+ $9C58 LD BC,$0190   ; Length to copy
+ $9C5B LDIR          ; Copy it
+ $9C5D LD SP,$FD84   ; Put the stack somewhere safe
+ $9C60 JP $FE45      ; Jump to the main loading routine
+
+; Build up a hash value from the screen memory
+;
+; Used by the routine at #R$FF70.
+;
+; A On exit, holds the computed hash value
+c$FE1F LD HL,$4000   ; Start of block
+ $FE22 LD BC,$1B00   ; Length
+ $FE25 XOR A         ; Initialise A to 0
+*$FE26 XOR (HL)      ; Flip bits against the current byte
+ $FE27 LD D,A        ; Remember new value
+ $FE28 INC HL        ; Point to next byte
+ $FE29 DEC BC        ; Decrease length
+ $FE2A LD A,B        ; { Is length 0?
+ $FE2B OR C          ; }
+ $FE2C LD A,D        ; Restore A
+ $FE2D JP NZ,$FE26   ; Loop back if more to do
+ $FE30 RET           ; All done
+
+; Build up a hash value from game memory
+;
+; Used by the routine at #R$FF70.
+;
+; A On exit, holds the computed hash value
+c$FE31 XOR A         ; Initialise A to 0
+ $FE32 LD HL,$5DC0   ; Start of block
+ $FE35 LD BC,$7530   ; Length
+*$FE38 XOR (HL)      ; Flip bits against the current byte
+ $FE39 LD E,A        ; Remember new value
+ $FE3A INC HL        ; Point to next byte
+ $FE3B DEC BC        ; Decrease length
+ $FE3C LD A,B        ; { Is length 0?
+ $FE3D OR C          ; }
+ $FE3E LD A,E        ; Restore A
+ $FE3F JP NZ,$FE38   ; Loop back if more to do
+ $FE42 RET           ; All done
+
+; Expected result from the hash function at #R$FE1F
+;
+; Used by the routine at #R$FF70
+b$FE43 DEFB $E6
+
+; Expected result from the hash function at #R$FE31
+;
+; Used by the routine at #R$FF70
+b$FE44 DEFB $C0
+
+; Main loader
+;
+; Used by the routine at #R$9C40.
+;
+; .
+;
+; The loader is incomplete when it is first run. A replacement
+; system is loaded off tape at FE5B. This includes the decryption
+; functions at #R$FE1F, #R$FE31 and #R$FF70.
+c$FE45 LD A,$84      ; Set flag byte
+ $FE47 LD DE,$1800   ; { Set start and length to the display file
+ $FE4A LD IX,$4000   ; }
+ $FE4E CALL $FEAB    ; Load block forwards with header
+ $FE51 LD DE,$0400   ; { Set start and length to attributes + printer buffer
+ $FE54 LD IX,$5BFF   ; }
+ $FE58 CALL $FF2A    ; Load block backwards
+ $FE5B LD DE,$01E1   ; { Set start and length to replacement loading system
+ $FE5E LD IX,$FE1F   ; }
+ $FE62 CALL $FEFA    ; Load block forwards
+ $FE65 LD DE,$9F1D   ; { Set start and length to the game
+ $FE68 LD IX,$FA1C   ; }
+ $FE6C CALL $FF2A    ; Load block backwards
+ $FE6F LD DE,$12E4   ; Store value for decryptor at #R$FF70
+ $FE72 LD IX,$FFFF   ;
+ $FE76 CALL $FF2A    ; Not called
+;Once the replacement loading system is complete, the code now reads
+ $FE76 JP $FF70      ; Jump to main decrypter
+
+; Unused code
+c$FE79 LD DE,$1B58   ;
+ $FE7C LD IX,$BF9B   ;
+ $FE80 CALL $FEFA    ;
+ $FE83 LD DE,$2233   ;
+ $FE86 LD IX,$AC12   ;
+ $FE8A CALL $FF2A    ;
+ $FE8D LD DE,$1B58   ;
+ $FE90 LD IX,$6E88   ;
+ $FE94 CALL $FEFA    ;
+ $FE97 LD DE,$0F28   ;
+ $FE9A LD IX,$DAF3   ;
+ $FE9E CALL $FEFA    ;
+ $FEA1 LD DE,$1388   ;
+ $FEA4 LD IX,$BF9A   ;
+ $FEA8 CALL $FF2A    ;
+
+; Load a block with leading tone.
+;
+; Used by the routine at #R$FE45.
+; This is mainly a copy of the ROM loading routine.
+c$FEAB INC D         ; { Reset zero flag and remember AF
+ $FEAC EX AF,AF'     ;
+ $FEAD DEC D         ; }
+ $FEAE DI            ; Disable interrupts while loading (although they are already disabled)
+ $FEAF LD A,$0F      ; { Set border to white
+ $FEB1 OUT ($FE),A   ; }
+ $FEB3 IN A,($FE)    ; { Read the EAR signal
+ $FEB5 RRA           ;
+ $FEB6 AND $20       ; }
+ $FEB8 OR $02        ; Add red border
+ $FEBA LD C,A        ; Remember this state
+ $FEBB CP A          ; Set the zero flag
+*$FEBC RET NZ        ; Return if load abandoned
+*$FEBD CALL $FF52    ; Get a tape edge
+ $FEC0 JR NC,$FEBC   ; Bail out if we couldn't find one
+ $FEC2 LD HL,$0415   ; { Wait for a while before checking a tape signal.
+*$FEC5 DJNZ $FEC5    ; This length is identical to the ROM routine.
+ $FEC7 DEC HL        ;
+ $FEC8 LD A,H        ;
+ $FEC9 OR L          ;
+ $FECA JR NZ,$FEC5   ; }
+ $FECC CALL $FF4E    ; Get a tape edge again
+ $FECF JR NC,$FEBC   ; Bail out if we didn't find one
+; At this point a leading tone has been found
+*$FED1 LD B,$9C      ; Timing constant
+ $FED3 CALL $FF4E    ; Get a tape edge
+ $FED6 JR NC,$FEBC   ; Bail out if there was none
+ $FED8 LD A,$C6      ; { Was an edge found soon enough?
+ $FEDA CP B          ; }
+ $FEDB JR NC,$FEBD   ; No, so loop back again to find one
+ $FEDD INC H         ; Increase the edge pair count
+ $FEDE JR NZ,$FED1   ; Loop back if more edge pairs need to be retrieved
+; Get the sync pulse
+*$FEE0 LD B,$C9      ; Timing constant
+ $FEE2 CALL $FF52    ; Get a tape edge
+ $FEE5 JR NC,$FEBC   ; Bail out if there wasn't one
+ $FEE7 LD A,B        ; { Were two tape edges close enough together
+ $FEE8 CP $D4        ; to be considered a sync pulse? }
+ $FEEA JR NC,$FEE0   ; No, so loop round and check again
+; The tape block is in sync, so load data
+ $FEEC CALL $FF52    ; Get a tape edge
+ $FEEF RET NC        ; Exit if there wasn't one
+ $FEF0 LD A,C        ; { Switch borders to blue + yellow
+ $FEF1 XOR $03       ;
+ $FEF3 LD C,A        ; }
+ $FEF4 LD H,$00      ; Initialise byte to collect
+ $FEF6 LD B,$E1      ; Timing constant.                     
+ $FEF8 JR $FF12      ; Jump forward to the loading routine
+
+; Load a block forwards
+;
+; Used by the routines at #R$FE45 and #R$FE79.
+c$FEFA EX AF,AF'     ; Save the flags
+ $FEFB JR NZ,$FF02   ; Check if this is the flag byte
+ $FEFD LD (IX+$00),L ; { This is data, store this byte and move on
+ $FF00 JR $FF0C      ; }
+*$FF02 RL C          ; Remember the carry flag
+ $FF04 XOR L         ; Check the flag byte is correct
+ $FF05 NOP           ; The corresponding routine in the ROM would
+                     ; exit here - in this custom loader, the flag
+                     ; byte is ignored
+ $FF06 LD A,C        ; { Restore carry flag
+ $FF07 RRA           ;
+ $FF08 LD C,A        ; }
+ $FF09 INC DE        ; Length should not be decreased for the flag byte
+ $FF0A JR $FF0E      ; Move on to get next byte
+*$FF0C INC IX        ; Point to next byte
+*$FF0E DEC DE        ; Decrease length
+ $FF0F EX AF,AF'     ; Restore flags
+ $FF10 LD B,$E3      ; Set timing constant
+; This entry point is used by the routine at #R$FEAB.
+*$FF12 LD L,$01      ; Clear bits in the byte to collect
+*$FF14 CALL $FF4E    ; Get a tape edge
+ $FF17 RET NC        ; Return if it took too long
+ $FF18 LD A,$ED      ; { See how quickly an edge was found.
+ $FF1A CP B          ; If less than ED, a 0 was found, otherwise a 1 }
+ $FF1B RL L          ; Store the relevant bit
+ $FF1D LD B,$E1      ; Set timing constant for next bit
+ $FF1F JP NC,$FF14   ; Jump back while there are still bits to retrieve
+ $FF22 LD A,H        ; { Update "parity matching" byte in H
+ $FF23 XOR L         ;
+ $FF24 LD H,A        ; }
+ $FF25 LD A,D        ; { Any more bytes to load?
+ $FF26 OR E          ; }
+ $FF27 JR NZ,$FEFA   ; Loop back if there are
+ $FF29 RET           ; All done
+
+; Load a block backwards
+;
+; Used by the routines at #R$FE45 and #R$FE79.
+c$FF2A EX AF,AF'     ; Save the flags
+ $FF2B LD (IX+$00),L ; Store the byte
+ $FF2E JR $FF30      ; 
+*$FF30 DEC IX        ; Point to the previous byte
+ $FF32 DEC DE        ; Decrease the length
+ $FF33 EX AF,AF'     ; Restore flags
+ $FF34 LD B,$E3      ; Set timing constant
+ $FF36 LD L,$01      ; Clear bits in byte to collect
+*$FF38 CALL $FF4E    ; Get a tape edge
+ $FF3B RET NC        ; Return if it took too long
+ $FF3C LD A,$ED      ; { See how quickly an edge was found.
+ $FF3E CP B          ; If less than ED, a 0 was found, otherwise a 1 }
+ $FF3F RL L          ; Store the relevant bit
+ $FF41 LD B,$E1      ; Set timing constant for the next bit
+ $FF43 JP NC,$FF38   ; Jump back while there are still bits to retrieve
+ $FF46 LD A,H        ; { Update "parity matching" byte in H
+ $FF47 XOR L         ;
+ $FF48 LD H,A        ; }
+ $FF49 LD A,D        ; { Any more bytes to load?
+ $FF4A OR E          ; }
+ $FF4B JR NZ,$FF2A   ; Loop back if there are
+ $FF4D RET           ; All done
+
+; Get tape signal
+;
+; Used by the routines at #R$FEAB, #R$FEFA and #R$FF2A.
+;
+; B On input, timing constant. On output, holds the time taken to find an edge change. If found before the timing constant value, a '0' bit was found, otherwise it was a '1' bit.
+; C Border colour and previous EAR signal bit
+c$FF4E CALL $FF52    ;
+ $FF51 RET NC        ;
+
+; Get tape signal
+;
+; Used by the routines at #R$FEAB and #R$FF4E. 
+;
+; B On input, timing constant. On output, holds the time taken to find an edge change. If found before the timing constant value, a '0' bit was found, otherwise it was a '1' bit.
+; C Border colour and previous EAR signal bit
+;
+; This is similar to the ROM routine LD_EDGE_1 at 05E7.
+c$FF52 LD A,$0B      ; { Wait the required length before sampling a bit
+*$FF54 DEC A         ;
+ $FF55 JR NZ,$FF54   ; }
+ $FF57 AND A         ; Clear carry flag
+*$FF58 INC B         ; Increment pass counter
+ $FF59 RET Z         ; Return if a signal wasn't found quickly enough
+ $FF5A LD A,$7F      ; { Read the tape signal
+ $FF5C IN A,($FE)    ; }
+ $FF5E RRA           ; Shift right
+ $FF5F NOP           ; The ROM routine returns here; this custom loader does nothing
+ $FF60 XOR C         ; Mask against expected edge type
+ $FF61 AND $20       ; Test for the edge
+ $FF63 JR Z,$FF58    ; Jump back if it wasn't found
+; At this point, an edge has been found
+ $FF65 LD A,C        ; { Flip border colour
+ $FF66 CPL           ;
+ $FF67 LD C,A        ; }
+ $FF68 AND $07       ; Turn off non-border bits
+ $FF6A OR $08        ; Turn off MIC input
+ $FF6C OUT ($FE),A   ; Set the border
+ $FF6E SCF           ; Set carry flag to denote success
+ $FF6F RET           ; All done
+
+; Main decrypter
+;
+; Used by the routine at #R$FE45.
+c$FF70 LD A,$00      ; { Set the border to black
+ $FF72 OUT ($FE),A   ; }
+ $FF74 CALL $FE1F    ; Get hash from the screen
+ $FF77 LD HL,$FE43   ; { Does it equal the value in FE43?
+ $FF7A CP (HL)       ; }
+ $FF7B JP Z,$FF89    ; Yes, so move on
+*$FF7E LD HL,$EE48   ; { Hash is wrong. There's a loading error.
+ $FF81 LD BC,$FFFF   ; Wipe the memory, which will lead to the
+ $FF84 LD DE,$EE49   ; code at 0000 to be executed, causing a reset.
+ $FF87 LDIR          ; }
+*$FF89 LD HL,$FFA3   ; Start of block to decrypt
+ $FF8C LD BC,$0045   ; Length of block
+*$FF8F LD A,D        ; D is 12, set up by the code at #$FE6F
+ $FF90 XOR (HL)      ; Flip bits
+ $FF91 LD (HL),A     ; Store decrypted value
+ $FF92 INC HL        ; Point to next byte
+ $FF93 DEC BC        ; Decrease length
+ $FF94 LD A,B        ; { Is length 0?
+ $FF95 OR C          ; } 
+ $FF96 JP NZ,$FF8F   ; Loop back if not
+ $FF99 CALL $FE31    ; Get hash from memory
+ $FF9C LD HL,$FE44   ; { Does it equal the value in FE44?
+ $FF9F CP (HL)       ; }
+ $FFA0 JP NZ,$FF7E   ; If not, jump back to routine that resets the machine
+; After the decrypter has run, the next block becomes executable code
+ $FFA3 LD HL,$5DC0   ; Start of block
+ $FFA6 LD BC,$7530   ; Length
+ $FFA9 CALL $FFD4    ; Decrypt it
+ $FFAC LD HL,$5DC0   ; Start of block
+ $FFAF LD BC,$7530   ; Length
+ $FFB2 CALL $FFDE    ; Decrypt it
+ $FFB5 LD HL,$FA1C   ; { Move the game into the right place
+ $FFB8 LD DE,$FF1C   ;
+ $FFBB LD BC,$9F1D   ;
+ $FFBE LDDR          ; }
+ $FFC0 LD HL,$A710   ; Set value to calculate start position
+ $FFC3 LD ($5C36),HL ; Set CHARS to this value - pretty meaningless if using custom character set
+ $FFC6 LD BC,$DF10   ; Calculate offset to change HL by - -20F0
+ $FFC9 XOR A         ; Reset carry flag
+ $FFCA SBC HL,BC     ; Subtract negative offset (ie: adding it) to give C800
+ $FFCC LD SP,$FFFF   ; Put the stack pointer somewhere safe
+ $FFCF IM 1          ; Turn interrupts back on
+ $FFD1 JP $006F      ; 006F contains JP (HL) (part of the ROM's NMI handler)
+; Control passes to the game's main entry point at C800
+
+; Decrypt a data block using bit shifting
+;
+; Used by the routine at #R$FF70.
+;
+; HL Start address
+; BC Length
+c$FFD4 LD A,(HL)     ; Get next byte
+ $FFD5 RRD           ; Shift bits and store it
+ $FFD7 INC HL        ; Point to next byte
+ $FFD8 DEC BC        ; Decrease length
+ $FFD9 LD A,B        ; { Is length 0?
+ $FFDA OR C          ; }
+ $FFDB JR NZ,$FFD4   ; No, loop back for more
+ $FFDD RET           ; All done
+
+; Decrypt a data block using bit twiddling
+;
+; Used by the routine at #R$FF70.
+;
+; HL Start address
+; BC Length
+; D Initial salt
+c$FFDE LD A,D        ; Get salt
+ $FFDF XOR (HL)      ; Flip bits on the next byte against it
+ $FFE0 LD (HL),A     ; Store new value
+ $FFE1 INC HL        ; Point to next byte
+ $FFE2 DEC BC        ; Decrease length
+ $FFE3 LD A,B        ; { Is length 0?
+ $FFE4 OR C          ; }
+ $FFE5 JR NZ,$FFDE   ; No, loop back for more
+ $FFE7 RET           ; All done
