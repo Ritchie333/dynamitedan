@@ -1,6 +1,6 @@
 [Game]
 Game=Dynamite Dan
-Copyright=Copyright Rod Bowkett / Mirrorsoft 1985. This dissassembly by Ritchie Swann 2019.
+Copyright=Copyright Rod Bowkett / Mirrorsoft 1985. This dissassembly by Ritchie Swann 2019-2023.
 
 [Config]
 HtmlWriterClass=:dan.DanHtmlWriter
