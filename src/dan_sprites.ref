@@ -1,0 +1,212 @@
+[Sprites:Dan]
+#HTML(#R$633A<br><img src="images/DanRight.png"/>)
+#HTML(#R$648A<br><img src="images/DanLeft.png"/>)
+
+[Sprites:Dan being shot]
+#HTML(
+    <table>
+        <tr>
+            <td>#R$F064</td>
+            <td>#R$F096</td>
+            <td>#R$F0C8</td>
+            <td>#R$F0FA</td>
+            <td>#R$F12C</td>
+            <td>#R$F176</td>
+            <td>#R$F1C0</td>
+            <td>#R$F20A</td>
+            <td>#R$F23C</td>
+        </tr>
+        <tr>
+            <td><img src="images/udgs/dandeada.png" /><td/>
+            <td><img src="images/udgs/dandeadb.png" /><td/>
+            <td><img src="images/udgs/dandeadc.png" /><td/>
+            <td><img src="images/udgs/dandeadd.png" /><td/>
+            <td><img src="images/udgs/dandeade.png" /><td/>
+            <td><img src="images/udgs/dandeadf.png" /><td/>
+            <td><img src="images/udgs/dandeadg.png" /><td/>
+            <td><img src="images/udgs/dandeadh.png" /><td/>
+    </table>
+)
+
+[Sprites:Sprite 00]
+#HTML(#R$B346<br/><img src="images/Sprite_00.png" />)
+
+[Sprites:Sprite 01]
+#HTML(#R$B0FF<br/><img src="images/Sprite_01.png" />)
+
+[Sprites:Sprite 02]
+#HTML(#R$C168<br/><img src="images/Sprite_02.png" />)
+
+[Sprites:Sprite 03]
+#HTML(#R$C1C9<br/><img src="images/Sprite_03.png" />)
+
+[Sprites:Sprite 04]
+#HTML(#R$B03D<br/><img src="images/Sprite_04.png" />)
+
+[Sprites:Sprite 05]
+#HTML(#R$B160<br/><img src="images/Sprite_05.png" />)
+
+[Sprites:Sprite 06]
+#HTML(#R$B1A1<br/><img src="images/Sprite_06.png" />)
+
+[Sprites:Sprite 07]
+#HTML(#R$B202<br/><img src="images/Sprite_07.png" />)
+
+[Sprites:Sprite 08]
+#HTML(#R$B09E<br/><img src="images/Sprite_08.png" />)
+
+[Sprites:Sprite 09]
+#HTML(#R$C127<br/><img src="images/Sprite_09.png" />)
+
+[Sprites:Sprite 0A]
+#HTML(#R$B263<br/><img src="images/Sprite_0A.png" />)
+
+[Sprites:Sprite 0B]
+#HTML(#R$B2A4<br/><img src="images/Sprite_0B.png" />)
+
+[Sprites:Sprite 0C]
+#HTML(#R$B488<br/><img src="images/Sprite_0C.png" />)
+
+[Sprites:Sprite 0D]
+#HTML(#R$B407<br/><img src="images/Sprite_0D.png" />)
+
+[Sprites:Sprite 0E]
+#HTML(#R$B7EF<br/><img src="images/Sprite_0E.png" />)
+
+[Sprites:Sprite 0F]
+#HTML(#R$BF43<br/><img src="images/Sprite_0F.png" />)
+
+[Sprites:Sprite 10]
+#HTML(#R$C085<br/><img src="images/Sprite_10.png" />)
+
+[Sprites:Sprite 11]
+#HTML(#R$BFC4<br/><img src="images/Sprite_11.png" />)
+
+[Sprites:Sprite 12]
+#HTML(#R$B305<br/><img src="images/Sprite_12.png" />)
+
+[Sprites:Sprite 13]
+#HTML(#R$B509<br/><img src="images/Sprite_13.png" />)
+
+[Sprites:Sprite 14]
+#HTML(#R$B54A<br/><img src="images/Sprite_14.png" />)
+
+[Sprites:Sprite 15 - Dr. Blitzen]
+#HTML(#R$AFDC<br/><img src="images/Sprite_15.png" />)
+
+[Sprites:Sprite 16]
+#HTML(#R$B5AB<br/><img src="images/Sprite_16.png" />)
+
+[Sprites:Sprite 17]
+#HTML(#R$B66C<br/><img src="images/Sprite_17.png" />)
+
+[Sprites:Sprite 18]
+#HTML(#R$BE21<br/><img src="images/Sprite_18.png" />)
+
+[Sprites:Sprite 19]
+#HTML(#R$BDE0<br/><img src="images/Sprite_19.png" />)
+
+[Sprites:Sprite 1A]
+#HTML(#R$C106<br/><img src="images/Sprite_1A.png" />)
+
+[Sprites:Sprite 1B]
+#HTML(#R$BD4F<br/><img src="images/Sprite_1B.png" />)
+
+[Sprites:Sprite 1C]
+#HTML(#R$BD0E<br/><img src="images/Sprite_1C.png" />)
+
+[Sprites:Sprite 1D]
+#HTML(#R$BC8D<br/><img src="images/Sprite_1D.png" />)
+
+[Sprites:Sprite 1E]
+#HTML(#R$BC2C<br/><img src="images/Sprite_1E.png" />)
+
+[Sprites:Sprite 1F]
+#HTML(#R$B6ED<br/><img src="images/Sprite_1F.png" />)
+
+[Sprites:Sprite 20]
+#HTML(#R$C24A<br/><img src="images/Sprite_20.png" />)
+
+[Sprites:Sprite 21]
+#HTML(#R$C31C<br/><img src="images/Sprite_21.png" />)
+
+[Sprites:Sprite 22]
+#HTML(#R$C2DB<br/><img src="images/Sprite_22.png" />)
+
+[Sprites:Sprite 23]
+#HTML(#R$C43E<br/><img src="images/Sprite_23.png" />)
+
+[Sprites:Sprite 24]
+#HTML(#R$BE82<br/><img src="images/Sprite_24.png" />)
+
+[Sprites:Sprite 25]
+#HTML(#R$B76E<br/><img src="images/Sprite_25.png" />)
+
+[Sprites:Sprite 26]
+#HTML(#R$C3DD<br/><img src="images/Sprite_26.png" />)
+
+[Sprites:Sprite 27]
+#HTML(#R$C49F<br/><img src="images/Sprite_27.png" />)
+
+[Sprites:Sprite 28]
+#HTML(#R$C693<br/><img src="images/Sprite_28.png" />)
+
+[Sprites:Sprite 29]
+#HTML(#R$C500<br/><img src="images/Sprite_29.png" />)
+
+[Sprites:Sprite 2A]
+#HTML(#R$C6D4<br/><img src="images/Sprite_2A.png" />)
+
+[Sprites:Sprite 2B]
+#HTML(#R$BA75<br/><img src="images/Sprite_2B.png" />)
+
+[Sprites:Sprite 2C - Donna]
+#HTML(#R$C735<br/><img src="images/Sprite_2C.png" />)
+
+[Sprites:Sprite 2D]
+#HTML(#R$B850<br/><img src="images/Sprite_2D.png" />)
+
+[Sprites:Sprite 2E]
+#HTML(#R$B8B1<br/><img src="images/Sprite_2E.png" />)
+
+[Sprites:Sprite 2F]
+#HTML(#R$BBEB<br/><img src="images/Sprite_2F.png" />)
+
+[Sprites:Sprite 30]
+#HTML(#R$B8F2<br/><img src="images/Sprite_30.png" />)
+
+[Sprites:Sprite 31]
+#HTML(#R$BBAA<br/><img src="images/Sprite_31.png" />)
+
+[Sprites:Sprite 32]
+#HTML(#R$C796<br/><img src="images/Sprite_32.png" />)
+
+[Sprites:Sprite 33]
+#HTML(#R$B933<br/><img src="images/Sprite_33.png" />)
+
+[Sprites:Sprite 34]
+#HTML(#R$BB49<br/><img src="images/Sprite_34.png" />)
+
+[Sprites:Sprite 35]
+#HTML(#R$BB08<br/><img src="images/Sprite_35.png" />)
+
+[Sprites:Sprite 36]
+#HTML(#R$AF9B<br/><img src="images/Sprite_36.png" />)
+
+[Sprites:Sprite 37]
+#HTML(#R$BAC7<br/><img src="images/Sprite_37.png" />)
+
+[Sprites:Sprite 38]
+#HTML(#R$AEDA<br/><img src="images/Sprite_38.png" />)
+
+[Sprites:Sprite 39]
+#HTML(#R$BAA6<br/><img src="images/Sprite_39.png" />)
+
+[Sprites:Sprite 3A]
+#HTML(#R$B9F4<br/><img src="images/Sprite_3A.png" />)
+
+[Sprites:Sprite 3B]
+#HTML(#R$C541<br/><img src="images/Sprite_3B.png" />)
+
+[Sprites:Sprite 3C]
+#HTML(#R$C5D2<br/><img src="images/Sprite_3C.png" />)

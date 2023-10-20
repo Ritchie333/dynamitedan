@@ -1,0 +1,23 @@
+[Food:00 - Egg]
+#HTML(#R$65F2<br/><img src="images/cheese.png"/>)
+
+[Food:01 - Martini]
+#HTML(#R$6747<br/><img src="images/martini.png"/>)
+
+[Food:02 - Fruit bowl]
+#HTML(#R$670F<br/><img src="images/fruit.png"/>)
+
+[Food:03 - Cheese]
+#HTML(#R$662C<br/><img src="images/cheese.png"/>)
+
+[Food:04 - Cake]
+#HTML(#R$6606<br/><img src="images/cake.png"/>)
+
+[Food:05 - Ice cream]
+#HTML(#R$667F<br/><img src="images/icecream.png"/>)
+
+[Food:06 - Cup of tea]
+#HTML(#R$66EB<br/><img src="images/tea.png"/>)
+
+[Food:07 - Soup]
+#HTML(#R$66BF<br/><img src="images/soup.png"/>)

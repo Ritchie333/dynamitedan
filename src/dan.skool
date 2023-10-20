@@ -1,4 +1,6 @@
-; UDG DE
+; UDG DE - Blown up safe 1
+;
+; #CALL:print_udg(#PC,UDG_DE)
 b$6000 DEFB $03,$04,$02,$54,$00,$08,$24,$00
  $6008 DEFB $00,$64,$00,$12,$5A,$00,$04,$F1
  $6010 DEFB $00,$00,$8A,$00,$00,$02,$00,$00
@@ -14,7 +16,9 @@ b$6000 DEFB $03,$04,$02,$54,$00,$08,$24,$00
  $6060 DEFB $DA,$00,$06,$03,$03,$02,$05,$05
  $6068 DEFB $02,$07,$06,$02,$05,$05
 
-; UDG DF
+; UDG DF - Blown up safe 2
+;
+; #CALL:print_udg(#PC,UDG_DF)
 b$606E DEFB $03,$04,$00,$00,$A0,$02,$31,$00
  $6076 DEFB $00,$58,$00,$10,$2C,$00,$04,$14
  $607E DEFB $80,$00,$8A,$00,$00,$02,$00,$00
@@ -30,7 +34,9 @@ b$606E DEFB $03,$04,$00,$00,$A0,$02,$31,$00
  $60CE DEFB $82,$00,$01,$07,$02,$02,$06,$06
  $60D6 DEFB $01,$07,$02,$02,$07,$07
 
-; UDG E0
+; UDG E0 - Blown up safe 3
+;
+; #CALL:print_udg(#PC,UDG_E0)
 b$60DC DEFB $03,$04,$00,$68,$00,$40,$30,$00
  $60E4 DEFB $00,$00,$00,$02,$12,$00,$20,$B1
  $60EC DEFB $00,$00,$0A,$00,$00,$02,$00,$00
@@ -46,7 +52,9 @@ b$60DC DEFB $03,$04,$00,$68,$00,$40,$30,$00
  $613C DEFB $00,$04,$04,$05,$02,$04,$06,$04
  $6144 DEFB $07,$07,$02,$05,$05
 
-; UDG E1
+; UDG E1 - Blown up safe 4
+;
+; #CALL:print_udg(#PC,UDG_E1)
 b$6149 DEFB $03,$04,$04,$60,$90,$00,$C4,$40
  $6151 DEFB $01,$90,$20,$03,$00,$00,$02,$0A
  $6159 DEFB $40,$00,$41,$00,$00,$05,$00,$00
@@ -62,7 +70,9 @@ b$6149 DEFB $03,$04,$04,$60,$90,$00,$C4,$40
  $61A9 DEFB $40,$02,$05,$05,$07,$04,$05,$05
  $61B1 DEFB $05,$05,$02,$02,$06
 
-; UDG E2
+; UDG E2 - Blown up safe 5
+;
+; #CALL:print_udg(#PC,UDG_E2)
 b$61B6 DEFB $03,$04,$00,$04,$00,$00,$22,$00
  $61BE DEFB $00,$89,$00,$00,$1C,$80,$00,$0E
  $61C6 DEFB $00,$00,$07,$00,$00,$03,$00,$00
@@ -78,7 +88,9 @@ b$61B6 DEFB $03,$04,$00,$04,$00,$00,$22,$00
  $6216 DEFB $02,$C0,$07,$07,$07,$05,$02,$07
  $621E DEFB $05,$03,$06,$05,$05,$07
 
-; UDG E3
+; UDG E3 - Blown up safe 6
+;
+; ##CALL:print_udg(#PC,UDG_E3)
 b$6224 DEFB $03,$04,$00,$00,$00,$00,$00,$10
  $622C DEFB $00,$20,$80,$04,$04,$00,$00,$00
  $6234 DEFB $08,$20,$41,$00,$00,$00,$00,$00
@@ -94,15 +106,9 @@ b$6224 DEFB $03,$04,$00,$00,$00,$00,$00,$10
  $6284 DEFB $00,$00,$02,$01,$07,$03,$07,$07
  $628C DEFB $07,$04,$07,$02,$02,$07
 
-; Offsets for safe blowing graphics
-w$6292 DEFW $DFDE
- $6294 DEFW $DFDE
- $6296 DEFW $E0E2
- $6298 DEFW $E1E2
- $629A DEFW $DFE0
- $629C DEFW $E1E2
- $629E DEFW $E0E3
- $62A0 DEFW $E3E2
+; Graphic IDs for the safe blowing graphics
+b$6292 DEFB $DE,$DF,$DE,$DF,$E2,$E0,$E2,$E1
+ $629A DEFB $E0,$DF,$E2,$E1,$E3,$E0,$E2,$E3
 
 ; Frames until the safe door should be removed
 b$62A2 DEFB $50
@@ -110,32 +116,34 @@ b$62A2 DEFB $50
 ; Blow the safe up
 ;
 ; Used by the routine at #R$CF77.
-c$62A3 LD BC,$0304   ;
- $62A6 LD DE,$130A   ;
- $62A9 LD HL,$62A2   ;
- $62AC LD A,(HL)     ;
- $62AD CP $50        ;
- $62AF RET Z         ;
- $62B0 INC (HL)      ;
- $62B1 LD A,(HL)     ;
- $62B2 CP $50        ;
- $62B4 JP Z,$E897    ;
- $62B7 CP $40        ;
- $62B9 JR NC,$62C4   ;
- $62BB AND $02       ;
- $62BD SRL A         ;
- $62BF ADD A,$06     ;
- $62C1 JP $E8BA      ;
-*$62C4 SUB $40       ;
- $62C6 PUSH BC       ;
- $62C7 LD C,A        ;
- $62C8 LD B,$00      ;
- $62CA LD HL,$6292   ;
- $62CD ADD HL,BC     ;
- $62CE LD A,(HL)     ;
- $62CF CALL $F3D3    ;
- $62D2 POP BC        ;
- $62D3 JP $E84E      ;
+c$62A3 LD BC,$0304   ; Size of the safe (3x4).
+ $62A6 LD DE,$130A   ; Position of the safe (#N$13, #N$0A).
+ $62A9 LD HL,$62A2   ; { Get the frame count. (#R$62A2)
+ $62AC LD A,(HL)     ; }
+ $62AD CP $50        ; It it 50 yet?
+ $62AF RET Z         ; Return if so.
+ $62B0 INC (HL)      ; Increase the frame count.
+ $62B1 LD A,(HL)     ; { Is it 50 now?
+ $62B2 CP $50        ; }
+ $62B4 JP Z,$E897    ; If so, remove the safe from screen.
+ $62B7 CP $40        ; Is the frame count less than #N40?
+ $62B9 JR NC,$62C4   ; Jump forward if not.
+; Flash the safe colours.
+ $62BB AND $02       ; { Otherwise take the last two bits,
+ $62BD SRL A         ; double them and add 6 to get an
+ $62BF ADD A,$06     ; attribute colour. }
+ $62C1 JP $E8BA      ; Fill with this attribute.
+; Draw the exploding safe.
+*$62C4 SUB $40       ; Decrease #REGa by #N$40.
+ $62C6 PUSH BC       ; Remember #REGbc.
+ $62C7 LD C,A        ; { Put this in #REGbc.
+ $62C8 LD B,$00      ; }
+ $62CA LD HL,$6292   ; { Add the offset to the graphic table. (#R$6292)
+ $62CD ADD HL,BC     ; }
+ $62CE LD A,(HL)     ; Get the graphic ID.
+ $62CF CALL $F3D3    ; Get the address of the UDG.
+ $62D2 POP BC        ; Restore #REGbc.
+ $62D3 JP $E84E      ; Draw the UDG.
 
 ; Dan's current working graphic
 g$62D6 DEFB $00,$00,$00,$00,$00,$00,$00,$00
@@ -163,7 +171,9 @@ w$632A DEFW $633A
  $6336 DEFW $6532
  $6338 DEFW $6586
 
-; Dan right 1
+; Dan right
+;
+; #CALL:print_dan(#PC,false,DanRight)
 b$633A DEFB $00,$00,$00,$00,$00,$00,$00,$E0
  $6342 DEFB $00,$07,$88,$00,$0E,$F4,$00,$09
  $634A DEFB $F0,$00,$05,$A0,$00,$07,$F0,$00
@@ -175,9 +185,8 @@ b$633A DEFB $00,$00,$00,$00,$00,$00,$00,$E0
  $637A DEFB $80,$00,$03,$00,$00,$03,$00,$00
  $6382 DEFB $03,$00,$00,$03,$C0,$00,$00,$00
  $638A DEFB $00,$00,$00,$00
-
 ; Dan right 2
-b$638E DEFB $00,$00,$00,$00,$00,$00,$00,$38
+@$638E DEFB $00,$00,$00,$00,$00,$00,$00,$38
  $6396 DEFB $00,$01,$E2,$00,$03,$BD,$00,$02
  $639E DEFB $7C,$00,$01,$68,$00,$01,$FC,$00
  $63A6 DEFB $00,$F8,$00,$00,$F0,$00,$01,$B8
@@ -188,9 +197,8 @@ b$638E DEFB $00,$00,$00,$00,$00,$00,$00,$38
  $63CE DEFB $D0,$00,$01,$B8,$00,$03,$1D,$00
  $63D6 DEFB $03,$0E,$00,$03,$C4,$00,$00,$00
  $63DE DEFB $00,$00,$00,$00
-
 ; Dan right 3
-b$63E2 DEFB $00,$00,$00,$00,$00,$00,$00,$0E
+@$63E2 DEFB $00,$00,$00,$00,$00,$00,$00,$0E
  $63EA DEFB $00,$00,$78,$80,$00,$EF,$40,$00
  $63F2 DEFB $9F,$00,$00,$5A,$00,$00,$7F,$00
  $63FA DEFB $00,$3E,$00,$00,$3C,$00,$00,$6E
@@ -201,9 +209,8 @@ b$63E2 DEFB $00,$00,$00,$00,$00,$00,$00,$0E
  $6422 DEFB $E8,$00,$01,$DC,$00,$01,$8E,$80
  $642A DEFB $03,$07,$00,$01,$82,$00,$00,$00
  $6432 DEFB $00,$00,$00,$00
-
 ; Dan right 4
-b$6436 DEFB $00,$00,$00,$00,$00,$00,$00,$03
+@$6436 DEFB $00,$00,$00,$00,$00,$00,$00,$03
  $643E DEFB $80,$00,$1E,$20,$00,$3B,$D0,$00
  $6446 DEFB $27,$C0,$00,$16,$80,$00,$1F,$C0
  $644E DEFB $00,$0F,$80,$00,$0F,$00,$00,$1B
@@ -215,7 +222,9 @@ b$6436 DEFB $00,$00,$00,$00,$00,$00,$00,$03
  $647E DEFB $00,$43,$00,$00,$23,$C0,$00,$00
  $6486 DEFB $00,$00,$00,$00
 
-; Dan left 1
+; Dan left
+;
+; #CALL:print_dan(#PC,true,DanLeft)
 b$648A DEFB $00,$00,$00,$00,$00,$00,$01,$C0
  $6492 DEFB $00,$04,$78,$00,$0B,$DC,$00,$03
  $649A DEFB $E4,$00,$01,$68,$00,$03,$F8,$00
@@ -227,9 +236,8 @@ b$648A DEFB $00,$00,$00,$00,$00,$00,$01,$C0
  $64CA DEFB $DC,$00,$00,$CE,$00,$00,$C6,$00
  $64D2 DEFB $00,$C2,$00,$03,$C4,$00,$00,$00
  $64DA DEFB $00,$00,$00,$00
-
 ; Dan left 2
-b$64DE DEFB $00,$00,$00,$00,$00,$00,$00,$70
+@$64DE DEFB $00,$00,$00,$00,$00,$00,$00,$70
  $64E6 DEFB $00,$01,$1E,$00,$02,$F7,$00,$00
  $64EE DEFB $F9,$00,$00,$5A,$00,$00,$FE,$00
  $64F6 DEFB $00,$7C,$00,$00,$3C,$00,$00,$76
@@ -240,9 +248,8 @@ b$64DE DEFB $00,$00,$00,$00,$00,$00,$00,$70
  $651E DEFB $17,$00,$00,$3B,$80,$01,$71,$80
  $6526 DEFB $00,$E0,$C0,$00,$41,$80,$00,$00
  $652E DEFB $00,$00,$00,$00
-
 ; Dan left 3
-b$6532 DEFB $00,$00,$00,$00,$00,$00,$00,$1C
+@$6532 DEFB $00,$00,$00,$00,$00,$00,$00,$1C
  $653A DEFB $00,$00,$47,$80,$00,$BD,$C0,$00
  $6542 DEFB $3E,$40,$00,$16,$80,$00,$3F,$80
  $654A DEFB $00,$1F,$00,$00,$0F,$00,$00,$1D
@@ -253,9 +260,8 @@ b$6532 DEFB $00,$00,$00,$00,$00,$00,$00,$1C
  $6572 DEFB $0B,$80,$00,$1D,$80,$00,$B8,$C0
  $657A DEFB $00,$70,$C0,$00,$23,$C0,$00,$00
  $6582 DEFB $00,$00,$00,$00
-
 ; Dan left 4
-b$6586 DEFB $00,$00,$00,$00,$00,$00,$00,$07
+@$6586 DEFB $00,$00,$00,$00,$00,$00,$00,$07
  $658E DEFB $00,$00,$11,$E0,$00,$2F,$70,$00
  $6596 DEFB $0F,$90,$00,$05,$A0,$00,$0F,$E0
  $659E DEFB $00,$07,$C0,$00,$03,$C0,$00,$07
@@ -286,11 +292,15 @@ w$65DA DEFW $65F2
 b$65EA DEFB $70,$78,$20,$70,$32,$50,$20,$28
 
 ; Food 0 - Egg
+;
+; #CALL:print_udg(#PC,egg)
 b$65F2 DEFB $01,$02,$00,$40,$A1,$D3,$E7,$C3
  $65FA DEFB $81,$FF,$C3,$91,$A1,$20,$40,$40
  $6602 DEFB $40,$FF,$70,$78
 
 ; Food 4 - Cake
+;
+; #CALL:print_udg(#PC,cake)
 b$6606 DEFB $02,$02,$00,$00,$00,$00,$FF,$FF
  $660E DEFB $00,$00,$00,$00,$FF,$FF,$00,$00
  $6616 DEFB $00,$00,$FF,$FF,$FF,$FF,$FF,$F7
@@ -298,6 +308,8 @@ b$6606 DEFB $02,$02,$00,$00,$00,$00,$FF,$FF
  $6626 DEFB $FF,$FF,$32,$32,$78,$78
 
 ; Food 3 - Cheese
+;
+; #CALL:print_udg(#PC,cheese)
 b$662C DEFB $03,$03,$80,$03,$09,$80,$03,$8B
  $6634 DEFB $C0,$03,$EB,$E0,$03,$F7,$F8,$03
  $663C DEFB $FF,$FF,$03,$FF,$FF,$FF,$FF,$FF
@@ -311,6 +323,8 @@ b$662C DEFB $03,$03,$80,$03,$09,$80,$03,$8B
  $667C DEFB $70,$70,$70
 
 ; Food 5 - Ice cream
+;
+; #CALL:print_udg(#PC,icecream)
 b$667F DEFB $02,$03,$4F,$06,$30,$00,$FD,$55
  $6687 DEFB $98,$01,$CC,$03,$E2,$07,$F8,$1F
  $668F DEFB $FF,$FF,$DB,$E3,$84,$DD,$81,$82
@@ -320,6 +334,8 @@ b$667F DEFB $02,$03,$4F,$06,$30,$00,$FD,$55
  $66AF DEFB $55,$FF,$50,$50,$78,$70,$70,$58
 
 ; Food 7 - Soup
+;
+; #CALL:print_udg(#PC,soup)
 b$66B7 DEFB $03,$02,$88,$94,$A9,$C4,$94,$B3
  $66BF DEFB $C2,$94,$A3,$EC,$63,$27,$F0,$00
  $66C7 DEFB $0F,$FC,$00,$3F,$FF,$00,$FF,$FF
@@ -329,6 +345,8 @@ b$66B7 DEFB $03,$02,$88,$94,$A9,$C4,$94,$B3
  $66E7 DEFB $64,$B1,$00,$28
 
 ; Food 6 - Cup of tea
+;
+; #CALL:print_udg(#PC,tea)
 b$66EB DEFB $02,$02,$E0,$0B,$F0,$17,$90,$17
  $66F3 DEFB $98,$2F,$FF,$FF,$80,$01,$F0,$0F
  $66FB DEFB $FF,$FF,$FF,$F8,$FF,$F1,$FF,$F3
@@ -336,6 +354,8 @@ b$66EB DEFB $02,$02,$E0,$0B,$F0,$17,$90,$17
  $670B DEFB $E0,$0B,$00,$20
 
 ; Food 2 - Fruit bowl
+;
+; #CALL:print_udg(#PC,fruit)
 b$670F DEFB $03,$02,$FF,$FF,$FF,$AA,$AA,$AA
  $6717 DEFB $D5,$55,$55,$EA,$AA,$AB,$F5,$55
  $671F DEFB $57,$FA,$AA,$AF,$FD,$55,$5F,$FF
@@ -345,6 +365,8 @@ b$670F DEFB $03,$02,$FF,$FF,$FF,$AA,$AA,$AA
  $673F DEFB $72,$3F,$20,$20,$20,$30,$58,$50
 
 ; Food 1 - Martini
+;
+; #CALL:print_udg(#PC,martini)
 b$6747 DEFB $02,$03,$FF,$7F,$FF,$7F,$FF,$7F
  $674F DEFB $FF,$7F,$FF,$7F,$FF,$7F,$F0,$07
  $6757 DEFB $FF,$FF,$80,$00,$DF,$DD,$EF,$DB
@@ -354,46 +376,62 @@ b$6747 DEFB $02,$03,$FF,$7F,$FF,$7F,$FF,$7F
  $6777 DEFB $00,$EF,$78,$78,$78,$78,$45,$50
 
 ; Character set (6-high)
-b$677F DEFB $3C,$72,$72,$72,$72,$3C,$1C,$3C
- $6787 DEFB $1C,$1C,$1C,$3E,$3C,$4E,$0E,$3C
- $678F DEFB $60,$7E,$3C,$4E,$1C,$0E,$4E,$3C
- $6797 DEFB $0C,$1C,$2C,$4C,$7E,$0C,$7E,$60
- $679F DEFB $7C,$0E,$4E,$3C,$3C,$70,$7C,$72
- $67A7 DEFB $72,$3C,$7E,$0E,$1C,$38,$30,$30
- $67AF DEFB $3C,$72,$3C,$72,$72,$3C,$3C,$4E
- $67B7 DEFB $4E,$3E,$0E,$3C,$3C,$72,$72,$7E
- $67BF DEFB $72,$72,$7C,$72,$7C,$72,$72,$7C
- $67C7 DEFB $3C,$72,$70,$70,$72,$3C,$7C,$72
- $67CF DEFB $72,$72,$72,$7C,$7E,$70,$7C,$70
- $67D7 DEFB $70,$7E,$7E,$70,$7C,$70,$70,$70
- $67DF DEFB $3C,$72,$70,$76,$72,$3C,$72,$72
- $67E7 DEFB $7E,$72,$72,$72,$3E,$1C,$1C,$1C
- $67EF DEFB $1C,$3E,$0E,$0E,$0E,$4E,$4E,$3C
- $67F7 DEFB $72,$74,$78,$78,$74,$72,$70,$70
- $67FF DEFB $70,$70,$70,$7E,$42,$66,$7A,$62
- $6807 DEFB $62,$62,$42,$62,$72,$7A,$76,$72
- $680F DEFB $7C,$72,$72,$7C,$70,$70,$3C,$62
- $6817 DEFB $62,$6A,$64,$3A,$7C,$72,$72,$7C
- $681F DEFB $74,$72,$3C,$70,$3C,$0E,$4E,$3C
- $6827 DEFB $7C,$38,$38,$38,$38,$38,$72,$72
- $682F DEFB $72,$72,$72,$3C,$72,$72,$72,$72
- $6837 DEFB $34,$18,$62,$62,$6A,$6A,$7E,$24
- $683F DEFB $62,$74,$38,$1C,$2E,$46,$42,$24
- $6847 DEFB $38,$38,$38,$38,$7E,$0E,$1C,$38
- $684F DEFB $70,$7E,$00,$30,$30,$00,$30,$30
- $6857 DEFB $6C,$6C,$24,$48,$00,$00,$36,$36
- $685F DEFB $24,$12,$00,$00,$00,$00,$00,$00
- $6867 DEFB $18,$18,$00,$00,$00,$00,$00,$00
- $686F DEFB $30,$30,$30,$00,$30,$30,$30,$48
- $6877 DEFB $18,$30,$00,$30,$18,$18,$08,$10
- $687F DEFB $00,$00,$00,$00,$30,$30,$10,$20
- $6887 DEFB $00,$3C,$3C,$00,$3C,$3C,$0C,$0C
- $688F DEFB $18,$18,$30,$30,$00,$00,$3C,$3C
- $6897 DEFB $00,$00
+; Character set (6-high)
+b$677F DEFB $3C,$72,$72,$72,$72,$3C ; #CALL:print_char($00,char_00)
+ $6785 DEFB $1C,$3C,$1C,$1C,$1C,$3E ; #CALL:print_char($01,char_01)
+ $678B DEFB $3C,$4E,$0E,$3C,$60,$7E ; #CALL:print_char($02,char_02)
+ $6791 DEFB $3C,$4E,$1C,$0E,$4E,$3C ; #CALL:print_char($03,char_03)
+ $6797 DEFB $0C,$1C,$2C,$4C,$7E,$0C ; #CALL:print_char($04,char_04)
+ $679D DEFB $7E,$60,$7C,$0E,$4E,$3C ; #CALL:print_char($05,char_05)
+ $67A3 DEFB $3C,$70,$7C,$72,$72,$3C ; #CALL:print_char($06,char_06)
+ $67A9 DEFB $7E,$0E,$1C,$38,$30,$30 ; #CALL:print_char($07,char_07)
+ $67AF DEFB $3C,$72,$3C,$72,$72,$3C ; #CALL:print_char($08,char_08)
+ $67B5 DEFB $3C,$4E,$4E,$3E,$0E,$3C ; #CALL:print_char($09,char_09)
+ $67BB DEFB $3C,$72,$72,$7E,$72,$72 ; #CALL:print_char($0A,char_0A)
+ $67C1 DEFB $7C,$72,$7C,$72,$72,$7C ; #CALL:print_char($0B,char_0B)
+ $67C7 DEFB $3C,$72,$70,$70,$72,$3C ; #CALL:print_char($0C,char_0C)
+ $67CD DEFB $7C,$72,$72,$72,$72,$7C ; #CALL:print_char($0D,char_0D)
+ $67D3 DEFB $7E,$70,$7C,$70,$70,$7E ; #CALL:print_char($0E,char_0E)
+ $67D9 DEFB $7E,$70,$7C,$70,$70,$70 ; #CALL:print_char($0F,char_0F)
+ $67DF DEFB $3C,$72,$70,$76,$72,$3C ; #CALL:print_char($10,char_10)
+ $67E5 DEFB $72,$72,$7E,$72,$72,$72 ; #CALL:print_char($11,char_11)
+ $67EB DEFB $3E,$1C,$1C,$1C,$1C,$3E ; #CALL:print_char($12,char_12)
+ $67F1 DEFB $0E,$0E,$0E,$4E,$4E,$3C ; #CALL:print_char($13,char_13)
+ $67F7 DEFB $72,$74,$78,$78,$74,$72 ; #CALL:print_char($14,char_14)
+ $67FD DEFB $70,$70,$70,$70,$70,$7E ; #CALL:print_char($15,char_15)
+ $6803 DEFB $42,$66,$7A,$62,$62,$62 ; #CALL:print_char($16,char_16)
+ $6809 DEFB $42,$62,$72,$7A,$76,$72 ; #CALL:print_char($17,char_17)
+ $680F DEFB $7C,$72,$72,$7C,$70,$70 ; #CALL:print_char($18,char_18)
+ $6815 DEFB $3C,$62,$62,$6A,$64,$3A ; #CALL:print_char($19,char_19)
+ $681B DEFB $7C,$72,$72,$7C,$74,$72 ; #CALL:print_char($1A,char_1A)
+ $6821 DEFB $3C,$70,$3C,$0E,$4E,$3C ; #CALL:print_char($1B,char_1B)
+ $6827 DEFB $7C,$38,$38,$38,$38,$38 ; #CALL:print_char($1C,char_1C)
+ $682D DEFB $72,$72,$72,$72,$72,$3C ; #CALL:print_char($1D,char_1D)
+ $6833 DEFB $72,$72,$72,$72,$34,$18 ; #CALL:print_char($1E,char_1E)
+ $6839 DEFB $62,$62,$6A,$6A,$7E,$24 ; #CALL:print_char($1F,char_1F)
+ $683F DEFB $62,$74,$38,$1C,$2E,$46 ; #CALL:print_char($20,char_20)
+ $6845 DEFB $42,$24,$38,$38,$38,$38 ; #CALL:print_char($21,char_21)
+ $684B DEFB $7E,$0E,$1C,$38,$70,$7E ; #CALL:print_char($22,char_22)
+ $6851 DEFB $00,$30,$30,$00,$30,$30 ; #CALL:print_char($23,char_23)
+ $6857 DEFB $6C,$6C,$24,$48,$00,$00 ; #CALL:print_char($24,char_24)
+ $685D DEFB $36,$36,$24,$12,$00,$00 ; #CALL:print_char($25,char_25)
+ $6863 DEFB $00,$00,$00,$00,$18,$18 ; #CALL:print_char($26,char_26)
+ $6869 DEFB $00,$00,$00,$00,$00,$00 ; #CALL:print_char($27,char_27)
+ $686F DEFB $30,$30,$30,$00,$30,$30 ; #CALL:print_char($28,char_28)
+ $6875 DEFB $30,$48,$18,$30,$00,$30 ; #CALL:print_char($29,char_29)
+ $687B DEFB $18,$18,$08,$10,$00,$00 ; #CALL:print_char($2A,char_2A)
+ $6881 DEFB $00,$00,$30,$30,$10,$20 ; #CALL:print_char($2B,char_2B)
+ $6887 DEFB $00,$3C,$3C,$00,$3C,$3C ; #CALL:print_char($2C,char_2C)
+ $688D DEFB $0C,$0C,$18,$18,$30,$30 ; #CALL:print_char($2D,char_2D)
+ $6893 DEFB $00,$00,$3C,$3C,$00,$00 ; #CALL:print_char($2E,char_2E)
 
 ; Raft graphics
 ;
 ; Used by the routine at #R$D9EC
+;
+; .
+;
+; #UDGARRAY1,7($6899-$6911-8)(raft)
 b$6899 DEFB $00,$03,$00,$03,$03,$00,$01,$01
  $68A1 DEFB $AA,$FF,$03,$03,$70,$88,$3D,$69
  $68A9 DEFB $AA,$FF,$00,$06,$76,$88,$3D,$69
@@ -468,6 +506,8 @@ w$6919 DEFW $0AFF
  $6983 DEFW $D60A
 
 ; River graphics
+;
+; #UDGARRAY1,15($6985-$69DD-8)(river)
 b$6985 DEFB $82,$12,$00,$20,$81,$06,$48,$01
  $698D DEFB $80,$02,$0C,$B0,$03,$01,$06,$C0
  $6995 DEFB $0D,$04,$90,$83,$48,$1A,$02,$82
@@ -547,7 +587,11 @@ b$6C26 DEFB $0E,$17,$04,$06,$07,$10,$0E,$17
 
 ; UDG offsets
 ;
-; Used by the routines at #R$ED00 and #R$F3D3
+; Used by the routines at #R$ED06 and #R$F3D3.
+;
+; .
+;
+; This table contains a series of addresses where graphics are held.
 w$6C46 DEFW $8B2C
  $6C48 DEFW $8B48
  $6C4A DEFW $8C1B
@@ -1531,55 +1575,77 @@ b$8175 DEFB $12,$0D,$94,$09,$0D,$52,$13,$1E
  $81CD DEFB $04,$03,$FF
 
 ; UDG DD
+;
+; #CALL:print_udg(#PC,UDG_DD)
 b$81D0 DEFB $01,$01,$7E,$81,$66,$BD,$18,$18
  $81D8 DEFB $5A,$24,$05
 
 ; UDG 2E
+;
+; #CALL:print_udg(#PC,UDG_2E)
 b$81DB DEFB $02,$01,$3F,$BF,$1D,$DF,$0F,$E0
  $81E3 DEFB $07,$F0,$03,$F8,$01,$FC,$00,$FE
  $81EB DEFB $00,$7F,$04,$04
 
 ; UDG 95
+;
+; #CALL:print_udg(#PC,UDG_95)
 b$81EF DEFB $02,$01,$FF,$FF,$00,$00,$FF,$FF
  $81F7 DEFB $F8,$0F,$03,$E0,$00,$00,$00,$00
  $81FF DEFB $00,$00,$03,$03
 
 ; UDG 82
+;
+; #CALL:print_udg(#PC,UDG_82)
 b$8203 DEFB $01,$01,$FF,$FF,$FF,$FF,$FF,$00
  $820B DEFB $55,$FF,$02
 
 ; UDG 83
+;
+; #CALL:print_udg(#PC,UDG_83)
 b$820E DEFB $01,$01,$FF,$FF,$FF,$00,$55,$FF
  $8216 DEFB $FF,$FF,$02
 
 ; UDG 84
+;
+; #CALL:print_udg(#PC,UDG_84)
 b$8219 DEFB $01,$02,$06,$03,$03,$03,$01,$01
  $8221 DEFB $00,$00,$FF,$FF,$FF,$00,$55,$FF
  $8229 DEFB $F9,$F6,$03,$02
 
 ; UDG 85
+;
+; #CALL:print_udg(#PC,UDG_85)
 b$822D DEFB $01,$03,$06,$06,$06,$06,$03,$03
  $8235 DEFB $03,$03,$60,$30,$30,$18,$18,$0C
  $823D DEFB $0C,$0C,$00,$00,$00,$80,$80,$C0
  $8245 DEFB $C0,$60,$00,$03
 
 ; UDG 86
+;
+; #CALL:print_udg(#PC,UDG_86)
 b$8249 DEFB $01,$02,$30,$60,$60,$C0,$C0,$80
  $8251 DEFB $80,$00,$FF,$FF,$FF,$00,$55,$FF
  $8259 DEFB $CF,$B7,$03,$02
 
 ; UDG 87
+;
+; #CALL:print_udg(#PC,UDG_87)
 b$825D DEFB $01,$03,$30,$30,$30,$30,$60,$60
  $8265 DEFB $60,$60,$03,$06,$06,$0C,$0C,$18
  $826D DEFB $18,$18,$00,$00,$00,$00,$00,$01
  $8275 DEFB $01,$03,$00,$03
 
 ; UDG 88
+;
+; #CALL:print_udg(#PC,UDG_88)
 b$8279 DEFB $02,$01,$79,$FA,$3A,$7F,$1E,$9F
  $8281 DEFB $07,$A7,$03,$E8,$00,$FD,$00,$3F
  $8289 DEFB $00,$07,$00,$02
 
 ; UDG 93
+;
+; #CALL:print_udg(#PC,UDG_93)
 b$828D DEFB $02,$02,$FF,$FD,$FB,$DC,$FC,$38
  $8295 DEFB $FF,$F8,$FB,$D8,$BC,$38,$5F,$E0
  $829D DEFB $A0,$00,$6B,$D0,$6C,$3D,$9F,$FD
@@ -1587,26 +1653,36 @@ b$828D DEFB $02,$02,$FF,$FD,$FB,$DC,$FC,$38
  $82AD DEFB $FC,$3D,$00,$05
 
 ; UDG 89
+;
+; #CALL:print_udg(#PC,UDG_89)
 b$82B1 DEFB $01,$01,$FF,$FF,$FF,$FF,$00,$55
  $82B9 DEFB $FF,$FF,$02
 
 ; UDG 8A
+;
+; #CALL:print_udg(#PC,UDG_8A)
 b$82BC DEFB $01,$01,$FF,$FF,$00,$AA,$FF,$FF
  $82C4 DEFB $FF,$FF,$02
 
 ; UDG 8B
+;
+; #CALL:print_udg(#PC,UDG_8B)
 b$82C7 DEFB $03,$01,$FF,$FF,$FF,$00,$00,$FF
  $82CF DEFB $AA,$AA,$00,$FF,$FF,$55,$FF,$FF
  $82D7 DEFB $FF,$FF,$FF,$FF,$00,$FF,$FF,$00
  $82DF DEFB $00,$00,$00,$02
 
 ; UDG 8C
+;
+; #CALL:print_udg(#PC,UDG_8C)
 b$82E3 DEFB $03,$01,$FF,$FF,$FF,$FF,$00,$00
  $82EB DEFB $00,$AA,$AA,$AA,$FF,$FF,$FF,$FF
  $82F3 DEFB $FF,$FF,$FF,$FF,$FF,$FF,$00,$00
  $82FB DEFB $00,$00,$00,$02
 
 ; UDG 8D
+;
+; #CALL:print_udg(#PC,UDG_8D)
 b$82FF DEFB $02,$02,$A0,$00,$EA,$AA,$FF,$FE
  $8307 DEFB $FF,$FF,$0F,$FF,$00,$1F,$00,$00
  $830F DEFB $00,$00,$FF,$FF,$FF,$FF,$FF,$FF
@@ -1614,6 +1690,8 @@ b$82FF DEFB $02,$02,$A0,$00,$EA,$AA,$FF,$FE
  $831F DEFB $1F,$FF,$00,$02
 
 ; UDG 8E
+;
+; #CALL:print_udg(#PC,UDG_8E)
 b$8323 DEFB $02,$02,$FF,$AA,$1F,$FF,$01,$FF
  $832B DEFB $00,$0F,$00,$00,$00,$00,$00,$00
  $8333 DEFB $00,$00,$BF,$FF,$C0,$FF,$D5,$00
@@ -1621,16 +1699,22 @@ b$8323 DEFB $02,$02,$FF,$AA,$1F,$FF,$01,$FF
  $8343 DEFB $EA,$80,$00,$02
 
 ; UDG 8F
+;
+; #CALL:print_udg(#PC,UDG_8F)
 b$8347 DEFB $03,$01,$57,$FF,$FF,$2A,$FF,$FF
  $834F DEFB $05,$57,$FF,$00,$AA,$BF,$00,$15
  $8357 DEFB $55,$00,$00,$AA,$00,$00,$15,$00
  $835F DEFB $00,$00,$00,$05
 
 ; UDG 90
+;
+; #CALL:print_udg(#PC,UDG_90)
 b$8363 DEFB $01,$01,$00,$FF,$FF,$FF,$FF,$AA
  $836B DEFB $55,$AA,$05
 
 ; UDG 91
+;
+; #CALL:print_udg(#PC,UDG_91)
 b$836E DEFB $04,$01,$0F,$FB,$7F,$FF,$7F,$FB
  $8376 DEFB $7F,$FF,$FB,$FC,$FF,$FF,$BC,$7F
  $837E DEFB $FF,$FF,$5F,$87,$FF,$FF,$2B,$F0
@@ -1638,10 +1722,14 @@ b$836E DEFB $04,$01,$0F,$FB,$7F,$FF,$7F,$FB
  $838E DEFB $FE,$00,$00,$05
 
 ; UDG 92
+;
+; #CALL:print_udg(#PC,UDG_92)
 b$8392 DEFB $01,$01,$00,$00,$00,$00,$00,$00
  $839A DEFB $00,$00,$2D
 
 ; UDG 19
+;
+; #CALL:print_udg(#PC,UDG_19)
 b$839D DEFB $01,$05,$3E,$3E,$1E,$1C,$1C,$08
  $83A5 DEFB $08,$00,$58,$18,$18,$18,$1C,$3C
  $83AD DEFB $3C,$3E,$18,$60,$78,$7C,$7E,$7E
@@ -1650,11 +1738,15 @@ b$839D DEFB $01,$05,$3E,$3E,$1E,$1C,$1C,$08
  $83C5 DEFB $1C,$1E,$00,$06
 
 ; UDG 13
+;
+; #CALL:print_udg(#PC,UDG_13)
 b$83C9 DEFB $02,$01,$45,$44,$18,$31,$60,$0C
  $83D1 DEFB $08,$10,$B0,$AA,$4A,$50,$15,$68
  $83D9 DEFB $09,$90,$04,$04
 
 ; UDG 3C
+;
+; #CALL:print_udg(#PC,UDG_3C)
 b$83DD DEFB $02,$04,$03,$60,$07,$20,$0C,$30
  $83E5 DEFB $00,$00,$3F,$FC,$52,$4A,$00,$00
  $83ED DEFB $FF,$FF,$03,$C0,$07,$60,$07,$B0
@@ -1666,11 +1758,15 @@ b$83DD DEFB $02,$04,$03,$60,$07,$20,$0C,$30
  $841D DEFB $03,$50,$00,$07
 
 ; UDG 3D
+;
+; #CALL:print_udg(#PC,UDG_3D)
 b$8421 DEFB $02,$01,$FF,$FF,$00,$00,$92,$49
  $8429 DEFB $B6,$DB,$B6,$DB,$24,$92,$FF,$FF
  $8431 DEFB $00,$00,$04,$04
 
 ; UDG 3E
+;
+; #CALL:print_udg(#PC,UDG_3E)
 b$8435 DEFB $02,$02,$12,$A4,$1A,$AC,$2D,$84
  $843D DEFB $2D,$94,$19,$88,$09,$38,$0C,$90
  $8445 DEFB $00,$00,$04,$25,$AA,$48,$DE,$9D
@@ -1678,6 +1774,8 @@ b$8435 DEFB $02,$02,$12,$A4,$1A,$AC,$2D,$84
  $8455 DEFB $A9,$81,$07,$07,$04,$04
 
 ; UDG 3F
+;
+; #CALL:print_udg(#PC,UDG_3F)
 b$845B DEFB $02,$02,$72,$54,$2A,$0A,$AB,$10
  $8463 DEFB $4D,$44,$55,$11,$64,$00,$2E,$04
  $846B DEFB $24,$20,$22,$A0,$8B,$29,$AE,$7C
@@ -1685,14 +1783,20 @@ b$845B DEFB $02,$02,$72,$54,$2A,$0A,$AB,$10
  $847B DEFB $50,$29,$07,$04,$04,$04
 
 ; UDG 40
+;
+; #CALL:print_udg(#PC,UDG_40)
 b$8481 DEFB $01,$01,$FF,$8F,$5E,$2C,$2C,$18
  $8489 DEFB $18,$00,$03
 
 ; UDG 41
+;
+; #CALL:print_udg(#PC,UDG_41)
 b$848C DEFB $01,$01,$00,$FF,$00,$FF,$00,$FF
  $8494 DEFB $00,$FF,$10
 
 ; UDG 43
+;
+; #CALL:print_udg(#PC,UDG_43)
 b$8497 DEFB $04,$01,$00,$00,$00,$00,$00,$03
  $849F DEFB $80,$0E,$F0,$F0,$00,$00,$00,$00
  $84A7 DEFB $3E,$00,$7C,$03,$00,$10,$00,$00
@@ -1700,31 +1804,43 @@ b$8497 DEFB $04,$01,$00,$00,$00,$00,$00,$03
  $84B7 DEFB $00,$00,$00,$10
 
 ; UDG 44
+;
+; #CALL:print_udg(#PC,UDG_44)
 b$84BB DEFB $01,$03,$F0,$F0,$F0,$F0,$F0,$F0
  $84C3 DEFB $F0,$F0,$F0,$F7,$F7,$F7,$F7,$F7
  $84CB DEFB $F0,$F0,$00,$F0,$F0,$F0,$F0,$F0
  $84D3 DEFB $F0,$F0,$00,$04
 
 ; UDG 45
+;
+; #CALL:print_udg(#PC,UDG_44)
 b$84D7 DEFB $01,$03,$0F,$0F,$0F,$0F,$0F,$0F
  $84DF DEFB $0F,$00,$0F,$6F,$6F,$6F,$6F,$6F
  $84E7 DEFB $0F,$0F,$00,$0F,$0F,$0F,$0F,$0F
  $84EF DEFB $0F,$0F,$00,$04
 
 ; UDG 46
+;
+; #CALL:print_udg(#PC,UDG_46)
 b$84F3 DEFB $01,$01,$AA,$AA,$AA,$AA,$AA,$AA
  $84FB DEFB $AA,$FF,$78
 
 ; UDG 47
+;
+; #CALL:print_udg(#PC,UDG_47)
 b$84FE DEFB $01,$01,$17,$10,$10,$70,$00,$00
  $8506 DEFB $00,$00,$06
 
 ; UDG 48
+;
+; #CALL:print_udg(#PC,UDG_48)
 b$8509 DEFB $02,$01,$00,$00,$FF,$FF,$00,$00
  $8511 DEFB $55,$54,$FF,$FF,$00,$00,$55,$54
  $8519 DEFB $FF,$FF,$07,$07
 
 ; UDG 49
+;
+; #CALL:print_udg(#PC,UDG_49)
 b$851D DEFB $02,$03,$01,$C0,$02,$60,$01,$C0
  $8525 DEFB $01,$C0,$00,$00,$FF,$FF,$44,$44
  $852D DEFB $FF,$FF,$00,$80,$01,$C0,$03,$E0
@@ -1734,12 +1850,16 @@ b$851D DEFB $02,$03,$01,$C0,$02,$60,$01,$C0
  $854D DEFB $01,$C0,$07,$07,$07,$47,$07,$07
 
 ; UDG 4A
+;
+; #CALL:print_udg(#PC,UDG_4A)
 b$8555 DEFB $03,$01,$FF,$FF,$FF,$A4,$42,$25
  $855D DEFB $FF,$FF,$FF,$00,$00,$00,$1F,$FF
  $8565 DEFB $F8,$0F,$FF,$F0,$03,$FF,$C0,$00
  $856D DEFB $FF,$00,$00,$03
 
 ; UDG 4B
+;
+; #CALL:print_udg(#PC,UDG_4B)
 b$8571 DEFB $04,$02,$F1,$FF,$FF,$8F,$0E,$7F
  $8579 DEFB $FC,$70,$01,$9F,$F9,$80,$00,$4D
  $8581 DEFB $B2,$00,$00,$12,$48,$00,$00,$2D
@@ -1751,12 +1871,16 @@ b$8571 DEFB $04,$02,$F1,$FF,$FF,$8F,$0E,$7F
  $85B1 DEFB $FF,$E8,$00,$07
 
 ; UDG 4C
+;
+; #CALL:print_udg(#PC,UDG_4C)
 b$85B5 DEFB $03,$01,$7F,$FF,$FE,$FF,$FF,$FF
  $85BD DEFB $00,$00,$00,$08,$66,$10,$11,$81
  $85C5 DEFB $88,$26,$00,$64,$58,$00,$1A,$E0
  $85CD DEFB $00,$07,$00,$02
 
 ; UDG 4D
+;
+; #CALL:print_udg(#PC,UDG_4D)
 b$85D1 DEFB $02,$03,$3F,$FC,$3F,$FC,$00,$00
  $85D9 DEFB $7F,$FE,$00,$00,$FF,$FF,$44,$44
  $85E1 DEFB $FF,$FF,$3F,$FC,$3F,$FC,$3F,$FC
@@ -1766,6 +1890,8 @@ b$85D1 DEFB $02,$03,$3F,$FC,$3F,$FC,$00,$00
  $8601 DEFB $3F,$FC,$00,$07
 
 ; UDG 4E
+;
+; #CALL:print_udg(#PC,UDG_4E)
 b$8605 DEFB $02,$02,$FC,$B0,$FF,$A0,$FF,$60
  $860D DEFB $B6,$40,$48,$80,$B5,$00,$48,$00
  $8615 DEFB $B6,$00,$00,$00,$00,$00,$FE,$FC
@@ -1773,6 +1899,8 @@ b$8605 DEFB $02,$02,$FC,$B0,$FF,$A0,$FF,$60
  $8625 DEFB $FB,$30,$00,$07
 
 ; UDG 4F
+;
+; #CALL:print_udg(#PC,UDG_4F)
 b$8629 DEFB $02,$02,$0D,$3F,$05,$FF,$06,$FF
  $8631 DEFB $02,$6D,$01,$12,$00,$AD,$00,$12
  $8639 DEFB $00,$6D,$00,$00,$00,$00,$3E,$FE
@@ -1780,11 +1908,15 @@ b$8629 DEFB $02,$02,$0D,$3F,$05,$FF,$06,$FF
  $8649 DEFB $0C,$DF,$00,$07
 
 ; UDG 50
+;
+; #CALL:print_udg(#PC,UDG_50)
 b$864D DEFB $02,$01,$FF,$FF,$90,$11,$90,$11
  $8655 DEFB $90,$11,$FF,$FF,$81,$01,$81,$01
  $865D DEFB $81,$01,$17,$17
 
 ; UDG 51
+;
+; #CALL:print_udg(#PC,UDG_51)
 b$8661 DEFB $05,$01,$92,$A4,$8A,$A2,$A9,$54
  $8669 DEFB $95,$A6,$D4,$97,$EE,$5B,$6D,$AF
  $8671 DEFB $DB,$FF,$EF,$F7,$FF,$FF,$FF,$FF
@@ -1793,6 +1925,8 @@ b$8661 DEFB $05,$01,$92,$A4,$8A,$A2,$A9,$54
  $8689 DEFB $FF,$FF,$00,$04
 
 ; UDG 52
+;
+; #CALL:print_udg(#PC,UDG_52)
 b$868D DEFB $02,$02,$00,$00,$FB,$FF,$FB,$FF
  $8695 DEFB $FB,$FF,$FB,$FF,$FB,$FF,$FB,$FF
  $869D DEFB $FB,$FF,$00,$00,$FF,$EF,$FF,$EF
@@ -1800,6 +1934,8 @@ b$868D DEFB $02,$02,$00,$00,$FB,$FF,$FB,$FF
  $86AD DEFB $FF,$EF,$00,$07
 
 ; UDG 94
+;
+; #CALL:print_udg(#PC,UDG_94)
 b$86B1 DEFB $02,$02,$00,$00,$FB,$FF,$FB,$FF
  $86B9 DEFB $FB,$FF,$FB,$FF,$FB,$FF,$FB,$FF
  $86C1 DEFB $FB,$FF,$FF,$FF,$00,$00,$FF,$EF
@@ -1807,40 +1943,58 @@ b$86B1 DEFB $02,$02,$00,$00,$FB,$FF,$FB,$FF
  $86D1 DEFB $FF,$EF,$00,$07
 
 ; UDG 53
+;
+; #CALL:print_udg(#PC,UDG_53)
 b$86D5 DEFB $02,$01,$FF,$FF,$00,$00,$FF,$EF
  $86DD DEFB $FF,$EF,$FF,$EF,$FF,$EF,$FF,$EF
  $86E5 DEFB $FF,$EF,$00,$07
 
 ; UDG 54
+;
+; #CALL:print_udg(#PC,UDG_54)
 b$86E9 DEFB $01,$01,$FE,$00,$FF,$FF,$FF,$FF
  $86F1 DEFB $00,$00,$04
 
 ; UDG 55
+;
+; #CALL:print_udg(#PC,UDG_55)
 b$86F4 DEFB $01,$01,$7E,$7E,$01,$AA,$FF,$FF
  $86FC DEFB $FF,$FF,$04
 
 ; UDG 56
+;
+; #CALL:print_udg(#PC,UDG_56)
 b$86FF DEFB $01,$02,$83,$C7,$C7,$FF,$83,$FF
  $8707 DEFB $EF,$EF,$10,$18,$2A,$6C,$74,$5C
  $870F DEFB $28,$00,$10,$06
 
 ; UDG 57
+;
+; #CALL:print_udg(#PC,UDG_57)
 b$8713 DEFB $01,$01,$FF,$00,$FF,$FF,$FF,$FF
  $871B DEFB $AA,$00,$07
 
 ; UDG 58
+;
+; #CALL:print_udg(#PC,UDG_58)
 b$871E DEFB $01,$01,$7F,$80,$7F,$7F,$7F,$7F
  $8726 DEFB $2A,$00,$07
 
 ; UDG 59
+;
+; #CALL:print_udg(#PC,UDG_59)
 b$8729 DEFB $01,$01,$7F,$80,$7F,$7F,$7F,$7D
  $8731 DEFB $5E,$B5,$07
 
 ; UDG 5A
+;
+; #CALL:print_udg(#PC,UDG_5A)
 b$8734 DEFB $01,$01,$FE,$01,$FE,$FE,$FE,$FE
  $873C DEFB $AA,$00,$07
 
 ; UDG 5B
+;
+; #CALL:print_udg(#PC,UDG_5B)
 b$873F DEFB $01,$01,$FE,$01,$FE,$FE,$FE,$BE
  $8747 DEFB $7A,$AD,$07
 
@@ -1852,27 +2006,39 @@ b$874A DEFB $04,$01,$FF,$FF,$FF,$FF,$00,$00
  $876A DEFB $55,$55,$00,$07
 
 ; UDG 5D
+;
+; #CALL:print_udg(#PC,UDG_5D)
 b$876E DEFB $02,$01,$6A,$FF,$35,$00,$1A,$AA
  $8776 DEFB $0D,$54,$06,$AA,$03,$54,$01,$AA
  $877E DEFB $00,$D4,$05,$05
 
 ; UDG 5F
+;
+; #CALL:print_udg(#PC,UDG_5F)
 b$8782 DEFB $01,$01,$7F,$00,$11,$09,$05,$02
  $878A DEFB $01,$00,$05
 
 ; UDG 60
+;
+; #CALL:print_udg(#PC,UDG_60)
 b$878D DEFB $01,$01,$BF,$40,$A1,$91,$89,$85
  $8795 DEFB $02,$FD,$05
 
 ; UDG 61
+;
+; #CALL:print_udg(#PC,UDG_61)
 b$8798 DEFB $01,$01,$FE,$41,$A2,$94,$88,$90
  $87A0 DEFB $20,$C0,$05
 
 ; UDG AA
+;
+; #CALL:print_udg(#PC,UDG_AA)
 b$87A3 DEFB $01,$01,$18,$18,$2C,$3C,$18,$2C
  $87AB DEFB $18,$00,$03
 
 ; UDG A9
+;
+; #CALL:print_udg(#PC,UDG_A9)
 b$87AE DEFB $02,$03,$73,$7C,$7E,$A0,$79,$54
  $87B6 DEFB $7A,$A8,$71,$54,$60,$A8,$40,$50
  $87BE DEFB $00,$28,$40,$C8,$13,$98,$21,$FC
@@ -1882,6 +2048,8 @@ b$87AE DEFB $02,$03,$73,$7C,$7E,$A0,$79,$54
  $87DE DEFB $4A,$70,$05,$04,$05,$05,$06,$06
 
 ; UDG AC
+;
+; #CALL:print_udg(#PC,UDG_AC)
 b$87E6 DEFB $02,$03,$01,$80,$F8,$1B,$FE,$7B
  $87EE DEFB $FF,$FB,$FF,$FB,$FF,$FB,$FF,$FB
  $87F6 DEFB $FF,$FB,$C9,$93,$C1,$83,$C1,$83
@@ -1891,6 +2059,8 @@ b$87E6 DEFB $02,$03,$01,$80,$F8,$1B,$FE,$7B
  $8816 DEFB $CF,$F3,$07,$07,$30,$10,$10,$30
 
 ; UDG AB
+;
+; #CALL:print_udg(#PC,UDG_AB)
 b$881E DEFB $02,$03,$0F,$FE,$1F,$FE,$3F,$FE
  $8826 DEFB $7F,$E6,$FF,$C6,$FE,$02,$B0,$02
  $882E DEFB $60,$00,$19,$40,$05,$42,$03,$C6
@@ -1900,6 +2070,8 @@ b$881E DEFB $02,$03,$0F,$FE,$1F,$FE,$3F,$FE
  $884E DEFB $31,$20,$00,$04
 
 ; UDG 5E
+;
+; #CALL:print_udg(#PC,UDG_5E)
 b$8852 DEFB $03,$02,$78,$FF,$1E,$02,$00,$40
  $885A DEFB $38,$FF,$1C,$BA,$FF,$5D,$B8,$FF
  $8862 DEFB $1D,$B3,$7E,$6D,$B3,$7E,$6D,$00
@@ -1909,6 +2081,8 @@ b$8852 DEFB $03,$02,$78,$FF,$1E,$02,$00,$40
  $8882 DEFB $AA,$4A,$00,$07
 
 ; UDG B5
+;
+; #CALL:print_udg(#PC,UDG_B5)
 b$8886 DEFB $04,$02,$0F,$FF,$FF,$FC,$07,$FF
  $888E DEFB $FF,$FA,$01,$FF,$FF,$FC,$00,$7F
  $8896 DEFB $FF,$C8,$01,$80,$00,$30,$03,$00
@@ -1920,10 +2094,14 @@ b$8886 DEFB $04,$02,$0F,$FF,$FF,$FC,$07,$FF
  $88C6 DEFB $FF,$FA,$00,$07
 
 ; UDG B6
+;
+; #CALL:print_udg(#PC,UDG_B6)
 b$88CA DEFB $01,$01,$02,$07,$02,$00,$1E,$1A
  $88D2 DEFB $02,$00,$05
 
 ; UDG BF
+;
+; #CALL:print_udg(#PC,UDG_BF)
 b$88D5 DEFB $03,$04,$0F,$0A,$00,$07,$15,$00
  $88DD DEFB $07,$0A,$00,$01,$15,$00,$00,$0A
  $88E5 DEFB $00,$00,$15,$00,$00,$0A,$00,$00
@@ -1940,6 +2118,8 @@ b$88D5 DEFB $03,$04,$0F,$0A,$00,$07,$15,$00
  $893D DEFB $04,$03,$04,$04,$04,$45
 
 ; UDG C1
+;
+; #CALL:print_udg(#PC,UDG_C1)
 b$8943 DEFB $02,$02,$B3,$F6,$AD,$AD,$73,$DA
  $894B DEFB $B5,$6A,$ED,$57,$EB,$DB,$DE,$F5
  $8953 DEFB $FF,$F7,$EF,$FB,$10,$02,$22,$A9
@@ -1947,6 +2127,8 @@ b$8943 DEFB $02,$02,$B3,$F6,$AD,$AD,$73,$DA
  $8963 DEFB $91,$D5,$28,$18,$06,$04
 
 ; UDG C4
+;
+; #CALL:print_udg(#PC,UDG_C4)
 b$8969 DEFB $04,$02,$EA,$B7,$10,$40,$AE,$DB
  $8971 DEFB $15,$14,$F5,$AF,$08,$50,$FE,$BF
  $8979 DEFB $02,$20,$EE,$DF,$15,$50,$FD,$BF
@@ -1959,43 +2141,59 @@ b$8969 DEFB $04,$02,$EA,$B7,$10,$40,$AE,$DB
  $89B1 DEFB $04,$03
 
 ; UDG CE
+;
+; #CALL:print_udg(#PC,UDG_CE)
 b$89B3 DEFB $02,$01,$8F,$F0,$AF,$F2,$AF,$F6
  $89BB DEFB $8F,$F6,$0F,$F2,$0F,$F0,$0F,$F0
  $89C3 DEFB $00,$00,$06,$06
 
-; UDG CB
+; UDG CB - bank card
+;
+; #CALL:print_udg(#PC,UDG_CB)
 b$89C7 DEFB $02,$02,$47,$C2,$46,$22,$46,$22
  $89CF DEFB $47,$C2,$40,$02,$7F,$FE,$80,$01
  $89D7 DEFB $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF
  $89DF DEFB $80,$01,$7F,$FE,$78,$3E,$79,$DE
  $89E7 DEFB $78,$3E,$30,$30,$68,$68
 
-; UDG CC
+; UDG CC - aerosol
+;
+; #CALL:print_udg(#PC,UDG_CC)
 b$89ED DEFB $01,$02,$A3,$A3,$A3,$A3,$A3,$FF
  $89F5 DEFB $A3,$FF,$FF,$ED,$C7,$FF,$A3,$FF
  $89FD DEFB $A3,$A3,$60,$60
 
-; UDG CD
+; UDG CD - oxygen tank
+;
+; #CALL:print_udg(#PC,UDG_CD)
 b$8A01 DEFB $01,$02,$D3,$D3,$D3,$D3,$D3,$D3
  $8A09 DEFB $E7,$FF,$F9,$F6,$F0,$F9,$E7,$DB
  $8A11 DEFB $D3,$D3,$38,$38
 
 ; UDG 99
+;
+; #CALL:print_udg(#PC,UDG_99)
 b$8A15 DEFB $01,$01,$FF,$00,$55,$FF,$00,$00
  $8A1D DEFB $00,$00,$07
 
 ; UDG 9A
+;
+; #CALL:print_udg(#PC,UDG_9A)
 b$8A20 DEFB $01,$02,$2C,$2C,$2C,$2C,$00,$2C
  $8A28 DEFB $5E,$00,$FF,$00,$59,$AD,$2C,$2C
  $8A30 DEFB $2C,$2C,$07,$07
 
 ; UDG 9B
+;
+; #CALL:print_udg(#PC,UDG_9B)
 b$8A34 DEFB $03,$01,$D0,$0F,$00,$FD,$00,$F0
  $8A3C DEFB $7F,$D0,$0E,$0F,$FD,$03,$00,$FF
  $8A44 DEFB $D1,$70,$0F,$F1,$8F,$00,$FE,$80
  $8A4C DEFB $F0,$0E,$00,$03
 
 ; UDG 9C
+;
+; #CALL:print_udg(#PC,UDG_9C)
 b$8A50 DEFB $02,$02,$07,$0F,$03,$00,$03,$D0
  $8A58 DEFB $01,$FD,$00,$FF,$70,$0F,$8F,$00
  $8A60 DEFB $80,$F0,$63,$C6,$97,$09,$B7,$7B
@@ -2003,15 +2201,21 @@ b$8A50 DEFB $02,$02,$07,$0F,$03,$00,$03,$D0
  $8A70 DEFB $00,$10,$03,$03,$07,$07
 
 ; UDG 9D
+;
+; #CALL:print_udg(#PC,UDG_9D)
 b$8A76 DEFB $02,$01,$D0,$18,$FD,$04,$7F,$A2
  $8A7E DEFB $0F,$C2,$00,$F1,$00,$61,$00,$31
  $8A86 DEFB $00,$0E,$03,$03
 
 ; UDG 9E
+;
+; #CALL:print_udg(#PC,UDG_9E)
 b$8A8A DEFB $01,$01,$00,$FF,$B9,$70,$60,$20
  $8A92 DEFB $81,$C3,$10
 
 ; UDG 10
+;
+; #CALL:print_udg(#PC,UDG_10)
 b$8A95 DEFB $08,$01,$FF,$FF,$FF,$FB,$FF,$FF
  $8A9D DEFB $FF,$FF,$FD,$FD,$67,$D4,$AF,$FF
  $8AA5 DEFB $FD,$BF,$EA,$AE,$8A,$AA,$95,$DD
@@ -2023,6 +2227,8 @@ b$8A95 DEFB $08,$01,$FF,$FF,$FF,$FB,$FF,$FF
  $8AD5 DEFB $13,$48,$00,$04
 
 ; UDG 11
+;
+; #CALL:print_udg(#PC,UDG_11)
 b$8AD9 DEFB $03,$03,$09,$00,$CC,$20,$B2,$CC
  $8AE1 DEFB $08,$62,$CC,$10,$64,$8C,$04,$6D
  $8AE9 DEFB $8C,$01,$ED,$1A,$24,$DB,$57,$08
@@ -2036,12 +2242,16 @@ b$8AD9 DEFB $03,$03,$09,$00,$CC,$20,$B2,$CC
  $8B29 DEFB $04,$04,$04
 
 ; UDG 00
+;
+; #CALL:print_udg(#PC,UDG_00)
 b$8B2C DEFB $03,$01,$92,$92,$8A,$55,$B5,$A6
  $8B34 DEFB $BE,$DB,$6D,$5F,$EF,$F7,$AB,$FF
  $8B3C DEFB $FF,$05,$FF,$FF,$22,$5D,$FF,$34
  $8B44 DEFB $AA,$57,$00,$04
 
 ; UDG 01
+;
+; #CALL:print_udg(#PC,UDG_01)
 b$8B48 DEFB $02,$09,$77,$84,$70,$E3,$19,$F8
  $8B50 DEFB $08,$30,$0E,$1D,$66,$F1,$10,$1F
  $8B58 DEFB $67,$B8,$40,$AD,$92,$23,$2C,$8D
@@ -2065,6 +2275,8 @@ b$8B48 DEFB $02,$09,$77,$84,$70,$E3,$19,$F8
  $8BE8 DEFB $04,$04,$04,$42
 
 ; UDG 04
+;
+; #CALL:print_udg(#PC,UDG_04)
 b$8BEC DEFB $01,$05,$0D,$0C,$0C,$0C,$0C,$0C
  $8BF4 DEFB $0C,$0D,$00,$04,$0D,$0D,$0D,$0D
  $8BFC DEFB $0D,$0D,$0A,$61,$A4,$4A,$0C,$31
@@ -2073,6 +2285,8 @@ b$8BEC DEFB $01,$05,$0D,$0C,$0C,$0C,$0C,$0C
  $8C14 DEFB $FC,$E0,$07,$07,$43,$46,$07
 
 ; UDG 02
+;
+; #CALL:print_udg(#PC,UDG_02)
 b$8C1B DEFB $02,$03,$1A,$20,$02,$51,$28,$E8
  $8C23 DEFB $49,$55,$14,$E8,$2D,$54,$48,$E9
  $8C2B DEFB $22,$53,$24,$53,$69,$A9,$34,$D0
@@ -2082,6 +2296,8 @@ b$8C1B DEFB $02,$03,$1A,$20,$02,$51,$28,$E8
  $8C4B DEFB $49,$69,$04,$06,$02,$06,$04,$04
 
 ; UDG 03
+;
+; #CALL:print_udg(#PC,UDG_03)
 b$8C53 DEFB $02,$03,$01,$6E,$52,$B2,$A4,$F8
  $8C5B DEFB $BD,$7C,$4E,$1E,$3D,$46,$AA,$A8
  $8C63 DEFB $55,$40,$D3,$E6,$7C,$D2,$17,$3C
@@ -2091,31 +2307,43 @@ b$8C53 DEFB $02,$03,$01,$6E,$52,$B2,$A4,$F8
  $8C83 DEFB $3F,$8E,$00,$04
 
 ; UDG 05
+;
+; #CALL:print_udg(#PC,UDG_05)
 b$8C87 DEFB $01,$03,$B5,$4A,$A5,$12,$24,$49
  $8C8F DEFB $2A,$00,$00,$19,$27,$0F,$15,$4A
  $8C97 DEFB $A5,$12,$00,$01,$02,$06,$07,$0E
  $8C9F DEFB $09,$02,$04,$04,$07
 
 ; UDG 06
+;
+; #CALL:print_udg(#PC,UDG_06)
 b$8CA4 DEFB $02,$01,$44,$22,$AA,$55,$44,$22
  $8CAC DEFB $00,$00,$3F,$FC,$2A,$54,$00,$00
  $8CB4 DEFB $00,$00,$05,$05
 
 ; UDG 07
+;
+; #CALL:print_udg(#PC,UDG_07)
 b$8CB8 DEFB $01,$01,$00,$FF,$07,$FF,$3F,$FF
  $8CC0 DEFB $7F,$FF,$10
 
 ; UDG 08
+;
+; #CALL:print_udg(#PC,UDG_08)
 b$8CC3 DEFB $01,$01,$00,$FF,$E0,$FF,$FC,$FF
  $8CCB DEFB $FE,$FF,$10
 
 ; UDG 09
+;
+; #CALL:print_udg(#PC,UDG_09)
 b$8CCE DEFB $01,$03,$00,$00,$00,$00,$00,$00
  $8CD6 DEFB $00,$00,$00,$00,$00,$00,$00,$00
  $8CDE DEFB $00,$00,$00,$00,$00,$00,$00,$00
  $8CE6 DEFB $00,$00,$00,$45
 
 ; UDG 0A
+;
+; #CALL:print_udg(#PC,UDG_0A)
 b$8CEA DEFB $02,$02,$71,$E0,$73,$C0,$77,$80
  $8CF2 DEFB $77,$00,$56,$00,$74,$00,$70,$00
  $8CFA DEFB $70,$00,$7B,$EF,$04,$10,$7F,$FF
@@ -2123,6 +2351,8 @@ b$8CEA DEFB $02,$02,$71,$E0,$73,$C0,$77,$80
  $8D0A DEFB $70,$F0,$00,$04
 
 ; UDG 0B
+;
+; #CALL:print_udg(#PC,UDG_0B)
 b$8D0E DEFB $02,$02,$07,$8E,$03,$CE,$01,$EE
  $8D16 DEFB $00,$EE,$00,$6A,$00,$2E,$00,$0E
  $8D1E DEFB $00,$0E,$F7,$DE,$08,$20,$FF,$FE
@@ -2130,19 +2360,27 @@ b$8D0E DEFB $02,$02,$07,$8E,$03,$CE,$01,$EE
  $8D2E DEFB $0F,$0E,$00,$04
 
 ; UDG 0C
+;
+; #CALL:print_udg(#PC,UDG_0C)
 b$8D32 DEFB $02,$01,$81,$81,$FF,$FF,$E3,$E3
  $8D3A DEFB $C3,$C3,$C3,$C3,$C3,$C3,$C3,$C3
  $8D42 DEFB $FF,$FF,$10,$10
 
 ; UDG 0D
+;
+; #CALL:print_udg(#PC,UDG_0D)
 b$8D46 DEFB $01,$01,$8F,$70,$6E,$0D,$E1,$DC
  $8D4E DEFB $1B,$C3,$06
 
 ; UDG 0E
+;
+; #CALL:print_udg(#PC,UDG_0E)
 b$8D51 DEFB $01,$01,$FF,$FF,$00,$00,$00,$00
  $8D59 DEFB $00,$00,$02
 
 ; UDG 12
+;
+; #CALL:print_udg(#PC,UDG_12)
 b$8D5C DEFB $04,$03,$8A,$A2,$10,$AA,$A6,$D6
  $8D64 DEFB $93,$54,$6D,$AA,$15,$72,$F7,$FE
  $8D6C DEFB $8F,$ED,$FF,$FF,$3F,$FC,$FF,$FF
@@ -2159,6 +2397,8 @@ b$8D5C DEFB $04,$03,$8A,$A2,$10,$AA,$A6,$D6
  $8DC4 DEFB $07,$04,$06,$06,$06,$06
 
 ; UDG 15
+;
+; #CALL:print_udg(#PC,UDG_15)
 b$8DCA DEFB $03,$06,$1A,$98,$22,$1A,$AA,$88
  $8DD2 DEFB $13,$2C,$62,$13,$2D,$21,$0B,$2F
  $8DDA DEFB $08,$03,$2C,$B1,$01,$14,$44,$01
@@ -2180,6 +2420,8 @@ b$8DCA DEFB $03,$06,$1A,$98,$22,$1A,$AA,$88
  $8E5A DEFB $7A,$28,$00,$07
 
 ; UDG 17
+;
+; #CALL:print_udg(#PC,UDG_17)
 b$8E5E DEFB $03,$04,$10,$87,$27,$52,$2E,$67
  $8E66 DEFB $00,$AC,$E7,$06,$2C,$E7,$62,$5C
  $8E6E DEFB $E6,$12,$5D,$C6,$20,$59,$C6,$02
@@ -2195,6 +2437,8 @@ b$8E5E DEFB $03,$04,$10,$87,$27,$52,$2E,$67
  $8EBE DEFB $2F,$36,$00,$07
 
 ; UDG 18
+;
+; #CALL:print_udg(#PC,UDG_18)
 b$8EC2 DEFB $03,$03,$0D,$ED,$84,$09,$CD,$45
  $8ECA DEFB $0D,$8E,$04,$19,$8E,$58,$1B,$92
  $8ED2 DEFB $84,$3B,$BB,$89,$27,$B2,$90,$0B
@@ -2208,24 +2452,34 @@ b$8EC2 DEFB $03,$03,$0D,$ED,$84,$09,$CD,$45
  $8F12 DEFB $04,$04,$04
 
 ; UDG 1A
+;
+; #CALL:print_udg(#PC,UDG_1A)
 b$8F15 DEFB $01,$01,$EE,$77,$00,$00,$00,$00
  $8F1D DEFB $00,$00,$06
 
 ; UDG 1B
+;
+; #CALL:print_udg(#PC,UDG_1B)
 b$8F20 DEFB $01,$02,$C6,$7F,$31,$18,$0C,$06
  $8F28 DEFB $03,$01,$7F,$3E,$80,$C0,$E0,$B0
  $8F30 DEFB $98,$8C,$06,$06
 
 ; UDG 1C
+;
+; #CALL:print_udg(#PC,UDG_1C)
 b$8F34 DEFB $01,$02,$63,$FE,$8C,$18,$30,$60
  $8F3C DEFB $C0,$80,$FE,$7C,$01,$03,$07,$0D
  $8F44 DEFB $19,$31,$06,$06
 
 ; UDG 1D
+;
+; #CALL:print_udg(#PC,UDG_1D)
 b$8F48 DEFB $01,$01,$FF,$FF,$00,$FF,$55,$AA
  $8F50 DEFB $55,$FF,$04
 
 ; UDG 1E
+;
+; #CALL:print_udg(#PC,UDG_1E)
 b$8F53 DEFB $02,$02,$00,$00,$3F,$C0,$00,$00
  $8F5B DEFB $7F,$80,$00,$00,$7F,$00,$55,$00
  $8F63 DEFB $00,$00,$00,$00,$00,$FF,$00,$00
@@ -2233,17 +2487,23 @@ b$8F53 DEFB $02,$02,$00,$00,$3F,$C0,$00,$00
  $8F73 DEFB $1F,$E0,$00,$03
 
 ; UDG 1F
+;
+; #CALL:print_udg(#PC,UDG_1F)
 b$8F77 DEFB $02,$01,$00,$00,$00,$7F,$00,$00
  $8F7F DEFB $01,$FC,$00,$00,$0F,$F0,$00,$00
  $8F87 DEFB $3F,$C0,$03,$03
 
 ; UDG 20
+;
+; #CALL:print_udg(#PC,UDG_20)
 b$8F8B DEFB $03,$01,$00,$00,$00,$00,$03,$FF
  $8F93 DEFB $00,$00,$00,$00,$3F,$F0,$00,$00
  $8F9B DEFB $00,$01,$FF,$00,$00,$00,$00,$0F
  $8FA3 DEFB $F0,$00,$00,$03
 
 ; UDG 21
+;
+; #CALL:print_udg(#PC,UDG_21)
 b$8FA7 DEFB $0A,$01,$00,$00,$00,$00,$00,$00
  $8FAF DEFB $00,$00,$00,$00,$00,$00,$00,$0F
  $8FB7 DEFB $FF,$FF,$F0,$00,$00,$00,$00,$00
@@ -2257,6 +2517,8 @@ b$8FA7 DEFB $0A,$01,$00,$00,$00,$00,$00,$00
  $8FF7 DEFB $FF,$F8,$00,$03
 
 ; UDG 22
+;
+; #CALL:print_udg(#PC,UDG_22)
 b$8FFB DEFB $03,$03,$2F,$E0,$00,$1F,$20,$00
  $9003 DEFB $3E,$40,$00,$3C,$80,$00,$D9,$00
  $900B DEFB $00,$6A,$00,$00,$30,$00,$00,$10
@@ -2269,11 +2531,15 @@ b$8FFB DEFB $03,$03,$2F,$E0,$00,$1F,$20,$00
  $9043 DEFB $07,$F0,$00,$06
 
 ; UDG 23
+;
+; #CALL:print_udg(#PC,UDG_23)
 b$9047 DEFB $02,$01,$00,$00,$FE,$00,$00,$00
  $904F DEFB $3F,$80,$00,$00,$0F,$F0,$00,$00
  $9057 DEFB $03,$FC,$03,$03
 
 ; UDG 24
+;
+; #CALL:print_udg(#PC,UDG_24)
 b$905B DEFB $02,$02,$00,$00,$03,$FC,$00,$00
  $9063 DEFB $01,$FE,$00,$00,$00,$FE,$00,$AA
  $906B DEFB $00,$00,$00,$00,$FF,$00,$00,$00
@@ -2281,27 +2547,39 @@ b$905B DEFB $02,$02,$00,$00,$03,$FC,$00,$00
  $907B DEFB $07,$F8,$00,$03
 
 ; UDG 25
+;
+; #CALL:print_udg(#PC,UDG_25)
 b$907F DEFB $01,$01,$FE,$00,$2A,$3E,$1E,$06
  $9087 DEFB $02,$02,$03
 
 ; UDG 26
+;
+; #CALL:print_udg(#PC,UDG_26)
 b$908A DEFB $01,$01,$7F,$00,$54,$7C,$78,$60
  $9092 DEFB $40,$40,$03
 
 ; UDG 27
+;
+; #CALL:print_udg(#PC,UDG_27)
 b$9095 DEFB $01,$01,$FF,$00,$00,$00,$FF,$00
  $909D DEFB $00,$00,$0E
 
 ; UDG 28
+;
+; #CALL:print_udg(#PC,UDG_28)
 b$90A0 DEFB $02,$01,$FF,$FF,$00,$00,$00,$00
  $90A8 DEFB $00,$00,$FF,$FF,$00,$00,$00,$00
  $90B0 DEFB $00,$00,$0E,$0E
 
 ; UDG 29
+;
+; #CALL:print_udg(#PC,UDG_29)
 b$90B4 DEFB $01,$01,$8E,$86,$8E,$86,$8E,$86
  $90BC DEFB $8E,$86,$07
 
 ; UDG 2A
+;
+; #CALL:print_udg(#PC,UDG_2A)
 b$90BF DEFB $02,$02,$39,$3E,$00,$9E,$00,$9E
  $90C7 DEFB $00,$00,$01,$FF,$00,$00,$01,$FF
  $90CF DEFB $00,$00,$38,$00,$3B,$C0,$3B,$F0
@@ -2309,16 +2587,22 @@ b$90BF DEFB $02,$02,$39,$3E,$00,$9E,$00,$9E
  $90DF DEFB $3A,$FE,$00,$07
 
 ; UDG 2B
+;
+; #CALL:print_udg(#PC,UDG_2B)
 b$90E3 DEFB $02,$01,$11,$A3,$11,$D3,$11,$CB
  $90EB DEFB $FF,$C5,$01,$CB,$01,$D3,$01,$A3
  $90F3 DEFB $FF,$43,$10,$06
 
 ; UDG 2C
+;
+; #CALL:print_udg(#PC,UDG_2C)
 b$90F7 DEFB $02,$01,$C5,$88,$CB,$88,$D3,$88
  $90FF DEFB $A3,$FF,$D3,$80,$CB,$80,$C5,$80
  $9107 DEFB $C2,$FF,$06,$10
 
 ; UDG 2D
+;
+; #CALL:print_udg(#PC,UDG_2D)
 b$910B DEFB $07,$02,$FF,$FF,$60,$00,$06,$FF
  $9113 DEFB $FF,$81,$80,$40,$00,$0A,$01,$80
  $911B DEFB $4A,$52,$4E,$1F,$72,$4A,$52,$B4
@@ -2340,6 +2624,8 @@ b$910B DEFB $07,$02,$FF,$FF,$60,$00,$06,$FF
  $919B DEFB $00,$C3,$07,$07
 
 ; UDG AD
+;
+; #CALL:print_udg(#PC,UDG_AD)
 b$919F DEFB $02,$02,$7F,$FE,$00,$00,$10,$08
  $91A7 DEFB $20,$04,$20,$04,$40,$02,$40,$02
  $91AF DEFB $00,$00,$7F,$FE,$C1,$83,$FF,$11
@@ -2347,11 +2633,15 @@ b$919F DEFB $02,$02,$7F,$FE,$00,$00,$10,$08
  $91BF DEFB $C1,$BB,$00,$06
 
 ; UDG AE
+;
+; #CALL:print_udg(#PC,UDG_AE)
 b$91C3 DEFB $01,$02,$AE,$AE,$AA,$A0,$A0,$A0
  $91CB DEFB $A0,$A0,$A0,$A0,$A0,$A0,$A0,$AA
  $91D3 DEFB $AE,$AE,$05,$04
 
 ; UDG AF
+;
+; #CALL:print_udg(#PC,UDG_AF)
 b$91D7 DEFB $04,$04,$4A,$6F,$FE,$64,$AA,$67
  $91DF DEFB $FC,$6A,$4A,$6A,$AA,$64,$AA,$70
  $91E7 DEFB $00,$6A,$4A,$78,$00,$E4,$AA,$7F
@@ -2371,27 +2661,37 @@ b$91D7 DEFB $04,$04,$4A,$6F,$FE,$64,$AA,$67
  $9257 DEFB $FF,$EA,$00,$06
 
 ; UDG 0F
+;
+; #CALL:print_udg(#PC,UDG_0F)
 b$925B DEFB $01,$03,$FF,$00,$24,$24,$42,$42
  $9263 DEFB $81,$00,$00,$3C,$3C,$5E,$BF,$BF
  $926B DEFB $7E,$00,$42,$24,$24,$00,$3C,$3C
  $9273 DEFB $00,$7E,$07,$02,$06
 
 ; UDG B0
+;
+; #CALL:print_udg(#PC,UDG_B0)
 b$9278 DEFB $01,$02,$00,$AA,$00,$00,$AA,$00
  $9280 DEFB $00,$AA,$AA,$00,$00,$AA,$00,$00
  $9288 DEFB $AA,$00,$02,$02
 
 ; UDG B1
+;
+; #CALL:print_udg(#PC,UDG_B1)
 b$928C DEFB $01,$02,$40,$2A,$58,$40,$2A,$58
  $9294 DEFB $60,$3A,$2A,$58,$40,$2A,$58,$40
  $929C DEFB $2A,$58,$06,$06
 
 ; UDG B2
+;
+; #CALL:print_udg(#PC,UDG_B2)
 b$92A0 DEFB $01,$02,$02,$B4,$1A,$02,$B4,$1A
  $92A8 DEFB $02,$B4,$B4,$1A,$02,$B4,$1A,$02
  $92B0 DEFB $B4,$1A,$06,$06
 
-; UDG B7
+; UDG B7 - Blizten on "game over" 0
+;
+; #CALL:print_udg(#PC,UDG_B7)
 b$92B4 DEFB $04,$06,$00,$00,$00,$00,$FB,$FF
  $92BC DEFB $FF,$FF,$00,$00,$00,$00,$3C,$FF
  $92C4 DEFB $FF,$FC,$06,$3F,$FF,$E0,$00,$00
@@ -2422,6 +2722,8 @@ b$92B4 DEFB $04,$06,$00,$00,$00,$00,$FB,$FF
  $938C DEFB $07,$07
 
 ; UDG B8 - Blizten on "game over" 1
+;
+; #CALL:print_udg(#PC,UDG_B8)
 b$938E DEFB $03,$03,$00,$0F,$E0,$00,$1F,$F0
  $9396 DEFB $00,$0F,$F0,$00,$0F,$80,$00,$07
  $939E DEFB $E0,$00,$07,$C0,$00,$03,$C0,$00
@@ -2435,6 +2737,8 @@ b$938E DEFB $03,$03,$00,$0F,$E0,$00,$1F,$F0
  $93DE DEFB $06,$06,$07
 
 ; UDG B9 - Blizten on "game over" 2
+;
+; #CALL:print_udg(#PC,UDG_B9)
 b$93E1 DEFB $03,$03,$00,$FE,$C0,$00,$FF,$C0
  $93E9 DEFB $00,$7F,$C0,$00,$7C,$80,$00,$3F
  $93F1 DEFB $80,$00,$3F,$00,$00,$1E,$00,$00
@@ -2448,6 +2752,8 @@ b$93E1 DEFB $03,$03,$00,$FE,$C0,$00,$FF,$C0
  $9431 DEFB $06,$07,$06
 
 ; UDG BA - Blizten on "game over" 3
+;
+; #CALL:print_udg(#PC,UDG_BA)
 b$9434 DEFB $03,$03,$00,$F3,$C0,$00,$FF,$C0
  $943C DEFB $00,$DE,$C0,$00,$61,$80,$00,$73
  $9444 DEFB $80,$00,$3F,$00,$00,$1E,$00,$00
@@ -2461,26 +2767,38 @@ b$9434 DEFB $03,$03,$00,$F3,$C0,$00,$FF,$C0
  $9484 DEFB $06,$07,$06
 
 ; UDG BB - Blizten on "game over" 4
+;
+; #CALL:print_udg(#PC,UDG_BB)
 b$9487 DEFB $01,$01,$FF,$60,$FF,$60,$FF,$60
  $948F DEFB $FF,$00,$07
 
 ; UDG BC
+;
+; #CALL:print_udg(#PC,UDG_BC)
 b$9492 DEFB $01,$01,$FF,$06,$FF,$06,$FF,$06
  $949A DEFB $FF,$00,$07
 
 ; UDG BD
+;
+; #CALL:print_udg(#PC,UDG_BD)
 b$949D DEFB $01,$01,$D1,$A1,$C1,$A1,$D1,$A1
  $94A5 DEFB $C1,$A1,$07
 
 ; UDG BE
+;
+; #CALL:print_udg(#PC,UDG_BE)
 b$94A8 DEFB $01,$01,$8B,$85,$83,$85,$8B,$85
  $94B0 DEFB $83,$85,$07
 
 ; UDG D1
+;
+; #CALL:print_udg(#PC,UDG_D1)
 b$94B3 DEFB $01,$01,$0F,$0F,$F0,$F0,$0F,$0F
  $94BB DEFB $F0,$F0,$05
 
 ; UDG D2
+;
+; #CALL:print_udg(#PC,UDG_D2)
 b$94BE DEFB $02,$04,$08,$00,$08,$00,$08,$00
  $94C6 DEFB $08,$00,$08,$00,$08,$00,$08,$00
  $94CE DEFB $08,$00,$08,$40,$08,$00,$08,$40
@@ -2492,6 +2810,8 @@ b$94BE DEFB $02,$04,$08,$00,$08,$00,$08,$00
  $94FE DEFB $3F,$BE,$00,$07
 
 ; UDG D3
+;
+; #CALL:print_udg(#PC,UDG_D3)
 b$9502 DEFB $03,$02,$01,$FE,$00,$01,$FC,$00
  $950A DEFB $03,$F8,$00,$03,$F8,$00,$07,$F0
  $9512 DEFB $00,$07,$F0,$00,$07,$F0,$00,$00
@@ -2501,11 +2821,15 @@ b$9502 DEFB $03,$02,$01,$FE,$00,$01,$FC,$00
  $9532 DEFB $FF,$00,$00,$07
 
 ; UDG D0
+;
+; #CALL:print_udg(#PC,UDG_D0)
 b$9536 DEFB $01,$02,$62,$62,$7A,$7A,$3A,$26
  $953E DEFB $54,$28,$02,$3A,$7A,$7A,$62,$62
  $9546 DEFB $62,$62,$04,$04
 
 ; UDG CF
+;
+; #CALL:print_udg(#PC,UDG_CF)
 b$954A DEFB $02,$03,$40,$28,$8A,$14,$54,$A0
  $9552 DEFB $11,$44,$44,$92,$A6,$24,$17,$EA
  $955A DEFB $23,$C0,$04,$40,$01,$00,$08,$20
@@ -2515,6 +2839,8 @@ b$954A DEFB $02,$03,$40,$28,$8A,$14,$54,$A0
  $957A DEFB $01,$00,$06,$04,$03,$03,$07,$07
 
 ; UDG C6
+;
+; #CALL:print_udg(#PC,UDG_C6)
 b$9582 DEFB $04,$01,$7F,$FF,$FF,$FC,$80,$00
  $958A DEFB $00,$02,$D2,$42,$21,$2E,$7F,$FF
  $9592 DEFB $FF,$FC,$00,$00,$00,$00,$16,$02
@@ -2522,6 +2848,8 @@ b$9582 DEFB $04,$01,$7F,$FF,$FF,$FC,$80,$00
  $95A2 DEFB $00,$00,$00,$05
 
 ; UDG C7
+;
+; #CALL:print_udg(#PC,UDG_C7)
 b$95A6 DEFB $02,$02,$41,$05,$41,$05,$41,$05
  $95AE DEFB $41,$05,$41,$05,$7F,$FD,$00,$01
  $95B6 DEFB $FF,$FF,$FF,$FF,$00,$01,$7F,$FD
@@ -2529,6 +2857,8 @@ b$95A6 DEFB $02,$02,$41,$05,$41,$05,$41,$05
  $95C6 DEFB $45,$45,$00,$0E
 
 ; UDG D5
+;
+; #CALL:print_udg(#PC,UDG_D5)
 b$95CA DEFB $02,$02,$00,$01,$02,$41,$02,$41
  $95D2 DEFB $03,$C1,$02,$41,$02,$41,$02,$41
  $95DA DEFB $02,$41,$FF,$FF,$FF,$FF,$00,$01
@@ -2536,6 +2866,8 @@ b$95CA DEFB $02,$02,$00,$01,$02,$41,$02,$41
  $95EA DEFB $07,$E1,$07,$07,$06,$06
 
 ; UDG D6
+;
+; #CALL:print_udg(#PC,UDG_D6)
 b$95F0 DEFB $04,$02,$3F,$FF,$BF,$FF,$20,$40
  $95F8 DEFB $A0,$01,$21,$50,$A8,$05,$20,$40
  $9600 DEFB $A0,$01,$20,$40,$A0,$01,$3F,$FF
@@ -2547,16 +2879,22 @@ b$95F0 DEFB $04,$02,$3F,$FF,$BF,$FF,$20,$40
  $9630 DEFB $00,$00,$00,$0E
 
 ; UDG D7
+;
+; #CALL:print_udg(#PC,UDG_D7)
 b$9634 DEFB $01,$02,$1C,$2E,$5F,$5F,$7F,$3E
  $963C DEFB $1C,$00,$14,$14,$00,$1C,$22,$1C
  $9644 DEFB $1C,$1C,$06,$06
 
 ; UDG D8
+;
+; #CALL:print_udg(#PC,UDG_D8)
 b$9648 DEFB $01,$02,$42,$81,$81,$BF,$BF,$5E
  $9650 DEFB $3C,$00,$7E,$24,$24,$24,$24,$24
  $9658 DEFB $24,$24,$05,$07
 
 ; UDG D9
+;
+; #CALL:print_udg(#PC,UDG_D9)
 b$965C DEFB $03,$02,$92,$49,$00,$6D,$B6,$5E
  $9664 DEFB $6D,$B6,$2C,$6D,$B6,$2C,$6D,$B6
  $966C DEFB $2C,$00,$00,$2C,$FF,$FF,$3C,$00
@@ -2566,6 +2904,8 @@ b$965C DEFB $03,$02,$92,$49,$00,$6D,$B6,$5E
  $968C DEFB $B6,$10,$04,$04,$02,$03,$03,$03
 
 ; UDG DA
+;
+; #CALL:print_udg(#PC,UDG_DA)
 b$9694 DEFB $02,$03,$11,$00,$21,$18,$11,$18
  $969C DEFB $21,$18,$11,$18,$85,$08,$79,$3C
  $96A4 DEFB $00,$00,$28,$44,$00,$82,$38,$82
@@ -2575,6 +2915,8 @@ b$9694 DEFB $02,$03,$11,$00,$21,$18,$11,$18
  $96C4 DEFB $00,$01,$02,$03,$06,$06,$45,$03
 
 ; UDG DB
+;
+; #CALL:print_udg(#PC,UDG_DB)
 b$96CC DEFB $02,$02,$89,$91,$01,$80,$B9,$97
  $96D4 DEFB $51,$8A,$02,$C0,$05,$E0,$FF,$FF
  $96DC DEFB $00,$00,$2F,$F4,$52,$CA,$21,$84
@@ -2582,12 +2924,16 @@ b$96CC DEFB $02,$02,$89,$91,$01,$80,$B9,$97
  $96EC DEFB $51,$8A,$00,$03
 
 ; UDG C9
+;
+; #CALL:print_udg(#PC,UDG_C9)
 b$96F0 DEFB $03,$01,$7D,$FF,$FF,$85,$FF,$FE
  $96F8 DEFB $8E,$00,$00,$87,$00,$00,$8F,$00
  $9700 DEFB $00,$87,$00,$00,$8F,$00,$00,$00
  $9708 DEFB $00,$00,$06,$05,$05
 
 ; UDG DC
+;
+; #CALL:print_udg(#PC,UDG_DC)
 b$970D DEFB $03,$02,$54,$38,$38,$24,$38,$38
  $9715 DEFB $24,$38,$38,$54,$5C,$5C,$24,$BE
  $971D DEFB $BE,$24,$FE,$FE,$18,$7C,$7C,$00
@@ -2597,10 +2943,14 @@ b$970D DEFB $03,$02,$54,$38,$38,$24,$38,$38
  $973D DEFB $38,$44,$05,$02,$03,$05,$05,$03
 
 ; UDG CA
+;
+; #CALL:print_udg(#PC,UDG_CA)
 b$9745 DEFB $01,$01,$7E,$87,$8F,$87,$8F,$87
  $974D DEFB $8F,$00,$06
 
 ; UDG C8
+;
+; #CALL:print_udg(#PC,UDG_C8)
 b$9750 DEFB $05,$01,$00,$00,$BF,$00,$00,$00
  $9758 DEFB $00,$BF,$00,$00,$3F,$FE,$00,$7F
  $9760 DEFB $FF,$7F,$FF,$5E,$FF,$FE,$00,$00
@@ -2609,6 +2959,8 @@ b$9750 DEFB $05,$01,$00,$00,$BF,$00,$00,$00
  $9778 DEFB $00,$00,$03,$03,$02,$03,$03
 
 ; UDG B3
+;
+; #CALL:print_udg(#PC,UDG_B3)
 b$977F DEFB $04,$01,$60,$00,$00,$25,$3E,$00
  $9787 DEFB $00,$35,$03,$FF,$80,$35,$0F,$3F
  $978F DEFB $FF,$01,$98,$00,$FF,$F9,$60,$00
@@ -2616,42 +2968,60 @@ b$977F DEFB $04,$01,$60,$00,$00,$25,$3E,$00
  $979F DEFB $00,$01,$00,$06
 
 ; UDG 62
+;
+; #CALL:print_udg(#PC,UDG_62)
 b$97A3 DEFB $02,$01,$00,$00,$00,$00,$00,$00
  $97AB DEFB $10,$08,$10,$08,$10,$08,$10,$08
  $97B3 DEFB $10,$08,$05,$05
 
 ; UDG 63
+;
+; #CALL:print_udg(#PC,UDG_63)
 b$97B7 DEFB $02,$01,$17,$E8,$10,$08,$10,$08
  $97BF DEFB $10,$08,$10,$08,$10,$08,$10,$08
  $97C7 DEFB $10,$08,$05,$05
 
 ; UDG 64
+;
+; #CALL:print_udg(#PC,UDG_64)
 b$97CB DEFB $02,$01,$17,$E8,$10,$08,$10,$08
  $97D3 DEFB $10,$08,$10,$08,$00,$00,$00,$00
  $97DB DEFB $00,$00,$05,$05
 
 ; UDG 96
+;
+; #CALL:print_udg(#PC,UDG_96)
 b$97DF DEFB $02,$01,$1F,$F8,$20,$04,$00,$00
  $97E7 DEFB $00,$00,$00,$00,$00,$00,$00,$00
  $97EF DEFB $00,$00,$05,$05
 
 ; UDG 65
+;
+; #CALL:print_udg(#PC,UDG_65)
 b$97F3 DEFB $01,$01,$FF,$00,$AA,$FF,$FF,$00
  $97FB DEFB $AA,$FF,$07
 
 ; UDG 66
+;
+; #CALL:print_udg(#PC,UDG_66)
 b$97FE DEFB $01,$01,$FF,$00,$0A,$0F,$0F,$00
  $9806 DEFB $00,$00,$07
 
 ; UDG 67
+;
+; #CALL:print_udg(#PC,UDG_67)
 b$9809 DEFB $01,$01,$FF,$00,$A8,$F0,$F0,$00
  $9811 DEFB $00,$00,$07
 
 ; UDG 68
+;
+; #CALL:print_udg(#PC,UDG_68)
 b$9814 DEFB $01,$01,$00,$FF,$00,$AA,$FF,$00
  $981C DEFB $AA,$FF,$07
 
 ; UDG 69
+;
+; #CALL:print_udg(#PC,UDG_69)
 b$981F DEFB $02,$05,$0D,$50,$0D,$50,$0D,$50
  $9827 DEFB $00,$00,$1F,$F8,$00,$00,$3F,$FC
  $982F DEFB $00,$00,$0D,$50,$0D,$50,$0D,$50
@@ -2665,6 +3035,8 @@ b$981F DEFB $02,$05,$0D,$50,$0D,$50,$0D,$50
  $986F DEFB $0D,$50,$00,$07
 
 ; UDG 6A
+;
+; #CALL:print_udg(#PC,UDG_6A)
 b$9873 DEFB $02,$02,$99,$99,$66,$66,$46,$62
  $987B DEFB $89,$91,$51,$8A,$22,$44,$54,$2A
  $9883 DEFB $80,$01,$80,$01,$54,$2A,$22,$44
@@ -2672,21 +3044,29 @@ b$9873 DEFB $02,$02,$99,$99,$66,$66,$46,$62
  $9893 DEFB $99,$99,$07,$07,$05,$05
 
 ; UDG 6B
+;
+; #CALL:print_udg(#PC,UDG_6B)
 b$9899 DEFB $02,$01,$FF,$FF,$55,$02,$3F,$04
  $98A1 DEFB $1F,$08,$0F,$10,$07,$20,$03,$40
  $98A9 DEFB $01,$80,$03,$03
 
 ; UDG 6C
+;
+; #CALL:print_udg(#PC,UDG_6C)
 b$98AD DEFB $02,$01,$00,$00,$00,$00,$00,$00
  $98B5 DEFB $00,$00,$00,$00,$00,$00,$00,$00
  $98BD DEFB $00,$00,$45,$45
 
 ; UDG 6D
+;
+; #CALL:print_udg(#PC,UDG_6D)
 b$98C1 DEFB $02,$01,$7F,$FE,$FF,$FF,$00,$00
  $98C9 DEFB $6F,$F6,$60,$06,$60,$06,$60,$06
  $98D1 DEFB $60,$06,$04,$04
 
 ; UDG 6E
+;
+; #CALL:print_udg(#PC,UDG_6E)
 b$98D5 DEFB $02,$02,$01,$80,$31,$89,$41,$89
  $98DD DEFB $25,$6D,$11,$8B,$60,$09,$02,$C0
  $98E5 DEFB $05,$E0,$00,$02,$3B,$87,$EF,$EC
@@ -2694,52 +3074,76 @@ b$98D5 DEFB $02,$02,$01,$80,$31,$89,$41,$89
  $98F5 DEFB $01,$00,$07,$47,$06,$46
 
 ; UDG 6F
+;
+; #CALL:print_udg(#PC,UDG_6F)
 b$98FB DEFB $01,$01,$FF,$10,$10,$10,$FF,$01
  $9903 DEFB $01,$01,$2A
 
 ; UDG 70
+;
+; #CALL:print_udg(#PC,UDG_70)
 b$9906 DEFB $02,$01,$FF,$FF,$10,$10,$10,$10
  $990E DEFB $10,$10,$FF,$FF,$01,$00,$01,$00
  $9916 DEFB $01,$00,$2A,$2A
 
 ; UDG 71
+;
+; #CALL:print_udg(#PC,UDG_71)
 b$991A DEFB $01,$01,$00,$3F,$7F,$70,$62,$65
  $9922 DEFB $6A,$65,$06
 
 ; UDG 72
+;
+; #CALL:print_udg(#PC,UDG_72)
 b$9925 DEFB $01,$01,$00,$FF,$FF,$00,$AA,$55
  $992D DEFB $AA,$55,$06
 
 ; UDG 73
+;
+; #CALL:print_udg(#PC,UDG_73)
 b$9930 DEFB $01,$01,$00,$FC,$FE,$06,$A6,$56
  $9938 DEFB $A6,$56,$06
 
 ; UDG 74
+;
+; #CALL:print_udg(#PC,UDG_74)
 b$993B DEFB $01,$01,$A6,$56,$A6,$56,$A6,$56
  $9943 DEFB $A6,$56,$06
 
 ; UDG 75
+;
+; #CALL:print_udg(#PC,UDG_75)
 b$9946 DEFB $01,$01,$A6,$56,$A6,$46,$0E,$FE
  $994E DEFB $FC,$00,$06
 
 ; UDG 76
+;
+; #CALL:print_udg(#PC,UDG_76)
 b$9951 DEFB $01,$01,$AA,$55,$AA,$55,$00,$FF
  $9959 DEFB $FF,$00,$06
 
 ; UDG 77
+;
+; #CALL:print_udg(#PC,UDG_77)
 b$995C DEFB $01,$01,$6A,$65,$6A,$65,$70,$7F
  $9964 DEFB $3F,$00,$06
 
 ; UDG 78
+;
+; #CALL:print_udg(#PC,UDG_78)
 b$9967 DEFB $01,$01,$6A,$65,$6A,$65,$6A,$65
  $996F DEFB $6A,$65,$06
 
 ; UDG 7B
+;
+; #CALL:print_udg(#PC,UDG_7B)
 b$9972 DEFB $02,$01,$FF,$FF,$5D,$A6,$0C,$84
  $997A DEFB $08,$80,$08,$00,$00,$00,$00,$00
  $9982 DEFB $00,$00,$05,$05
 
 ; UDG 7C
+;
+; #CALL:print_udg(#PC,UDG_7C)
 b$9986 DEFB $01,$04,$F6,$F6,$F6,$06,$FE,$FE
  $998E DEFB $00,$00,$F6,$F6,$F6,$F6,$F6,$F6
  $9996 DEFB $F6,$F6,$F6,$F6,$F6,$F6,$F6,$F6
@@ -2747,6 +3151,8 @@ b$9986 DEFB $01,$04,$F6,$F6,$F6,$06,$FE,$FE
  $99A6 DEFB $F0,$F0,$00,$01
 
 ; UDG 7D
+;
+; #CALL:print_udg(#PC,UDG_7D)
 b$99AA DEFB $01,$04,$07,$07,$07,$00,$00,$00
  $99B2 DEFB $00,$00,$07,$07,$07,$07,$07,$07
  $99BA DEFB $07,$07,$07,$07,$07,$07,$07,$07
@@ -2754,22 +3160,32 @@ b$99AA DEFB $01,$04,$07,$07,$07,$00,$00,$00
  $99CA DEFB $07,$07,$00,$01
 
 ; UDG 7E
+;
+; #CALL:print_udg(#PC,UDG_7E)
 b$99CE DEFB $01,$01,$00,$00,$00,$00,$00,$FF
  $99D6 DEFB $FF,$FF,$01
 
 ; UDG 7F
+;
+; #CALL:print_udg(#PC,UDG_7F)
 b$99D9 DEFB $01,$01,$FF,$FF,$FF,$00,$FF,$FF
  $99E1 DEFB $00,$00,$01
 
 ; UDG 80
+;
+; #CALL:print_udg(#PC,UDG_80)
 b$99E4 DEFB $01,$01,$FF,$FF,$FF,$00,$7F,$7F
  $99EC DEFB $00,$00,$01
 
 ; UDG 81
+;
+; #CALL:print_udg(#PC,UDG_81)
 b$99EF DEFB $01,$01,$00,$00,$3F,$3F,$3F,$00
  $99F7 DEFB $00,$00,$00
 
 ; UDG 16
+;
+; #CALL:print_udg(#PC,UDG_16)
 b$99FA DEFB $04,$05,$11,$D5,$8F,$48,$10,$F5
  $9A02 DEFB $0E,$C8,$00,$D5,$0D,$D0,$06,$55
  $9A0A DEFB $0D,$E0,$02,$D1,$1D,$E0,$12,$DA
@@ -2795,21 +3211,29 @@ b$99FA DEFB $04,$05,$11,$D5,$8F,$48,$10,$F5
  $9AAA DEFB $04,$04,$04,$04,$04,$07
 
 ; UDG 9F
+;
+; #CALL:print_udg(#PC,UDG_9F)
 b$9AB0 DEFB $01,$02,$18,$18,$18,$2C,$2C,$2C
  $9AB8 DEFB $5E,$5E,$7E,$00,$7E,$00,$7E,$00
  $9AC0 DEFB $7E,$00,$07,$07
 
 ; UDG 2F
+;
+; #CALL:print_udg(#PC,UDG_2F)
 b$9AC4 DEFB $01,$02,$A9,$B9,$81,$FF,$00,$55
  $9ACC DEFB $FF,$FF,$FF,$00,$AA,$FF,$FF,$00
  $9AD4 DEFB $F9,$89,$05,$07
 
 ; UDG 30
+;
+; #CALL:print_udg(#PC,UDG_30)
 b$9AD8 DEFB $02,$01,$FF,$FF,$00,$00,$57,$EA
  $9AE0 DEFB $FA,$5F,$FA,$5F,$02,$40,$54,$2A
  $9AE8 DEFB $FF,$FF,$05,$05
 
 ; UDG 31
+;
+; #CALL:print_udg(#PC,UDG_31)
 b$9AEC DEFB $03,$02,$56,$14,$B2,$55,$14,$AA
  $9AF4 DEFB $55,$54,$AA,$5D,$38,$F2,$40,$00
  $9AFC DEFB $02,$60,$00,$06,$3F,$FF,$FC,$80
@@ -2819,10 +3243,14 @@ b$9AEC DEFB $03,$02,$56,$14,$B2,$55,$14,$AA
  $9B1C DEFB $14,$AA,$05,$05,$05,$07,$07,$07
 
 ; UDG 32
+;
+; #CALL:print_udg(#PC,UDG_32)
 b$9B24 DEFB $01,$01,$FF,$FF,$00,$88,$BB,$BB
  $9B2C DEFB $FF,$00,$04
 
 ; UDG 33
+;
+; #CALL:print_udg(#PC,UDG_33)
 b$9B2F DEFB $08,$03,$E2,$3F,$AF,$8F,$9F,$F0
  $9B37 DEFB $FC,$C7,$FE,$3F,$28,$88,$BF,$10
  $9B3F DEFB $C4,$FF,$E2,$3F,$A8,$88,$FF,$10
@@ -2853,14 +3281,20 @@ b$9B2F DEFB $08,$03,$E2,$3F,$AF,$8F,$9F,$F0
  $9C07 DEFB $10,$10
 
 ; UDG 34
+;
+; #CALL:print_udg(#PC,UDG_34)
 b$9C09 DEFB $01,$01,$00,$3C,$3C,$18,$00,$00
  $9C11 DEFB $00,$00,$06
 
 ; UDG 35
+;
+; #CALL:print_udg(#PC,UDG_35)
 b$9C14 DEFB $01,$01,$18,$3C,$7E,$3C,$18,$3C
  $9C1C DEFB $18,$00,$06
 
 ; UDG 36
+;
+; #CALL:print_udg(#PC,UDG_36)
 b$9C1F DEFB $06,$01,$FF,$FF,$FF,$FF,$FF,$FF
  $9C27 DEFB $00,$00,$00,$00,$00,$00,$AA,$AA
  $9C2F DEFB $AA,$AA,$AA,$55,$53,$FF,$F9,$4F
@@ -2870,17 +3304,23 @@ b$9C1F DEFB $06,$01,$FF,$FF,$FF,$FF,$FF,$FF
  $9C4F DEFB $00,$3C,$00,$06
 
 ; UDG 37
+;
+; #CALL:print_udg(#PC,UDG_37)
 b$9C53 DEFB $01,$02,$18,$18,$18,$18,$18,$18
  $9C5B DEFB $18,$00,$7E,$0C,$3C,$00,$18,$18
  $9C63 DEFB $18,$18,$07,$07
 
 ; UDG 38
+;
+; #CALL:print_udg(#PC,UDG_38)
 b$9C67 DEFB $03,$01,$00,$7E,$00,$01,$FF,$80
  $9C6F DEFB $07,$BF,$E0,$1E,$7F,$F8,$39,$FF
  $9C77 DEFB $FC,$73,$FF,$FE,$E7,$FF,$FF,$CF
  $9C7F DEFB $FF,$FF,$00,$01
 
 ; UDG 39
+;
+; #CALL:print_udg(#PC,UDG_39)
 b$9C83 DEFB $02,$02,$15,$48,$51,$24,$0A,$50
  $9C8B DEFB $01,$40,$11,$20,$02,$40,$02,$40
  $9C93 DEFB $02,$00,$FF,$FF,$55,$54,$26,$8C
@@ -3417,6 +3857,8 @@ b$A989 DEFB $1B,$06,$08,$10,$11,$15,$0C,$19
  $A9C9 DEFB $0F,$14,$02,$47,$01,$02
 
 ; UDG D4
+;
+; #CALL:print_udg(#PC,UDG_D4)
 b$A9CF DEFB $02,$02,$01,$00,$03,$80,$05,$C0
  $A9D7 DEFB $0B,$E0,$13,$F0,$27,$F8,$00,$00
  $A9DF DEFB $01,$00,$03,$80,$00,$00,$01,$00
@@ -3424,6 +3866,8 @@ b$A9CF DEFB $02,$02,$01,$00,$03,$80,$05,$C0
  $A9EF DEFB $00,$00,$05,$05,$06,$06
 
 ; UDG 3A
+;
+; #CALL:print_udg(#PC,UDG_3A)
 b$A9F5 DEFB $08,$02,$12,$A4,$06,$52,$54,$A4
  $A9FD DEFB $52,$54,$1A,$A9,$52,$6A,$0A,$50
  $AA05 DEFB $DA,$0A,$2D,$7B,$B6,$EC,$10,$A4
@@ -3445,10 +3889,14 @@ b$A9F5 DEFB $08,$02,$12,$A4,$06,$52,$54,$A4
  $AA85 DEFB $04,$04
 
 ; UDG 3B
+;
+; #CALL:print_udg(#PC,UDG_3B)
 b$AA87 DEFB $01,$01,$FF,$70,$7E,$30,$3C,$10
  $AA8F DEFB $18,$00,$04
 
 ; UDG 14
+;
+; #CALL:print_udg(#PC,UDG_14)
 b$AA92 DEFB $03,$06,$10,$59,$A6,$02,$39,$A6
  $AA9A DEFB $10,$59,$A6,$01,$19,$A6,$20,$09
  $AAA2 DEFB $A6,$0B,$4C,$A6,$49,$6C,$D6,$01
@@ -3470,6 +3918,8 @@ b$AA92 DEFB $03,$06,$10,$59,$A6,$02,$39,$A6
  $AB22 DEFB $59,$76,$00,$07
 
 ; UDG 97
+;
+; #CALL:print_udg(#PC,UDG_97)
 b$AB26 DEFB $06,$02,$81,$58,$FF,$FF,$FF,$F5
  $AB2E DEFB $2B,$F3,$FF,$FF,$FF,$EA,$7F,$85
  $AB36 DEFB $5F,$FF,$FF,$D4,$FE,$2A,$AA,$AF
@@ -3485,6 +3935,8 @@ b$AB26 DEFB $06,$02,$81,$58,$FF,$FF,$FF,$F5
  $AB86 DEFB $FF,$FA,$00,$02
 
 ; UDG 98
+;
+; #CALL:print_udg(#PC,UDG_98)
 b$AB8A DEFB $02,$02,$13,$E0,$0B,$40,$0F,$E0
  $AB92 DEFB $07,$C0,$07,$80,$01,$C0,$00,$00
  $AB9A DEFB $00,$00,$00,$00,$00,$00,$00,$00
@@ -3492,6 +3944,8 @@ b$AB8A DEFB $02,$02,$13,$E0,$0B,$40,$0F,$E0
  $ABAA DEFB $1D,$E8,$00,$00
 
 ; UDG A0
+;
+; #CALL:print_udg(#PC,UDG_A0)
 b$ABAE DEFB $06,$01,$DD,$DD,$DD,$DD,$DD,$DD
  $ABB6 DEFB $66,$66,$66,$66,$66,$66,$11,$11
  $ABBE DEFB $10,$08,$88,$88,$0A,$AA,$BD,$BD
@@ -3501,17 +3955,23 @@ b$ABAE DEFB $06,$01,$DD,$DD,$DD,$DD,$DD,$DD
  $ABDE DEFB $00,$00,$00,$07
 
 ; UDG A1
+;
+; #CALL:print_udg(#PC,UDG_A1)
 b$ABE2 DEFB $01,$02,$71,$71,$72,$74,$68,$68
  $ABEA DEFB $70,$70,$01,$01,$72,$74,$68,$68
  $ABF2 DEFB $70,$70,$06,$06
 
 ; UDG A2
+;
+; #CALL:print_udg(#PC,UDG_A2)
 b$ABF6 DEFB $03,$01,$FF,$FF,$FF,$FF,$FF,$FF
  $ABFE DEFB $80,$00,$01,$7F,$FF,$FE,$00,$00
  $AC06 DEFB $00,$00,$2C,$00,$00,$5E,$00,$00
  $AC0E DEFB $00,$00,$00,$07
 
 ; UDG A3
+;
+; #CALL:print_udg(#PC,UDG_A3)
 b$AC12 DEFB $01,$04,$71,$38,$1C,$8E,$C7,$E3
  $AC1A DEFB $71,$38,$C7,$E3,$71,$38,$1C,$8E
  $AC22 DEFB $C7,$E3,$1C,$8E,$C7,$E3,$71,$38
@@ -3519,16 +3979,22 @@ b$AC12 DEFB $01,$04,$71,$38,$1C,$8E,$C7,$E3
  $AC32 DEFB $71,$38,$00,$32
 
 ; UDG A4
+;
+; #CALL:print_udg(#PC,UDG_A4)
 b$AC36 DEFB $02,$01,$55,$00,$55,$70,$55,$0C
  $AC3E DEFB $55,$52,$55,$7E,$55,$7C,$55,$70
  $AC46 DEFB $55,$00,$04,$07
 
 ; UDG A5
+;
+; #CALL:print_udg(#PC,UDG_A5)
 b$AC4A DEFB $02,$01,$00,$AA,$0E,$AA,$30,$AA
  $AC52 DEFB $4A,$AA,$7E,$AA,$3E,$AA,$0E,$AA
  $AC5A DEFB $00,$AA,$07,$04
 
 ; UDG A6
+;
+; #CALL:print_udg(#PC,UDG_A6)
 b$AC5E DEFB $03,$03,$10,$94,$84,$10,$B6,$84
  $AC66 DEFB $10,$AA,$84,$0A,$49,$28,$0A,$14
  $AC6E DEFB $28,$04,$2A,$10,$00,$14,$00,$00
@@ -3541,18 +4007,26 @@ b$AC5E DEFB $03,$03,$10,$94,$84,$10,$B6,$84
  $ACA6 DEFB $88,$80,$00,$07
 
 ; UDG A7
+;
+; #CALL:print_udg(#PC,UDG_A7)
 b$ACAA DEFB $01,$01,$FF,$FF,$55,$AA,$55,$55
  $ACB2 DEFB $55,$00,$07
 
 ; UDG A8
+;
+; #CALL:print_udg(#PC,UDG_A8)
 b$ACB5 DEFB $01,$01,$08,$08,$14,$08,$08,$14
  $ACBD DEFB $08,$08,$07
 
 ; UDG 7A
+;
+; #CALL:print_udg(#PC,UDG_7A)
 b$ACC0 DEFB $01,$01,$7C,$83,$39,$5C,$4C,$38
  $ACC8 DEFB $10,$10,$04
 
 ; UDG 79
+;
+; #CALL:print_udg(#PC,UDG_79)
 b$ACCB DEFB $04,$05,$40,$00,$00,$01,$7F,$FF
  $ACD3 DEFB $FF,$FF,$3F,$FF,$FF,$FE,$40,$00
  $ACDB DEFB $00,$01,$7F,$FF,$FF,$FF,$7F,$FF
@@ -3578,6 +4052,8 @@ b$ACCB DEFB $04,$05,$40,$00,$00,$01,$7F,$FF
  $AD7B DEFB $07,$01,$06,$07,$07,$06
 
 ; UDG C0
+;
+; #CALL:print_udg(#PC,UDG_C0)
 b$AD81 DEFB $03,$04,$76,$DB,$6E,$76,$DB,$6E
  $AD89 DEFB $76,$DF,$7E,$77,$DF,$7E,$7F,$FF
  $AD91 DEFB $FE,$55,$55,$54,$00,$00,$00,$FF
@@ -3593,6 +4069,8 @@ b$AD81 DEFB $03,$04,$76,$DB,$6E,$76,$DB,$6E
  $ADE1 DEFB $DB,$6E,$00,$02
 
 ; UDG C2
+;
+; #CALL:print_udg(#PC,UDG_C2)
 b$ADE5 DEFB $03,$04,$54,$09,$00,$22,$92,$40
  $ADED DEFB $00,$25,$00,$7E,$55,$00,$00,$22
  $ADF5 DEFB $00,$54,$A4,$00,$00,$8A,$00,$7C
@@ -3676,6 +4154,8 @@ w$AE60 DEFW $B346
  $AED8 DEFW $C5D2
 
 ; Sprite 38 - Pelican
+;
+; #CALL:print_graphic(#PC,4,Sprite_38)
 b$AEDA DEFB $0B,$02,$00,$00,$0A,$80,$00,$07
  $AEE2 DEFB $80,$00,$0F,$80,$00,$07,$8E,$00
  $AEEA DEFB $0F,$CB,$FC,$03,$DE,$00,$0F,$BF
@@ -3703,6 +4183,8 @@ b$AEDA DEFB $0B,$02,$00,$00,$0A,$80,$00,$07
  $AF9A DEFB $00
 
 ; Sprite 36 - Pair of forks
+;
+; #CALL:print_graphic(#PC,2,Sprite_36)
 b$AF9B DEFB $0A,$10,$00,$48,$10,$24,$24,$94
  $AFA3 DEFB $48,$4C,$52,$3E,$64,$06,$F8,$00
  $AFAB DEFB $C0,$01,$00,$02,$40,$04,$20,$08
@@ -3714,6 +4196,8 @@ b$AF9B DEFB $0A,$10,$00,$48,$10,$24,$24,$94
  $AFDB DEFB $03
 
 ; Sprite 15 - Dr Blitzen
+;
+; #CALL:print_graphic(#PC,2,Sprite_15)
 b$AFDC DEFB $0E,$27,$E4,$5F,$FA,$AF,$F5,$4F
  $AFE4 DEFB $F2,$A0,$05,$51,$8A,$1B,$D8,$1F
  $AFEC DEFB $F8,$0F,$F0,$06,$60,$07,$E0,$03
@@ -3729,6 +4213,8 @@ b$AFDC DEFB $0E,$27,$E4,$5F,$FA,$AF,$F5,$4F
  $B03C DEFB $FC
 
 ; Sprite 04 - Helicopter
+;
+; #CALL:print_graphic(#PC,4,Sprite_04)
 b$B03D DEFB $07,$01,$FD,$7F,$60,$00,$00,$20
  $B045 DEFB $03,$E0,$17,$FE,$10,$08,$1F,$10
  $B04D DEFB $0C,$07,$E0,$00,$02,$48,$00,$0F
@@ -3744,6 +4230,8 @@ b$B03D DEFB $07,$01,$FD,$7F,$60,$00,$00,$20
  $B09D DEFB $F0
 
 ; Sprite 08 - Centipede
+;
+; #CALL:print_graphic(#PC,4,Sprite_08)
 b$B09E DEFB $07,$09,$00,$0D,$1B,$68,$92,$5B
  $B0A6 DEFB $6D,$4C,$C3,$6D,$E0,$92,$48,$D0
  $B0AE DEFB $09,$22,$28,$A5,$54,$80,$90,$10
@@ -3759,6 +4247,8 @@ b$B09E DEFB $07,$09,$00,$0D,$1B,$68,$92,$5B
  $B0FE DEFB $00
 
 ; Sprite 01 - Neptune
+;
+; #CALL:print_graphic(#PC,2,Sprite_01)
 b$B0FF DEFB $0E,$55,$50,$55,$50,$3F,$E0,$2A
  $B107 DEFB $95,$00,$15,$3F,$D5,$52,$6E,$36
  $B10F DEFB $E4,$5F,$D4,$28,$A4,$17,$44,$2A
@@ -3774,6 +4264,8 @@ b$B0FF DEFB $0E,$55,$50,$55,$50,$3F,$E0,$2A
  $B15F DEFB $F4
 
 ; Sprite 05 - Oscilloscope
+;
+; #CALL:print_graphic(#PC,2,Sprite_05)
 b$B160 DEFB $0A,$7F,$FE,$40,$02,$4F,$F2,$5F
  $B168 DEFB $9A,$5F,$6A,$4F,$6A,$56,$F2,$56
  $B170 DEFB $FA,$59,$FA,$4F,$F2,$40,$02,$7F
@@ -3785,6 +4277,8 @@ b$B160 DEFB $0A,$7F,$FE,$40,$02,$4F,$F2,$5F
  $B1A0 DEFB $FF
 
 ; Sprite 06 - Flying lightbulb
+;
+; #CALL:print_graphic(#PC,2,Sprite_06)
 b$B1A1 DEFB $0E,$00,$00,$72,$CE,$8A,$D1,$8C
  $B1A9 DEFB $31,$7A,$DE,$20,$04,$01,$80,$01
  $B1B1 DEFB $80,$00,$00,$07,$E0,$00,$00,$15
@@ -3800,6 +4294,8 @@ b$B1A1 DEFB $0E,$00,$00,$72,$CE,$8A,$D1,$8C
  $B201 DEFB $00
 
 ; Sprite 07 - Waiter
+;
+; #CALL:print_graphic(#PC,2,Sprite_07)
 b$B202 DEFB $0E,$02,$40,$05,$A0,$03,$C0,$0D
  $B20A DEFB $B0,$0F,$F0,$07,$E0,$06,$60,$02
  $B212 DEFB $40,$11,$88,$36,$6C,$37,$EC,$77
@@ -3815,6 +4311,8 @@ b$B202 DEFB $0E,$02,$40,$05,$A0,$03,$C0,$0D
  $B262 DEFB $F0
 
 ; Sprite 0A - Spark
+;
+; #CALL:print_graphic(#PC,2,Sprite_0A)
 b$B263 DEFB $0A,$00,$00,$02,$40,$04,$48,$12
  $B26B DEFB $90,$26,$60,$19,$D4,$17,$E4,$CB
  $B273 DEFB $D8,$37,$CA,$4E,$E4,$0B,$50,$32
@@ -3826,6 +4324,8 @@ b$B263 DEFB $0A,$00,$00,$02,$40,$04,$48,$12
  $B2A3 DEFB $20
 
 ; Sprite OB - Squid
+;
+; #CALL:print_graphic(#PC,2,Sprite_0B)
 b$B2A4 DEFB $0E,$03,$E0,$0F,$F8,$3F,$FC,$33
  $B2AC DEFB $E4,$79,$CE,$72,$A6,$72,$A6,$70
  $B2B4 DEFB $86,$39,$CC,$3F,$FC,$1F,$F8,$0F
@@ -3841,6 +4341,8 @@ b$B2A4 DEFB $0E,$03,$E0,$0F,$F8,$3F,$FC,$33
  $B304 DEFB $0C
 
 ; Sprite 12 - Flying saucer
+;
+; #CALL:print_graphic(#PC,2,Sprite_12)
 b$B305 DEFB $0A,$00,$00,$00,$02,$00,$04,$00
  $B30D DEFB $14,$01,$C0,$07,$C8,$07,$80,$0F
  $B315 DEFB $28,$0E,$08,$0C,$98,$10,$30,$02
@@ -3852,6 +4354,8 @@ b$B305 DEFB $0A,$00,$00,$00,$02,$00,$04,$00
  $B345 DEFB $00
 
 ; Sprite 00 - Waiter on unicycle
+;
+; #CALL:print_graphic(#PC,4,Sprite_00)
 b$B346 DEFB $0E,$3E,$00,$00,$10,$FF,$90,$00
  $B34E DEFB $38,$3E,$30,$3A,$32,$1F,$3A,$1E
  $B356 DEFB $7F,$30,$00,$39,$C0,$7C,$00,$7A
@@ -3879,6 +4383,8 @@ b$B346 DEFB $0E,$3E,$00,$00,$10,$FF,$90,$00
  $B406 DEFB $00
 
 ; Sprite OD - Gryoscope
+;
+; #CALL:print_graphic(#PC,4,Sprite_0D)
 b$B407 DEFB $0A,$03,$80,$0C,$60,$31,$18,$21
  $B40F DEFB $08,$41,$04,$41,$04,$80,$02,$BF
  $B417 DEFB $FA,$BF,$FA,$40,$04,$41,$04,$21
@@ -3897,7 +4403,9 @@ b$B407 DEFB $0A,$03,$80,$0C,$60,$31,$18,$21
  $B47F DEFB $20,$09,$20,$04,$40,$03,$80,$01
  $B487 DEFB $00
 
-; Sprite OC - Battery terminals
+; Sprite OC - Train car
+;
+; #CALL:print_graphic(#PC,4,Sprite_0C)
 b$B488 DEFB $0A,$30,$80,$34,$C0,$02,$40,$78
  $B490 DEFB $C0,$00,$80,$78,$00,$00,$C0,$78
  $B498 DEFB $D8,$00,$C7,$78,$C0,$00,$00,$FF
@@ -3917,6 +4425,8 @@ b$B488 DEFB $0A,$30,$80,$34,$C0,$02,$40,$78
  $B508 DEFB $50
 
 ; Sprite 13 - Big face
+;
+; #CALL:print_graphic(#PC,2,Sprite_13)
 b$B509 DEFB $0A,$1F,$F8,$7F,$FE,$41,$82,$7D
  $B511 DEFB $BE,$63,$C6,$B7,$ED,$FF,$FF,$FF
  $B519 DEFB $FF,$B5,$AD,$B8,$1D,$3F,$FC,$2A
@@ -3928,6 +4438,8 @@ b$B509 DEFB $0A,$1F,$F8,$7F,$FE,$41,$82,$7D
  $B549 DEFB $00
 
 ; Sprite 14 - Bug eyed monster (3 wide)
+;
+; #CALL:print_graphic(#PC,2,Sprite_14)
 b$B54A DEFB $0B,$00,$00,$1C,$70,$00,$3E,$F8
  $B552 DEFB $00,$26,$CA,$18,$A2,$8B,$BD,$B2
  $B55A DEFB $99,$24,$1C,$70,$24,$00,$00,$42
@@ -3943,6 +4455,8 @@ b$B54A DEFB $0B,$00,$00,$1C,$70,$00,$3E,$F8
  $B5AA DEFB $80
 
 ; Sprite 16 - Guy on hovercraft
+;
+; #CALL:print_graphic(#PC,4,Sprite_16)
 b$B5AB DEFB $0E,$00,$00,$20,$00,$40,$00,$20
  $B5B3 DEFB $00,$40,$54,$00,$AA,$6C,$54,$EC
  $B5BB DEFB $B8,$6E,$68,$0E,$3C,$2F,$38,$47
@@ -3970,6 +4484,8 @@ b$B5AB DEFB $0E,$00,$00,$20,$00,$40,$00,$20
  $B66B DEFB $00
 
 ; Sprite 17 - Fuse wire
+;
+; #CALL:print_graphic(#PC,4,Sprite_17)
 b$B66C DEFB $0A,$00,$00,$09,$40,$05,$50,$14
  $B674 DEFB $A0,$0A,$A0,$06,$A0,$01,$40,$01
  $B67C DEFB $C0,$01,$C0,$01,$C0,$01,$C0,$01
@@ -3989,6 +4505,8 @@ b$B66C DEFB $0A,$00,$00,$09,$40,$05,$50,$14
  $B6EC DEFB $54
 
 ; Sprite 1F - Semaphore flag
+;
+; #CALL:print_graphic(#PC,4,Sprite_1F)
 b$B6ED DEFB $0A,$00,$80,$01,$40,$03,$A0,$07
  $B6F5 DEFB $90,$0F,$C8,$1F,$C4,$3F,$E2,$7F
  $B6FD DEFB $E1,$20,$1E,$10,$1C,$08,$38,$04
@@ -4008,6 +4526,8 @@ b$B6ED DEFB $0A,$00,$80,$01,$40,$03,$A0,$07
  $B76D DEFB $00
 
 ; Sprite 25 - Dragonfly
+;
+; #CALL:print_graphic(#PC,4,Sprite_25)
 b$B76E DEFB $0A,$00,$00,$00,$00,$00,$00,$00
  $B776 DEFB $00,$00,$00,$00,$00,$00,$A2,$00
  $B77E DEFB $55,$AA,$F7,$00,$02,$00,$00,$00
@@ -4027,6 +4547,8 @@ b$B76E DEFB $0A,$00,$00,$00,$00,$00,$00,$00
  $B7EE DEFB $00
 
 ; Sprite OE - Deep sea diver
+;
+; #CALL:print_graphic(#PC,2,Sprite_0E)
 b$B7EF DEFB $0E,$07,$C0,$0F,$E0,$1D,$70,$19
  $B7F7 DEFB $30,$1F,$F0,$19,$30,$0D,$60,$07
  $B7FF DEFB $C0,$07,$C0,$0F,$E0,$07,$C0,$18
@@ -4041,7 +4563,9 @@ b$B7EF DEFB $0E,$07,$C0,$0F,$E0,$1D,$70,$19
  $B847 DEFB $6A,$0E,$70,$0C,$3C,$3C,$3A,$54
  $B84F DEFB $20
 
-; Sprite 2D
+; Sprite 2D - Crab
+;
+; #CALL:print_graphic(#PC,4,Sprite_2D)
 b$B850 DEFB $07,$04,$5E,$41,$04,$5A,$63,$06
  $B858 DEFB $D8,$36,$01,$3E,$08,$01,$75,$88
  $B860 DEFB $01,$A4,$C8,$00,$18,$30,$00,$00
@@ -4056,7 +4580,9 @@ b$B850 DEFB $07,$04,$5E,$41,$04,$5A,$63,$06
  $B8A8 DEFB $13,$A6,$00,$14,$2C,$00,$08,$18
  $B8B0 DEFB $00
 
-; Sprite 2E
+; Sprite 2E - Fish bone
+;
+; #CALL:print_graphic(#PC,4,Sprite_2E)
 b$B8B1 DEFB $06,$89,$20,$40,$00,$49,$26,$2D
  $B8B9 DEFB $B1,$2D,$B7,$49,$26,$49,$20,$89
  $B8C1 DEFB $20,$09,$20,$89,$20,$49,$26,$2D
@@ -4067,7 +4593,9 @@ b$B8B1 DEFB $06,$89,$20,$40,$00,$49,$26,$2D
  $B8E9 DEFB $A1,$2D,$A7,$49,$26,$89,$20,$09
  $B8F1 DEFB $20
 
-; Sprite 30
+; Sprite 30 - Jackhammer
+;
+; #CALL:print_graphic(#PC,2,Sprite_30)
 b$B8F2 DEFB $0A,$00,$00,$00,$00,$00,$00,$C1
  $B8FA DEFB $83,$BD,$7B,$C1,$83,$01,$80,$04
  $B902 DEFB $20,$0B,$F0,$00,$00,$0B,$F0,$00
@@ -4078,7 +4606,9 @@ b$B8F2 DEFB $0A,$00,$00,$00,$00,$00,$00,$C1
  $B92A DEFB $00,$05,$E0,$00,$00,$02,$C0,$01
  $B932 DEFB $80
 
-; Sprite 33
+; Sprite 33 - Spinning top
+;
+; #CALL:print_graphic(#PC,4,Sprite_33)
 b$B933 DEFB $0B,$00,$2C,$00,$00,$5E,$00,$60
  $B93B DEFB $00,$06,$FE,$18,$3F,$3F,$DB,$FC
  $B943 DEFB $07,$18,$E0,$00,$00,$00,$00,$5E
@@ -4105,7 +4635,9 @@ b$B933 DEFB $0B,$00,$2C,$00,$00,$5E,$00,$60
  $B9EB DEFB $00,$00,$00,$05,$55,$60,$05,$55
  $B9F3 DEFB $60
 
-; Sprite 3A
+; Sprite 3A - Lightbulb with claws
+;
+; #CALL:print_graphic(#PC,4,Sprite_3A)
 b$B9F4 DEFB $0A,$60,$06,$B0,$0D,$11,$88,$0D
  $B9FC DEFB $70,$11,$88,$B1,$8D,$61,$86,$00
  $BA04 DEFB $00,$02,$C0,$05,$E0,$04,$E0,$09
@@ -4124,7 +4656,9 @@ b$B9F4 DEFB $0A,$60,$06,$B0,$0D,$11,$88,$0D
  $BA6C DEFB $F0,$09,$F0,$04,$E0,$03,$C0,$00
  $BA74 DEFB $00
 
-; Sprite 2B
+; Sprite 2B - Screw
+;
+; #CALL:print_graphic(#PC,2,Sprite_2B)
 b$BA75 DEFB $0D,$5F,$2E,$00,$10,$04,$08,$10
  $BA7D DEFB $04,$08,$10,$04,$08,$10,$04,$00
  $BA85 DEFB $1C,$00,$5D,$6D,$5D,$08,$00,$08
@@ -4133,14 +4667,18 @@ b$BA75 DEFB $0D,$5F,$2E,$00,$10,$04,$08,$10
  $BA9D DEFB $1C,$00,$14,$14,$14,$08,$00,$08
  $BAA5 DEFB $08
 
-; Sprite 39
+; Sprite 39 - Axle
+;
+; #CALL:print_graphic(#PC,2,Sprite_39)
 b$BAA6 DEFB $06,$41,$80,$E2,$40,$01,$82,$FA
  $BAAE DEFB $57,$99,$97,$42,$42,$E1,$80,$42
  $BAB6 DEFB $40,$02,$42,$01,$87,$42,$40,$E9
  $BABE DEFB $9F,$EA,$59,$41,$82,$02,$47,$01
  $BAC6 DEFB $82
 
-; Sprite 37
+; Sprite 37 - Fuse with claws
+;
+; #CALL:print_graphic(#PC,4,Sprite_37)
 b$BAC7 DEFB $09,$44,$54,$92,$AA,$92,$6C,$7C
  $BACF DEFB $38,$38,$38,$00,$38,$7C,$00,$54
  $BAD7 DEFB $92,$00,$28,$28,$44,$44,$54,$28
@@ -4151,7 +4689,9 @@ b$BAC7 DEFB $09,$44,$54,$92,$AA,$92,$6C,$7C
  $BAFF DEFB $38,$38,$38,$00,$38,$7C,$00,$28
  $BB07 DEFB $44
 
-; Sprite 35
+; Sprite 35 - Skull and crossbones
+;
+; #CALL:print_graphic(#PC,2,Sprite_35)
 b$BB08 DEFB $0A,$00,$02,$01,$82,$07,$E0,$0F
  $BB10 DEFB $F7,$01,$80,$09,$97,$0D,$B0,$07
  $BB18 DEFB $E7,$A2,$40,$61,$82,$18,$09,$06
@@ -4162,7 +4702,9 @@ b$BB08 DEFB $0A,$00,$02,$01,$82,$07,$E0,$0F
  $BB40 DEFB $64,$03,$D2,$03,$C4,$0E,$64,$04
  $BB48 DEFB $34
 
-; Sprite 34
+; Sprite 34 - Sea monster
+;
+; #CALL:print_graphic(#PC,2,Sprite_34)
 b$BB49 DEFB $0E,$03,$80,$0E,$C0,$3E,$40,$33
  $BB51 DEFB $46,$61,$89,$60,$09,$60,$0B,$37
  $BB59 DEFB $0E,$3F,$86,$1F,$8C,$5F,$7C,$3F
@@ -4177,7 +4719,9 @@ b$BB49 DEFB $0E,$03,$80,$0E,$C0,$3E,$40,$33
  $BBA1 DEFB $80,$8A,$40,$49,$20,$20,$20,$40
  $BBA9 DEFB $00
 
-; Sprite 31
+; Sprite 31 - Coral
+;
+; #CALL:print_graphic(#PC,2,Sprite_31)
 b$BBAA DEFB $0A,$00,$00,$01,$40,$0A,$28,$09
  $BBB2 DEFB $48,$34,$96,$0B,$68,$26,$32,$54
  $BBBA DEFB $95,$09,$48,$54,$95,$26,$32,$0B
@@ -4188,7 +4732,9 @@ b$BBAA DEFB $0A,$00,$00,$01,$40,$0A,$28,$09
  $BBE2 DEFB $48,$14,$94,$09,$48,$01,$40,$00
  $BBEA DEFB $00
 
-; Sprite 2F
+; Sprite 2F - Mini robot
+;
+; #CALL:print_graphic(#PC,4,Sprite_2F)
 b$BBEB DEFB $09,$00,$7C,$FE,$8E,$8E,$00,$D5
  $BBF3 DEFB $D5,$D5,$00,$D8,$7E,$0C,$61,$47
  $BBFB DEFB $C4,$3C,$7E,$62,$62,$7E,$00,$B5
@@ -4199,7 +4745,9 @@ b$BBEB DEFB $09,$00,$7C,$FE,$8E,$8E,$00,$D5
  $BC23 DEFB $AB,$AB,$00,$7E,$7E,$30,$84,$E7
  $BC2B DEFB $21
 
-; Sprite 1E
+; Sprite 1E - Viking
+;
+; #CALL:print_graphic(#PC,2,Sprite_1E)
 b$BC2C DEFB $0E,$10,$02,$20,$C1,$21,$61,$32
  $BC34 DEFB $F3,$10,$02,$05,$F8,$00,$C0,$02
  $BC3C DEFB $D0,$00,$00,$04,$C8,$0D,$EC,$9E
@@ -4214,7 +4762,9 @@ b$BC2C DEFB $0E,$10,$02,$20,$C1,$21,$61,$32
  $BC84 DEFB $78,$22,$E0,$0F,$03,$06,$0E,$70
  $BC8C DEFB $1C
 
-; Sprite 1D
+; Sprite 1D - Satellite dish
+;
+; #CALL:print_graphic(#PC,2,Sprite_1D)
 b$BC8D DEFB $0A,$04,$02,$02,$54,$03,$08,$03
  $BC95 DEFB $94,$01,$C0,$01,$E4,$00,$F0,$01
  $BC9D DEFB $78,$01,$1C,$01,$02,$02,$80,$07
@@ -4233,7 +4783,9 @@ b$BC8D DEFB $0A,$04,$02,$02,$54,$03,$08,$03
  $BD05 DEFB $40,$00,$00,$3F,$FC,$40,$02,$2A
  $BD0D DEFB $A8
 
-; Sprite 1C
+; Sprite 1C - Crank shafts
+;
+; #CALL:print_graphic(#PC,2,Sprite_1C)
 b$BD0E DEFB $0A,$00,$00,$00,$00,$00,$00,$00
  $BD16 DEFB $00,$00,$00,$30,$18,$48,$24,$48
  $BD1E DEFB $24,$34,$F8,$0E,$C0,$07,$00,$33
@@ -4244,7 +4796,9 @@ b$BD0E DEFB $0A,$00,$00,$00,$00,$00,$00,$00
  $BD46 DEFB $00,$00,$30,$00,$48,$00,$48,$00
  $BD4E DEFB $30
 
-; Sprite 1B
+; Sprite 1B - Big sea monster
+;
+; #CALL:print_graphic(#PC,2,Sprite_1B)
 b$BD4F DEFB $0F,$60,$00,$06,$98,$00,$0D,$8E
  $BD57 DEFB $00,$39,$4B,$00,$6A,$B1,$80,$C4
  $BD5F DEFB $51,$81,$8A,$00,$C3,$80,$00,$E7
@@ -4265,7 +4819,9 @@ b$BD4F DEFB $0F,$60,$00,$06,$98,$00,$0D,$8E
  $BDD7 DEFB $1C,$00,$48,$78,$00,$48,$94,$00
  $BDDF DEFB $00
 
-; Sprite 19
+; Sprite 19 - Alien
+;
+; #CALL:print_graphic(#PC,2,Sprite_19)
 b$BDE0 DEFB $0A,$1E,$78,$B3,$CD,$A1,$95,$A5
  $BDE8 DEFB $95,$E5,$97,$E5,$87,$61,$86,$3F
  $BDF0 DEFB $FC,$1A,$58,$08,$15,$07,$E2,$19
@@ -4276,7 +4832,9 @@ b$BDE0 DEFB $0A,$1E,$78,$B3,$CD,$A1,$95,$A5
  $BE18 DEFB $98,$3F,$FC,$07,$E2,$13,$C2,$0E
  $BE20 DEFB $75
 
-; Sprite 18
+; Sprite 18 - Spider
+;
+; #CALL:print_graphic(#PC,2,Sprite_18)
 b$BE21 DEFB $0B,$06,$00,$C0,$0B,$00,$A0,$05
  $BE29 DEFB $01,$40,$01,$02,$00,$19,$7A,$00
  $BE31 DEFB $64,$B4,$60,$9A,$B5,$98,$A5,$7A
@@ -4291,7 +4849,9 @@ b$BE21 DEFB $0B,$06,$00,$C0,$0B,$00,$A0,$05
  $BE79 DEFB $04,$FC,$24,$04,$00,$24,$00,$00
  $BE81 DEFB $20
 
-; Sprite 24
+; Sprite 24 - Snail
+;
+; #CALL:print_graphic(#PC,4,Sprite_24)
 b$BE82 DEFB $0B,$07,$F8,$00,$1F,$FE,$00,$3D
  $BE8A DEFB $5F,$00,$38,$0F,$00,$73,$E7,$80
  $BE92 DEFB $66,$33,$84,$74,$5B,$85,$66,$5B
@@ -4318,7 +4878,9 @@ b$BE82 DEFB $0B,$07,$F8,$00,$1F,$FE,$00,$3D
  $BF3A DEFB $30,$0F,$FC,$7F,$FF,$E0,$AA,$AA
  $BF42 DEFB $80
 
-; Sprite OF
+; Sprite OF - Vacuum cleaner
+;
+; #CALL:print_graphic(#PC,4,Sprite_0F)
 b$BF43 DEFB $0A,$0A,$15,$2A,$84,$11,$04,$60
  $BF4B DEFB $C4,$00,$04,$50,$C4,$D8,$00,$88
  $BF53 DEFB $BE,$89,$7F,$50,$00,$01,$7F,$01
@@ -4337,7 +4899,9 @@ b$BF43 DEFB $0A,$0A,$15,$2A,$84,$11,$04,$60
  $BFBB DEFB $7F,$01,$7F,$01,$7F,$00,$00,$00
  $BFC3 DEFB $82
 
-; Sprite 11
+; Sprite 11 - Cannon
+;
+; #CALL:print_graphic(#PC,4,Sprite_11)
 b$BFC4 DEFB $0B,$00,$00,$00,$00,$00,$06,$00
  $BFCC DEFB $00,$3A,$00,$01,$C7,$00,$0E,$3C
  $BFD4 DEFB $00,$71,$F8,$01,$81,$E0,$06,$3C
@@ -4364,7 +4928,9 @@ b$BFC4 DEFB $0B,$00,$00,$00,$00,$00,$06,$00
  $C07C DEFB $F2,$66,$00,$00,$3C,$00,$00,$00
  $C084 DEFB $00
 
-; Sprite 10
+; Sprite 10 - Bird
+;
+; #CALL:print_graphic(#PC,4,Sprite_10)
 b$C085 DEFB $0A,$00,$00,$00,$00,$00,$00,$00
  $C08D DEFB $00,$00,$00,$00,$20,$0F,$1C,$FF
  $C095 DEFB $D4,$3F,$FF,$17,$E0,$0F,$80,$6F
@@ -4383,14 +4949,18 @@ b$C085 DEFB $0A,$00,$00,$00,$00,$00,$00,$00
  $C0FD DEFB $00,$00,$00,$00,$00,$00,$00,$00
  $C105 DEFB $00
 
-; Sprite 1A
+; Sprite 1A - Kalaedoscope image
+;
+; #CALL:print_graphic(#PC,4,Sprite_1A)
 b$C106 DEFB $05,$18,$42,$81,$18,$18,$81,$42
  $C10E DEFB $18,$24,$00,$99,$24,$24,$99,$00
  $C116 DEFB $24,$00,$00,$24,$18,$18,$24,$00
  $C11E DEFB $00,$00,$24,$42,$00,$00,$42,$24
  $C126 DEFB $00
 
-; Sprite 09
+; Sprite 09 - Droid
+;
+; #CALL:print_graphic(#PC,4,Sprite_09)
 b$C127 DEFB $09,$18,$66,$42,$81,$81,$42,$66
  $C12F DEFB $18,$18,$18,$00,$2C,$5E,$00,$BF
  $C137 DEFB $BF,$18,$24,$42,$42,$42,$42,$24
@@ -4401,7 +4971,9 @@ b$C127 DEFB $09,$18,$66,$42,$81,$81,$42,$66
  $C15F DEFB $24,$18,$18,$00,$2C,$5E,$00,$BF
  $C167 DEFB $BF
 
-; Sprite 02
+; Sprite 02 - Toy soldier
+;
+; #CALL:print_graphic(#PC,4,Sprite_02)
 b$C168 DEFB $0D,$14,$2A,$14,$2A,$14,$2A,$00
  $C170 DEFB $1C,$14,$9E,$48,$24,$10,$28,$34
  $C178 DEFB $52,$5D,$80,$98,$34,$34,$27,$62
@@ -4416,7 +4988,9 @@ b$C168 DEFB $0D,$14,$2A,$14,$2A,$14,$2A,$00
  $C1C0 DEFB $32,$5D,$40,$18,$18,$18,$18,$18
  $C1C8 DEFB $1C
 
-; Sprite 03
+; Sprite 03 - Scissors
+;
+; #CALL:print_graphic(#PC,4,Sprite_03)
 b$C1C9 DEFB $0A,$00,$00,$70,$00,$88,$00,$88
  $C1D1 DEFB $1E,$9C,$78,$7D,$E0,$0E,$80,$05
  $C1D9 DEFB $00,$07,$80,$09,$E0,$7C,$78,$98
@@ -4435,7 +5009,9 @@ b$C1C9 DEFB $0A,$00,$00,$70,$00,$88,$00,$88
  $C241 DEFB $00,$88,$00,$70,$00,$00,$00,$00
  $C249 DEFB $00
 
-; Sprite 20
+; Sprite 20 - Big alien face
+;
+; #CALL:print_graphic(#PC,2,Sprite_20)
 b$C24A DEFB $0F,$00,$00,$38,$00,$00,$44,$00
  $C252 DEFB $00,$82,$1F,$BA,$82,$00,$14,$82
  $C25A DEFB $00,$14,$44,$00,$14,$38,$00,$2A
@@ -4456,7 +5032,9 @@ b$C24A DEFB $0F,$00,$00,$38,$00,$00,$44,$00
  $C2D2 DEFB $00,$80,$80,$00,$1C,$00,$00,$08
  $C2DA DEFB $00
 
-; Sprite 22
+; Sprite 22 - Walking plunger
+;
+; #CALL:print_graphic(#PC,2,Sprite_22)
 b$C2DB DEFB $06,$02,$00,$02,$00,$02,$00,$02
  $C2E3 DEFB $00,$00,$00,$05,$00,$0B,$80,$0B
  $C2EB DEFB $80,$0A,$C0,$0D,$40,$0A,$C0,$08
@@ -4467,7 +5045,9 @@ b$C2DB DEFB $06,$02,$00,$02,$00,$02,$00,$02
  $C313 DEFB $80,$00,$80,$28,$00,$5D,$40,$02
  $C31B DEFB $E0
 
-; Sprite 21
+; Sprite 21 - Upside down crawling thing
+;
+; #CALL:print_graphic(#PC,4,Sprite_21)
 b$C31C DEFB $0B,$50,$00,$05,$20,$28,$02,$20
  $C324 DEFB $10,$02,$18,$08,$04,$06,$00,$04
  $C32C DEFB $01,$BC,$08,$00,$5B,$30,$00,$3C
@@ -4494,7 +5074,9 @@ b$C31C DEFB $0B,$50,$00,$05,$20,$28,$02,$20
  $C3D4 DEFB $14,$7E,$28,$08,$00,$10,$00,$00
  $C3DC DEFB $00
 
-; Sprite 26
+; Sprite 26 - Dart
+;
+; #CALL:print_graphic(#PC,4,Sprite_26)
 b$C3DD DEFB $0E,$78,$8F,$7C,$9F,$7E,$BF,$7E
  $C3E5 DEFB $BF,$7E,$BF,$7C,$9F,$38,$9E,$38
  $C3ED DEFB $AE,$10,$B4,$14,$B4,$0B,$78,$0B
@@ -4509,7 +5091,9 @@ b$C3DD DEFB $0E,$78,$8F,$7C,$9F,$7E,$BF,$7E
  $C435 DEFB $F0,$01,$C0,$00,$80,$00,$80,$00
  $C43D DEFB $80
 
-; Sprite 23
+; Sprite 23 - Devil face
+;
+; #CALL:print_graphic(#PC,2,Sprite_23)
 b$C43E DEFB $0E,$08,$10,$10,$08,$08,$10,$10
  $C446 DEFB $08,$2C,$34,$10,$08,$2F,$F4,$1F
  $C44E DEFB $F8,$13,$C8,$5D,$BA,$6F,$F6,$9D
@@ -4524,7 +5108,9 @@ b$C43E DEFB $0E,$08,$10,$10,$08,$08,$10,$10
  $C496 DEFB $60,$06,$A0,$07,$E0,$07,$E0,$03
  $C49E DEFB $C0
 
-; Sprite 27
+; Sprite 27 - Mermaid
+;
+; #CALL:print_graphic(#PC,2,Sprite_27)
 b$C49F DEFB $0E,$0A,$80,$15,$40,$28,$20,$13
  $C4A7 DEFB $D0,$2A,$A0,$57,$D0,$2B,$C0,$55
  $C4AF DEFB $80,$AB,$00,$55,$80,$AB,$00,$53
@@ -4539,7 +5125,9 @@ b$C49F DEFB $0E,$0A,$80,$15,$40,$28,$20,$13
  $C4F7 DEFB $88,$31,$5D,$2A,$AE,$21,$50,$00
  $C4FF DEFB $80
 
-; Sprite 29
+; Sprite 29 - Alien scanner
+;
+; #CALL:print_graphic(#PC,4,Sprite_29)
 b$C500 DEFB $09,$00,$00,$99,$6E,$99,$99,$6E
  $C508 DEFB $18,$00,$3C,$18,$7E,$3C,$D9,$47
  $C510 DEFB $64,$00,$5A,$2C,$5A,$5A,$2C,$18
@@ -4550,7 +5138,9 @@ b$C500 DEFB $09,$00,$00,$99,$6E,$99,$99,$6E
  $C538 DEFB $18,$00,$3C,$18,$7E,$18,$26,$E2
  $C540 DEFB $83
 
-; Sprite 3B
+; Sprite 3B - Winged devil
+;
+; #CALL:print_graphic(#PC,2,Sprite_3B)
 b$C541 DEFB $0F,$00,$81,$00,$00,$42,$00,$38
  $C549 DEFB $BD,$1C,$7C,$99,$3E,$72,$42,$4E
  $C551 DEFB $E9,$3C,$97,$FE,$A5,$7F,$FF,$99
@@ -4571,7 +5161,9 @@ b$C541 DEFB $0F,$00,$81,$00,$00,$42,$00,$38
  $C5C9 DEFB $09,$44,$90,$02,$44,$40,$02,$20
  $C5D1 DEFB $00
 
-; Sprite 3C
+; Sprite 3C - Big alien scanner
+;
+; #CALL:print_graphic(#PC,4,Sprite_3C)
 b$C5D2 DEFB $0B,$00,$C3,$86,$01,$3B,$79,$00
  $C5DA DEFB $C3,$86,$00,$00,$00,$00,$03,$80
  $C5E2 DEFB $00,$03,$80,$00,$03,$80,$00,$03
@@ -4598,7 +5190,9 @@ b$C5D2 DEFB $0B,$00,$C3,$86,$01,$3B,$79,$00
  $C68A DEFB $2F,$1C,$00,$2F,$08,$BC,$00,$08
  $C692 DEFB $BC
 
-; Sprite 28
+; Sprite 28 - Doll
+;
+; #CALL:print_graphic(#PC,2,Sprite_28)
 b$C693 DEFB $0A,$05,$50,$2A,$A8,$15,$54,$28
  $C69B DEFB $08,$57,$E4,$25,$AA,$13,$C4,$2A
  $C6A3 DEFB $4A,$01,$80,$02,$40,$07,$E4,$5F
@@ -4609,7 +5203,9 @@ b$C693 DEFB $0A,$05,$50,$2A,$A8,$15,$54,$28
  $C6CB DEFB $FA,$03,$C4,$02,$40,$0C,$C0,$06
  $C6D3 DEFB $60
 
-; Sprite 2A
+; Sprite 2A - Insect face
+;
+; #CALL:print_graphic(#PC,2,Sprite_2A)
 b$C6D4 DEFB $0E,$00,$00,$00,$00,$00,$06,$60
  $C6DC DEFB $09,$90,$10,$08,$10,$08,$10,$04
  $C6E4 DEFB $20,$04,$20,$05,$A0,$21,$84,$53
@@ -4625,6 +5221,8 @@ b$C6D4 DEFB $0E,$00,$00,$00,$00,$00,$06,$60
  $C734 DEFB $00
 
 ; Sprite 2C - Donna
+;
+; #CALL:print_graphic(#PC,4,Sprite_2C)
 b$C735 DEFB $0D,$2A,$55,$AA,$55,$AE,$5A,$2F
  $C73D DEFB $56,$2E,$48,$A0,$5C,$98,$1C,$36
  $C745 DEFB $73,$78,$38,$00,$28,$48,$00,$86
@@ -4639,7 +5237,9 @@ b$C735 DEFB $0D,$2A,$55,$AA,$55,$AE,$5A,$2F
  $C78D DEFB $76,$78,$38,$00,$10,$10,$00,$10
  $C795 DEFB $18
 
-; Sprite 32
+; Sprite 32 - Engine shaft
+;
+; #CALL:print_graphic(#PC,2,Sprite_32)
 b$C796 DEFB $0B,$00,$E0,$00,$00,$E0,$00,$00
  $C79E DEFB $00,$00,$00,$47,$00,$08,$47,$10
  $C7A6 DEFB $2A,$40,$54,$2A,$02,$54,$2A,$F8
@@ -4652,32 +5252,33 @@ b$C796 DEFB $0B,$00,$E0,$00,$00,$E0,$00,$00
  $C7DE DEFB $D5,$AB,$FC,$D5,$A8,$02,$15,$A8
  $C7E6 DEFB $42,$15,$20,$A2,$04,$00,$E2,$00
  $C7EE DEFB $00,$00,$00,$00,$07,$00,$00,$07
- $C7F6 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $C7FE DEFB $00,$00
+
+; Unused
+s$C7F6 DEFS $0A
 
 ; Main entry point
-c$C800 DI            ;
- $C801 LD SP,$FFFF   ;
+c$C800 DI            ; Disable interrupts.
+ $C801 LD SP,$FFFF   ; Put the stack somewhere safe.
 ; This entry point is used by the routines at #R$CDD3 and #R$E62F.
-*$C804 CALL $CA5B    ;
- $C807 CALL $C881    ;
+*$C804 CALL $CA5B    ; Display the intro screen and wait for a game to start.
+ $C807 CALL $C881    ; Start the game.
 ; Main loop starts here
-*$C80A CALL $D9EC    ;
- $C80D CALL $E592    ;
- $C810 CALL $E93F    ;
- $C813 CALL $CFD9    ;
- $C816 CALL $EF7C    ;
- $C819 CALL $CC89    ;
- $C81C CALL $C92A    ;
- $C81F CALL $DA8D    ;
- $C822 CALL $CC5F    ;
- $C825 CALL $E5E8    ;
- $C828 CALL $E663    ;
- $C82B CALL $E6DC    ;
- $C82E CALL $CEAD    ;
- $C831 CALL $DE52    ;
- $C834 LD BC,$0400   ;
- $C837 CALL $D4AF    ;
+*$C80A CALL $D9EC    ; Update the raft.
+ $C80D CALL $E592    ; Move all objects in the room.
+ $C810 CALL $E93F    ; Toggle the colours on test tubes and dynamite.
+ $C813 CALL $CFD9    ; Update Dan and check for movement.
+ $C816 CALL $EF7C    ; Draw any glowing objects.
+ $C819 CALL $CC89    ; Move the lift.
+ $C81C CALL $C92A    ; Update the main status area.
+ $C81F CALL $DA8D    ; Play any sound effects.
+ $C822 CALL $CC5F    ; Animate the river.
+ $C825 CALL $E5E8    ; Launch the blimp if Dan is in it with the plans.
+ $C828 CALL $E663    ; Update any teleporters.
+ $C82B CALL $E6DC    ; Update any lasers in the room.
+ $C82E CALL $CEAD    ; Perform any special actions in the room.
+ $C831 CALL $DE52    ; Update aerosol immunity.
+ $C834 LD BC,$0400   ; { Pause for a time so the game has the right speed.
+ $C837 CALL $D4AF    ; }
 ; Pause the game if "P" was pressed
  $C83A LD A,$DF      ;
  $C83C IN A,($FE)    ;
@@ -4698,13 +5299,13 @@ c$C800 DI            ;
  $C854 AND $1F       ;
  $C856 JR NZ,$C850   ;
 ; Abort the game if "Q" was pressed
-*$C858 LD A,$FB      ;
- $C85A IN A,($FE)    ;
- $C85C RRA           ;
- $C85D JR C,$C80A    ;
- $C85F LD HL,$C87F   ;
- $C862 SET 7,(HL)    ;
- $C864 JR $C804      ;
+*$C858 LD A,$FB      ; { Get 'Q' - 'T' keys.
+ $C85A IN A,($FE)    ; }
+ $C85C RRA           ; { Jump to the beginning of the routine
+ $C85D JR C,$C80A    ; if 'Q' was pressed. }
+ $C85F LD HL,$C87F   ; { Set the laser to fire.
+ $C862 SET 7,(HL)    ; }
+ $C864 JR $C804      ; Run the main loop again.
 
 ; Current score
 g$C866 DEFB $00,$00,$00,$00,$FF
@@ -4798,7 +5399,7 @@ g$C880 DEFB $00
 ; Start the game
 ;
 ; Used by the routine at #R$C800.
-c$C881 CALL $E801    ;
+c$C881 CALL $E801    ; Clear the screen.
  $C884 LD HL,$69EA   ;
  $C887 LD DE,$000C   ;
  $C88A LD B,$30      ;
@@ -5021,6 +5622,8 @@ c$C92A LD HL,($C870) ;
  $CA1C JR $C9F5      ;
 
 ; "Good luck!"
+;
+; #CALL:print_string(#PC,goodluck)
 b$CA1E DEFB $12,$0B,$10,$00,$00,$0D,$27,$15
  $CA26 DEFB $1D,$0C,$14,$28,$FF
 
@@ -5058,11 +5661,11 @@ c$CA5B CALL $E801    ;
  $CA7B INC A         ;
  $CA7C CP $07        ;
  $CA7E JR NZ,$CA6F   ;
- $CA80 LD BC,$0012   ;
+ $CA80 LD BC,$0012   ; { Copy the intro screen's attributes.
  $CA83 LD DE,$5867   ;
  $CA86 LD HL,$CA2B   ;
- $CA89 LDIR          ;
- $CA8B LD HL,$DA8A   ;
+ $CA89 LDIR          ; }
+ $CA8B LD HL,$DA8A   ; 
  $CA8E LD (HL),$00   ;
  $CA90 LD IY,$CA3D   ;
  $CA94 CALL $E54D    ;
@@ -5447,21 +6050,21 @@ c$CD24 EXX           ;
 *$CD2B LD A,E        ;
  $CD2C EXX           ;
  $CD2D LD E,A        ;
- $CD2E LD HL,$CD84   ;
+ $CD2E LD HL,$CD84   ; Point #REGhl to the lift graphic.
 *$CD31 LD D,$0F      ;
- $CD33 LD C,$02      ;
- $CD35 CALL $E8D2    ;
-*$CD38 PUSH DE       ;
- $CD39 LD B,$03      ;
-*$CD3B LD A,(HL)     ;
- $CD3C LD (DE),A     ;
- $CD3D INC HL        ;
- $CD3E INC E         ;
- $CD3F DJNZ $CD3B    ;
- $CD41 POP DE        ;
- $CD42 INC D         ;
- $CD43 DEC C         ;
- $CD44 JR NZ,$CD38   ;
+ $CD33 LD C,$02      ; Draw 2 rows.
+ $CD35 CALL $E8D2    ; Convert the co-ordinate to a screen address.
+*$CD38 PUSH DE       ; Remember #REGde.
+ $CD39 LD B,$03      ; Draw 3 columns.
+*$CD3B LD A,(HL)     ; Get the graphic data.
+ $CD3C LD (DE),A     ; Put it on screen.
+ $CD3D INC HL        ; Move to the next graphic data.
+ $CD3E INC E         ; Move forward a column.
+ $CD3F DJNZ $CD3B    ; Loop if there are more columns on this row to draw.
+ $CD41 POP DE        ; Restore #REGde.
+ $CD42 INC D         ; Move down a row.
+ $CD43 DEC C         ; { Loop back if there are more rows to draw.
+ $CD44 JR NZ,$CD38   ; }
  $CD46 EXX           ;
  $CD47 LD A,C        ;
  $CD48 AND A         ;
@@ -5514,18 +6117,20 @@ c$CD5C LD A,E        ;
 b$CD7E DEFB $00,$00,$00,$00,$00,$00
 
 ; Lift graphic
+;
+; #UDGARRAY3,7,,3($CD84-$CD86;$CD87-$CD89)(lift)
 b$CD84 DEFB $66,$66,$66,$7F,$FF,$FE
 
 ; Something bad has happened - set the "lose a life" flag
 ;
 ; Used by the routines at #R$C92A, #R$CF77, #R$D1CE, #R$D895 and #R$E782.
-c$CD8A LD A,$08      ;
- $CD8C LD ($C880),A  ;
- $CD8F LD HL,$C874   ;
- $CD92 SET 5,(HL)    ;
- $CD94 LD HL,$DA8A   ;
- $CD97 SET 1,(HL)    ;
- $CD99 RET           ;
+c$CD8A LD A,$08      ; { Set 8 frames to run in the "touched" object sequence. (#R$C880)
+ $CD8C LD ($C880),A  ; }
+ $CD8F LD HL,$C874   ; Point #REGhl to the game flags (#R$C874).
+ $CD92 SET 5,(HL)    ; Set bit 5 (lose a life).
+ $CD94 LD HL,$DA8A   ; Point #REGhl to the current tune data. (#R$DA8A)
+ $CD97 SET 1,(HL)    ; Set bit 1 (play "lose a life" effect)
+ $CD99 RET           ; Return.
 
 ; Run a frame in the "lose a life" sequence
 ;
@@ -5547,18 +6152,19 @@ c$CD9A LD HL,$C880   ;
  $CDB3 SLA A         ;
  $CDB5 CALL $DB01    ;
  $CDB8 RET           ;
-*$CDB9 LD HL,$C86C   ;
- $CDBC LD A,$19      ;
- $CDBE CP (HL)       ;
- $CDBF JP C,$0000    ;
- $CDC2 LD A,(HL)     ;
- $CDC3 AND A         ;
- $CDC4 JR Z,$CDD3    ;
- $CDC6 DEC (HL)      ;
- $CDC7 LD HL,$C874   ;
- $CDCA RES 5,(HL)    ;
- $CDCC LD HL,$EE88   ;
- $CDCF CALL $DB0B    ;
+; All frames have been run, now remove one life.
+*$CDB9 LD HL,$C86C   ; Point #REGhl at the number of lives.
+ $CDBC LD A,$19      ; { Have we got #N$19 lives?
+ $CDBE CP (HL)       ; }
+ $CDBF JP C,$0000    ; If so, reset the game, looks like someone's been hacking.
+ $CDC2 LD A,(HL)     ; { Have we got any lives?
+ $CDC3 AND A         ; }
+ $CDC4 JR Z,$CDD3    ; If not, the game's over.
+ $CDC6 DEC (HL)      ; Decrease the number of lives.
+ $CDC7 LD HL,$C874   ; Point #REGhl to the game flags (#R$C874).
+ $CDCA RES 5,(HL)    ; Reset bit 5 (lose a life).
+ $CDCC LD HL,$EE88   ; Set #REGhl to the "lose a life" effect.
+ $CDCF CALL $DB0B    ; Play it.
  $CDD2 RET           ;
 
 ; Display the "game over" sequence
@@ -5608,15 +6214,15 @@ c$CDD3 POP HL        ;
  $CE30 JR NZ,$CE19   ;
 *$CE32 CALL $C92A    ;
  $CE35 CALL $DA8D    ;
- $CE38 CALL $DAFA    ;
+ $CE38 CALL $DAFA    ; Pause.
  $CE3B LD A,($C86B)  ;
  $CE3E AND A         ;
  $CE3F JR NZ,$CE32   ;
- $CE41 LD HL,$CE53   ;
- $CE44 CALL $DDE0    ;
+ $CE41 LD HL,$CE53   ; Point #REGhl at the "screens visited" message. (#R$CE53)
+ $CE44 CALL $DDE0    ; Print the message.
  $CE47 LD B,$32      ;
 *$CE49 PUSH BC       ;
- $CE4A CALL $DAFA    ;
+ $CE4A CALL $DAFA    ; Pause.
  $CE4D POP BC        ;
  $CE4E DJNZ $CE49    ;
  $CE50 JP $C804      ;
@@ -5626,6 +6232,10 @@ c$CDD3 POP HL        ;
 ; "00 SCREENS VISITED"
 ; .
 ; The numerical value at CE55 / CE56 is updated by the routine at #R$CBBD
+;
+; .
+;
+; #CALL:print_string( #PC, screensvisited )
 b$CE53 DEFB $0A,$07,$00,$00,$27,$1B,$0C,$1A
  $CE5B DEFB $0E,$0E,$17,$1B,$27,$1E,$12,$1B
  $CE63 DEFB $12,$1C,$0E,$0D,$FF
@@ -6149,32 +6759,35 @@ b$D1CD DEFB $00
 ;
 ; Used by the routines at #R$CFD9, #R$D079, #R$D08A, #R$D0DC, #R$D123, #R$D16F,
 ; #R$D2F0 and #R$DBEE.
-c$D1CE LD A,($C880)   ;
- $D1D1 BIT 0,A        ;
- $D1D3 JR Z,$D1DA     ;
- $D1D5 LD DE,$62D6    ;
- $D1D8 JR $D1E8       ;
-*$D1DA LD A,($C875)   ;
- $D1DD ADD A,A        ;
- $D1DE LD C,A         ;
- $D1DF LD B,$00       ;
- $D1E1 LD HL,$632A    ;
- $D1E4 ADD HL,BC      ;
- $D1E5 LD E,(HL)      ;
+c$D1CE LD A,($C880)   ; Get the frame count. (#R$C880)
+ $D1D1 BIT 0,A        ; Is bit 0 set?
+ $D1D3 JR Z,$D1DA     ; Jump forward if not.
+ $D1D5 LD DE,$62D6    ; Re-use Dan's existing graphic.
+ $D1D8 JR $D1E8       ; Move forward to do the drawing.
+# Put a new frame for Dan in the graphic buffer.
+*$D1DA LD A,($C875)   ; Get Dan's current graphic. (#R$C875)
+ $D1DD ADD A,A        ; Double it to get a word offset.
+ $D1DE LD C,A         ; { Put this in #REGbc.
+ $D1DF LD B,$00       ; }
+ $D1E1 LD HL,$632A    ; { Add the base offset for the graphic table. (#R$632A)
+ $D1E4 ADD HL,BC      ; }
+ $D1E5 LD E,(HL)      ; { Put the graphic address in #REGde.
  $D1E6 INC HL         ;
- $D1E7 LD D,(HL)      ;
-*$D1E8 LD HL,$62D6    ;
- $D1EB EXX            ;
- $D1EC LD DE,($C872)  ;
- $D1F0 LD A,($DBED)   ;
- $D1F3 LD B,A         ;
-*$D1F4 PUSH BC        ;
- $D1F5 PUSH DE        ;
- $D1F6 CALL $E8D2     ;
- $D1F9 PUSH DE        ;
- $D1FA CALL $E90C     ;
- $D1FD EX DE,HL       ;
- $D1FE POP DE         ;
+ $D1E7 LD D,(HL)      ; }
+*$D1E8 LD HL,$62D6    ; Point #REGhl at the working graphic buffer. (#R$62D6)
+; There is now a working sprite for Dan, so find the right place on screen to put it.
+ $D1EB EXX            ; Swap #REGbc, #REGde and #REGhl.
+ $D1EC LD DE,($C872)  ; Put Dan's co-ordinates in #REGde.
+ $D1F0 LD A,($DBED)   ; Get the height to draw.
+ $D1F3 LD B,A         ; Iterate for this number of rows.
+*$D1F4 PUSH BC        ; { Store #REGbc and #REGde.
+ $D1F5 PUSH DE        ; }
+ $D1F6 CALL $E8D2     ; Convert the co-ordinates into a screen address.
+ $D1F9 PUSH DE        ; Remember #REGde which holds the screen address.
+ $D1FA CALL $E90C     ; Convert the screen address to an attribute address.
+ $D1FD EX DE,HL       ; { Put the screen address in #REGhl
+ $D1FE POP DE         ; and the attribute address in #REGde.}
+; Found a place on screen to draw Dan, so do it.
  $D1FF LD C,$02       ;
 *$D201 PUSH DE        ;
  $D202 PUSH HL        ;
@@ -6533,11 +7146,11 @@ c$D3EC EXX           ;
 ; Used by the routines at #R$C800, #R$D3EC, #R$D4B5, #R$DAB2 and #R$DAFA.
 ;
 ; BC Length to pause
-c$D4AF DEC BC        ;
- $D4B0 LD A,B        ;
+c$D4AF DEC BC        ; Drecrement BC.
+ $D4B0 LD A,B        ; { Loop while BC > 0.
  $D4B1 OR C          ;
- $D4B2 JR NZ,$D4AF   ;
- $D4B4 RET           ;
+ $D4B2 JR NZ,$D4AF   ; }
+ $D4B4 RET           ; Otherwise return.
 
 ; Move Dan right
 ;
@@ -6815,15 +7428,15 @@ c$D655 CALL $E8D2    ;
 ;
 ; A The sprite ID
 ; DE On exit, holds a pointer to the graphic
-c$D669 ADD A,A       ;
- $D66A LD E,A        ;
- $D66B LD D,$00      ;
- $D66D LD HL,$AE60   ;
- $D670 ADD HL,DE     ;
- $D671 LD E,(HL)     ;
+c$D669 ADD A,A       ; Double the ID to get an appropriate word offset.
+ $D66A LD E,A        ; { Put this in #REGde.
+ $D66B LD D,$00      ; }
+ $D66D LD HL,$AE60   ; { Add the base offset for the sprite buffer at #R$AE60.
+ $D670 ADD HL,DE     ; }
+ $D671 LD E,(HL)     ; { Put the found address in #REGde.
  $D672 INC HL        ;
- $D673 LD D,(HL)     ;
- $D674 RET           ;
+ $D673 LD D,(HL)     ; }
+ $D674 RET           ; Return.
 
 ; Length (in bytes) of one frame of the currently processing sprite
 g$D675 DEFB $00,$00
@@ -6834,55 +7447,55 @@ g$D675 DEFB $00,$00
 ;
 ; DE The sprite data
 ; HL The buffer to copy the data to
-c$D677 LD A,(DE)     ;
- $D678 AND $0C       ;
+c$D677 LD A,(DE)     ; Get the first byte
+ $D678 AND $0C       ; { Extract bits 2-3 (the height) and store it #REGc.
  $D67A RRCA          ;
  $D67B RRCA          ;
- $D67C LD C,A        ;
- $D67D INC A         ;
- $D67E LD (HL),A     ;
- $D67F INC HL        ;
- $D680 LD A,(DE)     ;
+ $D67C LD C,A        ; }
+ $D67D INC A         ; { Copy this plus one into the graphic data.
+ $D67E LD (HL),A     ; }
+ $D67F INC HL        ; Move to the next position in the buffer. 
+ $D680 LD A,(DE)     ; { Extract bits 0-2 (the width) into #REGb
  $D681 AND $03       ;
- $D683 LD B,A        ;
- $D684 LD (HL),A     ;
- $D685 SLA C         ;
+ $D683 LD B,A        ; }
+ $D684 LD (HL),A     ; Copy this into the graphic data.
+ $D685 SLA C         ; { Multiply #REGc by 8 and store it in #REGa.
  $D687 SLA C         ;
  $D689 SLA C         ;
  $D68B XOR A         ;
-*$D68C ADD A,C       ;
- $D68D DJNZ $D68C    ;
- $D68F LD C,A        ;
- $D690 LD B,$00      ;
- $D692 LD ($D675),BC ;
- $D696 INC HL        ;
- $D697 PUSH HL       ;
- $D698 LD B,$F0      ;
- $D69A XOR A         ;
-*$D69B LD (HL),A     ;
- $D69C INC HL        ;
- $D69D DJNZ $D69B    ;
- $D69F POP HL        ;
- $D6A0 PUSH HL       ;
- $D6A1 LD BC,$0018   ;
- $D6A4 ADD HL,BC     ;
- $D6A5 INC DE        ;
- $D6A6 EX DE,HL      ;
- $D6A7 LD BC,($D675) ;
- $D6AB LDIR          ;
- $D6AD EX DE,HL      ;
- $D6AE POP HL        ;
- $D6AF LD BC,$0090   ;
- $D6B2 ADD HL,BC     ;
- $D6B3 EX DE,HL      ;
- $D6B4 LD BC,($D675) ;
- $D6B8 LDIR          ;
- $D6BA RET           ;
+*$D68C ADD A,C       ; }
+ $D68D DJNZ $D68C    ; Loop back while there is more to do.
+ $D68F LD C,A        ; { Put the height in #REGbc.
+ $D690 LD B,$00      ; }
+ $D692 LD ($D675),BC ; Store this in #R$D675.
+ $D696 INC HL        ; { Move to the next position in the buffer and store it.
+ $D697 PUSH HL       ; }
+ $D698 LD B,$F0      ; { Initialize the next #N$F0 bytes in the buffer with 0.L
+ $D69A XOR A         ; 
+*$D69B LD (HL),A     ; 
+ $D69C INC HL        ; 
+ $D69D DJNZ $D69B    ; }
+ $D69F POP HL        ; Restore #REGhl which points to the next place in the buffer.
+ $D6A0 PUSH HL       ; Store this.
+ $D6A1 LD BC,$0018   ; Increment by #N$18 for each iteration.
+ $D6A4 ADD HL,BC     ; Add the next offset.
+ $D6A5 INC DE        ; Move to the next byte in the sprite data.
+ $D6A6 EX DE,HL      ; Copy from the sprite data to the buffer.
+ $D6A7 LD BC,($D675) ; Get the length.
+ $D6AB LDIR          ; Do the copy.
+ $D6AD EX DE,HL      ; Make #REGde the next place to copy from.
+ $D6AE POP HL        ; Restore #REGhl.
+ $D6AF LD BC,$0090   ; Increment by #N$90 for each iteration.
+ $D6B2 ADD HL,BC     ; Add the next offset.
+ $D6B3 EX DE,HL      ; Copy from the sprite data to the buffer.
+ $D6B4 LD BC,($D675) ; Get the length.
+ $D6B8 LDIR          ; { Do the copy and return.
+ $D6BA RET           ; }
 
-; Game status buffer entry at D6BB
+; Current X co-ordinate for the vertical sprite being drawn
 g$D6BB DEFB $00
 
-; Current frame number for the vertical sprite being drawn
+; Current Y co-ordinate for the vertical sprite being drawn
 ;
 ; Used by the routine at #R$D7E7
 g$D6BC DEFB $00
@@ -6958,10 +7571,10 @@ c$D6BF AND A         ;
  $D72B DJNZ $D6C2    ;
  $D72D RET           ;
 
-; Game status buffer entry at D72E
+; Current X co-ordinate for the horizontal sprite being drawn
 g$D72E DEFB $00
 
-; Current frame number for the vertical sprite being drawn
+; Current Y co-ordinate for the horizontal sprite being drawn
 g$D72F DEFB $00
 
 ; Pointer to current horizontal sprite being drawn
@@ -7482,18 +8095,18 @@ c$D9EC LD A,($D9EA)  ;
  $DA3C CP B          ;
  $DA3D RET NZ        ;
 ; The raft is in the current room, so draw it
- $DA3E LD A,E        ;
- $DA3F ADD A,A       ;
+ $DA3E LD A,E        ; Get the X co-ordinate of the raft graphic.
+ $DA3F ADD A,A       ; { Multiply by 32 to get an appropriate offset.
  $DA40 ADD A,A       ;
  $DA41 ADD A,A       ;
  $DA42 ADD A,A       ;
- $DA43 ADD A,A       ;
- $DA44 LD C,A        ;
- $DA45 LD B,$00      ;
- $DA47 LD HL,$6899   ;
- $DA4A ADD HL,BC     ;
- $DA4B LD C,D        ;
- $DA4C LD DE,$5040   ;
+ $DA43 ADD A,A       ; }
+ $DA44 LD C,A        ; { Put this in #REGbc.
+ $DA45 LD B,$00      ; }
+ $DA47 LD HL,$6899   ; { Add the offset of the raft graphic. (#R$6899)
+ $DA4A ADD HL,BC     ; }
+ $DA4B LD C,D        ; Get the y co-ordinate of the raft.
+ $DA4C LD DE,$5040   ; Get the basic y screen position of the raft.
  $DA4F EX DE,HL      ;
  $DA50 LD A,C        ;
  $DA51 CP $20        ;
@@ -7628,9 +8241,9 @@ c$DAE5 LD HL,$EE34   ;
 ; Pause for one second
 ;
 ; Used by the routines at #R$CA5B, #R$CDD3, #R$DB17 and #R$DD8D.
-c$DAFA LD BC,$0A84   ;
- $DAFD CALL $D4AF    ;
- $DB00 RET           ;
+c$DAFA LD BC,$0A84   ; Load #REGbc with about one second's worth of pause.
+ $DAFD CALL $D4AF    ; { Pause and return.
+ $DB00 RET           ; }
 
 ; Select a sound effect to play
 ;
@@ -8445,37 +9058,42 @@ g$E540 DEFB $00,$00,$00,$00
 ;
 ; Used by the routine at #R$CBBD.
 ;
-; IY Pointer to moving object data
-c$E544 LD L,(IX+$07) ;
- $E547 LD H,(IX+$08) ;
- $E54A PUSH HL       ;
- $E54B POP IY        ;
+; IX Pointer to moving room data
+c$E544 LD L,(IX+$07) ; { Get the pointer to moving object data
+ $E547 LD H,(IX+$08) ; and put it in #REGhl. }
+ $E54A PUSH HL       ; { Copy this to #REGiy.
+ $E54B POP IY        ; }
 ; This entry point is used by the routine at #R$CA5B.
-*$E54D LD A,(IY+$00) ;
- $E550 CALL $D669    ;
- $E553 LD HL,$DED8   ;
- $E556 CALL $D677    ;
- $E559 LD A,(IY+$01) ;
- $E55C CALL $D669    ;
- $E55F LD HL,$DFCA   ;
- $E562 CALL $D677    ;
- $E565 LD A,(IY+$02) ;
- $E568 CALL $D669    ;
- $E56B LD HL,$E0BC   ;
- $E56E CALL $D815    ;
- $E571 LD A,(IY+$03) ;
- $E574 CALL $D669    ;
- $E577 LD HL,$E2FE   ;
- $E57A CALL $D815    ;
- $E57D LD A,(IY+$04) ;
- $E580 CALL $E9F8    ;
- $E583 LD ($E540),BC ;
- $E587 LD A,(IY+$05) ;
- $E58A CALL $E9F8    ;
- $E58D LD ($E542),BC ;
- $E591 RET           ;
+; Get the first object
+*$E54D LD A,(IY+$00) ; Get the first sprite ID.
+ $E550 CALL $D669    ; Get the graphic for this and put it in #REGde.
+ $E553 LD HL,$DED8   ; Set #REGhl to the first moving graphics buffer (#R$DED8).
+ $E556 CALL $D677    ; Copy the object.
+; Get the second object
+ $E559 LD A,(IY+$01) ; Get the second sprite ID.
+ $E55C CALL $D669    ; Get the graphic for this and put it in #REGde.
+ $E55F LD HL,$DFCA   ; Set #REGhl to the second moving graphics buffer (#R$DED8).
+ $E562 CALL $D677    ; Copy the object.
+; Get the third object
+ $E565 LD A,(IY+$02) ; Get the third sprite ID.
+ $E568 CALL $D669    ; Get the graphic for this and put it in #REGde.
+ $E56B LD HL,$E0BC   ; Set #REGhl to the third moving graphics buffer (#R$DED8).
+ $E56E CALL $D815    ; Copy the object.
+; Get the fourth object
+ $E571 LD A,(IY+$03) ; Get the fourth sprite ID.
+ $E574 CALL $D669    ; Get the graphic for this and put it in #REGde.
+ $E577 LD HL,$E2FE   ; Set #REGhl to the fourth moving graphics buffer (#R$DED8).
+ $E57A CALL $D815    ; Copy the object.
+; Now get the instances of each object.
+ $E57D LD A,(IY+$04) ; Load the first byte.
+ $E580 CALL $E9F8    ; Convert into two bytes in #REGbc.
+ $E583 LD ($E540),BC ; Store this in #R$E540.
+ $E587 LD A,(IY+$05) ; Load the second byte.
+ $E58A CALL $E9F8    ; Convert into two bytes in #REGbc.
+ $E58D LD ($E542),BC ; Store this in #R$E540.
+ $E591 RET           ; Return.
 
-; Draw a moving object
+; Move all objects in the room
 ;
 ; Used by the routine at #R$C800.
 ;
@@ -8516,73 +9134,76 @@ c$E592 LD L,(IX+$07) ;
 ; See if Dan is in the blimp with the plans, and if so, launch it
 ;
 ; Used by the routine at #R$C800.
-c$E5E8 LD HL,$C87E   ;
- $E5EB BIT 7,(HL)    ;
- $E5ED JR NZ,$E62F   ;
- $E5EF LD A,($CFCA)  ;
- $E5F2 CP $2B        ;
- $E5F4 RET NZ        ;
- $E5F5 LD A,$02      ;
+c$E5E8 LD HL,$C87E   ; Get the game flags. (#R$C87E)
+ $E5EB BIT 7,(HL)    ; Is the blimp been launched?
+ $E5ED JR NZ,$E62F   ; Display the winning text if so.
+ $E5EF LD A,($CFCA)  ; Get the current room. (#R$CFCA)
+ $E5F2 CP $2B        ; Is it the start room? (#N$2B)?
+ $E5F4 RET NZ        ; Return if not.
+ $E5F5 LD A,$02      ; 
  $E5F7 LD ($CFD3),A  ;
- $E5FA LD A,($C872)  ;
- $E5FD CP $16        ;
- $E5FF RET NZ        ;
- $E600 LD A,($C873)  ;
- $E603 SUB $0C       ;
- $E605 CP $08        ;
- $E607 RET NC        ;
- $E608 BIT 1,(HL)    ;
- $E60A RET Z         ;
- $E60B LD (HL),$80   ;
- $E60D LD HL,$40B0   ;
- $E610 LD B,$08      ;
- $E612 LD A,$FF      ;
-*$E614 PUSH HL       ;
- $E615 LD (HL),A     ;
- $E616 INC L         ;
+ $E5FA LD A,($C872)  ; { Is the Y co-ordinate #N$16?
+ $E5FD CP $16        ; }
+ $E5FF RET NZ        ; Return if not.
+ $E600 LD A,($C873)  ; { Is the X co-ordinate
+ $E603 SUB $0C       ; between 08 and #N$14? 
+ $E605 CP $08        ; }
+ $E607 RET NC        ; Return if not.
+ $E608 BIT 1,(HL)    ; Does Dan have the plans?
+ $E60A RET Z         ; Return if not.
+; Dan is in the blimp and has the plans. Launch it.
+ $E60B LD (HL),$80   ; Set bit 7 to denote Dan has the plans, clear all other flags.
+ $E60D LD HL,$40B0   ; Starting screen address.
+ $E610 LD B,$08      ; Loop 8 times.
+ $E612 LD A,$FF      ; Load #REGa with all bits set.
+*$E614 PUSH HL       ; Remember the current screen address.
+ $E615 LD (HL),A     ; { Set the next three columns
+ $E616 INC L         ; to this.
  $E617 LD (HL),A     ;
  $E618 INC L         ;
- $E619 LD (HL),A     ;
- $E61A POP HL        ;
- $E61B INC H         ;
- $E61C DJNZ $E614    ;
- $E61E LD HL,$5855   ;
- $E621 LD (HL),$06   ;
- $E623 LD BC,$0904   ;
- $E626 LD DE,$0C05   ;
- $E629 LD A,$05      ;
- $E62B CALL $E8BA    ;
- $E62E RET           ;
+ $E619 LD (HL),A     ; }
+ $E61A POP HL        ; Restore the screen address.
+ $E61B INC H         ; Move down a row.
+ $E61C DJNZ $E614    ; Loop until the number of rows has been scrolled.
+ $E61E LD HL,$5855   ; Starting attribute address.
+ $E621 LD (HL),$06   ; Set yellow on black.
+ $E623 LD BC,$0904   ; Fill for 9 columns, 4 rows.
+ $E626 LD DE,$0C05   ; Start at co-ordinate #N$0C, #N$05.
+ $E629 LD A,$05      ; { Fill with cyan on black.
+ $E62B CALL $E8BA    ; }
+ $E62E RET           ; Return for another run round the main loop.
 
 ; Display the winning game text
 ;
 ; Used by the routine at #R$E5E8.
-c$E62F INC (HL)      ;
- $E630 BIT 6,(HL)    ;
- $E632 JR Z,$E644    ;
- $E634 CALL $E801    ;
- $E637 LD HL,$FE77   ;
- $E63A CALL $EEF1    ;
- $E63D CALL $DD8D    ;
- $E640 POP HL        ;
- $E641 JP $C804      ;
+;
+; HL Points to the game flags (#R$C87E).
+c$E62F INC (HL)      ; Set bit 1 to denote Dan has the plans.
+ $E630 BIT 6,(HL)    ; Does Dan have an oxygen tank?
+ $E632 JR Z,$E644    ; Launch the blimp if not.
+ $E634 CALL $E801    ; Clear the screen.
+ $E637 LD HL,$FE77   ; Point #REGhl to the winning text. (#R$FE77)
+ $E63A CALL $EEF1    ; Print it.
+ $E63D CALL $DD8D    ; Wait for the user to acknowledge the message.
+ $E640 POP HL        ; { Tidy the stack and restart the game.
+ $E641 JP $C804      ; }
 
 ; Launch the blimp
 ;
 ; Used by the routine at #R$E62F.
-c$E644 CALL $E916    ;
- $E647 LD A,($C87E)  ;
- $E64A AND $07       ;
- $E64C RET NZ        ;
- $E64D LD HL,$5820   ;
+c$E644 CALL $E916    ; Update the blimp.
+ $E647 LD A,($C87E)  ; Get the game flags. (#R$C87E)
+ $E64A AND $07       ; Ensure bits 1 - 3 are set.
+ $E64C RET NZ        ; Return if not.
+ $E64D LD HL,$5820   ; { Scroll the attributes up one row.
  $E650 LD DE,$5800   ;
- $E653 LD BC,$00C0   ;
- $E656 LDIR          ;
- $E658 LD HL,$C878   ;
- $E65B LD A,$08      ;
+ $E653 LD BC,$00C0   ; 
+ $E656 LDIR          ; }
+ $E658 LD HL,$C878   ; Get the height landed.
+ $E65B LD A,$08      ; { If it's greater than 8, reset the machine.
  $E65D CP (HL)       ;
- $E65E JP C,$0000    ;
- $E661 RET           ;
+ $E65E JP C,$0000    ; }
+ $E661 RET           ; Otherwise return.
 
 ; Current colour sequence for this room's teleporter
 g$E662 DEFB $00
@@ -8833,28 +9454,36 @@ c$E782 LD A,($C87F)  ;
 
 i$E7E2
 
-; Current border colour
+; Last read state of port #N$FE
+;
+; Used to set the border colour, and to play sound.
+;
+; .
+;
+; Used by the routines at #R$CDD3, #R$DBA2, #R$DE52 and #R$E801.
 g$E800 DEFB $00
 
 ; Clear the screen
 ;
 ; Used by the routines at #R$C881, #R$CA5B, #R$DB63, #R$DCF6, #R$E62F and
 ; #R$F2F4.
-c$E801 LD HL,$4000   ;
- $E804 LD BC,$1800   ;
- $E807 LD (HL),L     ;
- $E808 LD D,H        ;
- $E809 LD E,$01      ;
- $E80B LDIR          ;
- $E80D LD A,$45      ;
- $E80F LD (HL),A     ;
- $E810 LD BC,$02FF   ;
- $E813 LDIR          ;
- $E815 LD A,($E800)  ;
- $E818 AND $F8       ;
- $E81A OUT ($FE),A   ;
- $E81C LD ($E800),A  ;
- $E81F RET           ;
+c$E801 LD HL,$4000   ; { Start copying from the top of the screen,
+ $E804 LD BC,$1800   ; and for the length of it. }
+ $E807 LD (HL),L     ; Set the first byte to 0.
+ $E808 LD D,H        ; { Start copying to the second byte in the screen.
+ $E809 LD E,$01      ; }
+ $E80B LDIR          ; Do the copy, which will fill the screen with 0.
+; At this point, #REGhl is pointing to the attributes.
+ $E80D LD A,$45      ; Use bright cyan on black.
+ $E80F LD (HL),A     ; Set the first cell.
+ $E810 LD BC,$02FF   ; { Fill the rest of the attributes.
+ $E813 LDIR          ; }
+; Set the border to black.
+ $E815 LD A,($E800)  ; Get the last read to port #N$FE. (#R$E800)
+ $E818 AND $F8       ; Ignore the border bits, it is always black.
+ $E81A OUT ($FE),A   ; Set the port values.
+ $E81C LD ($E800),A  ; Remember this for later.
+ $E81F RET           ; Return.
 
 ; Clear the screen to cyan ink / black paper
 ;
@@ -8894,38 +9523,42 @@ c$E820 LD HL,$4000   ;
 ; #R$EF7C and #R$F3EC.
 ;
 ; HL Pointer to data containing information about what to draw and where.
-c$E84E LD B,(HL)     ;
- $E84F INC HL        ;
- $E850 LD C,(HL)     ;
- $E851 INC HL        ;
- $E852 PUSH BC       ;
- $E853 PUSH DE       ;
- $E854 CALL $E87A    ;
- $E857 POP DE        ;
- $E858 POP BC        ;
- $E859 LD A,(HL)     ;
- $E85A AND A         ;
- $E85B JR NZ,$E862   ;
- $E85D INC HL        ;
- $E85E LD A,(HL)     ;
- $E85F JP $E8BA      ;
-*$E862 CALL $E8E3    ;
- $E865 EX DE,HL      ;
-*$E866 PUSH BC       ;
- $E867 PUSH HL       ;
-*$E868 LD A,(DE)     ;
- $E869 LD (HL),A     ;
- $E86A INC L         ;
- $E86B INC DE        ;
- $E86C DJNZ $E868    ;
- $E86E POP HL        ;
- $E86F LD BC,$0020   ;
+; DE Co-ordinates to print the graphic.
+c$E84E LD B,(HL)     ; { Get the height.
+ $E84F INC HL        ; }
+ $E850 LD C,(HL)     ; { Get the width.
+ $E851 INC HL        ; }
+ $E852 PUSH BC       ; { Remember #REGbc and #REGde.
+ $E853 PUSH DE       ; }
+ $E854 CALL $E87A    ; Copy the graphic data.
+; Put the pixel data on screen.
+ $E857 POP DE        ; { Restore #REGbc and #REGde.
+ $E858 POP BC        ; }
+ $E859 LD A,(HL)     ; { Is this a "fill" command?
+ $E85A AND A         ; }
+ $E85B JR NZ,$E862   ; Jump forward if it isn't.
+; There is a "fill" command here.
+ $E85D INC HL        ; { Put the attribute in #REGa.
+ $E85E LD A,(HL)     ; }
+ $E85F JP $E8BA      ; Move forward to do the fill.
+; Print the attribute for the graphic.
+*$E862 CALL $E8E3    ; Convert the screen address to an attribute address.
+ $E865 EX DE,HL      ; Put the attribute address in #REGhl.
+*$E866 PUSH BC       ; { Remember #REGbc and #REGhl.
+ $E867 PUSH HL       ; }
+*$E868 LD A,(DE)     ; Get the attribute data.
+ $E869 LD (HL),A     ; Put it on screen.
+ $E86A INC L         ; Move to the next column.
+ $E86B INC DE        ; Move to the next data cell.
+ $E86C DJNZ $E868    ; Loop while there are more columns.
+ $E86E POP HL        ; Restore #REGhl.
+ $E86F LD BC,$0020   ; { Move to the next row.
  $E872 AND A         ;
- $E873 SBC HL,BC     ;
- $E875 POP BC        ;
- $E876 DEC C         ;
- $E877 JR NZ,$E866   ;
- $E879 RET           ;
+ $E873 SBC HL,BC     ; }
+ $E875 POP BC        ; Restore #REGbc.
+ $E876 DEC C         ; { Loop back if there are more rows to draw.
+ $E877 JR NZ,$E866   ; }
+ $E879 RET           ; Otherwise return.
 
 ; Copy a graphic onto screen
 ;
@@ -8935,29 +9568,29 @@ c$E84E LD B,(HL)     ;
 ; DE Co-ordinates to place the graphic
 ; B Width
 ; C Height
-c$E87A LD A,C        ;
-*$E87B EX AF,AF'     ;
- $E87C LD C,$08      ;
- $E87E PUSH DE       ;
- $E87F CALL $E8F1    ;
-*$E882 PUSH BC       ;
- $E883 PUSH DE       ;
-*$E884 LD A,(HL)     ;
- $E885 LD (DE),A     ;
- $E886 INC E         ;
- $E887 INC HL        ;
- $E888 DJNZ $E884    ;
- $E88A POP DE        ;
- $E88B INC D         ;
- $E88C POP BC        ;
- $E88D DEC C         ;
- $E88E JR NZ,$E882   ;
- $E890 POP DE        ;
- $E891 DEC E         ;
- $E892 EX AF,AF'     ;
- $E893 DEC A         ;
- $E894 JR NZ,$E87B   ;
- $E896 RET           ;
+c$E87A LD A,C        ; { Put the height in #REGa and store it in the shadow register.
+*$E87B EX AF,AF'     ; }
+ $E87C LD C,$08      ; 8 rows to draw per UDG cell.
+ $E87E PUSH DE       ; Remember the co-ordinates.
+ $E87F CALL $E8F1    ; Convert this to a screen address in #REGde.
+*$E882 PUSH BC       ; { Remember the screen address and dimensions.
+ $E883 PUSH DE       ; }
+*$E884 LD A,(HL)     ; { Copy the graphic byte.
+ $E885 LD (DE),A     ; }
+ $E886 INC E         ; Move forward a cell.
+ $E887 INC HL        ; Move forward a column in the data.
+ $E888 DJNZ $E884    ; Loop back if there are more columns to draw.
+ $E88A POP DE        ; Restore the screen address.
+ $E88B INC D         ; Move to the next column.
+ $E88C POP BC        ; Restore the dimensions.
+ $E88D DEC C         ; Move to the next UDG cell.
+ $E88E JR NZ,$E882   ; Loop back if there is more to draw.
+ $E890 POP DE        ; Restore the co-ordinates.
+ $E891 DEC E         ; Move to the next row.
+ $E892 EX AF,AF'     ; { Restore height left to draw and move down a row.
+ $E893 DEC A         ; }
+ $E894 JR NZ,$E87B   ; { Loop back unti all rows are done.
+ $E896 RET           ; }
 
 ; Remove an object from screen
 ;
@@ -8966,8 +9599,8 @@ c$E87A LD A,C        ;
 ;
 ; DE Position of the object
 ; BC Size of the object
-c$E897 PUSH DE       ;
- $E898 PUSH BC       ;
+c$E897 PUSH DE       ; { Remember the input values.
+ $E898 PUSH BC       ; }
  $E899 LD H,C        ;
 *$E89A PUSH DE       ;
  $E89B CALL $E8F1    ;
@@ -8987,11 +9620,11 @@ c$E897 PUSH DE       ;
  $E8AE DEC E         ;
  $E8AF DEC H         ;
  $E8B0 JR NZ,$E89A   ;
- $E8B2 POP BC        ;
- $E8B3 POP DE        ;
- $E8B4 LD A,$45      ;
- $E8B6 CALL $E8BA    ;
- $E8B9 RET           ;
+ $E8B2 POP BC        ; { Restore the input values.
+ $E8B3 POP DE        ; }
+ $E8B4 LD A,$45      ; { Fill the area with bright cyan on black.
+ $E8B6 CALL $E8BA    ; }
+ $E8B9 RET           ; Return.
 
 ; Fill a number of lines with an attribute
 ;
@@ -9001,24 +9634,26 @@ c$E897 PUSH DE       ;
 ; A Attribute to fill in
 ; DE co-ordinate to start
 ; B Number of columns to fill
-; C Number of lines to fill
-c$E8BA LD L,A        ;
- $E8BB CALL $E8E3    ;
- $E8BE LD A,L        ;
- $E8BF EX DE,HL      ;
- $E8C0 LD DE,$0020   ;
-*$E8C3 PUSH BC       ;
- $E8C4 PUSH HL       ;
-*$E8C5 LD (HL),A     ;
- $E8C6 INC L         ;
- $E8C7 DJNZ $E8C5    ;
- $E8C9 POP HL        ;
- $E8CA AND A         ;
- $E8CB SBC HL,DE     ;
- $E8CD POP BC        ;
- $E8CE DEC C         ;
- $E8CF JR NZ,$E8C3   ;
- $E8D1 RET           ;
+; C Number of rows to fill
+c$E8BA LD L,A        ; Store the attribute.
+ $E8BB CALL $E8E3    ; Get the attribute address from the co-ordinate in #REGde.
+ $E8BE LD A,L        ; Restore the attribute.
+ $E8BF EX DE,HL      ; Swap #REGde and #REGhl.
+ $E8C0 LD DE,$0020   ; Set #N$20 as the offset to move between rows.
+*$E8C3 PUSH BC       ; { Remember the size and attribute address.
+ $E8C4 PUSH HL       ; }
+*$E8C5 LD (HL),A     ; Fill this attribute with the value specified.
+ $E8C6 INC L         ; Move to the next column.
+ $E8C7 DJNZ $E8C5    ; Repeat until all columns are done.
+ $E8C9 POP HL        ; Restore the attribute address.
+ $E8CA AND A         ; Clear the carry flag.
+ $E8CB SBC HL,DE     ; Move up a row.
+                     ; Note, this could have been done by setting #REGde to #N$FFE0
+                     ; and calling ADD HL,DE which saves a byte.
+ $E8CD POP BC        ; Restore the size.
+ $E8CE DEC C         ; { Loop back if there are more rows to do.
+ $E8CF JR NZ,$E8C3   ; }
+ $E8D1 RET           ; Otherwise return.
 
 ; Convert a room co-ordinate to a screen address rounded to the nearest 8x8
 ; cell
@@ -9026,19 +9661,19 @@ c$E8BA LD L,A        ;
 ; Used by the routines at #R$C8FF, #R$CD24, #R$D1CE, #R$D550, #R$D655 and
 ; #R$E909.
 ;
-; DE On entry, holds the x and y co-ordinates. On return, holds the attribute
+; DE On entry, holds the x and y co-ordinates. On return, holds the screen
 ; .  address.
-c$E8D2 LD A,E        ;
- $E8D3 AND $07       ;
- $E8D5 LD B,A        ;
- $E8D6 SRL E         ;
- $E8D8 SRL E         ;
- $E8DA SRL E         ;
- $E8DC CALL $E8F1    ;
- $E8DF LD A,B        ;
- $E8E0 ADD A,D       ;
- $E8E1 LD D,A        ;
- $E8E2 RET           ;
+c$E8D2 LD A,E        ; Get the Y co-ordinate.
+ $E8D3 AND $07       ; { Put the bottom 3 bits in #REGb.
+ $E8D5 LD B,A        ; }
+ $E8D6 SRL E         ; { Divide the Y co-ordinate by 8
+ $E8D8 SRL E         ; to get an appropriate offset for screen data.
+ $E8DA SRL E         ; }
+ $E8DC CALL $E8F1    ; Convert this to an attribute address in #REGde.
+ $E8DF LD A,B        ; { Add the low 3 bits to the X co-ordinate to get
+ $E8E0 ADD A,D       ; the appropriate screen address.
+ $E8E1 LD D,A        ; }
+ $E8E2 RET           ; Return with a screen address in #REGde.
 
 ; Convert a room co-ordinate to an attribute address
 ;
@@ -9047,14 +9682,14 @@ c$E8D2 LD A,E        ;
 ;
 ; DE On entry, holds the x and y co-ordinates. On return, holds the attribute
 ; .  address.
-c$E8E3 LD A,E        ;
- $E8E4 AND $18       ;
- $E8E6 SRA A         ;
+c$E8E3 LD A,E        ; Get the Y co-ordinate.
+ $E8E4 AND $18       ; Keep bits 3 and 4, which hold the correct third of the screen to use.
+ $E8E6 SRA A         ; { Divide by 8 to get an appropriate offset for this line.
  $E8E8 SRA A         ;
- $E8EA SRA A         ;
- $E8EC ADD A,$58     ;
- $E8EE PUSH AF       ;
- $E8EF JR $E8F7      ;
+ $E8EA SRA A         ; }
+ $E8EC ADD A,$58     ; Add the base address for the attribute buffer.
+ $E8EE PUSH AF       ; Store #REGa and ensure the stack is correct for the next instruction.
+ $E8EF JR $E8F7      ; Jump forward to set the low byte, which is the same as the screen.
 
 ; Convert a room co-ordinate to a screen address
 ;
@@ -9062,39 +9697,39 @@ c$E8E3 LD A,E        ;
 ;
 ; DE On entry, holds the x and y co-ordinates. On return, holds the screen
 ; .  address.
-c$E8F1 LD A,E        ;
- $E8F2 AND $18       ;
- $E8F4 ADD A,$40     ;
- $E8F6 PUSH AF       ;
+c$E8F1 LD A,E        ; Get the Y co-ordinate.
+ $E8F2 AND $18       ; Keep bits 3 and 4, which hold the correct third of the screen to use.
+ $E8F4 ADD A,$40     ; Add a base address of #N$40 to the the high byte of a screen address.
+ $E8F6 PUSH AF       ; Remember this.
 ; This entry point is used by the routine at #R$E8E3.
-*$E8F7 LD A,E        ;
- $E8F8 AND $07       ;
- $E8FA SLA A         ;
- $E8FC SLA A         ;
+*$E8F7 LD A,E        ; Get the X co-ordinate.
+ $E8F8 AND $07       ; { Take the bottom 3 bits and multiply them by 32
+ $E8FA SLA A         ; to get the correct offset for this line
+ $E8FC SLA A         ; (ie: #N$20, #N$40, #N$60, #N$80, #N$A0, #N$E0)
  $E8FE SLA A         ;
  $E900 SLA A         ;
- $E902 SLA A         ;
- $E904 ADD A,D       ;
- $E905 LD E,A        ;
- $E906 POP AF        ;
- $E907 LD D,A        ;
- $E908 RET           ;
+ $E902 SLA A         ; }
+ $E904 ADD A,D       ; { Add the Y co-ordinate to get the right low byte of a screen address.
+ $E905 LD E,A        ; }
+ $E906 POP AF        ; { Restore the high byte into #REGd.
+ $E907 LD D,A        ; }
+ $E908 RET           ; Return.
 
 ; Convert a screen address to an attribute address
 ;
 ; Used by the routines at #R$CD5C, #R$D567, #R$D895, #R$D951 and #R$E663.
 ;
 ; DE On entry, holds the screen address. On return, holds the attribute address
-c$E909 CALL $E8D2    ;
+c$E909 CALL $E8D2    ; Round the screen address to the nearest whole cell.
 ; This entry point is used by the routine at #R$D1CE.
-*$E90C LD A,D        ;
- $E90D RRCA          ;
+*$E90C LD A,D        ; { Divide the high byte by 8 to give an offset of
+ $E90D RRCA          ; 08, 09 or #N$A.
  $E90E RRCA          ;
- $E90F RRCA          ;
- $E910 AND $03       ;
- $E912 OR $58        ;
- $E914 LD D,A        ;
- $E915 RET           ;
+ $E90F RRCA          ; }
+ $E910 AND $03       ; Keep only the bottom 3 bits, to give an offset of 0, 1 or 2.
+ $E912 OR $58        ; Add the base address of the attribute buffer, to give #N$58, #N$59 or #N$5A.
+ $E914 LD D,A        ; Store this as the new high byte. The low byte is unchanged.
+ $E915 RET           ; Return.
 
 ; Launch the blimp having got the plans
 ;
@@ -9161,7 +9796,7 @@ c$E93F BIT 5,(IX+$04) ;
 ;
 ; Used by the routines at #R$D7B7 and #R$D7E7.
 ;
-; DE Position to drawn the sprite
+; DE Position to draw the sprite
 ; HL Pointer to the current sprite data
 ; B Number of frames for the sprite
 ; IY Pointer to current room data
@@ -9499,94 +10134,103 @@ c$ECF4 LD A,(HL)     ;
  $ECFE LD (HL),A     ;
  $ECFF RET           ;
 
-; Print a set of UDGs
+; Print a set of UDGs indirectly
 ;
 ; Used by the routine at #R$CBBD.
 ;
+; IX Pointer to address of UDGs to print.
+c$ED00 LD L,(IX+$00) ; { Put the address in #REGhl and move forward to 
+ $ED03 LD H,(IX+$01) ; #R$ED06 to print them. }
+
+; Print a set of UDGs
+;
+; Used by the routines at #R$CA5B, #R$CDD3, #R$D378,
+; #R$DCF6, #R$DD8D and #R$ED00.
+;
 ; HL Pointer of UDGs to print, terminated with FF
-c$ED00 LD L,(IX+$00) ;
- $ED03 LD H,(IX+$01) ;
-; This entry point is used by the routines at #R$CA5B, #R$CDD3, #R$D378,
-; #R$DCF6 and #R$DD8D.
-*$ED06 LD A,(HL)     ;
- $ED07 CP $FF        ;
- $ED09 RET Z         ;
- $ED0A LD E,A        ;
+c$ED06 LD A,(HL)     ; Get the width.
+ $ED07 CP $FF        ; { Return if this is a terminator symbol instead.
+ $ED09 RET Z         ; }
+ $ED0A LD E,A        ; { Get the height and put the sizes in #REGde.
  $ED0B INC HL        ;
- $ED0C LD D,(HL)     ;
- $ED0D INC HL        ;
- $ED0E PUSH HL       ;
- $ED0F LD L,(HL)     ;
- $ED10 LD H,$00      ;
- $ED12 ADD HL,HL     ;
- $ED13 LD BC,$6C46   ;
- $ED16 ADD HL,BC     ;
- $ED17 LD C,(HL)     ;
+ $ED0C LD D,(HL)     ; }
+ $ED0D INC HL        ; { Move to the next position and remember it.
+ $ED0E PUSH HL       ; }
+ $ED0F LD L,(HL)     ; { Get the offset to the graphic buffer in #REGhl.
+ $ED10 LD H,$00      ; }
+ $ED12 ADD HL,HL     ; Double it to get an appropriate word offset.
+ $ED13 LD BC,$6C46   ; { Add the base offset address at #R$6C46.
+ $ED16 ADD HL,BC     ; }
+ $ED17 LD C,(HL)     ; { Put the actual address of the graphic in #REGbc.
  $ED18 INC HL        ;
- $ED19 LD B,(HL)     ;
- $ED1A POP HL        ;
- $ED1B INC HL        ;
- $ED1C LD A,(HL)     ;
- $ED1D CP $FE        ;
- $ED1F JR Z,$ED36    ;
- $ED21 CP $FD        ;
- $ED23 JR Z,$ED50    ;
- $ED25 CP $FC        ;
- $ED27 JR Z,$ED6A    ;
- $ED29 CP $FB        ;
- $ED2B JR Z,$ED85    ;
- $ED2D PUSH HL       ;
- $ED2E LD L,C        ;
- $ED2F LD H,B        ;
- $ED30 CALL $E84E    ;
- $ED33 POP HL        ;
- $ED34 JR $ED06      ;
-*$ED36 INC HL        ;
+ $ED19 LD B,(HL)     ; }
+ $ED1A POP HL        ; Restore the graphic buffer position.
+ $ED1B INC HL        ; Move to the byte after it.
+ $ED1C LD A,(HL)     ; Get the next command.
+ $ED1D CP $FE        ; { Jump forward if this is "draw right".
+ $ED1F JR Z,$ED36    ; }
+ $ED21 CP $FD        ; { Jump forward if this is "draw left".
+ $ED23 JR Z,$ED50    ; }
+ $ED25 CP $FC        ; { Jump forward if this is "draw up".
+ $ED27 JR Z,$ED6A    ; }
+ $ED29 CP $FB        ; { Jump forward if this is "draw down".
+ $ED2B JR Z,$ED85    ; }
+; No special command here, so print the graphic.
+ $ED2D PUSH HL       ; Remember the current position.
+ $ED2E LD L,C        ; { Put the graphic address in #REGhl.
+ $ED2F LD H,B        ; }
+ $ED30 CALL $E84E    ; Print the graphic.
+ $ED33 POP HL        ; { Restore #REGhl and print another character.
+ $ED34 JR $ED06      ; }
+; Draw a string of UDGs to the right.
+*$ED36 INC HL        ; Move to the next position.
  $ED37 PUSH HL       ;
  $ED38 PUSH BC       ;
- $ED39 LD C,(HL)     ;
+ $ED39 LD C,(HL)     ; 
  $ED3A INC HL        ;
  $ED3B LD B,(HL)     ;
  $ED3C POP HL        ;
-*$ED3D PUSH BC       ;
+*$ED3D PUSH BC       ; { Remember the main registers used.
  $ED3E PUSH DE       ;
- $ED3F PUSH HL       ;
- $ED40 CALL $E84E    ;
- $ED43 POP HL        ;
+ $ED3F PUSH HL       ; }
+ $ED40 CALL $E84E    ; Print the graphic.
+ $ED43 POP HL        ; { Restore the registers.
  $ED44 POP DE        ;
- $ED45 POP BC        ;
- $ED46 LD A,D        ;
+ $ED45 POP BC        ; }
+ $ED46 LD A,D        ; { Increase the X position.
  $ED47 ADD A,C       ;
- $ED48 LD D,A        ;
+ $ED48 LD D,A        ; }
  $ED49 DJNZ $ED3D    ;
  $ED4B POP HL        ;
  $ED4C INC HL        ;
  $ED4D INC HL        ;
  $ED4E JR $ED06      ;
-*$ED50 INC HL        ;
+; Draw a string of UDGs to the left.
+*$ED50 INC HL        ; Move to the next position.
  $ED51 PUSH HL       ;
  $ED52 PUSH BC       ;
- $ED53 LD C,(HL)     ;
+ $ED53 LD C,(HL)     ; { Put }
  $ED54 INC HL        ;
  $ED55 LD B,(HL)     ;
  $ED56 POP HL        ;
-*$ED57 PUSH BC       ;
+*$ED57 PUSH BC       ; { Remember the main registers used.
  $ED58 PUSH DE       ;
- $ED59 PUSH HL       ;
- $ED5A CALL $E84E    ;
- $ED5D POP HL        ;
+ $ED59 PUSH HL       ; }
+ $ED5A CALL $E84E    ; Print the graphic.
+ $ED5D POP HL        ; { Restore the registers.
  $ED5E POP DE        ;
- $ED5F POP BC        ;
- $ED60 LD A,E        ;
+ $ED5F POP BC        ; }
+ $ED60 LD A,E        ; { Decrease the X position.
  $ED61 SUB C         ;
- $ED62 LD E,A        ;
+ $ED62 LD E,A        ; }
  $ED63 DJNZ $ED57    ;
  $ED65 POP HL        ;
  $ED66 INC HL        ;
  $ED67 INC HL        ;
  $ED68 JR $ED06      ;
-*$ED6A INC HL        ;
- $ED6B PUSH HL       ;
+; Draw a string of UDGS up.
+*$ED6A INC HL        ; Move to the next position.
+ $ED6B PUSH HL       ; 
  $ED6C PUSH BC       ;
  $ED6D LD C,(HL)     ;
  $ED6E INC HL        ;
@@ -9595,20 +10239,21 @@ c$ED00 LD L,(IX+$00) ;
 *$ED71 PUSH BC       ;
  $ED72 PUSH DE       ;
  $ED73 PUSH HL       ;
- $ED74 CALL $E84E    ;
+ $ED74 CALL $E84E    ; Print the graphic.
  $ED77 POP HL        ;
  $ED78 POP DE        ;
  $ED79 POP BC        ;
  $ED7A LD A,D        ;
  $ED7B ADD A,C       ;
  $ED7C LD D,A        ;
- $ED7D INC E         ;
+ $ED7D INC E         ; Increase the Y position.
  $ED7E DJNZ $ED71    ;
  $ED80 POP HL        ;
  $ED81 INC HL        ;
  $ED82 INC HL        ;
  $ED83 JR $ED06      ;
-*$ED85 INC HL        ;
+; Draw a string of UDGS down.
+*$ED85 INC HL        ; Move to the next position.
  $ED86 PUSH HL       ;
  $ED87 PUSH BC       ;
  $ED88 LD C,(HL)     ;
@@ -9618,14 +10263,14 @@ c$ED00 LD L,(IX+$00) ;
 *$ED8C PUSH BC       ;
  $ED8D PUSH DE       ;
  $ED8E PUSH HL       ;
- $ED8F CALL $E84E    ;
+ $ED8F CALL $E84E    ; Print the graphic.
  $ED92 POP HL        ;
  $ED93 POP DE        ;
  $ED94 POP BC        ;
  $ED95 LD A,D        ;
  $ED96 ADD A,C       ;
  $ED97 LD D,A        ;
- $ED98 DEC E         ;
+ $ED98 DEC E         ; Decrease the Y position.
  $ED99 DJNZ $ED8C    ;
  $ED9B POP HL        ;
  $ED9C INC HL        ;
@@ -9740,42 +10385,47 @@ b$EEBD DEFB $27,$24,$27,$24,$27,$24,$27,$24
 ; #R$E62F and #R$F2BE.
 ;
 ; HL Pointer to a buffer containing x,y,string
-c$EEF1 LD E,(HL)     ;
- $EEF2 INC HL        ;
- $EEF3 LD D,(HL)     ;
- $EEF4 CALL $E8F1    ;
- $EEF7 INC D         ;
-*$EEF8 INC HL        ;
+c$EEF1 LD E,(HL)     ; Get the x co-ordinate.
+ $EEF2 INC HL        ; Increment the pointer to the buffer.
+ $EEF3 LD D,(HL)     ; Get the y co-ordinate.
+ $EEF4 CALL $E8F1    ; Convert this into a screen address in #REGde.
+ $EEF7 INC D         ; Move down a row.
+*$EEF8 INC HL        ; Increment the pointer to the buffer.
+; The screen address is now in #REGde, so draw the string.
 ; This entry point is used by the routines at #R$C92A and #R$D378.
-*$EEF9 LD A,(HL)     ;
- $EEFA CP $FF        ;
- $EEFC RET Z         ;
- $EEFD CP $FE        ;
- $EEFF JR Z,$EF1B    ;
- $EF01 PUSH HL       ;
- $EF02 PUSH DE       ;
- $EF03 LD B,A        ;
+*$EEF9 LD A,(HL)     ; Get the next character.
+ $EEFA CP $FF        ; Is it #N$FF?
+ $EEFC RET Z         ; If so, that's the end of the string, so return.
+ $EEFD CP $FE        ; Is it #N$FE?
+ $EEFF JR Z,$EF1B    ; If so, it's the end of the line, so handle that.
+ $EF01 PUSH HL       ; { Store #REGhl and #REGde.
+ $EF02 PUSH DE       ; }
+ $EF03 LD B,A        ; { Multiply the character ID by 4.
  $EF04 ADD A,A       ;
- $EF05 ADD A,B       ;
- $EF06 LD L,A        ;
- $EF07 LD H,$00      ;
- $EF09 ADD HL,HL     ;
- $EF0A LD BC,$677F   ;
- $EF0D ADD HL,BC     ;
- $EF0E LD B,$06      ;
-*$EF10 LD A,(HL)     ;
- $EF11 LD (DE),A     ;
- $EF12 INC HL        ;
- $EF13 INC D         ;
- $EF14 DJNZ $EF10    ;
- $EF16 POP DE        ;
- $EF17 POP HL        ;
- $EF18 INC E         ;
- $EF19 JR $EEF8      ;
-*$EF1B INC HL        ;
- $EF1C JR $EEF1      ;
-; This entry point is used by the routine at #R$C881.
-*$EF1E LD HL,($69ED) ;
+ $EF05 ADD A,B       ; }
+ $EF06 LD L,A        ; { Put this in #REGhl.
+ $EF07 LD H,$00      ; }
+ $EF09 ADD HL,HL     ; Double it to get an appropriate offset.
+ $EF0A LD BC,$677F   ; { Add the base offset for the character set. (#R$677F)
+ $EF0D ADD HL,BC     ; }
+ $EF0E LD B,$06      ; Draw 6 rows.
+*$EF10 LD A,(HL)     ; Get the next graphic data.
+ $EF11 LD (DE),A     ; Write it to screen.
+ $EF12 INC HL        ; Move to the next position in the buffer.
+ $EF13 INC D         ; Move to the next row.
+ $EF14 DJNZ $EF10    ; Loop while there are more rows.
+ $EF16 POP DE        ; { Restore #REGhl and #REGde.
+ $EF17 POP HL        ; }
+ $EF18 INC E         ; Move forward a column.
+ $EF19 JR $EEF8      ; Loop back to print more.
+; A newline character was found, so handle it.
+*$EF1B INC HL        ; Move forward in the buffer.
+ $EF1C JR $EEF1      ; Jump back to get the next co-ordinates and line.
+
+; Initialize moving objects in the first room
+;
+; Used by the routine at #R$C881.
+c$EF1E LD HL,($69ED) ;
  $EF21 INC HL        ;
  $EF22 INC HL        ;
  $EF23 INC HL        ;
@@ -9808,6 +10458,8 @@ c$EEF1 LD E,(HL)     ;
 b$EF48 DEFB $00
 
 ; UDG - Dynamite
+;
+; #UDGARRAY2,7,,2($EF4B-$EF4C)(dynamite)
 b$EF49 DEFB $02,$01,$00,$00,$00,$00,$00,$00
  $EF51 DEFB $DF,$D9,$DF,$DA,$DF,$D8,$00,$00
  $EF59 DEFB $00,$00,$00
@@ -9816,6 +10468,8 @@ b$EF49 DEFB $02,$01,$00,$00,$00,$00,$00,$00
 b$EF5C DEFB $00
 
 ; UDG - Test tube
+;
+; #UDGARRAY1,7($EF67;$EF5F)(testtube)
 b$EF5D DEFB $01,$02,$2C,$2C,$2C,$2C,$2C,$2C
  $EF65 DEFB $18,$00,$00,$7E,$24,$24,$24,$2C
  $EF6D DEFB $2C,$2C,$00
@@ -9825,13 +10479,13 @@ b$EF70 DEFB $00
 
 ; List of attributes for each state of a glowing object
 ;
-; Used by the routine at #R$EF7C
+; Used by the routine at #R$EF7C.
 b$EF71 DEFB $06,$06,$05,$05,$04,$04,$03,$02
  $EF79 DEFB $07
 
 ; Pointer to current attribute state of glowing objects
 ;
-; Used by the routine at #R$EF7C
+; Used by the routine at #R$EF7C.
 w$EF7A DEFW $EF71
 
 ; Draw any glowing objects (dynamite or test tubes)
@@ -9887,39 +10541,43 @@ g$F020 DEFB $00
 ; Animate Dan dying having been shot on the "game over" screen
 ;
 ; Used by the routine at #R$CDD3.
-c$F021 LD HL,$F020   ;
- $F024 AND A         ;
- $F025 JR NZ,$F02B   ;
- $F027 LD A,$08      ;
- $F029 JR $F03B      ;
-*$F02B BIT 7,A       ;
- $F02D JR NZ,$F033   ;
- $F02F XOR A         ;
+c$F021 LD HL,$F020   ; Get the current animation flag.
+ $F024 AND A         ; Is it zero?
+ $F025 JR NZ,$F02B   ; Jump forward if not.
+ $F027 LD A,$08      ; Start at index 8.
+ $F029 JR $F03B      ; Jump foward.
+*$F02B BIT 7,A       ; Is the index #N$80 or above?
+ $F02D JR NZ,$F033   ; Jump forward if it isn't.
+ $F02F XOR A         ; { Otherwise reset the index to 0.
  $F030 LD (HL),A     ;
- $F031 JR $F03B      ;
-*$F033 INC (HL)      ;
- $F034 LD A,(HL)     ;
- $F035 CP $09        ;
- $F037 JR C,$F03B    ;
- $F039 LD A,$08      ;
-*$F03B ADD A,A       ;
- $F03C LD C,A        ;
- $F03D LD B,$00      ;
- $F03F LD HL,$F052   ;
- $F042 ADD HL,BC     ;
- $F043 LD A,(HL)     ;
+ $F031 JR $F03B      ; }
+; Go to the next index.
+*$F033 INC (HL)      ; Increment the index.
+ $F034 LD A,(HL)     ; { Is it above 9?
+ $F035 CP $09        ; }
+ $F037 JR C,$F03B    ; Jump forward if it is.
+ $F039 LD A,$08      ; Otherwise initialise it to 8.
+; Now draw the graphic
+*$F03B ADD A,A       ; Double the index to get a word offset.
+ $F03C LD C,A        ; { Put the address in #REGbc.
+ $F03D LD B,$00      ; }
+ $F03F LD HL,$F052   ; { Add the base offset to the dying graphic table.
+ $F042 ADD HL,BC     ; }
+ $F043 LD A,(HL)     ; { Put the actual address in #REGhl.
  $F044 INC HL        ;
  $F045 LD H,(HL)     ;
- $F046 LD L,A        ;
- $F047 LD B,(HL)     ;
- $F048 INC HL        ;
- $F049 LD C,(HL)     ;
- $F04A INC HL        ;
- $F04B LD DE,$1B0B   ;
- $F04E CALL $E87A    ;
- $F051 RET           ;
+ $F046 LD L,A        ; }
+ $F047 LD B,(HL)     ; { Put the width in #REGb.
+ $F048 INC HL        ; }
+ $F049 LD C,(HL)     ; { Put the depth in #REGc.
+ $F04A INC HL        ; }
+ $F04B LD DE,$1B0B   ; Position is always #N$0B , #N$1B.
+ $F04E CALL $E87A    ; { Put the graphic on screen and return.
+ $F051 RET           ; }
 
 ; Dan dying offsets
+;
+; Used by the routine at #R$F021.
 w$F052 DEFW $F064
  $F054 DEFW $F096
  $F056 DEFW $F0C8
@@ -9931,6 +10589,8 @@ w$F052 DEFW $F064
  $F062 DEFW $F23C
 
 ; Dan dying 1
+;
+; #UDGARRAY2,5,,2($F086-$F087;$F076-$F077;$F066-$F067)(dandeada)
 b$F064 DEFB $02,$03,$1E,$C0,$1E,$00,$0E,$C0
  $F06C DEFB $07,$00,$03,$00,$03,$00,$03,$00
  $F074 DEFB $0F,$00,$1D,$80,$03,$C0,$07,$C0
@@ -9940,6 +10600,8 @@ b$F064 DEFB $02,$03,$1E,$C0,$1E,$00,$0E,$C0
  $F094 DEFB $0F,$00
 
 ; Dan dying 2
+;
+; #UDGARRAY2,5,,2($F0B8-$F0B9;$F0A8-$F0A9;$F098-$F099)(dandeadb)
 b$F096 DEFB $02,$03,$07,$00,$07,$60,$03,$80
  $F09E DEFB $01,$C0,$01,$80,$03,$80,$0F,$00
  $F0A6 DEFB $03,$00,$0F,$60,$00,$F0,$01,$F0
@@ -9949,6 +10611,8 @@ b$F096 DEFB $02,$03,$07,$00,$07,$60,$03,$80
  $F0C6 DEFB $07,$80
 
 ; Dan dying 3
+;
+; #UDGARRAY2,5,,2($F0EA-$F0EB;$F0DA-$F0DB;$F0CA-$F0CB)(dandeadc)
 b$F0C8 DEFB $02,$03,$03,$60,$03,$40,$01,$80
  $F0D0 DEFB $01,$C0,$03,$80,$13,$00,$0F,$00
  $F0D8 DEFB $06,$00,$01,$C0,$03,$98,$00,$3C
@@ -9958,6 +10622,8 @@ b$F0C8 DEFB $02,$03,$03,$60,$03,$40,$01,$80
  $F0F8 DEFB $03,$E0
 
 ; Dan dying 4
+;
+; #UDGARRAY2,5,,2($F11C-$F11D;$F10C-$F10D;$F0FA-$F0FB)(dandeadd)
 b$F0FA DEFB $02,$03,$01,$90,$01,$60,$01,$40
  $F102 DEFB $01,$80,$01,$C0,$13,$80,$0F,$00
  $F10A DEFB $06,$00,$00,$F8,$00,$70,$00,$EC
@@ -9967,6 +10633,8 @@ b$F0FA DEFB $02,$03,$01,$90,$01,$60,$01,$40
  $F12A DEFB $01,$FC
 
 ; Dan dying 5
+;
+; #UDGARRAY3,5,,3($F15E-$F160;$F146-$F148;$F12E-$F130)(dandeade)
 b$F12C DEFB $03,$03,$00,$8E,$00,$01,$DC,$00
  $F134 DEFB $01,$88,$00,$01,$60,$00,$01,$40
  $F13C DEFB $00,$13,$00,$00,$1F,$00,$00,$0C
@@ -9979,6 +10647,8 @@ b$F12C DEFB $03,$03,$00,$8E,$00,$01,$DC,$00
  $F174 DEFB $16,$80
 
 ; Dan dying 6
+;
+; #UDGARRAY3,5,,3($F1A8-$F1AA;$F190-$F193;$F178-$F17A)(dandeade)
 b$F176 DEFB $03,$03,$00,$33,$E0,$00,$87,$80
  $F17E DEFB $00,$CE,$00,$01,$8C,$00,$01,$60
  $F186 DEFB $00,$27,$40,$00,$3F,$00,$00,$1C
@@ -9991,6 +10661,8 @@ b$F176 DEFB $03,$03,$00,$33,$E0,$00,$87,$80
  $F1BE DEFB $03,$DC
 
 ; Dan dying 7
+;
+; #UDGARRAY3,5,,3($F1F2-$F1F4;$F1DA-$F1DC;$F1C2-$F1C4)(dandeadf)
 b$F1C0 DEFB $03,$03,$00,$9E,$FF,$00,$C3,$FA
  $F1C8 DEFB $01,$C7,$E6,$03,$1F,$36,$47,$5C
  $F1D0 DEFB $0C,$4E,$50,$00,$7E,$00,$00,$78
@@ -10003,6 +10675,8 @@ b$F1C0 DEFB $03,$03,$00,$9E,$FF,$00,$C3,$FA
  $F208 DEFB $00,$00
 
 ; Dan dying 8
+;
+; #UDGARRAY3,5,,3($F224-$F226;$F20C-$F20E)(dandeadg)
 b$F20A DEFB $03,$02,$00,$01,$ED,$01,$79,$FF
  $F212 DEFB $03,$7E,$FA,$07,$07,$E6,$8C,$1F
  $F21A DEFB $36,$9A,$FE,$0C,$FA,$E0,$00,$F0
@@ -10012,6 +10686,8 @@ b$F20A DEFB $03,$02,$00,$01,$ED,$01,$79,$FF
  $F23A DEFB $01,$7D
 
 ; Dan dying 9
+;
+; #UDGARRAY3,5,,3($F256-$F258;$F23E-$F240)(dandeadh)
 b$F23C DEFB $03,$02,$00,$00,$2D,$01,$61,$7D
  $F244 DEFB $03,$79,$ED,$87,$7D,$FF,$8F,$1E
  $F24C DEFB $FA,$FC,$07,$E6,$FA,$FF,$36,$02
@@ -10072,13 +10748,19 @@ c$F271 LD HL,$F26E   ;
  $F2A4 RET           ;
 
 ; "LEFT"
+;
+; #CALL:print_string( #PC, left )
 b$F2A5 DEFB $0C,$09,$15,$0E,$0F,$1C,$2C,$FF
 
 ; "RIGHT"
+;
+; #CALL:print_string( #PC, right )
 b$F2AD DEFB $0C,$09,$1A,$12,$10,$11,$1C,$2C
  $F2B5 DEFB $FF
 
 ; "JUMP"
+;
+; #CALL:print_string( #PC, jump )
 b$F2B6 DEFB $0C,$09,$13,$1D,$16,$18,$2C,$FF
 
 ; Redfine keys
@@ -10176,7 +10858,7 @@ c$F30A LD DE,$FF2F   ;
 ; Initialize game data and make all objects visible
 ;
 ; Used by the routine at #R$C881.
-c$F345 LD HL,$69EA   ;
+c$F345 LD HL,$69EA   ; Point #REGhl to the objects in the start room.
  $F348 LD DE,$0007   ;
  $F34B LD BC,$0005   ;
  $F34E LD A,$30      ;
@@ -10267,16 +10949,16 @@ c$F3A4 LD A,R        ;
 ;
 ; A UDG ID to look up
 ; HL On return, points to the UDG data
-c$F3D3 LD L,A        ;
- $F3D4 LD H,$00      ;
- $F3D6 ADD HL,HL     ;
- $F3D7 LD BC,$6C46   ;
- $F3DA ADD HL,BC     ;
- $F3DB LD A,(HL)     ;
+c$F3D3 LD L,A        ; { Put the ID in #REGhl.
+ $F3D4 LD H,$00      ; }
+ $F3D6 ADD HL,HL     ; Double this to get an appropriate word offset.
+ $F3D7 LD BC,$6C46   ; { Add the base address of the graphic lookup table at #R$6C46.
+ $F3DA ADD HL,BC     ; }
+ $F3DB LD A,(HL)     ; { Put the address of the graphic in #REGhl.
  $F3DC INC HL        ;
  $F3DD LD H,(HL)     ;
- $F3DE LD L,A        ;
- $F3DF RET           ;
+ $F3DE LD L,A        ; }
+ $F3DF RET           ; Return.
 
 ; Given a room number, return the location of a bank card
 ;
@@ -10413,12 +11095,16 @@ b$F592 DEFB $07,$07,$CC,$04,$07,$CB,$0D,$07
 b$F59C DEFB $00,$E2,$5A,$1C
 
 ; Instructions page 1 end message
+;
+; #CALL:print_string( #PC, instructend1 )
 b$F5A0 DEFB $17,$0B
 ; "N0 CHANCE!"
  $F5A2 DEFB $17,$00,$27,$0C,$11,$0A,$17,$0C
  $F5AA DEFB $0E,$28,$FF
 
 ; Instructions page 2 end message
+;
+; #CALL:print_string( #PC, instructend2 )
 b$F5AD DEFB $17,$03
 ; "THAT MEANS DAN CAN'T SWIM"
  $F5AF DEFB $1C,$11,$0A,$1C,$27,$16,$0E,$0A
@@ -10427,18 +11113,24 @@ b$F5AD DEFB $17,$03
  $F5C7 DEFB $16,$FF
 
 ; Instructions page 3 end message
+;
+; #CALL:print_string( #PC, instructend3 )
 b$F5C9 DEFB $17,$0C
 ; "EAT THAT!"
  $F5CB DEFB $0E,$0A,$1C,$27,$1C,$11,$0A,$1C
  $F5D3 DEFB $28,$FF
 
 ; Instructions page 4 end message
+;
+; #CALL:print_string( #PC, instructend4 )
 b$F5D5 DEFB $17,$09
 ; "GET THAT LIFE!"
  $F5D7 DEFB $10,$0E,$1C,$27,$1C,$11,$0A,$1C
  $F5DF DEFB $27,$15,$12,$0F,$0E,$28,$FF
 
 ; UDG C5
+;
+; #CALL:print_udg(#PC,UDG_C5)
 b$F5E6 DEFB $0C,$02,$A1,$7A,$DD,$FF,$EE,$AD
  $F5EE DEFB $6B,$5B,$B6,$BD,$F7,$6B,$99,$7A
  $F5F6 DEFB $D5,$00,$2E,$AD,$6B,$5A,$D6,$BD
@@ -10466,6 +11158,8 @@ b$F5E6 DEFB $0C,$02,$A1,$7A,$DD,$FF,$EE,$AD
  $F6A6 DEFB $17,$6A,$00,$07
 
 ; UDG 42
+;
+; #CALL:print_udg(#PC,UDG_42)
 b$F6AA DEFB $08,$02,$65,$09,$18,$8A,$22,$16
  $F6B2 DEFB $60,$00,$11,$A8,$92,$60,$86,$63
  $F6BA DEFB $13,$28,$80,$02,$00,$42,$10,$08
@@ -10485,6 +11179,8 @@ b$F6AA DEFB $08,$02,$65,$09,$18,$8A,$22,$16
  $F72A DEFB $D1,$13,$00,$04
 
 ; UDG B4
+;
+; #CALL:print_udg(#PC,UDG_B4)
 b$F72E DEFB $07,$03,$2C,$22,$80,$64,$18,$12
  $F736 DEFB $5B,$72,$87,$62,$D5,$22,$B1,$B8
  $F73E DEFB $E2,$11,$58,$85,$CE,$96,$92,$B5
@@ -10511,6 +11207,8 @@ b$F72E DEFB $07,$03,$2C,$22,$80,$64,$18,$12
  $F7E6 DEFB $04,$04,$04,$04,$04,$04,$04
 
 ; UDG C3
+;
+; #CALL:print_udg(#PC,UDG_C3)
 b$F7ED DEFB $0C,$02,$61,$A4,$94,$52,$29,$28
  $F7F5 DEFB $94,$94,$14,$4A,$05,$06,$61,$A4
  $F7FD DEFB $94,$5C,$2E,$28,$97,$0F,$94,$4B
@@ -10541,6 +11239,28 @@ b$F7ED DEFB $0C,$02,$61,$A4,$94,$52,$29,$28
  $F8C5 DEFB $07,$07
 
 ; Instructions page 1 text
+;
+; #CALL:print_multi_string( #PC, 0, instructions1a )
+; #CALL:print_multi_string( #PC, 1, instructions1b )
+; #CALL:print_multi_string( #PC, 2, instructions1c )
+; #CALL:print_multi_string( #PC, 3, instructions1d )
+; #CALL:print_multi_string( #PC, 4, instructions1e )
+; #CALL:print_multi_string( #PC, 5, instructions1f )
+; #CALL:print_multi_string( #PC, 6, instructions1g )
+; #CALL:print_multi_string( #PC, 7, instructions1h )
+; #CALL:print_multi_string( #PC, 8, instructions1i )
+; #CALL:print_multi_string( #PC, 9, instructions1j )
+; #CALL:print_multi_string( #PC, 10, instructions1k )
+; #CALL:print_multi_string( #PC, 11, instructions1l )
+; #CALL:print_multi_string( #PC, 12, instructions1m )
+; #CALL:print_multi_string( #PC, 13, instructions1n )
+; #CALL:print_multi_string( #PC, 14, instructions1o )
+; #CALL:print_multi_string( #PC, 15, instructions1p )
+; #CALL:print_multi_string( #PC, 16, instructions1q )
+; #CALL:print_multi_string( #PC, 17, instructions1r )
+; #CALL:print_multi_string( #PC, 18, instructions1s )
+; #CALL:print_multi_string( #PC, 19, instructions1t )
+; #CALL:print_multi_string( #PC, 20, instructions1u )
 b$F8C7 DEFB $00,$00,$1C,$11,$0E,$27,$0D,$0A
  $F8CF DEFB $1B,$1C,$0A,$1A,$0D,$15,$21,$27
  $F8D7 DEFB $0D,$1A,$26,$0B,$15,$12,$1C,$22
@@ -10627,6 +11347,21 @@ b$F8C7 DEFB $00,$00,$1C,$11,$0E,$27,$0D,$0A
  $FB5F DEFB $0B,$15,$12,$16,$18,$26,$FF
 
 ; Instructions page 2 text
+;
+; #CALL:print_multi_string( #PC, 0, instructions2a )
+; #CALL:print_multi_string( #PC, 1, instructions2b )
+; #CALL:print_multi_string( #PC, 2, instructions2c )
+; #CALL:print_multi_string( #PC, 3, instructions2d )
+; #CALL:print_multi_string( #PC, 4, instructions2e )
+; #CALL:print_multi_string( #PC, 5, instructions2f )
+; #CALL:print_multi_string( #PC, 6, instructions2g )
+; #CALL:print_multi_string( #PC, 7, instructions2h )
+; #CALL:print_multi_string( #PC, 8, instructions2i )
+; #CALL:print_multi_string( #PC, 9, instructions2j )
+; #CALL:print_multi_string( #PC, 10, instructions2k )
+; #CALL:print_multi_string( #PC, 11, instructions2l )
+; #CALL:print_multi_string( #PC, 12, instructions2m )
+; #CALL:print_multi_string( #PC, 13, instructions2n )
 b$FB66 DEFB $00,$07,$14,$0E,$21,$0B,$00,$0A
  $FB6E DEFB $1A,$0D,$27,$0C,$00,$17,$1C,$1A
  $FB76 DEFB $00,$15,$1B,$FE,$02,$08,$25,$0A
@@ -10670,6 +11405,21 @@ b$FB66 DEFB $00,$07,$14,$0E,$21,$0B,$00,$0A
  $FCA6 DEFB $0C,$21,$28,$FF
 
 ; Instructions page 3 text
+;
+; #CALL:print_multi_string( #PC, 0, instructions3a )
+; #CALL:print_multi_string( #PC, 1, instructions3b )
+; #CALL:print_multi_string( #PC, 2, instructions3c )
+; #CALL:print_multi_string( #PC, 3, instructions3d )
+; #CALL:print_multi_string( #PC, 4, instructions3e )
+; #CALL:print_multi_string( #PC, 5, instructions3f )
+; #CALL:print_multi_string( #PC, 6, instructions3g )
+; #CALL:print_multi_string( #PC, 7, instructions3h )
+; #CALL:print_multi_string( #PC, 8, instructions3i )
+; #CALL:print_multi_string( #PC, 9, instructions3j )
+; #CALL:print_multi_string( #PC, 10, instructions3k )
+; #CALL:print_multi_string( #PC, 11, instructions3l )
+; #CALL:print_multi_string( #PC, 12, instructions3m )
+; #CALL:print_multi_string( #PC, 13, instructions3n )
 b$FCAA DEFB $00,$0E,$0F,$00,$00,$0D,$FE,$04
  $FCB2 DEFB $04,$0E,$10,$10,$FE,$04,$0C,$2C
  $FCBA DEFB $27,$05,$FE,$09,$04,$0C,$00,$0C
@@ -10687,6 +11437,19 @@ b$FCAA DEFB $00,$0E,$0F,$00,$00,$0D,$FE,$04
  $FD1A DEFB $04,$00,$FF
 
 ; Instructions page 4 text
+;
+; #CALL:print_multi_string( #PC, 0, instructions4a )
+; #CALL:print_multi_string( #PC, 1, instructions4b )
+; #CALL:print_multi_string( #PC, 2, instructions4c )
+; #CALL:print_multi_string( #PC, 3, instructions4d )
+; #CALL:print_multi_string( #PC, 4, instructions4e )
+; #CALL:print_multi_string( #PC, 5, instructions4f )
+; #CALL:print_multi_string( #PC, 6, instructions4g )
+; #CALL:print_multi_string( #PC, 7, instructions4h )
+; #CALL:print_multi_string( #PC, 8, instructions4i )
+; #CALL:print_multi_string( #PC, 9, instructions4j )
+; #CALL:print_multi_string( #PC, 10, instructions4k )
+; #CALL:print_multi_string( #PC, 11, instructions4l )
 b$FD1D DEFB $00,$0B,$00,$1C,$11,$0E,$1A,$27
  $FD25 DEFB $12,$1C,$0E,$16,$1B,$FE,$04,$0B
  $FD2D DEFB $0C,$1A,$0E,$0D,$12,$1C,$27,$0C
@@ -10704,6 +11467,13 @@ b$FD1D DEFB $00,$0B,$00,$1C,$11,$0E,$1A,$27
  $FD8D DEFB $16,$2C,$02,$00,$00,$FF
 
 ; Redefine keys instructions text
+;
+; #CALL:print_multi_string( #PC, 0, redefinea )
+; #CALL:print_multi_string( #PC, 1, redefineb )
+; #CALL:print_multi_string( #PC, 2, redefinec )
+; #CALL:print_multi_string( #PC, 3, redefined )
+; #CALL:print_multi_string( #PC, 4, redefinee )
+; #CALL:print_multi_string( #PC, 5, redefinef )
 b$FD93 DEFB $00,$0A,$0D,$0E,$0F,$12,$17,$0E
  $FD9B DEFB $27,$14,$0E,$21,$1B,$FE,$04,$03
  $FDA3 DEFB $0C,$11,$00,$00,$1B,$0E,$27,$03
@@ -10746,6 +11516,17 @@ b$FE71 DEFB $0C,$11,$16,$1B,$20,$FF
 ; Game won text
 ;
 ; Used by the routine at #R$E62F
+;
+; .
+;
+; #CALL:print_multi_string( #PC, 0, wona )
+; #CALL:print_multi_string( #PC, 1, wonb )
+; #CALL:print_multi_string( #PC, 2, wonc )
+; #CALL:print_multi_string( #PC, 3, wond )
+; #CALL:print_multi_string( #PC, 4, wone )
+; #CALL:print_multi_string( #PC, 5, wonf )
+; #CALL:print_multi_string( #PC, 6, wong )
+; #CALL:print_multi_string( #PC, 7, wonh )
 b$FE77 DEFB $04,$06,$0C,$00,$17,$10,$1A,$0A
  $FE7F DEFB $1C,$1D,$15,$0A,$1C,$12,$00,$17
  $FE87 DEFB $1B,$28,$FE,$06,$06,$21,$00,$1D

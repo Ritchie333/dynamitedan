@@ -207,6 +207,8 @@ w$5E95 DEFW $5E76    ; Routine to return to from the main entry point at #R$5E52
 i$5EAD
 
 ; Second tape block entry point
+;
+; Used by the routine at #R$5E12.
 c$9C40 LD HL,$9C52   ; Start of block to decrypt
  $9C43 LD BC,$0190   ; Length of block
  $9C46 LD D,$A5      ; Set initial salt

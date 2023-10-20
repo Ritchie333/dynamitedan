@@ -1,0 +1,6 @@
+; Food 0 - Egg
+;
+; #CALL:print_udg(#PC,egg)
+b$65F2 DEFB $01,$02,$00,$40,$A1,$D3,$E7,$C3
+ $65FA DEFB $81,$FF,$C3,$91,$A1,$20,$40,$40
+ $6602 DEFB $40,$FF,$70,$78
