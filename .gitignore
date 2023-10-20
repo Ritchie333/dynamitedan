@@ -1,4 +1,6 @@
 .DS_Store
+dan
+src/__pycache__
 src/*.sna
 src/*.rzx
 src/*.z80
