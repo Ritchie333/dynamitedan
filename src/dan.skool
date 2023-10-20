@@ -5400,14 +5400,14 @@ g$C880 DEFB $00
 ;
 ; Used by the routine at #R$C800.
 c$C881 CALL $E801    ; Clear the screen.
- $C884 LD HL,$69EA   ;
- $C887 LD DE,$000C   ;
- $C88A LD B,$30      ;
-*$C88C SET 3,(HL)    ;
- $C88E ADD HL,DE     ;
- $C88F DJNZ $C88C    ;
- $C891 CALL $EF1E    ;
- $C894 CALL $F345    ;
+ $C884 LD HL,$69EA   ; Get the flags (offset 4) for the first room.
+ $C887 LD DE,$000C   ; Increment by #N$0C bytes per room.
+ $C88A LD B,$30      ; Number of rooms to set up.
+*$C88C SET 3,(HL)    ; Set bit 3 for this room
+ $C88E ADD HL,DE     ; Move to the next room.
+ $C88F DJNZ $C88C    ; Loop until all rooms are done.
+ $C891 CALL $EF1E    ; { Make all moving objects visible.
+ $C894 CALL $F345    ; }
  $C897 LD HL,$C866   ;
  $C89A LD DE,$C925   ;
  $C89D LD B,$04      ;
@@ -9488,11 +9488,11 @@ c$E801 LD HL,$4000   ; { Start copying from the top of the screen,
 ; Clear the screen to cyan ink / black paper
 ;
 ; Used by the routines at #R$CBBD and #R$CDD3.
-c$E820 LD HL,$4000   ;
- $E823 LD BC,$1000   ;
- $E826 LD (HL),L     ;
- $E827 LD D,H        ;
- $E828 LD E,$01      ;
+c$E820 LD HL,$4000   ; { Clear the screen from #N$4000 - #N$5000.
+ $E823 LD BC,$1000   ; 
+ $E826 LD (HL),L     ; 
+ $E827 LD D,H        ; 
+ $E828 LD E,$01      ; 
  $E82A LDIR          ;
  $E82C XOR A         ;
  $E82D LD B,$08      ;
@@ -9508,14 +9508,14 @@ c$E820 LD HL,$4000   ;
  $E83B INC H         ;
  $E83C POP BC        ;
  $E83D DJNZ $E82F    ;
- $E83F LD HL,$5800   ;
+ $E83F LD HL,$5800   ; { Fill the attributes to cyan on black.
  $E842 LD D,H        ;
  $E843 LD E,$01      ;
  $E845 LD A,$45      ;
  $E847 LD (HL),A     ;
  $E848 LD BC,$027F   ;
- $E84B LDIR          ;
- $E84D RET           ;
+ $E84B LDIR          ; }
+ $E84D RET           ; Return.
 
 ; Draw a UDG
 ;
@@ -9602,22 +9602,22 @@ c$E87A LD A,C        ; { Put the height in #REGa and store it in the shadow regi
 c$E897 PUSH DE       ; { Remember the input values.
  $E898 PUSH BC       ; }
  $E899 LD H,C        ;
-*$E89A PUSH DE       ;
- $E89B CALL $E8F1    ;
- $E89E LD C,$08      ;
- $E8A0 XOR A         ;
-*$E8A1 PUSH BC       ;
- $E8A2 PUSH DE       ;
-*$E8A3 LD (DE),A     ;
- $E8A4 INC E         ;
- $E8A5 DJNZ $E8A3    ;
- $E8A7 POP DE        ;
- $E8A8 INC D         ;
- $E8A9 POP BC        ;
- $E8AA DEC C         ;
- $E8AB JR NZ,$E8A1   ;
- $E8AD POP DE        ;
- $E8AE DEC E         ;
+*$E89A PUSH DE       ; Remember #REGde.
+ $E89B CALL $E8F1    ; Convert the co-ordinates to a screen address.
+ $E89E LD C,$08      ; 8 rows to update.
+ $E8A0 XOR A         ; Set #REGa to 0.
+*$E8A1 PUSH BC       ; { Remember #REGbc and #REGde.
+ $E8A2 PUSH DE       ; }
+*$E8A3 LD (DE),A     ; Set the byte.
+ $E8A4 INC E         ; Move to the next column.
+ $E8A5 DJNZ $E8A3    ; Loop while there are more columns.
+ $E8A7 POP DE        ; Restore #REGde.
+ $E8A8 INC D         ; Move to the next row.
+ $E8A9 POP BC        ; Restore #REGbc.
+ $E8AA DEC C         ; { Loop until all rows are done.
+ $E8AB JR NZ,$E8A1   ; }
+ $E8AD POP DE        ; Restore #REGde.
+ $E8AE DEC E         ; 
  $E8AF DEC H         ;
  $E8B0 JR NZ,$E89A   ;
  $E8B2 POP BC        ; { Restore the input values.
@@ -9734,35 +9734,35 @@ c$E909 CALL $E8D2    ; Round the screen address to the nearest whole cell.
 ; Launch the blimp having got the plans
 ;
 ; Used by the routine at #R$E644.
-c$E916 LD DE,$4000   ;
- $E919 LD B,$08      ;
-*$E91B PUSH BC       ;
- $E91C PUSH DE       ;
- $E91D LD B,$07      ;
-*$E91F LD L,E        ;
- $E920 LD H,D        ;
- $E921 INC H         ;
- $E922 PUSH HL       ;
- $E923 PUSH BC       ;
- $E924 LD BC,$0020   ;
- $E927 LDIR          ;
- $E929 EX DE,HL      ;
- $E92A POP BC        ;
- $E92B POP DE        ;
- $E92C DJNZ $E91F    ;
- $E92E POP HL        ;
- $E92F POP BC        ;
- $E930 DEC B         ;
- $E931 RET Z         ;
- $E932 PUSH BC       ;
- $E933 LD BC,$0020   ;
- $E936 ADD HL,BC     ;
- $E937 PUSH HL       ;
- $E938 LDIR          ;
- $E93A POP DE        ;
- $E93B POP BC        ;
- $E93C JR $E91B      ;
- $E93E RET           ;
+c$E916 LD DE,$4000   ; Point #REGde to the start of screen.
+ $E919 LD B,$08      ; 8 8x8 blocks to update.
+*$E91B PUSH BC       ; { Remember #REGbc and #REGde.
+ $E91C PUSH DE       ; }
+ $E91D LD B,$07      ; 7 rows to update.
+*$E91F LD L,E        ; { Copy #REGde to #REGhl.
+ $E920 LD H,D        ; }
+ $E921 INC H         ; Move down a row.
+ $E922 PUSH HL       ; { Remember #REGhl and #REGbc.
+ $E923 PUSH BC       ; }
+ $E924 LD BC,$0020   ; { Copy a line from #REGhl to a row above in #REGde.
+ $E927 LDIR          ; }
+ $E929 EX DE,HL      ; Swap #REGde and #REGhl.
+ $E92A POP BC        ; Restore #REGbc.
+ $E92B POP DE        ; Restore #REGhl into #REGde.
+ $E92C DJNZ $E91F    ; Loop back while there are more rows to update.
+ $E92E POP HL        ; { Restore #REGhl and #REGbc.
+ $E92F POP BC        ; }
+ $E930 DEC B         ; { Reduce the number of blocks to update by 1,
+ $E931 RET Z         ; and return if it is zero. }
+ $E932 PUSH BC       ; Remember #REGbc.
+ $E933 LD BC,$0020   ; { Move down a 8x8 block.
+ $E936 ADD HL,BC     ; }
+ $E937 PUSH HL       ; Remember #REGhl.
+ $E938 LDIR          ; Do the copy.
+ $E93A POP DE        ; Restore #REGhl as #REGde.
+ $E93B POP BC        ; Restore #REGbc.
+ $E93C JR $E91B      ; Loop back to update more.
+ $E93E RET           ; This is never executed, the function executes at #R$E931.
 
 ; Toggle the colours on any test tubes or dynamite so they glow
 ;
@@ -9862,8 +9862,8 @@ w$E9BA DEFW $F271
 ;
 ; C On return holds the appropriate action : 0 - jump right, 1 - move right, 2
 ; . - jump left, 3 - move left, 4 - jump, 5 - no action
-c$E9BC LD HL,($E9BA) ;
- $E9BF JP (HL)       ;
+c$E9BC LD HL,($E9BA) ; Get the movement routine. (#R$E9BA)
+ $E9BF JP (HL)       ; Jump to it.
 
 ; Kempston joystick input routine
 ;
@@ -9925,17 +9925,17 @@ c$E9DB LD A,$EF      ;
 ; A The byte to convert
 ; B On return, holds the lowest 4 bits
 ; C On return, holds the highest 4 bits
-c$E9F8 LD C,A        ;
- $E9F9 AND $07       ;
- $E9FB LD B,A        ;
- $E9FC LD A,C        ;
- $E9FD AND $F0       ;
- $E9FF RRCA          ;
- $EA00 RRCA          ;
+c$E9F8 LD C,A        ; Copy #REGa to #REGc as a temporary copy.
+ $E9F9 AND $07       ; { Put the bottom 3 bits of #REGa in #REGb.
+ $E9FB LD B,A        ; Note : This should be AND #N$0F, otherwise bit 3 is lost!}
+ $E9FC LD A,C        ; { Take the top 4 bytes to convert.
+ $E9FD AND $F0       ; } 
+ $E9FF RRCA          ; { Shift these down to bits 0 - 3
+ $EA00 RRCA          ; and put it in C.
  $EA01 RRCA          ;
- $EA02 RRCA          ;
- $EA03 LD C,A        ;
- $EA04 RET           ;
+ $EA02 RRCA          ; 
+ $EA03 LD C,A        ; }
+ $EA04 RET           ; Return.
 
 ; Arrangement / sequence of theme tune parts
 w$EA05 DEFW $EA29
@@ -10422,37 +10422,42 @@ c$EEF1 LD E,(HL)     ; Get the x co-ordinate.
 *$EF1B INC HL        ; Move forward in the buffer.
  $EF1C JR $EEF1      ; Jump back to get the next co-ordinates and line.
 
-; Initialize moving objects in the first room
+; Initialize moving objects in all rooms
 ;
 ; Used by the routine at #R$C881.
-c$EF1E LD HL,($69ED) ;
- $EF21 INC HL        ;
- $EF22 INC HL        ;
+;
+; . 
+;
+; This routine loops through every moving object's movement table, and sets its
+; visible flag, so that everything is in play when the game begins.
+c$EF1E LD HL,($69ED) ; Point #REGhl at the moving objects buffer. (#R$69E6 + 7 / 8)
+ $EF21 INC HL        ; { Skip the first four bytes
+ $EF22 INC HL        ; which hold the object IDs.
  $EF23 INC HL        ;
- $EF24 INC HL        ;
- $EF25 LD B,$30      ;
-*$EF27 PUSH BC       ;
- $EF28 LD A,(HL)     ;
- $EF29 CALL $E9F8    ;
- $EF2C LD A,B        ;
+ $EF24 INC HL        ; }
+ $EF25 LD B,$30      ; #N$30 rooms to check.
+*$EF27 PUSH BC       ; Remember #REGbc.
+ $EF28 LD A,(HL)     ; Get the first byte with the number of objects.
+ $EF29 CALL $E9F8    ; Split the two 4-bit numbers into #REGb and #REGc.
+ $EF2C LD A,B        ; { Put the combined total in #REGd.
  $EF2D ADD A,C       ;
- $EF2E LD D,A        ;
- $EF2F INC HL        ;
- $EF30 LD A,(HL)     ;
- $EF31 CALL $E9F8    ;
- $EF34 LD A,B        ;
- $EF35 ADD A,C       ;
- $EF36 ADD A,D       ;
- $EF37 LD B,A        ;
- $EF38 LD DE,$0005   ;
- $EF3B ADD HL,DE     ;
-*$EF3C RES 6,(HL)    ;
- $EF3E LD DE,$0008   ;
- $EF41 ADD HL,DE     ;
- $EF42 DJNZ $EF3C    ;
- $EF44 POP BC        ;
- $EF45 DJNZ $EF27    ;
- $EF47 RET           ;
+ $EF2E LD D,A        ; }
+ $EF2F INC HL        ; { Get the second byte with the number of objects.
+ $EF30 LD A,(HL)     ; }
+ $EF31 CALL $E9F8    ; Split the two 4-bit numbers into #REGb and #REGc.
+ $EF34 LD A,B        ; { Put the combined total, plus the earlier total
+ $EF35 ADD A,C       ; in #REGb as the number of moving objects in
+ $EF36 ADD A,D       ; this room.
+ $EF37 LD B,A        ; }
+ $EF38 LD DE,$0005   ; { Move to the start of the movement table.
+ $EF3B ADD HL,DE     ; }
+*$EF3C RES 6,(HL)    ; Set the sprite to be drawn.
+ $EF3E LD DE,$0008   ; { Move to the next movement entry. 
+ $EF41 ADD HL,DE     ; }
+ $EF42 DJNZ $EF3C    ; Loop while there are more objects to look at it.
+ $EF44 POP BC        ; Restore #REGbc.
+ $EF45 DJNZ $EF27    ; { Loop back until all rooms have been checked.
+ $EF47 RET           ; }
 
 ; Counter to make glowing objects alternate between colour and black
 b$EF48 DEFB $00
@@ -10711,41 +10716,44 @@ g$F270 DEFB $20
 ;
 ; C On return holds the appropriate action : 0 - jump right, 1 - move right, 2
 ; . - jump left, 3 - move left, 4 - jump, 5 - no action
-c$F271 LD HL,$F26E   ;
- $F274 LD E,$00      ;
- $F276 LD D,$03      ;
-*$F278 LD A,(HL)     ;
- $F279 CALL $F32A    ;
- $F27C CCF           ;
- $F27D RL E          ;
- $F27F INC HL        ;
- $F280 DEC D         ;
- $F281 JR NZ,$F278   ;
- $F283 LD A,E        ;
- $F284 AND $06       ;
- $F286 CP $06        ;
- $F288 JR NZ,$F28E   ;
- $F28A LD A,E        ;
- $F28B AND $01       ;
- $F28D LD E,A        ;
-*$F28E LD C,$05      ;
- $F290 LD A,E        ;
- $F291 AND A         ;
- $F292 RET Z         ;
- $F293 DEC C         ;
- $F294 CP $01        ;
- $F296 RET Z         ;
- $F297 DEC C         ;
- $F298 CP $04        ;
- $F29A RET Z         ;
- $F29B DEC C         ;
- $F29C CP $05        ;
- $F29E RET Z         ;
- $F29F DEC C         ;
- $F2A0 CP $02        ;
- $F2A2 RET Z         ;
- $F2A3 DEC C         ;
- $F2A4 RET           ;
+c$F271 LD HL,$F26E   ; Point #REGhl at the key for left.
+ $F274 LD E,$00      ; Initialize #REGe to no keys pressed.
+ $F276 LD D,$03      ; Number of keys to check.
+*$F278 LD A,(HL)     ; Get the key to press.
+ $F279 CALL $F32A    ; See if it was pressed.
+ $F27C CCF           ; { Invert the carry flag, then rotate #REGe, putting
+ $F27D RL E          ; the flag in as bit 0. This allows the various key presses
+                     ; to be built up as the keys are checked. }
+ $F27F INC HL        ; Move to the next key.
+ $F280 DEC D         ; { Loop until all keys checked.
+ $F281 JR NZ,$F278   ; }
+; All keys have been scanned, now check the values.
+ $F283 LD A,E        ; Get the matrix of keys pressed.
+ $F284 AND $06       ; Only consider bits 1 - 2.
+ $F286 CP $06        ; Is the value 6?
+ $F288 JR NZ,$F28E   ; Jump forward if not.
+ $F28A LD A,E        ; { Clear all bits except 1.
+ $F28B AND $01       ; 
+ $F28D LD E,A        ; }
+; Now decide what action to take.
+*$F28E LD C,$05      ; Default to value 5 (no action).
+ $F290 LD A,E        ; Get the matrix of keys.
+ $F291 AND A         ; { Return if it is zero (nothing pressed).
+ $F292 RET Z         ; }
+ $F293 DEC C         ; Select option 4 (jump).
+ $F294 CP $01        ; Is only the jump bit set?
+ $F296 RET Z         ; Return if it is.
+ $F297 DEC C         ; Select option 3 (left).
+ $F298 CP $04        ; Is left pressed but not jump?
+ $F29A RET Z         ; Return if it is.
+ $F29B DEC C         ; Select option 2 (jump + left).
+ $F29C CP $05        ; Are left and jump pressed?
+ $F29E RET Z         ; Return if they are.
+ $F29F DEC C         ; Selecti option 1 (right).
+ $F2A0 CP $02        ; Is right pressed but not jump?
+ $F2A2 RET Z         ; Return if is.
+ $F2A3 DEC C         ; { Only option left is right and jump pressed,
+ $F2A4 RET           ; select option 0 (jump right) and return. }
 
 ; "LEFT"
 ;
@@ -10766,61 +10774,63 @@ b$F2B6 DEFB $0C,$09,$13,$1D,$16,$18,$2C,$FF
 ; Redfine keys
 ;
 ; Used by the routine at #R$DB63.
-c$F2BE CALL $F2F4    ;
- $F2C1 LD HL,$F2A5   ;
- $F2C4 CALL $EEF1    ;
- $F2C7 CALL $F300    ;
- $F2CA LD A,D        ;
- $F2CB LD ($F26E),A  ;
- $F2CE CALL $F2F4    ;
- $F2D1 LD HL,$F2AD   ;
- $F2D4 CALL $EEF1    ;
- $F2D7 CALL $F300    ;
- $F2DA LD A,D        ;
- $F2DB LD ($F26F),A  ;
- $F2DE CALL $F2F4    ;
- $F2E1 LD HL,$F2B6   ;
- $F2E4 CALL $EEF1    ;
- $F2E7 CALL $F300    ;
- $F2EA LD A,D        ;
- $F2EB LD ($F270),A  ;
- $F2EE CALL $F2F4    ;
- $F2F1 JP $CA56      ;
+c$F2BE CALL $F2F4    ; Clear the screen and wait for a keypress.
+ $F2C1 LD HL,$F2A5   ; { Print "left". (#R$F2A5)
+ $F2C4 CALL $EEF1    ; }
+ $F2C7 CALL $F300    ; Wait for a keypress.
+ $F2CA LD A,D        ; { Store the key for "left". (#R$F26E)
+ $F2CB LD ($F26E),A  ; }
+ $F2CE CALL $F2F4    ; Clear the screen and wait for a keypress.
+ $F2D1 LD HL,$F2AD   ; { Print "right". (#R$F2AD)
+ $F2D4 CALL $EEF1    ; }
+ $F2D7 CALL $F300    ; Wait for a keypress.
+ $F2DA LD A,D        ; { Store the key for "right". (#R$F26F)
+ $F2DB LD ($F26F),A  ; }
+ $F2DE CALL $F2F4    ; Clear the screen and wait for a keypress.
+ $F2E1 LD HL,$F2B6   ; { Print "jump". (#R$F2B6)
+ $F2E4 CALL $EEF1    ; }
+ $F2E7 CALL $F300    ; Wait for a keypress.
+ $F2EA LD A,D        ; { Store the key for "jump". (#R$F270)
+ $F2EB LD ($F270),A  ; }
+ $F2EE CALL $F2F4    ; Clear the screen and wait for a keypress.
+ $F2F1 JP $CA56      ; Should be JP #R$CA5B, as this address is in a buffer (#R$CA3D),
+                     ; however, the instructions are harmless and the bug has no effect!
 
 ; Clear the screen and wait for all keys to be released
 ;
 ; Used by the routine at #R$F2BE.
-c$F2F4 CALL $E801    ;
-*$F2F7 XOR A         ;
- $F2F8 IN A,($FE)    ;
- $F2FA CPL           ;
- $F2FB AND $1F       ;
- $F2FD JR NZ,$F2F7   ;
- $F2FF RET           ;
+c$F2F4 CALL $E801    ; Clear the screen.
+*$F2F7 XOR A         ; Set #REGa to 0.
+ $F2F8 IN A,($FE)    ; Read the keyboard.
+ $F2FA CPL           ; Invert the bits, so keys pressed will be set bits.
+ $F2FB AND $1F       ; Keep only bits 1 - 5, as that's all the keyboard uses.
+ $F2FD JR NZ,$F2F7   ; Loop back while keys are being pressed.
+ $F2FF RET           ; Otherwise return.
 
 ; Wait for a key to be pressed
 ;
 ; Used by the routine at #R$F2BE.
 ;
 ; D Returns the key value
-c$F300 CALL $F30A    ;
- $F303 JR NZ,$F300   ;
- $F305 INC D         ;
- $F306 JR Z,$F300    ;
- $F308 DEC D         ;
- $F309 RET           ;
+c$F300 CALL $F30A    ; { Get a key pressed.
+ $F303 JR NZ,$F300   ; }
+ $F305 INC D         ; { Loop back if nothing was pressed.
+ $F306 JR Z,$F300    ; }
+ $F308 DEC D         ; { Restore #REGd and return.
+ $F309 RET           ; }
 
 ; Check all keys and return the first one found pressed
 ;
 ; Used by the routine at #R$F300.
 ;
 ; D Returns the key value, or FF if nothing pressed
-c$F30A LD DE,$FF2F   ;
- $F30D LD BC,$FEFE   ;
-*$F310 IN A,(C)      ;
- $F312 CPL           ;
- $F313 AND $1F       ;
- $F315 JR Z,$F323    ;
+c$F30A LD DE,$FF2F   ; Start with no key pressed and checking key #N$2F.
+ $F30D LD BC,$FEFE   ; Start by checking SHIFT-V.
+*$F310 IN A,(C)      ; Read the keyboard.
+ $F312 CPL           ; Invert the bits so keys pressed have bits set.
+ $F313 AND $1F       ; Keep only bits 1-5 as the others aren't used.
+ $F315 JR Z,$F323    ; Jump forward if no keys were pressed.
+; A key was pressed.
  $F317 INC D         ;
  $F318 RET NZ        ;
  $F319 LD H,A        ;
@@ -10830,11 +10840,16 @@ c$F30A LD DE,$FF2F   ;
  $F31F JR NC,$F31B   ;
  $F321 RET NZ        ;
  $F322 LD D,A        ;
-*$F323 DEC E         ;
- $F324 RLC B         ;
- $F326 JR C,$F310    ;
+; Scan another part of the keyboard.
+*$F323 DEC E         ; Move to the next key.
+ $F324 RLC B         ; Move to the next section of keyboard, so it
+                     ; cyles from #N$FE - #N$FD - #N$FB - #N$F7 - #N$EF - #N$DF - #N$BF - #N$7F 
+ $F326 JR C,$F310    ; Loop round for another read if we didn't scan anything. This stops
+                     ; once port #N$7FFE is checked, as that the only one that doesn't carry
+                     ; when shifting left.
  $F328 CP A          ;
  $F329 RET Z         ;
+; Check that a particular key in #REGa was pressed.
 ; This entry point is used by the routine at #R$F271.
 *$F32A LD C,A        ;
  $F32B AND $07       ;
@@ -10849,32 +10864,32 @@ c$F30A LD DE,$FF2F   ;
  $F339 LD A,$FE      ;
 *$F33B RRCA          ;
  $F33C DJNZ $F33B    ;
- $F33E IN A,($FE)    ;
-*$F340 RRA           ;
- $F341 DEC C         ;
+ $F33E IN A,($FE)    ; Read the keyboard.
+*$F340 RRA           ; Put the bit in the carry flag.
+ $F341 DEC C         ; 
  $F342 JR NZ,$F340   ;
  $F344 RET           ;
 
 ; Initialize game data and make all objects visible
 ;
 ; Used by the routine at #R$C881.
-c$F345 LD HL,$69EA   ; Point #REGhl to the objects in the start room.
- $F348 LD DE,$0007   ;
- $F34B LD BC,$0005   ;
- $F34E LD A,$30      ;
+c$F345 LD HL,$69EA   ; Point #REGhl to the flags in the first room.
+ $F348 LD DE,$0007   ; Increment by 7 bytes from the start of an entry to a moving object list.
+ $F34B LD BC,$0005   ; Increment by 5 bytes from the moving object list to the start of an entry.
+ $F34E LD A,$30      ; Number of rooms to check.
 *$F350 RES 5,(HL)    ;
  $F352 RES 4,(HL)    ;
- $F354 ADD HL,DE     ;
- $F355 LD (HL),$00   ;
- $F357 ADD HL,BC     ;
- $F358 DEC A         ;
- $F359 JR NZ,$F350   ;
- $F35B LD HL,$F3A0   ;
- $F35E LD (HL),$20   ;
+ $F354 ADD HL,DE     ; Move to the moving object list in this room.
+ $F355 LD (HL),$00   ; Set it to empty.
+ $F357 ADD HL,BC     ; Move to the next room data.
+ $F358 DEC A         ; { Loop back while there are more rooms to look at.
+ $F359 JR NZ,$F350   ; }
+ $F35B LD HL,$F3A0   ; Get the flags for what to set on initialisation. 
+ $F35E LD (HL),$20   ; 
  $F360 INC HL        ;
  $F361 LD (HL),$30   ;
- $F363 LD HL,$69EA   ;
- $F366 LD ($F3A2),HL ;
+ $F363 LD HL,$69EA   ; { Set the object data pointer to the first room.
+ $F366 LD ($F3A2),HL ; }
  $F369 LD B,$08      ;
  $F36B CALL $F3A4    ;
  $F36E LD A,$10      ;
@@ -10885,8 +10900,8 @@ c$F345 LD HL,$69EA   ; Point #REGhl to the objects in the start room.
  $F37B LD (HL),$01   ;
  $F37D INC HL        ;
  $F37E LD (HL),$07   ;
- $F380 LD HL,$69F1   ;
- $F383 LD ($F3A2),HL ;
+ $F380 LD HL,$69F1   ; { Set the object data pointer to more flags in the first room.
+ $F383 LD ($F3A2),HL ; }
  $F386 LD B,$02      ;
  $F388 CALL $F3A4    ;
  $F38B LD A,$02      ;
@@ -10912,36 +10927,38 @@ w$F3A2 DEFW $69EA
 ; Put special objects randomly in a room
 ;
 ; Used by the routine at #R$F345.
-c$F3A4 LD A,R        ;
- $F3A6 AND $3F       ;
- $F3A8 CP $30        ;
- $F3AA JR NC,$F3A4   ;
- $F3AC LD C,A        ;
-*$F3AD LD A,C        ;
- $F3AE ADD A,$11     ;
- $F3B0 CP $30        ;
- $F3B2 JR C,$F3B6    ;
- $F3B4 SUB $30       ;
-*$F3B6 LD C,A        ;
- $F3B7 ADD A,A       ;
- $F3B8 ADD A,A       ;
- $F3B9 LD L,A        ;
- $F3BA LD H,$00      ;
- $F3BC LD E,L        ;
+;
+; B Number of objects to add.
+c$F3A4 LD A,R        ; Load #REGa with the memory refresh register #REGr, which is pseudo-random.
+ $F3A6 AND $3F       ; Store only the lower 6 bits.
+ $F3A8 CP $30        ; { Loop until the value is less than or equal to #N$30,
+ $F3AA JR NC,$F3A4   ; which is the number of rooms}
+ $F3AC LD C,A        ; Put this value in #REGc.
+*$F3AD LD A,C        ; Get the randomly generated value.
+ $F3AE ADD A,$11     ; Add #N11.
+ $F3B0 CP $30        ; { If the value is now greater than #N$30,
+ $F3B2 JR C,$F3B6    ; subtract 30 so the it cycles round from 00 - #N$30
+ $F3B4 SUB $30       ; and always holds a valid room.}
+*$F3B6 LD C,A        ; Store the new value.
+ $F3B7 ADD A,A       ; { Multiply the value by 4.
+ $F3B8 ADD A,A       ; and put it in #REGhl.
+ $F3B9 LD L,A        ; 
+ $F3BA LD H,$00      ; }
+ $F3BC LD E,L        ; { Multiply this by 4 to get an appropriate offset for a room.
  $F3BD LD D,H        ;
  $F3BE ADD HL,HL     ;
- $F3BF ADD HL,DE     ;
- $F3C0 LD DE,($F3A2) ;
- $F3C4 ADD HL,DE     ;
- $F3C5 LD DE,($F3A0) ;
- $F3C9 LD A,(HL)     ;
- $F3CA AND D         ;
- $F3CB JR NZ,$F3AD   ;
- $F3CD LD A,(HL)     ;
- $F3CE OR E          ;
- $F3CF LD (HL),A     ;
- $F3D0 DJNZ $F3AD    ;
- $F3D2 RET           ;
+ $F3BF ADD HL,DE     ; }
+ $F3C0 LD DE,($F3A2) ; Get the base rooms object data pointer in #REGde. (#R$F3A2)
+ $F3C4 ADD HL,DE     ; Add the offset to get to the desired room.
+ $F3C5 LD DE,($F3A0) ; Get the base room's flags in #REGde. (#R$F3A0)
+ $F3C9 LD A,(HL)     ; Get the object flags.
+ $F3CA AND D         ; { If the room can't support this object type, discard this
+ $F3CB JR NZ,$F3AD   ; and pick another one. }
+ $F3CD LD A,(HL)     ; { Get the object flags, and do a logical or against
+ $F3CE OR E          ; the allowed flags.
+ $F3CF LD (HL),A     ; }
+ $F3D0 DJNZ $F3AD    ; { Loop until all the objects are done.
+ $F3D2 RET           ; }
 
 ; Convert a UDG ID to the address of its data
 ;
@@ -10965,37 +10982,45 @@ c$F3D3 LD L,A        ; { Put the ID in #REGhl.
 ; Used by the routines at #R$DE28 and #R$F3EC.
 ;
 ; A Room number
-c$F3E0 ADD A,A       ;
- $F3E1 LD E,A        ;
- $F3E2 LD D,$00      ;
- $F3E4 LD HL,$F410   ;
- $F3E7 ADD HL,DE     ;
- $F3E8 LD E,(HL)     ;
- $F3E9 INC HL        ;
+; DE On exit, holds the co-ordinates of the card
+c$F3E0 ADD A,A       ; Double the room number to get a word offset.
+ $F3E1 LD E,A        ; { Put this in #REGde.
+ $F3E2 LD D,$00      ; }
+ $F3E4 LD HL,$F410   ; { Add the base address of the bank card locations. (#R$F410)
+ $F3E7 ADD HL,DE     ; }
+ $F3E8 LD E,(HL)     ; { Put the value found in #REGde and return.
+ $F3E9 INC HL        ; }
  $F3EA LD D,(HL)     ;
  $F3EB RET           ;
 
 ; Draw any bank cards in the room
 ;
 ; Used by the routine at #R$CBBD.
-c$F3EC LD A,(IX+$0B) ;
- $F3EF BIT 0,A       ;
- $F3F1 JR Z,$F3F7    ;
- $F3F3 LD C,$CD      ;
- $F3F5 JR $F404      ;
-*$F3F7 BIT 1,A       ;
- $F3F9 JR Z,$F3FF    ;
- $F3FB LD C,$CB      ;
- $F3FD JR $F404      ;
-*$F3FF BIT 2,A       ;
- $F401 RET Z         ;
- $F402 LD C,$CC      ;
-*$F404 LD A,B        ;
- $F405 CALL $F3E0    ;
- $F408 LD A,C        ;
- $F409 CALL $F3D3    ;
- $F40C CALL $E84E    ;
- $F40F RET           ;
+;
+; B Room number to check
+; IX Pointer to room data
+c$F3EC LD A,(IX+$0B) ; Get bit flags for this room.
+; Check type 1.
+ $F3EF BIT 0,A       ; Is bit 0 set?
+ $F3F1 JR Z,$F3F7    ; No, so skip this.
+ $F3F3 LD C,$CD      ; { Draw bank card #N$CD.
+ $F3F5 JR $F404      ; }
+; Check type 2.
+*$F3F7 BIT 1,A       ; Is bit 1 set?
+ $F3F9 JR Z,$F3FF    ; No, so skip this.
+ $F3FB LD C,$CB      ; { Draw bank card #N$CB.
+ $F3FD JR $F404      ; }
+; Check type 3.
+*$F3FF BIT 2,A       ; Is bit 2 set?
+ $F401 RET Z         ; Return if not, there are no bank cards here.
+ $F402 LD C,$CC      ; Otherwise draw bank card #N$CC.
+; Now draw the card.
+*$F404 LD A,B        ; { Get the bank card location for this room.
+ $F405 CALL $F3E0    ; }
+ $F408 LD A,C        ; { Convert the UDG type to a graphic address.
+ $F409 CALL $F3D3    ; }
+ $F40C CALL $E84E    ; { Draw the card and return.
+ $F40F RET           ; }
 
 ; Bank card locations
 ;
@@ -11018,24 +11043,24 @@ b$F410 DEFB $0F,$06,$0D,$17,$07,$17,$0A,$07
 ; Used by the routines at #R$DB63 and #R$DCF6.
 ;
 ; HL pointer to data containing what to draw and where
-c$F470 LD B,(HL)     ;
-*$F471 PUSH BC       ;
- $F472 INC HL        ;
- $F473 LD A,(HL)     ;
- $F474 INC HL        ;
- $F475 LD B,(HL)     ;
- $F476 INC HL        ;
- $F477 LD C,(HL)     ;
- $F478 INC HL        ;
- $F479 LD E,(HL)     ;
- $F47A INC HL        ;
- $F47B LD D,(HL)     ;
- $F47C PUSH HL       ;
- $F47D CALL $E8BA    ;
- $F480 POP HL        ;
- $F481 POP BC        ;
- $F482 DJNZ $F471    ;
- $F484 RET           ;
+c$F470 LD B,(HL)     ; Get the number of times to repeat.
+*$F471 PUSH BC       ; Remember #REGbc.
+ $F472 INC HL        ; { Get the attribute.
+ $F473 LD A,(HL)     ; }
+ $F474 INC HL        ; { Get the number of columns.
+ $F475 LD B,(HL)     ; }
+ $F476 INC HL        ; { Get the number of rows.
+ $F477 LD C,(HL)     ; }
+ $F478 INC HL        ; { Get the X co-ordinate.
+ $F479 LD E,(HL)     ; }
+ $F47A INC HL        ; { Get the Y co-ordinate.
+ $F47B LD D,(HL)     ; }
+ $F47C PUSH HL       ; Remember #REGhl.
+ $F47D CALL $E8BA    ; Fill the lines with the attribute.
+ $F480 POP HL        ; Restore #REGhl.
+ $F481 POP BC        ; Restore #REGbc.
+ $F482 DJNZ $F471    ; { Loop round until the fill is complete.
+ $F484 RET           ; }
 
 ; Dan drowning graphic
 b$F485 DEFB $00,$00,$00,$00,$00,$24,$10,$00
