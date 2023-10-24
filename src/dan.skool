@@ -5635,181 +5635,209 @@ b$CA2B DEFB $03,$07,$02,$05,$06,$03,$04,$07
 ; Moving object data for intro screen
 ;
 ; Used by the routine at #R$CA5B
-b$CA3D DEFB $15,$2C,$2C,$2C,$11,$00,$0A,$06
- $CA45 DEFB $05,$0D,$02,$43,$01,$02,$0A,$19
- $CA4D DEFB $05,$0D,$81,$46,$01,$02,$00,$46
- $CA55 DEFB $5A,$14,$05,$EA,$12,$07
+b$CA3D DEFB $15,$2C,$2C,$2C,$11,$00
+
+; Movement table for objects in intro screen
+b$CA43 DEFB $0A,$06,$05,$0D,$02,$43,$01,$02
+ $CA4B DEFB $0A,$19,$05,$0D,$81,$46,$01,$02
+
+; Laser movement for the intro screen
+b$CA53 DEFB $00,$46,$5A,$14
+
+; Pointer to the current tune block being played
+g$CA57 DEFW $EA05
+
+; Number of blocks in the tune currently being played
+g$CA59 DEFB $12
+
+; Currently selected row that should flash
+g$CA5A DEFB $07
 
 ; Display the intro screen and wait for the game to start
 ;
 ; Used by the routines at #R$C800 and #R$DCF6.
-c$CA5B CALL $E801    ;
- $CA5E LD HL,$EFBC   ;
- $CA61 CALL $ED06    ;
- $CA64 LD HL,$EC26   ;
- $CA67 CALL $EEF1    ;
- $CA6A LD DE,$0A07   ;
- $CA6D LD A,$02      ;
-*$CA6F PUSH DE       ;
- $CA70 PUSH AF       ;
- $CA71 LD BC,$0E01   ;
- $CA74 CALL $E8BA    ;
- $CA77 POP AF        ;
- $CA78 POP DE        ;
- $CA79 INC E         ;
- $CA7A INC E         ;
- $CA7B INC A         ;
- $CA7C CP $07        ;
- $CA7E JR NZ,$CA6F   ;
+c$CA5B CALL $E801    ; Clear the screen.
+ $CA5E LD HL,$EFBC   ; { Print the intro screen UDGS. (#R$EFBC)
+ $CA61 CALL $ED06    ; }
+ $CA64 LD HL,$EC26   ; { Print the intro text. (#R$EC26)
+ $CA67 CALL $EEF1    ; }
+ $CA6A LD DE,$0A07   ; Start at location #N$0A , #N07.
+ $CA6D LD A,$02      ; Start by drawing red on black.
+*$CA6F PUSH DE       ; { Store #REGde and #REGaf.
+ $CA70 PUSH AF       ; }
+ $CA71 LD BC,$0E01   ; { Fill #N0E columns and 1 row with this attribute.
+ $CA74 CALL $E8BA    ; }
+ $CA77 POP AF        ; { Restore #REGaf and #REGde. 
+ $CA78 POP DE        ; }
+ $CA79 INC E         ; { Move forward two columns.
+ $CA7A INC E         ; }
+ $CA7B INC A         ; Move to the next ink colour?
+ $CA7C CP $07        ; Have we reached white yet?
+ $CA7E JR NZ,$CA6F   ; No, so loop back and colour some more.
  $CA80 LD BC,$0012   ; { Copy the intro screen's attributes.
  $CA83 LD DE,$5867   ;
  $CA86 LD HL,$CA2B   ;
  $CA89 LDIR          ; }
- $CA8B LD HL,$DA8A   ; 
- $CA8E LD (HL),$00   ;
- $CA90 LD IY,$CA3D   ;
- $CA94 CALL $E54D    ;
- $CA97 LD HL,$E6D9   ;
- $CA9A LD (HL),$7F   ;
- $CA9C INC HL        ;
- $CA9D LD (HL),$00   ;
- $CA9F LD HL,$EA05   ;
- $CAA2 LD ($CA57),HL ;
- $CAA5 LD A,$12      ;
- $CAA7 LD ($CA59),A  ;
-*$CAAA LD HL,($CA57) ;
- $CAAD LD A,(HL)     ;
+ $CA8B LD HL,$DA8A   ; { Switch to playing a tune.
+ $CA8E LD (HL),$00   ; }
+ $CA90 LD IY,$CA3D   ; Point #REGiy at the moving object data for the intro screen.
+ $CA94 CALL $E54D    ; Display moving objects, directly.
+ $CA97 LD HL,$E6D9   ; { Set the laser tick count (#R$E6D9) to #N$7F (fire next loop).
+ $CA9A LD (HL),$7F   ; }
+ $CA9C INC HL        ; { Default to drawing the last bolt in black.
+ $CA9D LD (HL),$00   ; }
+ $CA9F LD HL,$EA05   ; Point #REGhl at the theme tune. (#R$EA05)
+ $CAA2 LD ($CA57),HL ; Store it as the current one. (#R$CA57).
+ $CAA5 LD A,$12      ; { Set #N$12 blocks in the tune.
+ $CAA7 LD ($CA59),A  ; }
+; Loop round the theme tune blocks and play them.
+*$CAAA LD HL,($CA57) ; Get the current theme tune block.
+ $CAAD LD A,(HL)     ; { Load the pointer to the tune block into #REGhl.
  $CAAE INC HL        ;
  $CAAF LD H,(HL)     ;
- $CAB0 LD L,A        ;
- $CAB1 CALL $DB0B    ;
-*$CAB4 LD A,$FD      ;
- $CAB6 IN A,($FE)    ;
- $CAB8 BIT 2,A       ;
- $CABA JP Z,$DB63    ;
- $CABD LD IY,$CA43   ;
- $CAC1 CALL $E59F    ;
- $CAC4 CALL $EDA2    ;
- $CAC7 CALL $DA8D    ;
- $CACA CALL $DAFA    ;
- $CACD LD HL,($DA88) ;
+ $CAB0 LD L,A        ; }
+ $CAB1 CALL $DB0B    ; Play the tune.
+*$CAB4 LD A,$FD      ; { Scan for 'A' - 'G' on the keyboard.
+ $CAB6 IN A,($FE)    ; }
+ $CAB8 BIT 2,A       ; { Was 'D' pressed?}
+ $CABA JP Z,$DB63    ; If so, move forward to define the keys.
+; Move the sprites on screen.
+ $CABD LD IY,$CA43   ; Point #REGiy at the moving object data for the intro screen.
+ $CAC1 CALL $E59F    ; Move the objects.
+ $CAC4 CALL $EDA2    ; Rotate the colours on the main message.
+ $CAC7 CALL $DA8D    ; Play a note of the tune.
+ $CACA CALL $DAFA    ; Pause for one second.
+ $CACD LD HL,($DA88) ; { Have we reached the end of the tune block?
  $CAD0 LD A,(HL)     ;
- $CAD1 CP $FF        ;
- $CAD3 JR NZ,$CAEE   ;
- $CAD5 LD HL,($CA57) ;
+ $CAD1 CP $FF        ; }
+ $CAD3 JR NZ,$CAEE   ; Jump forward if not.
+; Reached the end of this tune block, move to the next one.
+ $CAD5 LD HL,($CA57) ; { Move onto the next tune block. (#R$CA57)
  $CAD8 INC HL        ;
- $CAD9 INC HL        ;
- $CADA LD A,($CA59)  ;
- $CADD DEC A         ;
- $CADE AND A         ;
- $CADF JR NZ,$CAE6   ;
- $CAE1 LD A,$12      ;
- $CAE3 LD HL,$EA05   ;
-*$CAE6 LD ($CA57),HL ;
- $CAE9 LD ($CA59),A  ;
- $CAEC JR $CAAA      ;
-*$CAEE LD A,($CA5A)  ;
- $CAF1 LD E,A        ;
- $CAF2 LD D,$0A      ;
- $CAF4 CALL $E8E3    ;
- $CAF7 EX DE,HL      ;
- $CAF8 LD B,$0A      ;
-*$CAFA SET 7,(HL)    ;
- $CAFC INC L         ;
- $CAFD DJNZ $CAFA    ;
- $CAFF LD A,$FD      ;
- $CB01 IN A,($FE)    ;
- $CB03 AND $02       ;
- $CB05 JR NZ,$CB1E   ;
- $CB07 LD A,($CA5A)  ;
- $CB0A CP $0B        ;
- $CB0C JR Z,$CAB4    ;
- $CB0E CALL $CB8D    ;
- $CB11 LD HL,$E9DB   ;
- $CB14 LD ($E9BA),HL ;
- $CB17 LD A,$0B      ;
-*$CB19 LD ($CA5A),A  ;
- $CB1C JR $CAB4      ;
-*$CB1E LD A,$BF      ;
- $CB20 IN A,($FE)    ;
- $CB22 LD B,A        ;
- $CB23 AND $04       ;
- $CB25 JR NZ,$CB3B   ;
- $CB27 LD A,($CA5A)  ;
- $CB2A CP $07        ;
- $CB2C JR Z,$CAB4    ;
- $CB2E CALL $CB8D    ;
- $CB31 LD HL,$F271   ;
- $CB34 LD ($E9BA),HL ;
- $CB37 LD A,$07      ;
- $CB39 JR $CB19      ;
-*$CB3B LD A,B        ;
- $CB3C AND $08       ;
- $CB3E JR NZ,$CB55   ;
- $CB40 LD A,($CA5A)  ;
- $CB43 CP $09        ;
- $CB45 JP Z,$CAB4    ;
- $CB48 CALL $CB8D    ;
- $CB4B LD HL,$E9C0   ;
- $CB4E LD ($E9BA),HL ;
- $CB51 LD A,$09      ;
- $CB53 JR $CB19      ;
-*$CB55 LD A,$DF      ;
- $CB57 IN A,($FE)    ;
- $CB59 BIT 2,A       ;
- $CB5B JP Z,$DCF6    ;
- $CB5E CALL $CB9C    ;
- $CB61 JP NZ,$CAB4   ;
- $CB64 LD HL,$DA8A   ;
- $CB67 RES 0,(HL)    ;
-*$CB69 LD IY,$CA53   ;
- $CB6D CALL $E6F6    ;
- $CB70 CALL $DA8D    ;
- $CB73 CALL $DAFA    ;
- $CB76 CALL $EDA2    ;
- $CB79 LD IY,$CA43   ;
- $CB7D CALL $E59F    ;
- $CB80 LD A,($E6DA)  ;
- $CB83 AND A         ;
- $CB84 JR NZ,$CB69   ;
- $CB86 LD HL,$CA1E   ;
+ $CAD9 INC HL        ; }
+ $CADA LD A,($CA59)  ; { Decrement the number of blocks left to play.
+ $CADD DEC A         ; }
+ $CADE AND A         ; Are there no blocks left?
+ $CADF JR NZ,$CAE6   ; If there are, then jump forward.
+; Reached the end of all tune blocks, start the tune from the beginning.
+ $CAE1 LD A,$12      ; #N$12 blocks left to play.
+ $CAE3 LD HL,$EA05   ; { Point back to the first block.
+*$CAE6 LD ($CA57),HL ; }
+ $CAE9 LD ($CA59),A  ; Set the number of blocks.
+ $CAEC JR $CAAA      ; Loop back to play more of the theme tune.
+; Flash the selected row on the title screen.
+*$CAEE LD A,($CA5A)  ; { Put the current row in #REGe.
+ $CAF1 LD E,A        ; }
+ $CAF2 LD D,$0A      ; Always starting at column #N0A.
+ $CAF4 CALL $E8E3    ; { Get the attribute at this location
+ $CAF7 EX DE,HL      ; and put it in #REGhl. }
+ $CAF8 LD B,$0A      ; Loop for #N$0A columns.
+*$CAFA SET 7,(HL)    ; Set the flash bit.
+ $CAFC INC L         ; Move to the next column.
+ $CAFD DJNZ $CAFA    ; Loop while there are more columns.
+; Detect Sinclair joystick.
+ $CAFF LD A,$FD      ; { Scan for 'A' - 'G' on the keyboard.
+ $CB01 IN A,($FE)    ; }
+ $CB03 AND $02       ; Was 'D' pressed?
+ $CB05 JR NZ,$CB1E   ; Move forward if not.
+ $CB07 LD A,($CA5A)  ; Get the currently selected row to flash.
+ $CB0A CP $0B        ; Is it #N0B?
+ $CB0C JR Z,$CAB4    ; Jump back if is.
+ $CB0E CALL $CB8D    ; Otherwise change the option.
+ $CB11 LD HL,$E9DB   ; { Change input to Sinclair joystick.
+ $CB14 LD ($E9BA),HL ; }
+ $CB17 LD A,$0B      ; { Set #N0B as the row to flash.
+*$CB19 LD ($CA5A),A  ; }
+ $CB1C JR $CAB4      ; Jump back.
+; Detect keyboard
+*$CB1E LD A,$BF      ; { Scan for 'ENTER' - 'H' on the keyboard.
+ $CB20 IN A,($FE)    ; }
+ $CB22 LD B,A        ; Remember this in #REGb.
+ $CB23 AND $04       ; Was 'K' pressed?
+ $CB25 JR NZ,$CB3B   ; Jump forward if not.
+ $CB27 LD A,($CA5A)  ; Get the currently selected row to flash.
+ $CB2A CP $07        ; Is it 07?
+ $CB2C JR Z,$CAB4    ; Jump back if it is.
+ $CB2E CALL $CB8D    ; Otherwise change the option.
+ $CB31 LD HL,$F271   ; { Change input to keyboard.
+ $CB34 LD ($E9BA),HL ; }
+ $CB37 LD A,$07      ; { Set 07 as the row to flash and jump back.
+ $CB39 JR $CB19      ; }
+; Detect Kempston joystick
+*$CB3B LD A,B        ; Get the keys pressed earlier.
+ $CB3C AND $08       ; Was 'J' pressed?
+ $CB3E JR NZ,$CB55   ; Jump forward if not.
+ $CB40 LD A,($CA5A)  ; Get the currently selected row to flash.
+ $CB43 CP $09        ; Is it 09?
+ $CB45 JP Z,$CAB4    ; Jump back if it is.
+ $CB48 CALL $CB8D    ; Otherwise change the option.
+ $CB4B LD HL,$E9C0   ; { Change input to Kempston joystick.
+ $CB4E LD ($E9BA),HL ; }
+ $CB51 LD A,$09      ; { Set 09 as the row to flash and jump back.
+ $CB53 JR $CB19      ; }
+; No change in input routine, check for another option.
+*$CB55 LD A,$DF      ; { Scan 'P' - 'Y' on the keyboard.
+ $CB57 IN A,($FE)    ; }
+ $CB59 BIT 2,A       ; Was 'I' pressed?
+ $CB5B JP Z,$DCF6    ; If so, display the instructions.
+ $CB5E CALL $CB9C    ; Check if ENTER or FIRE was pressed.
+ $CB61 JP NZ,$CAB4   ; Jump back if it it wasn't.
+; ENTER or FIRE was pressed. Time to start the game.
+ $CB64 LD HL,$DA8A   ; { Stop the tune playing (#R$DA8A).
+ $CB67 RES 0,(HL)    ; }
+*$CB69 LD IY,$CA53   ; Point #REGiy at the laser movement for the intro screen (#R$CA53)
+ $CB6D CALL $E6F6    ; Update the laser.
+ $CB70 CALL $DA8D    ; Play the laser sound effect.
+ $CB73 CALL $DAFA    ; Pause for one second.
+ $CB76 CALL $EDA2    ; Rotate the colours for the main message / laser.
+ $CB79 LD IY,$CA43   ; Point #REGiy at the moving object data for the intro screen.
+ $CB7D CALL $E59F    ; Move all objects.
+ $CB80 LD A,($E6DA)  ; Is the current laser colour 0?
+ $CB83 AND A         ; { If not, loop back to redraw it.
+ $CB84 JR NZ,$CB69   ; }
+ $CB86 LD HL,$CA1E   ; { Print "Good luck" (#R$CA1E) on screen and return.
  $CB89 CALL $DDE0    ;
- $CB8C RET           ;
+ $CB8C RET           ; }
 
 ; Turn a flashing option on the intro screen off
 ;
 ; Used by the routine at #R$CA5B.
-c$CB8D LD E,A        ;
- $CB8E LD D,$0A      ;
- $CB90 CALL $E8E3    ;
- $CB93 EX DE,HL      ;
- $CB94 LD B,$0A      ;
-*$CB96 RES 7,(HL)    ;
- $CB98 INC L         ;
- $CB99 DJNZ $CB96    ;
- $CB9B RET           ;
+;
+; A The row to flash
+c$CB8D LD E,A        ; Put the row to flash in #REGe.
+ $CB8E LD D,$0A      ; The column is always #N$0A.
+ $CB90 CALL $E8E3    ; { Convert this to an attribute address and put it in #REGhl.
+ $CB93 EX DE,HL      ; }
+ $CB94 LD B,$0A      ; Loop for #N$0A columns.
+*$CB96 RES 7,(HL)    ; Switch the flash attribute off.
+ $CB98 INC L         ; Move to the next column.
+ $CB99 DJNZ $CB96    ; { Loop until all columns are done.
+ $CB9B RET           ; }
 
 ; Set the zero flag if ENTER or the fire button was pressed
 ;
 ; Used by the routines at #R$CA5B and #R$DD8D.
-c$CB9C LD A,($CA5A)  ;
- $CB9F CP $09        ;
- $CBA1 JR NZ,$CBAB   ;
- $CBA3 IN A,($1F)    ;
- $CBA5 CPL           ;
- $CBA6 BIT 4,A       ;
- $CBA8 RET Z         ;
- $CBA9 JR $CBB6      ;
-*$CBAB CP $0B        ;
- $CBAD JR NZ,$CBB6   ;
- $CBAF LD A,$EF      ;
- $CBB1 IN A,($FE)    ;
- $CBB3 BIT 0,A       ;
- $CBB5 RET Z         ;
-*$CBB6 LD A,$BF      ;
- $CBB8 IN A,($FE)    ;
- $CBBA BIT 0,A       ;
- $CBBC RET           ;
+c$CB9C LD A,($CA5A)  ; { Has Kempston been selected as the input method?
+ $CB9F CP $09        ; }
+ $CBA1 JR NZ,$CBAB   ; Jump forward if not.
+; Test for FIRE on Kempston.
+ $CBA3 IN A,($1F)    ; Read the Kempston joystick.
+ $CBA5 CPL           ; Invert so successful reads have bits set.
+ $CBA6 BIT 4,A       ; Was FIRE pressed?
+ $CBA8 RET Z         ; Return if so.
+ $CBA9 JR $CBB6      ; Otherwise jump forward.
+; Test for FIRE on Sinclair.
+*$CBAB CP $0B        ; Has Sinclair been selected as the input method?
+ $CBAD JR NZ,$CBB6   ; Jump forward if not.
+ $CBAF LD A,$EF      ; { Read '0' - '6' from the keyboard.
+ $CBB1 IN A,($FE)    ;  }
+ $CBB3 BIT 0,A       ; Was '0' pressed?
+ $CBB5 RET Z         ; Return if so.
+; Test for ENTER on Keyboard.
+*$CBB6 LD A,$BF      ; { Read 'ENTER' - H' from the keyboard.
+ $CBB8 IN A,($FE)    ; }
+ $CBBA BIT 0,A       ; Was 'ENTER' pressed?
+ $CBBC RET           ; Return with the zero flag also set if it was.
 
 ; Switch to a new room
 ;
@@ -5817,72 +5845,75 @@ c$CB9C LD A,($CA5A)  ;
 ; and #R$E663.
 ;
 ; A New room
-c$CBBD LD ($CFCA),A   ;
- $CBC0 ADD A,A        ;
+c$CBBD LD ($CFCA),A   ; Get the current room. (#R$CFCA).
+ $CBC0 ADD A,A        ; { Multiply it by 4 and put it in #REGhl.
  $CBC1 ADD A,A        ;
  $CBC2 LD L,A         ;
- $CBC3 LD H,$00       ;
- $CBC5 LD C,L         ;
- $CBC6 LD B,H         ;
- $CBC7 ADD HL,HL      ;
- $CBC8 ADD HL,BC      ;
- $CBC9 LD DE,$69E6    ;
- $CBCC ADD HL,DE      ;
- $CBCD PUSH HL        ;
- $CBCE POP IX         ;
- $CBD0 LD A,(IX+$04)  ;
- $CBD3 AND $C0        ;
- $CBD5 RRCA           ;
- $CBD6 RRCA           ;
+ $CBC3 LD H,$00       ; }
+ $CBC5 LD C,L         ; { Copy #REGhl to #REGbc.
+ $CBC6 LD B,H         ; }
+ $CBC7 ADD HL,HL      ; { Multiply the address by 4 to get a suitable offset.
+ $CBC8 ADD HL,BC      ; }
+ $CBC9 LD DE,$69E6    ; { Add the base address for room offsets (#R$69E6)
+ $CBCC ADD HL,DE      ; }
+ $CBCD PUSH HL        ; { Put the pointer to the actual room in #REGix.
+ $CBCE POP IX         ; }
+ $CBD0 LD A,(IX+$04)  ; Get the flags for this room?
+ $CBD3 AND $C0        ; Get bits 6-7 (wall information).
+ $CBD5 RRCA           ; { Shift this three bits to the right to get a suitable
+ $CBD6 RRCA           ; offset and put it in #REGbc.
  $CBD7 RRCA           ;
- $CBD8 LD C,A         ;
- $CBD9 LD HL,$6C26    ;
- $CBDC ADD HL,BC      ;
- $CBDD LD BC,$0008    ;
- $CBE0 LD DE,$CFD1    ;
- $CBE3 LDIR           ;
- $CBE5 EXX            ;
+ $CBD8 LD C,A         ; }
+ $CBD9 LD HL,$6C26    ; { Add the base address for wall data. (#R$6C26).
+ $CBDC ADD HL,BC      ; }
+ $CBDD LD BC,$0008    ; 8 bytes to copy.
+ $CBE0 LD DE,$CFD1    ; { Copy to the working buffer. (#R$CFD1)
+ $CBE3 LDIR           ; }
+ $CBE5 EXX            ; { Store the shadow set of #REGhl, #REGde and #REGbc.
  $CBE6 PUSH HL        ;
  $CBE7 PUSH DE        ;
  $CBE8 PUSH BC        ;
- $CBE9 EXX            ;
- $CBEA CALL $E820     ;
- $CBED CALL $ED00     ;
- $CBF0 CALL $DCC1     ;
- $CBF3 CALL $CC36     ;
- $CBF6 CALL $E544     ;
- $CBF9 CALL $CE76     ;
- $CBFC LD A,($CFCA)   ;
- $CBFF LD B,A         ;
- $CC00 CALL $F3EC     ;
- $CC03 CALL $C8FF     ;
- $CC06 LD HL,$C87C    ;
- $CC09 LD A,(HL)      ;
- $CC0A CP $1C         ;
- $CC0C JR NC,$CC10    ;
- $CC0E LD (HL),$1C    ;
-*$CC10 BIT 7,(IX+$0B) ;
- $CC14 JR NZ,$CC30    ;
- $CC16 SET 7,(IX+$0B) ;
- $CC1A LD HL,$CE56    ;
- $CC1D LD A,(HL)      ;
- $CC1E CP $09         ;
- $CC20 JR Z,$CC25     ;
- $CC22 INC (HL)       ;
- $CC23 JR $CC30       ;
-*$CC25 LD (HL),$00    ;
- $CC27 DEC HL         ;
- $CC28 INC (HL)       ;
- $CC29 LD A,(HL)      ;
- $CC2A CP $28         ;
- $CC2C JR NZ,$CC30    ;
- $CC2E LD (HL),$01    ;
-*$CC30 EXX            ;
+ $CBE9 EXX            ; }
+ $CBEA CALL $E820     ; Clear the screen.
+ $CBED CALL $ED00     ; Print the room's UDGs.
+ $CBF0 CALL $DCC1     ; Draw any food.
+ $CBF3 CALL $CC36     ; Draw the river if it's here.
+ $CBF6 CALL $E544     ; Display moving objects.
+ $CBF9 CALL $CE76     ; Draw any additional objects if relevant.
+ $CBFC LD A,($CFCA)   ; { Put the current room in #REGb.
+ $CBFF LD B,A         ; }
+ $CC00 CALL $F3EC     ; Draw any bank cards.
+ $CC03 CALL $C8FF     ; Put Dan in the right place.
+ $CC06 LD HL,$C87C    ; { Get the lift co-ordinate.
+ $CC09 LD A,(HL)      ; }
+ $CC0A CP $1C         ; { If it's greater than the maximum #N$1C,
+ $CC0C JR NC,$CC10    ; then set it to that.
+ $CC0E LD (HL),$1C    ; }
+; Handle if the room has been visited, and if not, increment the running total.
+*$CC10 BIT 7,(IX+$0B) ; Has the room been visited?
+ $CC14 JR NZ,$CC30    ; Jump forward if it has.
+ $CC16 SET 7,(IX+$0B) ; Set the "room visited" flag.
+ $CC1A LD HL,$CE56    ; Set #REGhl to the relevant part of the "screens visited" message (#R$CE53).
+ $CC1D LD A,(HL)      ; { Is the current digit 9?
+ $CC1E CP $09         ; }
+ $CC20 JR Z,$CC25     ; If so, need to accomodate decimal overflow.
+ $CC22 INC (HL)       ; { Otherwise increment number of screens visited and move on.
+ $CC23 JR $CC30       ; }
+; Accomodate decimal overflow in the number of screens visited.
+*$CC25 LD (HL),$00    ; Set the digit to 0.
+ $CC27 DEC HL         ; Move to the previous digit (ie: more significant)
+ $CC28 INC (HL)       ; Increment that.
+ $CC29 LD A,(HL)      ; { Have we reached the maximum of #N$280?
+ $CC2A CP $28         ; }
+ $CC2C JR NZ,$CC30    ; Jump forward if we haven't.
+ $CC2E LD (HL),$01    ; Otherwise something's gone wrong, either a bug or hacking, so set back to 1.
+; All done with setting up the room.
+*$CC30 EXX            ; { Restore the shadow registers and return.
  $CC31 POP BC         ;
  $CC32 POP DE         ;
  $CC33 POP HL         ;
  $CC34 EXX            ;
- $CC35 RET            ;
+ $CC35 RET            ; }
 
 ; Draw the river
 ;
@@ -6231,7 +6262,7 @@ c$CDD3 POP HL        ;
 ;
 ; "00 SCREENS VISITED"
 ; .
-; The numerical value at CE55 / CE56 is updated by the routine at #R$CBBD
+; The numerical value at $NCE55 / $RNE56 is updated by the routine at #R$CBBD
 ;
 ; .
 ;
@@ -10025,6 +10056,8 @@ b$EB70 DEFB $17,$0B,$17,$0B,$1C,$10,$1C,$10
  $EB88 DEFB $FF
 
 ; Graphics for the plans
+;
+; #CALL:print_udg(#PC,plans)
 b$EB89 DEFB $03,$03,$FF,$FF,$FF,$C9,$B3,$23
  $EB91 DEFB $DB,$55,$77,$C9,$73,$37,$EB,$55
  $EB99 DEFB $77,$C9,$B5,$37,$FF,$FF,$FF,$FF
@@ -10038,6 +10071,8 @@ b$EB89 DEFB $03,$03,$FF,$FF,$FF,$C9,$B3,$23
  $EBD9 DEFB $02,$02,$02
 
 ; Graphics for the safe door
+;
+; #CALL:print_udg(#PC,safedoor)
 b$EBDC DEFB $02,$04,$F2,$00,$EA,$00,$F2,$00
  $EBE4 DEFB $EA,$00,$F2,$00,$0A,$00,$02,$00
  $EBEC DEFB $00,$00,$F2,$EE,$EA,$E0,$F2,$84
@@ -10047,22 +10082,34 @@ b$EBDC DEFB $02,$04,$F2,$00,$EA,$00,$F2,$00
  $EC0C DEFB $EA,$8A,$00,$00,$02,$00,$02,$00
  $EC14 DEFB $EA,$00,$F2,$00,$EA,$00,$F2,$00
  $EC1C DEFB $EA,$00,$07,$45,$07,$07,$07,$07
- $EC24 DEFB $07,$45,$03,$07,$27,$27,$27,$0D
- $EC2C DEFB $21,$17,$0A,$16,$12,$1C,$0E,$27
- $EC34 DEFB $0D,$0A,$17,$27,$27,$27,$27,$FE
- $EC3C DEFB $05,$0A,$0D,$27,$0D,$0E,$0F,$12
- $EC44 DEFB $17,$0E,$27,$14,$0E,$21,$1B,$27
- $EC4C DEFB $FE,$07,$0A,$14,$27,$14,$0E,$21
- $EC54 DEFB $0B,$00,$0A,$1A,$0D,$FE,$09,$0A
- $EC5C DEFB $13,$27,$14,$0E,$16,$18,$1B,$1C
- $EC64 DEFB $00,$17,$FE,$0B,$0A,$1B,$27,$1B
- $EC6C DEFB $12,$17,$0C,$15,$0A,$12,$1A,$FE
- $EC74 DEFB $0D,$0A,$12,$27,$12,$17,$1B,$1C
- $EC7C DEFB $1A,$1D,$0C,$1C,$12,$00,$17,$1B
- $EC84 DEFB $FE,$0F,$0A,$18,$27,$18,$0A,$1D
- $EC8C DEFB $1B,$0E,$FE,$12,$07,$0E,$17,$1C
- $EC94 DEFB $0E,$1A,$2D,$0F,$12,$1A,$0E,$27
- $EC9C DEFB $1C,$00,$27,$18,$15,$0A,$21,$FF
+ $EC24 DEFB $07,$45
+
+; Intro text
+;
+; #CALL:print_multi_string( #PC, 0, intro0 )
+; #CALL:print_multi_string( #PC, 1, intro1 )
+; #CALL:print_multi_string( #PC, 2, intro2 )
+; #CALL:print_multi_string( #PC, 3, intro3 )
+; #CALL:print_multi_string( #PC, 4, intro4 )
+; #CALL:print_multi_string( #PC, 5, intro5 )
+; #CALL:print_multi_string( #PC, 6, intro6 )
+; #CALL:print_multi_string( #PC, 7, intro7 )
+b$EC26 DEFB $03,$07,$27,$27,$27,$0D,$21,$17
+ $EC2E DEFB $0A,$16,$12,$1C,$0E,$27,$0D,$0A
+ $EC36 DEFB $17,$27,$27,$27,$27,$FE,$05,$0A
+ $EC3E DEFB $0D,$27,$0D,$0E,$0F,$12,$17,$0E
+ $EC46 DEFB $27,$14,$0E,$21,$1B,$27,$FE,$07
+ $EC4E DEFB $0A,$14,$27,$14,$0E,$21,$0B,$00
+ $EC56 DEFB $0A,$1A,$0D,$FE,$09,$0A,$13,$27
+ $EC5E DEFB $14,$0E,$16,$18,$1B,$1C,$00,$17
+ $EC66 DEFB $FE,$0B,$0A,$1B,$27,$1B,$12,$17
+ $EC6E DEFB $0C,$15,$0A,$12,$1A,$FE,$0D,$0A
+ $EC76 DEFB $12,$27,$12,$17,$1B,$1C,$1A,$1D
+ $EC7E DEFB $0C,$1C,$12,$00,$17,$1B,$FE,$0F
+ $EC86 DEFB $0A,$18,$27,$18,$0A,$1D,$1B,$0E
+ $EC8E DEFB $FE,$12,$07,$0E,$17,$1C,$0E,$1A
+ $EC96 DEFB $2D,$0F,$12,$1A,$0E,$27,$1C,$00
+ $EC9E DEFB $27,$18,$15,$0A,$21,$FF
 
 ; Flash the teleporter
 ;

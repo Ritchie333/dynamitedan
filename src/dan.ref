@@ -18,6 +18,8 @@ SectionPrefix=Sprites
 [Page:Food]
 SectionPrefix=Food
 
+[Page:Items]
+SectionPrefix=Items
 
 [Page:Pokes]
 SectionType=ListItems
@@ -115,7 +117,7 @@ walls ie: cannot be walked through. }
 { 07 - 08 | Pointer to list of moving objects }
 { 09 - 0A | Location of dynamite in the room, if any }
 { 0B | If bits 0, 1 or 2 are set, this prints a bank card of UDG
-CB CC or CD in the room }
+CB CC or CD in the room. If bit 7 is set, this room has been visited. }
 TABLE#
 
 [DataStructures:UDG format]
@@ -209,6 +211,7 @@ DataStructures
 UDGs
 Sprites
 Food
+Items
 
 [Links]
 DataStructures=Data structures

@@ -471,6 +471,12 @@ b $CA1E "Good luck!"
 b $CA2B Attributes for intro screen
 b $CA3D Moving object data for intro screen
 D $CA3D Used by the routine at #R$CA5B
+b $CA43
+b $CA53 Laser movement for the intro screen
+g $CA57 Pointer to the current tune being played
+W $CA57
+g $CA59 Number of blocks for the tune
+g $CA5A Currently selected row that should flash
 c $CA5B Display the intro screen and wait for the game to start
 c $CB8D Turn a flashing option on the intro screen off
 c $CB9C Set the zero flag if ENTER or the fire button was pressed
@@ -758,6 +764,7 @@ b $EB57 Theme tune 7
 b $EB70 Theme tune 8
 b $EB89 Graphics for the plans
 b $EBDC Graphics for the safe door
+b $EC26 Intro string
 c $ECA4 Flash the teleporter
 R $ECA4 IY Pointer to current teleporter's data
 b $ECBD Laser graphics

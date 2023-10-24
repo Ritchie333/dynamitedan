@@ -21,3 +21,16 @@
 
 [Food:07 - Soup]
 #HTML(#R$66BF<br/><img src="images/soup.png"/>)
+
+[Items:Test tube]
+#HTML(#R$EF5D<br/><img src="images/udgs/testtube.png"/>)
+
+[Items:Dynamite]
+#HTML(#R$EF49<br/><img src="images/udgs/dynamite.png"/>)
+
+[Items:Plans]
+#HTML(#R$EB89<br/><img src="images/plans.png"/>)
+
+[Items:Safe door]
+#HTML(#R$EBDC<br/><img src="images/safedoor.png"/>)
+
