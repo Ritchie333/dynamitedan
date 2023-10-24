@@ -6285,40 +6285,44 @@ b$CE72 DEFB $00,$46,$59,$16
 ; Draw extra objects in the safe room if relevant
 ;
 ; Used by the routine at #R$CBBD.
-c$CE76 LD A,($CFCA)  ;
- $CE79 CP $1B        ;
- $CE7B RET NZ        ;
- $CE7C LD A,($C87E)  ;
- $CE7F BIT 0,A       ;
- $CE81 JR NZ,$CE8C   ;
- $CE83 LD DE,$140A   ;
- $CE86 LD HL,$EBDC   ;
- $CE89 CALL $E84E    ;
-*$CE8C LD A,($C87E)  ;
- $CE8F BIT 1,A       ;
- $CE91 RET NZ        ;
- $CE92 LD DE,$0506   ;
- $CE95 LD HL,$EB89   ;
- $CE98 CALL $E84E    ;
- $CE9B LD A,($C86C)  ;
- $CE9E CP $1A        ;
- $CEA0 JP NC,$0000   ;
- $CEA3 RET           ;
+c$CE76 LD A,($CFCA)  ; Get the current room. (#R$CFCA)
+ $CE79 CP $1B        ; Is it the room with the safe?
+ $CE7B RET NZ        ; Return if it's not.
+; This is the safe room, see if there's anything extra to draw.
+ $CE7C LD A,($C87E)  ; { Is the safe locked?
+ $CE7F BIT 0,A       ; }
+ $CE81 JR NZ,$CE8C   ; Jump forward if not.
+; The safe's locked, so need's drawing.
+ $CE83 LD DE,$140A   ; Set #REGde to the position.
+ $CE86 LD HL,$EBDC   ; Set #REGhl to the graphic. (#R$EBDC)
+ $CE89 CALL $E84E    ; Draw the graphic.
+; Has Dan got the plans?
+*$CE8C LD A,($C87E)  ; { Has Dan got the plans?
+ $CE8F BIT 1,A       ; }
+ $CE91 RET NZ        ; Return if he has.
+; Dan hasn't got the plans, they need drawing.
+ $CE92 LD DE,$0506   ; Set #REGde to the position.
+ $CE95 LD HL,$EB89   ; Set #REGhl to the graphic. (#R$EB89)
+ $CE98 CALL $E84E    ; Draw the graphic.
+ $CE9B LD A,($C86C)  ; { Is the number of lives greater than #N$1A?
+ $CE9E CP $1A        ; }
+ $CEA0 JP NC,$0000   ; If so, reset - either a bug or someone's hacking the game.
+ $CEA3 RET           ; Otherwise return.
 
 ; Room for action 1
 b$CEA4 DEFB $23
 
 ; Pointer to action 1
-w$CEA5 DEFW $CEDC
+w$CEA5 DEFW $CEDC   ; #R$CEDC
 
 ; Room for action 2
 b$CEA7 DEFB $1D
 
 ; Pointer to action 2
-w$CEA8 DEFW $CEE1
+w$CEA8 DEFW $CEE1   ; #R$CEE1
 
 ; Room for action 3
-b$CEAA DEFB $1B
+b$CEAA DEFB $1B     ; #R$CF77
 
 ; Pointer for action 3
 w$CEAB DEFW $CF77
@@ -6326,22 +6330,23 @@ w$CEAB DEFW $CF77
 ; Perform special actions
 ;
 ; Used by the routine at #R$C800.
-c$CEAD LD B,$03      ;
- $CEAF LD HL,$CEA4   ;
- $CEB2 LD A,($CFCA)  ;
-*$CEB5 CP (HL)       ;
- $CEB6 JR Z,$CEBE    ;
- $CEB8 INC HL        ;
+c$CEAD LD B,$03      ; Number of rooms to check.
+ $CEAF LD HL,$CEA4   ; Point #REGhl to the first action.
+ $CEB2 LD A,($CFCA)  ; Get the current room.
+*$CEB5 CP (HL)       ; Is the special action in this room?
+ $CEB6 JR Z,$CEBE    ; Jump forward if it is.
+ $CEB8 INC HL        ; { Move to the next entry.
  $CEB9 INC HL        ;
- $CEBA INC HL        ;
- $CEBB DJNZ $CEB5    ;
- $CEBD RET           ;
-*$CEBE INC HL        ;
+ $CEBA INC HL        ; }
+ $CEBB DJNZ $CEB5    ; { Loop until all actions have been considered.
+ $CEBD RET           ; }
+; A special action was found in this room, so act on it.
+*$CEBE INC HL        ; { Put the pointer to the action in #REGhl.
  $CEBF LD A,(HL)     ;
  $CEC0 INC HL        ;
  $CEC1 LD H,(HL)     ;
- $CEC2 LD L,A        ;
- $CEC3 JP (HL)       ;
+ $CEC2 LD L,A        ; }
+ $CEC3 JP (HL)       ; Do it.
 
 ; Rainbow lift data in room 23
 b$CEC4 DEFB $ED,$58,$06,$08,$7E,$0D,$1C,$28
@@ -6462,43 +6467,46 @@ c$CEF0 LD DE,$CEE8   ;
  $CF76 RET           ;
 
 ; Special actions on room 1B (safe room)
-c$CF77 LD HL,$CED4   ;
- $CF7A CALL $CEF0    ;
- $CF7D CALL $62A3    ;
- $CF80 LD A,($62A2)  ;
- $CF83 CP $50        ;
- $CF85 JR NZ,$CFB5   ;
- $CF87 LD A,($C872)  ;
- $CF8A CP $3E        ;
- $CF8C RET NZ        ;
- $CF8D LD A,($C873)  ;
- $CF90 CP $15        ;
- $CF92 RET NZ        ;
- $CF93 LD A,($C875)  ;
- $CF96 CP $05        ;
- $CF98 RET NZ        ;
- $CF99 LD A,($C87E)  ;
- $CF9C BIT 0,A       ;
- $CF9E RET NZ        ;
- $CF9F LD A,($C878)  ;
- $CFA2 CP $08        ;
- $CFA4 RET NZ        ;
- $CFA5 XOR A         ;
- $CFA6 LD ($62A2),A  ;
- $CFA9 LD HL,$C87E   ;
- $CFAC SET 0,(HL)    ;
- $CFAE LD HL,$6E0E   ;
- $CFB1 CALL $DB0B    ;
- $CFB4 RET           ;
-*$CFB5 CP $40        ;
- $CFB7 RET NZ        ;
- $CFB8 LD A,($C86C)  ;
- $CFBB CP $1A        ;
- $CFBD JP NC,$0000   ;
- $CFC0 LD A,($C873)  ;
- $CFC3 CP $17        ;
- $CFC5 RET NC        ;
- $CFC6 JP $CD8A      ;
+c$CF77 LD HL,$CED4   ; { Draw the rainbow lifts (#R$CED4).
+ $CF7A CALL $CEF0    ; }
+ $CF7D CALL $62A3    ; Blow the safe up.
+ $CF80 LD A,($62A2)  ; Get the frame count. (#R$62A2)
+ $CF83 CP $50        ; Is it #N$50?
+ $CF85 JR NZ,$CFB5   ; Jump forward if it is.
+ $CF87 LD A,($C872)  ; Get Dan's Y co-ordinate. (#R$C872)
+ $CF8A CP $3E        ; Is it #N$3E?
+ $CF8C RET NZ        ; Return if is isn't.
+ $CF8D LD A,($C873)  ; Get Dan's X co-ordinate. (#R$C873)
+ $CF90 CP $15        ; Is it #N$15?
+ $CF92 RET NZ        ; Return if it isn't.
+ $CF93 LD A,($C875)  ; Get Dan's frame count. (#R$C875)
+ $CF96 CP $05        ; Is it 5?
+ $CF98 RET NZ        ; Return if it isn't.
+ $CF99 LD A,($C87E)  ; Get some flags.
+ $CF9C BIT 0,A       ; Is the safe still locked?
+ $CF9E RET NZ        ; Return if not.
+; Dan is next to the safe and it's locked. Can it be blown up?
+ $CF9F LD A,($C878)  ; Get the number of dynamite sticks. (#R$C878)
+ $CFA2 CP $08        ; Has Dan got all 8?
+ $CFA4 RET NZ        ; Return if not.
+; Dan's got all 8 dynamite sticks, so blow the safe up!
+ $CFA5 XOR A         ; { Start at frame 0. (#R$62A2)
+ $CFA6 LD ($62A2),A  ; }
+ $CFA9 LD HL,$C87E   ; { Set that the safe has been blown up.
+ $CFAC SET 0,(HL)    ; }
+ $CFAE LD HL,$6E0E   ; { Play the "blown the safe door" tune and return.
+ $CFB1 CALL $DB0B    ; 
+ $CFB4 RET           ; }
+; The safe is being blown up or has been blown up.
+*$CFB5 CP $40        ; Is the frame count #N40?
+ $CFB7 RET NZ        ; Return if it is.
+ $CFB8 LD A,($C86C)  ; Otherwise check the number of lives. 
+ $CFBB CP $1A        ; Are there more than #N$1A?
+ $CFBD JP NC,$0000   ; If so, somebody's been hacking or there's a bug, so reset the system.
+ $CFC0 LD A,($C873)  ; Get Dan's X co-ordinate.
+ $CFC3 CP $17        ; Is it greater than #N$17?
+ $CFC5 RET NC        ; Return if it is.
+ $CFC6 JP $CD8A      ; Otherwise Dan got caught in the blast range - oops - so lose a life.
 
 ; Attribute marking the food item in this room
 g$CFC9 DEFB $00
