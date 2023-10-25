@@ -1006,8 +1006,9 @@ w $DA8B Next action to take during playing a sound (used by #R$DA8D)
 c $DA8D Play a note or a sound effect
 c $DA9E Play a sound
 c $DAB2 Beep
-R $DAB2 B Frequency
-R $DAB2 DE Length
+R $DAB2 B Length
+R $DAB2 DE Frequency
+c $DAC8
 c $DAE5 Start the "lose a life" sound effect
 c $DAFA Pause for one second
 c $DB01 Select a sound effect to play

@@ -5884,34 +5884,34 @@ b$C8ED DEFB $47,$46,$43,$07,$06,$02,$05,$04
 b$C8F5 DEFB $45,$04,$07,$02,$43,$02,$03,$06
  $C8FD DEFB $05,$44
 
-; Put Dan in the correct place when entering a room
+; Copy Dan's graphic into the working buffer.
 ;
 ; Used by the routine at #R$CBBD.
-c$C8FF LD DE,($C872) ; Put Dan's co-ordinates in #REGde.
- $C903 LD HL,$62D6   ;
- $C906 LD A,$0E      ;
-*$C908 EX AF,AF'     ;
- $C909 PUSH DE       ;
- $C90A CALL $E8D2    ;
- $C90D LD C,$02      ;
-*$C90F PUSH DE       ;
- $C910 LD B,$03      ;
-*$C912 LD A,(DE)     ;
- $C913 LD (HL),A     ;
- $C914 INC HL        ;
- $C915 INC E         ;
- $C916 DJNZ $C912    ;
- $C918 POP DE        ;
- $C919 INC D         ;
- $C91A DEC C         ;
- $C91B JR NZ,$C90F   ;
- $C91D POP DE        ;
- $C91E INC E         ;
- $C91F INC E         ;
- $C920 EX AF,AF'     ;
- $C921 DEC A         ;
- $C922 JR NZ,$C908   ;
- $C924 RET           ;
+c$C8FF LD DE,($C872) ; Put Dan's co-ordinates (#R$C872) in #REGde.
+ $C903 LD HL,$62D6   ; Point #REGhl to Dan's current graphic.
+ $C906 LD A,$0E      ; #N0E entries to check.
+*$C908 EX AF,AF'     ; Remember #REGa.
+ $C909 PUSH DE       ; Remember #REGde.
+ $C90A CALL $E8D2    ; Convert the co-ordinates to a screen address.
+ $C90D LD C,$02      ; 2 rows to draw.
+*$C90F PUSH DE       ; Remember #REGde.
+ $C910 LD B,$03      ; 3 columns to draw.
+*$C912 LD A,(DE)     ; Get the screen data.
+ $C913 LD (HL),A     ; Put it in the graphic buffer.
+ $C914 INC HL        ; Move to the next graphic data.
+ $C915 INC E         ; Move to the next column.
+ $C916 DJNZ $C912    ; Loop until all the columns in this row are drawn.
+ $C918 POP DE        ; Restore #REGde.
+ $C919 INC D         ; Move to the next row.
+ $C91A DEC C         ; { Loop until all the rows are drawn.
+ $C91B JR NZ,$C90F   ; }
+ $C91D POP DE        ; Restore #REGde.
+ $C91E INC E         ; { Move to the next set of data.
+ $C91F INC E         ; }
+ $C920 EX AF,AF'     ; Restore #REGa.
+ $C921 DEC A         ; { Loop until all entries are done.
+ $C922 JR NZ,$C908   ; }
+ $C924 RET           ; Return.
 
 ; Current high score
 g$C925 DEFB $00,$00,$00,$00,$FF
@@ -5925,89 +5925,99 @@ c$C92A LD HL,($C870) ; Get the frame count before the score should be updated. (
  $C92F OR H          ; }
  $C930 JR NZ,$C939   ; Jump forward if not.
 ; Time to update the score.
- $C932 LD HL,$C86B   ;
- $C935 INC (HL)      ;
- $C936 LD HL,$0384   ;
-*$C939 LD ($C870),HL ;
- $C93C LD HL,$C86F   ;
- $C93F DEC (HL)      ;
- $C940 JR Z,$C95D    ;
- $C942 LD A,($C86D)  ;
- $C945 CP $01        ;
- $C947 JR NZ,$C956   ;
- $C949 LD A,(HL)     ;
- $C94A AND $07       ;
- $C94C JR NZ,$C956   ;
- $C94E LD A,$2E      ;
- $C950 CALL $DB01    ;
- $C953 XOR A         ;
- $C954 JR $C958      ;
-*$C956 LD A,$07      ;
-*$C958 LD ($C8ED),A  ;
- $C95B JR $C967      ;
-*$C95D LD (HL),$C8   ;
- $C95F XOR A         ;
- $C960 CALL $DB01    ;
- $C963 LD HL,$C86D   ;
- $C966 DEC (HL)      ;
-*$C967 LD HL,$C86E   ;
- $C96A DEC (HL)      ;
- $C96B JR NZ,$C997   ;
- $C96D LD (HL),$03   ;
- $C96F LD HL,$C86B   ;
- $C972 LD A,(HL)     ;
- $C973 AND A         ;
- $C974 JR Z,$C997    ;
- $C976 DEC (HL)      ;
- $C977 LD A,($C87E)  ;
- $C97A BIT 5,A       ;
- $C97C JR NZ,$C984   ;
- $C97E LD HL,$DAC8   ;
- $C981 LD ($DA8B),HL ;
+ $C932 LD HL,$C86B   ; Point #REGhl to the current amount to add to the score. (#R$C86B)
+ $C935 INC (HL)      ; Increase it by 1.
+ $C936 LD HL,$0384   ; { Wait another #N384 frames to update the score.
+*$C939 LD ($C870),HL ; }
+; Check for energy
+ $C93C LD HL,$C86F   ; { Decrement the frame count until an energy bar is lost. (#R$C86F)
+ $C93F DEC (HL)      ; }
+ $C940 JR Z,$C95D    ; Jump forward if it is zero.
+; If Dan only has one energy bar, sound a warning.
+ $C942 LD A,($C86D)  ; Get the energy bar count. (#R$C86D)
+ $C945 CP $01        ; Is there one left?
+ $C947 JR NZ,$C956   ; Jump forward if not.
+ $C949 LD A,(HL)     ; Get the current frame count.
+ $C94A AND $07       ; Are bits 0 - 2 set?
+ $C94C JR NZ,$C956   ; Jump forward if not.
+ $C94E LD A,$2E      ; { Play a "energy low" sound effect.
+ $C950 CALL $DB01    ; }
+ $C953 XOR A         ; { Set the attribute on the remaining energy bar to 0.
+ $C954 JR $C958      ; }
+*$C956 LD A,$07      ; { Otherwise, set it to 7.
+*$C958 LD ($C8ED),A  ; }
+ $C95B JR $C967      ; Jump forward.
+; Dan has lost one bar of energy.
+*$C95D LD (HL),$C8   ; Reset the frame count to #N$C8.
+ $C95F XOR A         ; { Play a tick sound.
+ $C960 CALL $DB01    ; }
+ $C963 LD HL,$C86D   ; { Decrement the energy by 1.
+ $C966 DEC (HL)      ; }
+*$C967 LD HL,$C86E   ; { Decrement the copy of this by 1.
+ $C96A DEC (HL)      ; }
+ $C96B JR NZ,$C997   ; Jump forward if there is still energy left.
+; Dan has run out of energy.
+ $C96D LD (HL),$03   ; Reset the frame count to #N$03.
+ $C96F LD HL,$C86B   ; Point #REGhl to the current amount to add to the score. (#R$C86B)
+ $C972 LD A,(HL)     ; Put the value in #REGa.
+ $C973 AND A         ; Is it zero?
+ $C974 JR Z,$C997    ; Jump forward if it is.
+ $C976 DEC (HL)      ; Otherwise decrease the amount to add.
+ $C977 LD A,($C87E)  ; Get the flags. (#R$C87E)
+ $C97A BIT 5,A       ; Has Dan got the aerosol (bit 5)?
+ $C97C JR NZ,$C984   ; Jump forward if not.
+ $C97E LD HL,$DAC8   ; { Point the current sound action (#R$DA8B) to
+ $C981 LD ($DA8B),HL ; a clicking effect. }
 ; Increase the score by 1
-*$C984 LD HL,$C869   ;
- $C987 LD B,$04      ;
-*$C989 LD A,(HL)     ;
- $C98A CP $09        ;
- $C98C JR NZ,$C995   ;
- $C98E XOR A         ;
- $C98F LD (HL),A     ;
- $C990 DEC HL        ;
- $C991 DJNZ $C989    ;
- $C993 JR $C997      ;
-*$C995 INC A         ;
- $C996 LD (HL),A     ;
-*$C997 LD HL,$5AA0   ;
- $C99A LD DE,$C8ED   ;
- $C99D LD A,($C86D)  ;
- $C9A0 LD B,A        ;
- $C9A1 LD C,A        ;
- $C9A2 AND A         ;
- $C9A3 JR NZ,$C9B3   ;
- $C9A5 LD A,($C874)  ;
- $C9A8 BIT 5,A       ;
- $C9AA JR NZ,$C9C5   ;
- $C9AC LD (HL),$00   ;
- $C9AE CALL $CD8A    ;
- $C9B1 JR $C9C5      ;
-*$C9B3 LD A,(DE)     ;
- $C9B4 LD (HL),A     ;
- $C9B5 INC L         ;
- $C9B6 INC DE        ;
- $C9B7 DJNZ $C9B3    ;
- $C9B9 LD A,$08      ;
- $C9BB SUB C         ;
- $C9BC AND A         ;
- $C9BD JR Z,$C9C5    ;
- $C9BF LD B,A        ;
- $C9C0 XOR A         ;
-*$C9C1 LD (HL),A     ;
- $C9C2 INC L         ;
- $C9C3 DJNZ $C9C1    ;
-*$C9C5 LD HL,$C866   ;
- $C9C8 LD DE,$51B0   ;
- $C9CB CALL $EEF9    ;
- $C9CE LD A,($5AE7)  ;
+*$C984 LD HL,$C869   ; Point #REGhl to the end of the score. (#R$C866)
+ $C987 LD B,$04      ; 4 digits to check.
+*$C989 LD A,(HL)     ; { Is the next digit 9?
+ $C98A CP $09        ; }
+ $C98C JR NZ,$C995   ; Jump forward if it isn't.
+; Handle decimal overflow on the score.
+ $C98E XOR A         ; { Set the value to 0.
+ $C98F LD (HL),A     ; }
+ $C990 DEC HL        ; Move to the next digit.
+ $C991 DJNZ $C989    ; Loop while there are more digits to check.
+ $C993 JR $C997      ; Move forward - maximum score of 9,999 has been reached.
+; No overflow, so increment the score.
+*$C995 INC A         ; { Add one to the score.
+ $C996 LD (HL),A     ; }
+; Update the energy display.
+*$C997 LD HL,$5AA0   ; Point #REGhl to the attribute area with the energy.
+ $C99A LD DE,$C8ED   ; Point #REGde to the energy bar attributes. (#R$C8ED)
+ $C99D LD A,($C86D)  ; Get the current energy (#R$C86D) in #REGa.
+ $C9A0 LD B,A        ; { Store it in #REGb and #REGc.
+ $C9A1 LD C,A        ; }
+ $C9A2 AND A         ; Is it 0?
+ $C9A3 JR NZ,$C9B3   ; Jump forward if it isn't.
+; Dan has run out of energy, so lose a life.
+ $C9A5 LD A,($C874)  ; Get the flags (#R$C874)
+ $C9A8 BIT 5,A       ; Is bit 5 (lose a life) set?
+ $C9AA JR NZ,$C9C5   ; Jump forward if it is.
+ $C9AC LD (HL),$00   ; Clear the last attribute of energy.
+ $C9AE CALL $CD8A    ; { Lose a life and jump forward.
+ $C9B1 JR $C9C5      ; }
+; Dan has one less energy bar.
+*$C9B3 LD A,(DE)     ; Get the attribute.
+ $C9B4 LD (HL),A     ; Set it on screen.
+ $C9B5 INC L         ; Move to the next column.
+ $C9B6 INC DE        ; Move to the next attribute data.
+ $C9B7 DJNZ $C9B3    ; Loop while there is more to draw.
+ $C9B9 LD A,$08      ; { Find out how many energy cells
+ $C9BB SUB C         ; should be clear (8 - current energy) }
+ $C9BC AND A         ; Are there any?
+ $C9BD JR Z,$C9C5    ; Jump forward if not.
+ $C9BF LD B,A        ; Get the number of energy bars to clear.
+ $C9C0 XOR A         ; { Set the attribute to black on black.
+*$C9C1 LD (HL),A     ; }
+ $C9C2 INC L         ; Move to the next column.
+ $C9C3 DJNZ $C9C1    ; Loop while there is more to draw.
+; Print the current score
+*$C9C5 LD HL,$C866   ; Point #REGhl to the current score. (#R$C866)s
+ $C9C8 LD DE,$51B0   ; Point #REGde to the position on screen.
+ $C9CB CALL $EEF9    ; Display the data.
+ $C9CE LD A,($5AE7)  ; { Copy back the attribute to the rest of the score.
  $C9D1 LD C,A        ;
  $C9D2 LD HL,$5AE0   ;
  $C9D5 LD B,$08      ;
@@ -6015,15 +6025,16 @@ c$C92A LD HL,($C870) ; Get the frame count before the score should be updated. (
  $C9D8 LD (HL),C     ;
  $C9D9 INC L         ;
  $C9DA LD C,A        ;
- $C9DB DJNZ $C9D7    ;
+ $C9DB DJNZ $C9D7    ; }
+; Display the lives
  $C9DD LD BC,$0502   ;
  $C9E0 LD HL,$5A96   ;
- $C9E3 LD DE,$C8F5   ;
- $C9E6 LD A,($C86C)  ;
- $C9E9 CP $1A        ;
- $C9EB JP NC,$0000   ;
- $C9EE CP $0B        ;
- $C9F0 JR C,$C9F4    ;
+ $C9E3 LD DE,$C8F5   ; Point #REGde to the attributes for lives.
+ $C9E6 LD A,($C86C)  ; Get the number of lives (#R$C86C)
+ $C9E9 CP $1A        ; Is it more than #$1A, the maximum?
+ $C9EB JP NC,$0000   ; If so, reset, either a bug or someone's been hacking.
+ $C9EE CP $0B        ; Is it more than #$0B, taking up two rows?
+ $C9F0 JR C,$C9F4    ; Jump forward if it is.
  $C9F2 LD A,$0A      ;
 *$C9F4 EX AF,AF'     ;
 *$C9F5 EX AF,AF'     ;
@@ -6354,30 +6365,31 @@ c$CBBD LD ($CFCA),A   ; Get the current room. (#R$CFCA).
 ; Draw the river
 ;
 ; Used by the routine at #R$CBBD.
-c$CC36 LD A,($CFCA)  ;
- $CC39 CP $08        ;
- $CC3B RET NC        ;
- $CC3C LD HL,$6985   ;
- $CC3F LD DE,$5060   ;
- $CC42 LD C,$03      ;
-*$CC44 PUSH DE       ;
- $CC45 LD B,$20      ;
-*$CC47 LD A,(HL)     ;
- $CC48 LD (DE),A     ;
- $CC49 INC HL        ;
- $CC4A INC E         ;
- $CC4B DJNZ $CC47    ;
- $CC4D POP DE        ;
- $CC4E INC D         ;
- $CC4F DEC C         ;
- $CC50 JR NZ,$CC44   ;
- $CC52 LD DE,$5A60   ;
- $CC55 LD A,$4F      ;
- $CC57 LD B,$20      ;
-*$CC59 LD (DE),A     ;
- $CC5A INC E         ;
- $CC5B DJNZ $CC59    ;
- $CC5D RET           ;
+c$CC36 LD A,($CFCA)  ; Get the current room.
+ $CC39 CP $08        ; Is it less than 8?
+ $CC3B RET NC        ; If so, the room is not at ground level, so return.
+; The room is at ground level, so draw the river.
+ $CC3C LD HL,$6985   ; Point #REGhl at the river graphics. (#R$6985)
+ $CC3F LD DE,$5060   ; Point #REGde at the initial screen position.
+ $CC42 LD C,$03      ; 3 rows to draw.
+*$CC44 PUSH DE       ; Remember the screen posiiton in #REGde.
+ $CC45 LD B,$20      ; #N$20 columns to draw.
+*$CC47 LD A,(HL)     ; Get the graphic data.
+ $CC48 LD (DE),A     ; Put it on screen.
+ $CC49 INC HL        ; Move to the next graphic data.
+ $CC4A INC E         ; Move to the next column on screen.
+ $CC4B DJNZ $CC47    ; Loop while there are more columns on this row to draw.
+ $CC4D POP DE        ; Restore the screen position in #REGde.
+ $CC4E INC D         ; Move to the next row on screen.
+ $CC4F DEC C         ; { Loop while there are more rows to draw.
+ $CC50 JR NZ,$CC44   ; }
+ $CC52 LD DE,$5A60   ; Point #REGde at the attributes.
+ $CC55 LD A,$4F      ; Draw bright white on blue.
+ $CC57 LD B,$20      ; #N$20 columns to set attributes for.
+*$CC59 LD (DE),A     ; Set this column.
+ $CC5A INC E         ; Move to the next column.
+ $CC5B DJNZ $CC59    ; { Loop until all the columns have had attributes set.
+ $CC5D RET           ; }
 
 ; Current animation frame for the river (1-3)
 ;
@@ -6562,7 +6574,7 @@ c$CD5C LD A,E        ;
  $CD62 EXX           ;
  $CD63 LD E,A        ;
  $CD64 LD D,$0E      ;
- $CD66 CALL $E909    ;
+ $CD66 CALL $E909    ; Convert into an attribute address.
  $CD69 LD A,(DE)     ;
  $CD6A LD B,A        ;
  $CD6B INC E         ;
@@ -8667,51 +8679,58 @@ c$DA9E LD HL,$DAFA   ;
 ;
 ; Used by the routines at #R$DAE5 and #R$DDE0.
 ;
-; B Frequency
-; DE Length
-c$DAB2 LD A,($E800)  ;
-*$DAB5 PUSH DE       ;
- $DAB6 XOR $10       ;
- $DAB8 OUT ($FE),A   ;
- $DABA LD C,A        ;
-*$DABB DEC DE        ;
- $DABC LD A,D        ;
- $DABD OR E          ;
- $DABE JR NZ,$DABB   ;
- $DAC0 POP DE        ;
- $DAC1 LD A,C        ;
- $DAC2 DJNZ $DAB5    ;
- $DAC4 LD ($E800),A  ;
- $DAC7 RET           ;
- $DAC8 LD HL,$DAFA   ;
- $DACB LD ($DA8B),HL ;
- $DACE LD DE,$000A   ;
+; B Length
+; DE Frequency
+c$DAB2 LD A,($E800)  ; Get the last read state of port #N$FE. (#R$E800)
+*$DAB5 PUSH DE       ; Remember #REGde.
+; First, toggle the bit on the speaker to start a square wave
+ $DAB6 XOR $10       ; { Toggle the speaker bit on the port.
+ $DAB8 OUT ($FE),A   ; }
+ $DABA LD C,A        ; Remember this in #REGc.
+; Now, wait a while, leaving the speaker in this state,
+; then loop back, toggling the bit again to start a new wave.
+*$DABB DEC DE        ; Decrease the length.
+ $DABC LD A,D        ; { Is it now zero?
+ $DABD OR E          ; }
+ $DABE JR NZ,$DABB   ; Jump back if it isn't.
+ $DAC0 POP DE        ; Restore the wave length.
+ $DAC1 LD A,C        ; Restore the speaker state.
+ $DAC2 DJNZ $DAB5    ; Loop back and toggle it again.
+ $DAC4 LD ($E800),A  ; { Store the most recent state and return.
+ $DAC7 RET           ; }
+
+; Play a clicking effect while the score is being incremented
+;
+; Used by the routine at #R$C92A
+c$DAC8 LD HL,$DAFA   ; { Make the next sound action to take (#R$DA8B)
+ $DACB LD ($DA8B),HL ; as pausing for one second (#R$DAFA). }
+ $DACE LD DE,$000A   ; { Make a short beep.
  $DAD1 LD B,$1E      ;
- $DAD3 CALL $DAB2    ;
- $DAD6 LD BC,$0740   ;
- $DAD9 CALL $D4AF    ;
- $DADC LD DE,$0014   ;
+ $DAD3 CALL $DAB2    ; }
+ $DAD6 LD BC,$0740   ; { Pause.
+ $DAD9 CALL $D4AF    ; }
+ $DADC LD DE,$0014   ; { Make another short beep.
  $DADF LD B,$14      ;
- $DAE1 CALL $DAB2    ;
- $DAE4 RET           ;
+ $DAE1 CALL $DAB2    ; }
+ $DAE4 RET           ; Return.
 
 ; Start the "lose a life" sound effect
 ;
 ; Used by the routine at #R$DA8D.
-c$DAE5 LD HL,$EE34   ;
- $DAE8 LD B,$09      ;
-*$DAEA LD E,(HL)     ;
- $DAEB LD D,$00      ;
- $DAED INC HL        ;
- $DAEE LD B,(HL)     ;
- $DAEF PUSH HL       ;
- $DAF0 PUSH BC       ;
- $DAF1 CALL $DAB2    ;
- $DAF4 POP BC        ;
- $DAF5 POP HL        ;
- $DAF6 INC HL        ;
- $DAF7 DJNZ $DAEA    ;
- $DAF9 RET           ;
+c$DAE5 LD HL,$EE34   ; Point #REGhl at the "life lost" sound effect data. (#R$EE34)
+ $DAE8 LD B,$09      ; Loop 9 times.
+*$DAEA LD E,(HL)     ; { Put the next frequency in #REGde.
+ $DAEB LD D,$00      ; } 
+ $DAED INC HL        ; { Put the next length in #REGb.
+ $DAEE LD B,(HL)     ; }
+ $DAEF PUSH HL       ; { Remember #REGhl and #REGbc.
+ $DAF0 PUSH BC       ; }
+ $DAF1 CALL $DAB2    ; Beep.
+ $DAF4 POP BC        ; { Restore #REGhl and #REGbc.
+ $DAF5 POP HL        ; }
+ $DAF6 INC HL        ; Move to the next entry.
+ $DAF7 DJNZ $DAEA    ; { Repeat until all sound has been played.
+ $DAF9 RET           ; }
 
 ; Pause for one second
 ;
@@ -8726,10 +8745,10 @@ c$DAFA LD BC,$0A84   ; Load #REGbc with about one second's worth of pause.
 ; #R$D61E, #R$DE52, #R$E663 and #R$E775.
 ;
 ; A Type of sound effect
-c$DB01 LD ($DA87),A  ;
- $DB04 LD HL,$DA9E   ;
- $DB07 LD ($DA8B),HL ;
- $DB0A RET           ;
+c$DB01 LD ($DA87),A  ; Set the current tune type (#R$DA87) to #REGa.
+ $DB04 LD HL,$DA9E   ; { Set the next sound action (#R$DA8B)
+ $DB07 LD ($DA8B),HL ; to play a sound (#R$DA9E).}
+ $DB0A RET           ; Return.
 
 ; Select a tune to play
 ;
@@ -8737,52 +8756,54 @@ c$DB01 LD ($DA87),A  ;
 ; #R$DE28 and #R$DE87.
 ;
 ; HL Pointer to the tune data
-c$DB0B LD ($DA88),HL ;
- $DB0E LD A,($DA8A)  ;
- $DB11 SET 0,A       ;
- $DB13 LD ($DA8A),A  ;
- $DB16 RET           ;
+c$DB0B LD ($DA88),HL ; Set it. (#R$DA88)
+ $DB0E LD A,($DA8A)  ; { Set bit 0 (play a tune) on the current playing state.
+ $DB11 SET 0,A       ; 
+ $DB13 LD ($DA8A),A  ; }
+ $DB16 RET           ; Return.
 
 ; Play a note of a tune
 ;
 ; Used by the routine at #R$DA8D.
-c$DB17 LD HL,($DA88) ;
- $DB1A LD A,(HL)     ;
- $DB1B INC HL        ;
- $DB1C LD ($DA88),HL ;
- $DB1F CP $FF        ;
- $DB21 JR Z,$DB29    ;
- $DB23 AND A         ;
- $DB24 JR Z,$DAFA    ;
- $DB26 JP $DAA7      ;
-*$DB29 LD HL,$DAFA   ;
- $DB2C LD ($DA8B),HL ;
- $DB2F LD A,($DA8A)  ;
+c$DB17 LD HL,($DA88) ; Get the address of the current note in #REGhl.
+ $DB1A LD A,(HL)     ; Put the value in #REGa.
+ $DB1B INC HL        ; { Move to the next note.
+ $DB1C LD ($DA88),HL ; }
+; Now play the relevant note.
+ $DB1F CP $FF        ; Is this the end of the tune?
+ $DB21 JR Z,$DB29    ; Jump forward if so.
+ $DB23 AND A         ; Is this a rest?
+ $DB24 JR Z,$DAFA    ; Jump forward if so.
+ $DB26 JP $DAA7      ; Otherwise play the note.
+; The tune is now finished.
+*$DB29 LD HL,$DAFA   ; { Set the current sound type (#R$DA8B) to
+ $DB2C LD ($DA8B),HL ; pause (#R$DAFA). }
+ $DB2F LD A,($DA8A)  ; { Reset bit 0 on the current playing state.
  $DB32 RES 0,A       ;
- $DB34 LD ($DA8A),A  ;
- $DB37 RET           ;
+ $DB34 LD ($DA8A),A  ; }
+ $DB37 RET           ; Return.
 
 ; Return with the carry flag set if Dan has moved over a glowing item
 ;
 ; Used by the routines at #R$D1CE and #R$DE87.
 ;
-; DE Current co-ordinates.
-c$DB38 PUSH HL       ;
- $DB39 LD HL,($C872) ;
- $DB3C LD A,H        ;
- $DB3D SUB D         ;
- $DB3E ADD A,$03     ;
- $DB40 CP $07        ;
- $DB42 JR NC,$DB50   ;
- $DB44 LD A,L        ;
- $DB45 SRL A         ;
- $DB47 SRL A         ;
+; DE Co-ordinates of the item.
+c$DB38 PUSH HL       ; Remember #REGhl.
+ $DB39 LD HL,($C872) ; Get Dan's co-ordinates (#R$C872, #R$C873)
+ $DB3C LD A,H        ; Put the Y co-ordinate in #REGa.
+ $DB3D SUB D         ; { Is this close enough to the
+ $DB3E ADD A,$03     ; Y co-ordinate of the item?
+ $DB40 CP $07        ; }
+ $DB42 JR NC,$DB50   ; Jump forward if it isn't.
+ $DB44 LD A,L        ; Put the X co-ordinate in #REGa.
+ $DB45 SRL A         ; { Set the carry flag if this close enough to
+ $DB47 SRL A         ; the X co-ordinate of the item.
  $DB49 SRL A         ;
  $DB4B SUB E         ;
  $DB4C ADD A,$03     ;
- $DB4E CP $07        ;
-*$DB50 POP HL        ;
- $DB51 RET           ;
+ $DB4E CP $07        ; }
+*$DB50 POP HL        ; { Restore #REGhl and return.
+ $DB51 RET           ; }
 
 ; Redefine keys confirmation text
 ;
@@ -8796,17 +8817,17 @@ b$DB5D DEFB $01,$4E,$0B,$01,$00,$0A
 ; Display the redefine keys instructions
 ;
 ; Used by the routine at #R$CA5B.
-c$DB63 CALL $E801    ;
- $DB66 LD HL,$FD93   ;
- $DB69 CALL $EEF1    ;
- $DB6C LD HL,$DB5D   ;
- $DB6F CALL $F470    ;
- $DB72 LD HL,$DA8A   ;
- $DB75 LD (HL),$00   ;
- $DB77 CALL $DD8D    ;
- $DB7A LD HL,$DB52   ;
- $DB7D CALL $DDE0    ;
- $DB80 JP $F2BE      ;
+c$DB63 CALL $E801    ; Clear the screen.
+ $DB66 LD HL,$FD93   ; { Print the instructions (#R$FD93).
+ $DB69 CALL $EEF1    ; }
+ $DB6C LD HL,$DB5D   ; { Set the attributes.
+ $DB6F CALL $F470    ; }
+ $DB72 LD HL,$DA8A   ; Get the current sound state (#R$DA8A).
+ $DB75 LD (HL),$00   ; Set it to "no sound".
+ $DB77 CALL $DD8D    ; Wait for ENTER to be pressed.
+ $DB7A LD HL,$DB52   ; { Display the confirmation text.
+ $DB7D CALL $DDE0    ; }
+ $DB80 JP $F2BE      ; Jump forward to define the keys.
 
 ; Draw a horizontally moving sprite
 ;
@@ -9036,18 +9057,18 @@ c$DCC1 LD A,(IX+$04) ;
 ;
 ; Used by the routines at #R$DBB8 and #R$DCC1.
 ;
-; R A ID of the food item
+; A ID of the food item
 ; HL On return, holds the address for the graphic data
-c$DCE8 ADD A,A       ;
- $DCE9 LD C,A        ;
- $DCEA LD B,$00      ;
- $DCEC LD HL,$65DA   ;
- $DCEF ADD HL,BC     ;
- $DCF0 LD A,(HL)     ;
+c$DCE8 ADD A,A       ; Double the item ID to get a word offset.
+ $DCE9 LD C,A        ; { Put this in #REGbc.
+ $DCEA LD B,$00      ; }
+ $DCEC LD HL,$65DA   ; { Add the base address of the food table (#R$65DA).
+ $DCEF ADD HL,BC     ; }
+ $DCF0 LD A,(HL)     ; { Put the data found in #REGhl.
  $DCF1 INC HL        ;
  $DCF2 LD H,(HL)     ;
- $DCF3 LD L,A        ;
- $DCF4 RET           ;
+ $DCF3 LD L,A        ; }
+ $DCF4 RET           ; Return.
 
 ; Set bit 0 to denote items are only being drawn for instructions
 b$DCF5 DEFB $00
@@ -9055,65 +9076,65 @@ b$DCF5 DEFB $00
 ; Display instructions
 ;
 ; Used by the routine at #R$CA5B.
-c$DCF6 LD HL,$DA8A   ;
- $DCF9 RES 0,(HL)    ;
+c$DCF6 LD HL,$DA8A   ; Get the current sound state. (#R$DA8A)
+ $DCF9 RES 0,(HL)    ; Reset bit 0 (play a tune).
 ; Page 1
- $DCFB CALL $E801    ;
- $DCFE LD HL,$F8C7   ;
- $DD01 CALL $EEF1    ;
- $DD04 LD HL,$F525   ;
- $DD07 CALL $F470    ;
- $DD0A CALL $DD8D    ;
- $DD0D LD HL,$F5A0   ;
- $DD10 CALL $DDE0    ;
+ $DCFB CALL $E801    ; Clear the screen.
+ $DCFE LD HL,$F8C7   ; { Print the first page. (#R$F8C7)
+ $DD01 CALL $EEF1    ; }
+ $DD04 LD HL,$F525   ; { Print the attributes for the first page. (#R$F525)
+ $DD07 CALL $F470    ; }
+ $DD0A CALL $DD8D    ; Wait for ENTER to be pressed.
+ $DD0D LD HL,$F5A0   ; { Print the end message. (#R$F5A0)
+ $DD10 CALL $DDE0    ; }
 ; Page 2
- $DD13 CALL $E801    ;
- $DD16 LD HL,$FB66   ;
- $DD19 CALL $EEF1    ;
- $DD1C LD HL,$F562   ;
- $DD1F CALL $F470    ;
- $DD22 CALL $DD8D    ;
- $DD25 LD HL,$F5AD   ;
- $DD28 CALL $DDE0    ;
+ $DD13 CALL $E801    ; Clear the screen.
+ $DD16 LD HL,$FB66   ; { Print the second page. (#R$FB66)
+ $DD19 CALL $EEF1    ; }
+ $DD1C LD HL,$F562   ; { Print the attributes for the second page. (#R$F562)
+ $DD1F CALL $F470    ; }
+ $DD22 CALL $DD8D    ; Wait for ENTER to be pressed.
+ $DD25 LD HL,$F5AD   ; { Print the end message. (#R$F5AD)
+ $DD28 CALL $DDE0    ; }
 ; Page 3
- $DD2B CALL $E801    ;
- $DD2E LD HL,$FCAA   ;
- $DD31 CALL $EEF1    ;
- $DD34 LD HL,$F577   ;
- $DD37 CALL $F470    ;
- $DD3A LD IX,$F505   ;
- $DD3E XOR A         ;
-*$DD3F PUSH AF       ;
- $DD40 CALL $DCCC    ;
- $DD43 INC IX        ;
- $DD45 INC IX        ;
- $DD47 POP AF        ;
- $DD48 INC A         ;
- $DD49 CP $08        ;
- $DD4B JR NZ,$DD3F   ;
- $DD4D CALL $DD8D    ;
- $DD50 LD HL,$F5C9   ;
- $DD53 CALL $DDE0    ;
+ $DD2B CALL $E801    ; Clear the screen.
+ $DD2E LD HL,$FCAA   ; { Print the third page. (#R$FCAA)
+ $DD31 CALL $EEF1    ; }
+ $DD34 LD HL,$F577   ; { Print the attributes for the third page. (#R$F525)
+ $DD37 CALL $F470    ; }
+ $DD3A LD IX,$F505   ; Point #REGix at the food data for the instructions. (#R$F505)
+ $DD3E XOR A         ; { Set #REGa to 0 and remember this.
+*$DD3F PUSH AF       ; }
+ $DD40 CALL $DCCC    ; Print a graphic.
+ $DD43 INC IX        ; { Move to the next item.
+ $DD45 INC IX        ; }
+ $DD47 POP AF        ; Restore #REGa.
+ $DD48 INC A         ; Increment the number of items drawn.
+ $DD49 CP $08        ; Have all items been drawn?
+ $DD4B JR NZ,$DD3F   ; Jump back if not.
+ $DD4D CALL $DD8D    ; Wait for ENTER to be pressed.
+ $DD50 LD HL,$F5C9   ; { Print the end message. (#R$F5C9)
+ $DD53 CALL $DDE0    ; }
 ; Page 4
- $DD56 CALL $E801    ;
- $DD59 LD HL,$FD1D   ;
- $DD5C CALL $EEF1    ;
- $DD5F LD HL,$F587   ;
- $DD62 CALL $F470    ;
- $DD65 LD A,$01      ;
- $DD67 LD ($DCF5),A  ;
- $DD6A LD IX,$F51A   ;
- $DD6E LD HL,$F592   ;
- $DD71 CALL $ED06    ;
- $DD74 LD HL,$EB89   ;
+ $DD56 CALL $E801    ; Clear the screen.
+ $DD59 LD HL,$FD1D   ; { Print the fourth page. (#R$FD1D)
+ $DD5C CALL $EEF1    ; }
+ $DD5F LD HL,$F587   ; { Print the attributes for the fourth page. (#R$F525)
+ $DD62 CALL $F470    ; }
+ $DD65 LD A,$01      ; { Set bit 0 on #R$DCF5 - items are only being
+ $DD67 LD ($DCF5),A  ; used for the instructions. }
+ $DD6A LD IX,$F51A   ; Point #REGix at the item data for the instructions. (#R$F51A)
+ $DD6E LD HL,$F592   ; { Draw the UDGs for this page.
+ $DD71 CALL $ED06    ; }
+ $DD74 LD HL,$EB89   ; { Draw the plans.
  $DD77 LD DE,$0614   ;
- $DD7A CALL $E84E    ;
- $DD7D CALL $DD8D    ;
- $DD80 LD HL,$F5D5   ;
- $DD83 CALL $DDE0    ;
- $DD86 XOR A         ;
- $DD87 LD ($DCF5),A  ;
- $DD8A JP $CA5B      ;
+ $DD7A CALL $E84E    ; }
+ $DD7D CALL $DD8D    ; Wait for ENTER to be pressed.
+ $DD80 LD HL,$F5D5   ; { Print the end message. (#R$F5D5)
+ $DD83 CALL $DDE0    ; }
+ $DD86 XOR A         ; { Reset bit 0 on #R$DCF5 - stops items being used
+ $DD87 LD ($DCF5),A  ; for instructions only. } 
+ $DD8A JP $CA5B      ; Jump to the intro screen.
 
 ; Wait for the user to press ENTER, then fire a laser ray
 ;
