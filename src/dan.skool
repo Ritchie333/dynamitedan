@@ -10662,9 +10662,9 @@ c$ED06 LD A,(HL)     ; Get the width.
  $ED1F JR Z,$ED36    ; }
  $ED21 CP $FD        ; { Jump forward if this is "draw up".
  $ED23 JR Z,$ED50    ; }
- $ED25 CP $FC        ; { Jump forward if this is "draw right and up".
+ $ED25 CP $FC        ; { Jump forward if this is "draw right and down".
  $ED27 JR Z,$ED6A    ; }
- $ED29 CP $FB        ; { Jump forward if this is "draw left and up".
+ $ED29 CP $FB        ; { Jump forward if this is "draw right and up".
  $ED2B JR Z,$ED85    ; }
 ; No special command here, so print the graphic.
  $ED2D PUSH HL       ; Remember the current position.
@@ -10675,12 +10675,12 @@ c$ED06 LD A,(HL)     ; Get the width.
  $ED34 JR $ED06      ; }
 ; Draw a string of UDGs to the right.
 *$ED36 INC HL        ; Move to the next position.
- $ED37 PUSH HL       ;
- $ED38 PUSH BC       ;
- $ED39 LD C,(HL)     ; 
- $ED3A INC HL        ;
- $ED3B LD B,(HL)     ;
- $ED3C POP HL        ;
+ $ED37 PUSH HL       ; { Remember #REGhl and #REGbc.
+ $ED38 PUSH BC       ; }
+ $ED39 LD C,(HL)     ; Put the increment amount in #REGc.
+ $ED3A INC HL        ; { Put the length in #REGb.
+ $ED3B LD B,(HL)     ; }
+ $ED3C POP HL        ; Restore #REGhl.
 *$ED3D PUSH BC       ; { Remember the main registers used.
  $ED3E PUSH DE       ;
  $ED3F PUSH HL       ; }
@@ -10688,21 +10688,21 @@ c$ED06 LD A,(HL)     ; Get the width.
  $ED43 POP HL        ; { Restore the registers.
  $ED44 POP DE        ;
  $ED45 POP BC        ; }
- $ED46 LD A,D        ; { Increase the X position.
+ $ED46 LD A,D        ; { Move the X position right.
  $ED47 ADD A,C       ;
  $ED48 LD D,A        ; }
- $ED49 DJNZ $ED3D    ;
- $ED4B POP HL        ;
- $ED4C INC HL        ;
+ $ED49 DJNZ $ED3D    ; Loop while there is more to draw.
+ $ED4B POP HL        ; Restore #REGhl.
+ $ED4C INC HL        ; { Move to the next UDG definition.
  $ED4D INC HL        ;
- $ED4E JR $ED06      ;
+ $ED4E JR $ED06      ; }
 ; Draw a string of UDGs up.
 *$ED50 INC HL        ; Move to the next position.
- $ED51 PUSH HL       ;
- $ED52 PUSH BC       ;
- $ED53 LD C,(HL)     ; 
- $ED54 INC HL        ;
- $ED55 LD B,(HL)     ;
+ $ED51 PUSH HL       ; { Remember #REGhl and #REGbc.
+ $ED52 PUSH BC       ; }
+ $ED53 LD C,(HL)     ; Put the increment amount in #REGc.
+ $ED54 INC HL        ; { Put the length in #REGb.
+ $ED55 LD B,(HL)     ; }
  $ED56 POP HL        ;
 *$ED57 PUSH BC       ; { Remember the main registers used.
  $ED58 PUSH DE       ;
@@ -10711,58 +10711,58 @@ c$ED06 LD A,(HL)     ; Get the width.
  $ED5D POP HL        ; { Restore the registers.
  $ED5E POP DE        ;
  $ED5F POP BC        ; }
- $ED60 LD A,E        ; { Decrease the Y position.
+ $ED60 LD A,E        ; { Move the Y position up.
  $ED61 SUB C         ;
  $ED62 LD E,A        ; }
- $ED63 DJNZ $ED57    ;
- $ED65 POP HL        ;
- $ED66 INC HL        ;
+ $ED63 DJNZ $ED57    ; Loop while there is more to draw.
+ $ED65 POP HL        ; Restore #REGhl.
+ $ED66 INC HL        ; { Move to the next UDG definition.
  $ED67 INC HL        ;
- $ED68 JR $ED06      ;
-; Draw a string of UDGS right and up.
+ $ED68 JR $ED06      ; }
+; Draw a string of UDGS right and down.
 *$ED6A INC HL        ; Move to the next position.
- $ED6B PUSH HL       ; 
- $ED6C PUSH BC       ;
- $ED6D LD C,(HL)     ;
- $ED6E INC HL        ;
- $ED6F LD B,(HL)     ;
- $ED70 POP HL        ;
-*$ED71 PUSH BC       ;
+ $ED6B PUSH HL       ; { Remember #REGhl and #REGbc.
+ $ED6C PUSH BC       ; }
+ $ED6D LD C,(HL)     ; { Put the increment amount in #REGc.
+ $ED6E INC HL        ; }
+ $ED6F LD B,(HL)     ; { Put the length in #REGb.
+ $ED70 POP HL        ; }
+*$ED71 PUSH BC       ; { Remember the main registers used.
  $ED72 PUSH DE       ;
- $ED73 PUSH HL       ;
+ $ED73 PUSH HL       ; }
  $ED74 CALL $E84E    ; Print the graphic.
- $ED77 POP HL        ;
+ $ED77 POP HL        ; { Restore the registers.
  $ED78 POP DE        ;
- $ED79 POP BC        ;
- $ED7A LD A,D        ;
+ $ED79 POP BC        ; }
+ $ED7A LD A,D        ; { Move the X position right.
  $ED7B ADD A,C       ;
- $ED7C LD D,A        ;
+ $ED7C LD D,A        ; }
  $ED7D INC E         ; Increase the Y position.
- $ED7E DJNZ $ED71    ;
- $ED80 POP HL        ;
- $ED81 INC HL        ;
+ $ED7E DJNZ $ED71    ; Loop while there is more to draw.
+ $ED80 POP HL        ; Restore #REGhl.
+ $ED81 INC HL        ; { Move to the next UDG definition.
  $ED82 INC HL        ;
- $ED83 JR $ED06      ;
-; Draw a string of UDGS left and up.
+ $ED83 JR $ED06      ; }
+; Draw a string of UDGS right and up.
 *$ED85 INC HL        ; Move to the next position.
- $ED86 PUSH HL       ;
- $ED87 PUSH BC       ;
- $ED88 LD C,(HL)     ;
- $ED89 INC HL        ;
- $ED8A LD B,(HL)     ;
- $ED8B POP HL        ;
+ $ED86 PUSH HL       ; { Remember #REGhl and #REGbc.
+ $ED87 PUSH BC       ; }
+ $ED88 LD C,(HL)     ; Put the increment amount in #REGc.
+ $ED89 INC HL        ; { Put the length in #REGb. 
+ $ED8A LD B,(HL)     ; }
+ $ED8B POP HL        ; { Remember the main registers used.
 *$ED8C PUSH BC       ;
  $ED8D PUSH DE       ;
- $ED8E PUSH HL       ;
+ $ED8E PUSH HL       ; }
  $ED8F CALL $E84E    ; Print the graphic.
- $ED92 POP HL        ;
+ $ED92 POP HL        ; { Restore the registers.
  $ED93 POP DE        ;
- $ED94 POP BC        ;
- $ED95 LD A,D        ;
+ $ED94 POP BC        ; }
+ $ED95 LD A,D        ; { Move the X position to the right.
  $ED96 ADD A,C       ;
- $ED97 LD D,A        ;
- $ED98 DEC E         ; Decrease the X position.
- $ED99 DJNZ $ED8C    ;
+ $ED97 LD D,A        ; }
+ $ED98 DEC E         ; Decrease the Y position.
+ $ED99 DJNZ $ED8C    ; Loop while there is more to draw.
  $ED9B POP HL        ;
  $ED9C INC HL        ;
  $ED9D INC HL        ;

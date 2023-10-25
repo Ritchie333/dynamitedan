@@ -150,8 +150,8 @@ for its ID. There is then an optional sequence of :
 #LIST(default)
 { FE, a, b - 'b' times and move right by 'a' spaces }
 { FD, a, b - 'b' times and move up by 'a' spaces }
-{ FC, a, b - 'b' times and move right and up by 'a' spaces }
-{ FB, a, b - 'b' times and move left and up by 'a' spaces }
+{ FC, a, b - 'b' times and move right by 'a' spaces and down by one space }
+{ FB, a, b - 'b' times and move right by 'a' spaces and up by one space  }
 { FF - end of the list }
 LIST#
 
