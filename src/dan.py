@@ -1,14 +1,90 @@
-
 #!/usr/bin/env python3
 
 import html
 
+import skoolkit.graphics
 from skoolkit.graphics import Frame, Udg
 from skoolkit.skoolhtml import HtmlWriter
 
 class DanHtmlWriter(HtmlWriter):
 
     repeat_attr = 0
+
+    def print_room( self, cwd, udg_ptr, fName ):
+    
+        repeat_right = int( 0xfe )
+        repeat_up = int( 0xfd )
+        repeat_right_down = int( 0xfc )
+        repeat_left_down = int( 0xfb )
+
+        bg = self.make_background()
+
+        while self.snapshot[ udg_ptr ] != 0xff:
+            y = self.snapshot[ udg_ptr ]
+            x = self.snapshot[ udg_ptr + 1 ]
+            id = self.snapshot[ udg_ptr + 2 ]
+            repeat = self.snapshot[ udg_ptr + 3 ]
+            if( repeat >= 0xFB and repeat <= 0xFE ):
+                every = self.snapshot[ udg_ptr + 4 ]
+                length = self.snapshot[ udg_ptr + 5 ]
+                udg_ptr = udg_ptr + 6
+                if repeat_right == repeat:
+                    for j in range( 0, length ):
+                        nx = x + every * j
+                        self.overlay_udgs_by_id( bg, nx, y, id )
+                if repeat_up == repeat:
+                    for j in range( 0, 0 - length, -1 ):
+                        ny = y + every * j
+                        self.overlay_udgs_by_id( bg, x, ny, id )
+                if repeat_right_down == repeat:
+                    for j in range( 0, length ):
+                        nx = x + every * j
+                        ny = y + every * j
+                        self.overlay_udgs_by_id( bg, nx, ny, id )     
+                if repeat_left_down == repeat:
+                    for j in range( 0, 0 - length, -1 ):
+                        nx = x - every * j
+                        ny = y + every * j
+                        self.overlay_udgs_by_id( bg, nx, ny, id )
+                 
+            else:
+                self.overlay_udgs_by_id( bg, x, y, id )
+                udg_ptr = udg_ptr + 3
+        frame = Frame( bg, 2 )
+        return self.handle_image( frame, fName, cwd )
+
+    def overlay_udgs_by_id( self, bg, x, y, id ):
+        # Note that single UDGs are drawn in reverse depth!
+        width, depth = self.get_udg_width_and_height_by_id( id )
+        ny = y - ( depth - 1 )
+        rattr = lambda bg, fg : fg
+        rbyte = lambda bg, fg, mask : fg
+        skoolkit.graphics.overlay_udgs( bg, self.get_udg_by_id( id ), x * 8, ny * 8, 0, rattr, rbyte )
+
+    def get_udg_width_and_height_by_id( self, id ):
+        udg_addr = self.get_ptr( self.get_udg_addr( id ) )
+        width = self.snapshot[ udg_addr ]
+        depth = self.snapshot[ udg_addr + 1 ]
+        return width, depth
+
+    def get_udg_by_id( self, id ):
+        udg_addr = self.get_ptr( self.get_udg_addr( id ) )
+        udgs = self.build_udgs( udg_addr )
+        return udgs
+
+    def get_udg_addr( self, id ):
+        base = 0x6c46
+        addr = base + 2 * id
+        return addr
+
+    def make_background( self ):
+        udgs = []
+        for y in range( 0, 24 ):
+            nextUdgs = []
+            for x in range( 0, 32 ):
+                nextUdgs.append( Udg( 0, [ 0, 0, 0, 0, 0, 0, 0, 0]))
+            udgs.append( nextUdgs )
+        return udgs                
 
     def print_udg( self, cwd, addr, fName ):
         udgs = self.build_udgs( addr )
@@ -147,9 +223,12 @@ class DanHtmlWriter(HtmlWriter):
             print( f'#HTML(#R${self.get_ref(base,i):X}<br/><img src="images/Sprite_{i:X}.png" />)')
             print()
 
-    def get_ref( self, base, i ):
-        addr = base + ( 2 * i )
+    def get_ptr( self, addr ):
         lo = self.snapshot[ addr ]
         hi = self.snapshot[ addr + 1 ]
         ref = hi * 0x100 + lo
         return ref
+
+    def get_ref( self, base, i ):
+        return self.get_ptr( base + ( 2 * i ) )
+        

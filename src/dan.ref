@@ -4,7 +4,7 @@ Copyright=Copyright Rod Bowkett / Mirrorsoft 1985. This dissassembly by Ritchie 
 
 [Config]
 HtmlWriterClass=:dan.DanHtmlWriter
-RefFiles=dan_udgs.ref;dan_sprites.ref
+RefFiles=dan_udgs.ref;dan_sprites.ref;dan_rooms.ref
 
 [Page:DataStructures]
 SectionPrefix=DataStructures
@@ -20,6 +20,9 @@ SectionPrefix=Food
 
 [Page:Items]
 SectionPrefix=Items
+
+[Page:Rooms]
+SectionPrefix=Rooms
 
 [Page:Pokes]
 SectionType=ListItems
@@ -145,12 +148,14 @@ The first two bytes are the co-ordinates of a UDG, followed by one byte
 for its ID. There is then an optional sequence of :
 
 #LIST(default)
-{ FE, a, b - copy 'a' x 'b' times and move right }
-{ FD, a, b - copy 'a' x 'b' times and move left }
-{ FC, a, b - copy 'a' x 'b' times and move up }
-{ FB, a, b - copy 'a' x 'b' times and move down }
+{ FE, a, b - 'b' times and move right by 'a' spaces }
+{ FD, a, b - 'b' times and move up by 'a' spaces }
+{ FC, a, b - 'b' times and move right and up by 'a' spaces }
+{ FB, a, b - 'b' times and move left and up by 'a' spaces }
 { FF - end of the list }
 LIST#
+
+(The last two types, FC and FB are mostly used for staircases).
 
 The structure then repeats.
 
@@ -208,6 +213,7 @@ GameStatusBuffer
 DataStructures
 
 [Index:Graphics:Graphics]
+Rooms
 UDGs
 Sprites
 Food

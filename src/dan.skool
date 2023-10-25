@@ -525,54 +525,391 @@ b$6985 DEFB $82,$12,$00,$20,$81,$06,$48,$01
 ; Room data offsets
 ;
 ; Used by the routine at #R$CBBD
-b$69E6 DEFB $5F,$6E,$07,$02,$15,$08,$08,$A7,$9C,$0F,$17,$00
- $69F2 DEFB $90,$6E,$05,$18,$13,$07,$0B,$ED,$9C,$0D,$11,$00
- $69FE DEFB $DC,$6E,$09,$08,$01,$0D,$17,$23,$9D,$0F,$11,$00
- $6A0A DEFB $34,$6F,$0D,$19,$00,$0A,$11,$61,$9D,$03,$06,$00
- $6A16 DEFB $77,$6F,$10,$15,$04,$0C,$0D,$B7,$9D,$03,$16,$00
- $6A22 DEFB $C6,$6F,$0E,$1D,$05,$0C,$1B,$F5,$9D,$0F,$0B,$00
- $6A2E DEFB $2A,$70,$05,$0B,$41,$0B,$17,$2B,$9E,$0C,$11,$00
- $6A3A DEFB $94,$70,$04,$05,$07,$0F,$08,$79,$9E,$0F,$0C,$00
- $6A46 DEFB $B9,$70,$0D,$08,$00,$0B,$03,$BF,$9E,$10,$17,$00
- $6A52 DEFB $0E,$71,$0B,$18,$01,$11,$1A,$F5,$9E,$0B,$10,$00
- $6A5E DEFB $90,$71,$05,$02,$04,$11,$16,$3B,$9F,$0C,$09,$00
- $6A6A DEFB $F4,$71,$0E,$15,$07,$10,$0C,$81,$9F,$09,$1C,$00
- $6A76 DEFB $52,$72,$0C,$17,$03,$05,$06,$CF,$9F,$0E,$05,$00
- $6A82 DEFB $E9,$72,$0C,$05,$06,$0C,$15,$0D,$A0,$0E,$14,$00
- $6A8E DEFB $62,$73,$0C,$14,$40,$08,$0D,$53,$A0,$10,$0D,$00
- $6A9A DEFB $02,$74,$08,$0E,$44,$0B,$1A,$A1,$A0,$0E,$09,$00
- $6AA6 DEFB $72,$74,$10,$08,$06,$06,$16,$DF,$A0,$10,$17,$00
- $6AB2 DEFB $E5,$74,$10,$12,$83,$12,$02,$2D,$A1,$07,$16,$00
- $6ABE DEFB $31,$75,$0E,$18,$02,$09,$0B,$6B,$A1,$05,$18,$00
- $6ACA DEFB $A7,$75,$05,$02,$C0,$12,$02,$A9,$A1,$12,$0B,$00
- $6AD6 DEFB $26,$76,$0C,$1A,$01,$05,$0A,$F7,$A1,$12,$05,$00
- $6AE2 DEFB $A2,$76,$0E,$07,$00,$0D,$1B,$2D,$A2,$0C,$16,$00
- $6AEE DEFB $33,$77,$08,$1B,$05,$06,$06,$73,$A2,$11,$18,$00
- $6AFA DEFB $CD,$77,$12,$07,$02,$11,$09,$B9,$A2,$0F,$15,$00
- $6B06 DEFB $2E,$78,$08,$0F,$00,$10,$1B,$07,$A3,$03,$03,$00
- $6B12 DEFB $C5,$78,$0A,$09,$80,$0A,$18,$45,$A3,$06,$18,$00
- $6B1E DEFB $F6,$78,$04,$02,$C7,$0A,$02,$9B,$A3,$11,$1A,$00
- $6B2A DEFB $5D,$79,$11,$02,$40,$0F,$17,$E9,$A3,$03,$1A,$00
- $6B36 DEFB $18,$7A,$12,$15,$46,$0A,$0F,$37,$A4,$08,$07,$00
- $6B42 DEFB $46,$7A,$0F,$17,$40,$08,$08,$8D,$A4,$03,$04,$00
- $6B4E DEFB $C8,$7A,$04,$07,$03,$10,$1B,$E3,$A4,$0D,$0F,$00
- $6B5A DEFB $3E,$7B,$08,$19,$07,$0F,$0D,$31,$A5,$04,$0E,$00
- $6B66 DEFB $93,$7B,$08,$08,$02,$06,$1B,$77,$A5,$0D,$19,$00
- $6B72 DEFB $45,$7C,$05,$02,$05,$05,$0C,$B5,$A5,$08,$0B,$00
- $6B7E DEFB $6D,$7C,$06,$02,$C6,$06,$1C,$F3,$A5,$0C,$0F,$00
- $6B8A DEFB $BF,$7C,$11,$1C,$00,$05,$16,$41,$A6,$10,$02,$00
- $6B96 DEFB $50,$7D,$06,$1B,$02,$0F,$0C,$97,$A6,$01,$02,$00
- $6BA2 DEFB $DB,$7D,$0C,$0B,$C3,$0E,$19,$D5,$A6,$08,$15,$00
- $6BAE DEFB $63,$7E,$04,$0F,$C0,$05,$04,$1B,$A7,$0E,$0D,$00
- $6BBA DEFB $C7,$7E,$12,$14,$00,$05,$06,$61,$A7,$07,$1C,$00
- $6BC6 DEFB $3D,$7F,$10,$19,$80,$10,$13,$9F,$A7,$10,$05,$00
- $6BD2 DEFB $89,$7F,$0A,$1B,$80,$0A,$0A,$ED,$A7,$0A,$05,$00
- $6BDE DEFB $96,$7F,$03,$15,$C1,$0A,$02,$2B,$A8,$10,$18,$00
- $6BEA DEFB $30,$80,$10,$03,$85,$10,$12,$71,$A8,$10,$0D,$00
- $6BF6 DEFB $AC,$80,$10,$17,$00,$10,$0D,$B7,$A8,$10,$03,$00
- $6C02 DEFB $D7,$80,$10,$18,$41,$06,$02,$FD,$A8,$0B,$06,$00
- $6C0E DEFB $35,$81,$03,$02,$C6,$06,$14,$3B,$A9,$06,$08,$00
- $6C1A DEFB $75,$81,$08,$0F,$C5,$10,$0D,$89,$A9,$02,$16,$00
+; .
+; Room 00
+b$69E6 DEFW $6E5F    ; UDGs
+ $69E8 DEFB $07,$02  ; Test tube location
+ $69EA DEFB $15      ; Food item index
+ $69EB DEFB $08,$08  ; Food co-ordinates
+ $69ED DEFW $9CA7    ; Moving objects
+ $69EF DEFB $0F,$17  ; Dynamite co-ordinates
+ $69F1 DEFB $00      ; Bank card index
+; Room 01
+ $69F2 DEFW $6E90    ; UDGs
+ $69F4 DEFB $05,$18  ; Test tube location
+ $69F6 DEFB $13      ; Food item index
+ $69F7 DEFB $07,$0B  ; Food co-ordinates
+ $69F9 DEFW $9CED    ; Moving objects
+ $69FB DEFB $0D,$11  ; Dynamite co-ordinates
+ $69FD DEFB $00      ; Bank card index
+; Room 02
+ $69FE DEFW $6EDC    ; UDGs
+ $6A00 DEFB $09,$08  ; Test tube location
+ $6A02 DEFB $01      ; Food item index
+ $6A03 DEFB $0D,$17  ; Food co-ordinates
+ $6A05 DEFW $9D23    ; Moving objects
+ $6A07 DEFB $0F,$11  ; Dynamite co-ordinates
+ $6A09 DEFB $00      ; Bank card index
+; Room 03
+ $6A0A DEFW $6F34    ; UDGs
+ $6A0C DEFB $0D,$19  ; Test tube location
+ $6A0E DEFB $00      ; Food item index
+ $6A0F DEFB $0A,$11  ; Food co-ordinates
+ $6A11 DEFW $9D61    ; Moving objects
+ $6A13 DEFB $03,$06  ; Dynamite co-ordinates
+ $6A15 DEFB $00      ; Bank card index
+; Room 04
+ $6A16 DEFW $6F77    ; UDGs
+ $6A18 DEFB $10,$15  ; Test tube location
+ $6A1A DEFB $04      ; Food item index
+ $6A1B DEFB $0C,$0D  ; Food co-ordinates
+ $6A1D DEFW $9DB7    ; Moving objects
+ $6A1F DEFB $03,$16  ; Dynamite co-ordinates
+ $6A21 DEFB $00      ; Bank card index
+; Room 05
+ $6A22 DEFW $6FC6    ; UDGs
+ $6A24 DEFB $0E,$1D  ; Test tube location
+ $6A26 DEFB $05      ; Food item index
+ $6A27 DEFB $0C,$1B  ; Food co-ordinates
+ $6A29 DEFW $9DF5    ; Moving objects
+ $6A2B DEFB $0F,$0B  ; Dynamite co-ordinates
+ $6A2D DEFB $00      ; Bank card index
+; Room 06
+ $6A2E DEFW $702A    ; UDGs
+ $6A30 DEFB $05,$0B  ; Test tube location
+ $6A32 DEFB $41      ; Food item index
+ $6A33 DEFB $0B,$17  ; Food co-ordinates
+ $6A35 DEFW $9E2B    ; Moving objects
+ $6A37 DEFB $0C,$11  ; Dynamite co-ordinates
+ $6A39 DEFB $00      ; Bank card index
+; Room 07 
+ $6A3A DEFW $7094    ; UDGs
+ $6A3C DEFB $04,$05  ; Test tube location
+ $6A3E DEFB $07      ; Food item index
+ $6A3F DEFB $0F,$08  ; Food co-ordinates
+ $6A41 DEFW $9E79    ; Moving objects
+ $6A43 DEFB $0F,$0C  ; Dynamite co-ordinates
+ $6A45 DEFB $00      ; Bank card index
+; Room 08
+ $6A46 DEFW $70B9    ; UDGs
+ $6A48 DEFB $0D,$08  ; Test tube location
+ $6A4A DEFB $00      ; Food item index
+ $6A4B DEFB $0B,$03  ; Food co-ordinates
+ $6A4D DEFW $9EBF    ; Moving objects
+ $6A4F DEFB $10,$17  ; Dynamite co-ordinates
+ $6A51 DEFB $00      ; Bank card index
+; Room 09
+ $6A52 DEFW $710E    ; UDGs
+ $6A54 DEFB $0B,$18  ; Test tube location
+ $6A56 DEFB $01      ; Food item index
+ $6A57 DEFB $11,$1A  ; Food co-ordinates
+ $6A59 DEFW $9EF5    ; Moving objects
+ $6A5B DEFB $0B,$10  ; Dynamite co-ordinates
+ $6A5D DEFB $00      ; Bank card index
+; Room 0A
+ $6A5E DEFW $7190    ; UDGs
+ $6A60 DEFB $05,$02  ; Test tube location
+ $6A62 DEFB $04      ; Food item index
+ $6A63 DEFB $11,$16  ; Food co-ordinates
+ $6A65 DEFW $9F3B    ; Moving objects
+ $6A67 DEFB $0C,$09  ; Dynamite co-ordinates
+ $6A69 DEFB $00      ; Bank card index
+; Room 0B
+ $6A6A DEFW $71F4    ; UDGs
+ $6A6C DEFB $0E,$15  ; Test tube location
+ $6A6E DEFB $07      ; Food item index
+ $6A6F DEFB $10,$0C  ; Food co-ordinates
+ $6A71 DEFW $9F81    ; Moving objects
+ $6A73 DEFB $09,$1C  ; Dynamite co-ordinates
+ $6A75 DEFB $00      ; Bank card index
+; Room 0C
+ $6A76 DEFW $7252    ; UDGs
+ $6A78 DEFB $0C,$17  ; Test tube location
+ $6A7A DEFB $03      ; Food item index
+ $6A7B DEFB $05,$06  ; Food co-ordinates
+ $6A7D DEFW $9FCF    ; Moving objects
+ $6A7F DEFB $0E,$05  ; Dynamite co-ordinates
+ $6A81 DEFB $00      ; Bank card index
+; Room 0D
+ $6A82 DEFW $72E9    ; UDGs
+ $6A84 DEFB $0C,$05  ; Test tube location
+ $6A86 DEFB $06      ; Food item index
+ $6A87 DEFB $0C,$15  ; Food co-ordinates
+ $6A89 DEFW $A00D    ; Moving objects
+ $6A8B DEFB $0E,$14  ; Dynamite co-ordinates
+ $6A8D DEFB $00      ; Bank card index
+; Room 0E
+ $6A8E DEFW $7362    ; UDGs
+ $6A90 DEFB $0C,$14  ; Test tube location
+ $6A92 DEFB $40      ; Food item index
+ $6A93 DEFB $08,$0D  ; Food co-ordinates
+ $6A95 DEFW $A053    ; Moving objects
+ $6A97 DEFB $10,$0D  ; Dynamite co-ordinates
+ $6A99 DEFB $00      ; Bank card index
+; Room 0F
+ $6A9A DEFW $7402    ; UDGs
+ $6A9C DEFB $08,$0E  ; Test tube location
+ $6A9E DEFB $44      ; Food item index
+ $6A9F DEFB $0B,$1A  ; Food co-ordinates
+ $6AA1 DEFW $A0A1    ; Moving objects
+ $6AA3 DEFB $0E,$09  ; Dynamite co-ordinates
+ $6AA5 DEFB $00      ; Bank card index
+; Room 10
+ $6AA6 DEFW $7472    ; UDGs
+ $6AA8 DEFB $10,$08  ; Test tube location
+ $6AAA DEFB $06      ; Food item index
+ $6AAB DEFB $06,$16  ; Food co-ordinates
+ $6AAD DEFW $A0DF    ; Moving objects
+ $6AAF DEFB $10,$17  ; Dynamite co-ordinates
+ $6AB1 DEFB $00      ; Bank card index
+; Room 11
+ $6AB2 DEFW $74E5    ; UDGs
+ $6AB4 DEFB $10,$12  ; Test tube location
+ $6AB6 DEFB $83      ; Food item index
+ $6AB7 DEFB $12,$02  ; Food co-ordinates
+ $6AB9 DEFW $A12D    ; Moving objects
+ $6ABB DEFB $07,$16  ; Dynamite co-ordinates
+ $6ABD DEFB $00      ; Bank card index
+; Room 12
+ $6ABE DEFW $7531    ; UDGs
+ $6AC0 DEFB $0E,$18  ; Test tube location
+ $6AC2 DEFB $02      ; Food item index
+ $6AC3 DEFB $09,$0B  ; Food co-ordinates
+ $6AC5 DEFW $A16B    ; Moving objects
+ $6AC7 DEFB $05,$18  ; Dynamite co-ordinates
+ $6AC9 DEFB $00      ; Bank card index
+; Room 13
+ $6ACA DEFW $75A7    ; UDGs
+ $6ACC DEFB $05,$02  ; Test tube location
+ $6ACE DEFB $C0      ; Food item index
+ $6ACF DEFB $12,$02  ; Food co-ordinates
+ $6AD1 DEFW $A1A9    ; Moving objects
+ $6AD3 DEFB $12,$0B  ; Dynamite co-ordinates
+ $6AD5 DEFB $00      ; Bank card index
+; Room 14
+ $6AD6 DEFW $7626    ; UDGs
+ $6AD8 DEFB $0C,$1A  ; Test tube location
+ $6ADA DEFB $01      ; Food item index
+ $6ADB DEFB $05,$0A  ; Food co-ordinates
+ $6ADD DEFW $A1F7    ; Moving objects
+ $6ADF DEFB $12,$05  ; Dynamite co-ordinates
+ $6AE1 DEFB $00      ; Bank card index
+; Room 15
+ $6AE2 DEFW $76A2    ; UDGs
+ $6AE4 DEFB $0E,$07  ; Test tube location
+ $6AE6 DEFB $00      ; Food item index
+ $6AE7 DEFB $0D,$1B  ; Food co-ordinates
+ $6AE9 DEFW $A22D    ; Moving objects
+ $6AEB DEFB $0C,$16  ; Dynamite co-ordinates
+ $6AED DEFB $00      ; Bank card index
+; Room 16
+ $6AEE DEFW $7733    ; UDGs
+ $6AF0 DEFB $08,$1B  ; Test tube location
+ $6AF2 DEFB $05      ; Food item index
+ $6AF3 DEFB $06,$06  ; Food co-ordinates
+ $6AF5 DEFW $A273    ; Moving objects
+ $6AF7 DEFB $11,$18  ; Dynamite co-ordinates
+ $6AF9 DEFB $00      ; Bank card index
+; Room 17
+ $6AFA DEFW $77CD    ; UDGs
+ $6AFC DEFB $12,$07  ; Test tube location
+ $6AFE DEFB $02      ; Food item index
+ $6AFF DEFB $11,$09  ; Food co-ordinates
+ $6B01 DEFW $A2B9    ; Moving objects
+ $6B03 DEFB $0F,$15  ; Dynamite co-ordinates
+ $6B05 DEFB $00      ; Bank card index
+; Room 18
+ $6B06 DEFW $782E    ; UDGs
+ $6B08 DEFB $08,$0F  ; Test tube location
+ $6B0A DEFB $00      ; Food item index
+ $6B0B DEFB $10,$1B  ; Food co-ordinates
+ $6B0D DEFW $A307    ; Moving objects
+ $6B0F DEFB $03,$03  ; Dynamite co-ordinates
+ $6B11 DEFB $00      ; Bank card index
+; Room 19
+ $6B12 DEFW $78C5    ; UDGs
+ $6B14 DEFB $0A,$09  ; Test tube location
+ $6B16 DEFB $80      ; Food item index
+ $6B17 DEFB $0A,$18  ; Food co-ordinates
+ $6B19 DEFW $A345    ; Moving objects
+ $6B1B DEFB $06,$18  ; Dynamite co-ordinates
+ $6B1D DEFB $00      ; Bank card index
+; Room 1A
+ $6B1E DEFW $78F6    ; UDGs
+ $6B20 DEFB $04,$02  ; Test tube location
+ $6B22 DEFB $C7      ; Food item index
+ $6B23 DEFB $0A,$02  ; Food co-ordinates
+ $6B25 DEFW $A39B    ; Moving objects
+ $6B27 DEFB $11,$1A  ; Dynamite co-ordinates
+ $6B29 DEFB $00      ; Bank card index
+; Room 1B
+ $6B2A DEFW $795D    ; UDGs
+ $6B2C DEFB $11,$02  ; Test tube location
+ $6B2E DEFB $40      ; Food item index
+ $6B2F DEFB $0F,$17  ; Food co-ordinates
+ $6B31 DEFW $A3E9    ; Moving objects
+ $6B33 DEFB $03,$1A  ; Dynamite co-ordinates
+ $6B35 DEFB $00      ; Bank card index
+; Room 1C
+ $6B36 DEFW $7A18    ; UDGs
+ $6B38 DEFB $12,$15  ; Test tube location
+ $6B3A DEFB $46      ; Food item index
+ $6B3B DEFB $0A,$0F  ; Food co-ordinates
+ $6B3D DEFW $A437    ; Moving objects
+ $6B3F DEFB $08,$07  ; Dynamite co-ordinates
+ $6B41 DEFB $00      ; Bank card index
+; Room 1D
+ $6B42 DEFW $7A46    ; UDGs
+ $6B44 DEFB $0F,$17  ; Test tube location
+ $6B46 DEFB $40      ; Food item index
+ $6B47 DEFB $08,$08  ; Food co-ordinates
+ $6B49 DEFW $A48D    ; Moving objects
+ $6B4B DEFB $03,$04  ; Dynamite co-ordinates
+ $6B4D DEFB $00      ; Bank card index
+; Room 1E
+ $6B4E DEFW $7AC8    ; UDGs
+ $6B50 DEFB $04,$07  ; Test tube location
+ $6B52 DEFB $03      ; Food item index
+ $6B53 DEFB $10,$1B  ; Food co-ordinates
+ $6B55 DEFW $A4E3    ; Moving objects
+ $6B57 DEFB $0D,$0F  ; Dynamite co-ordinates
+ $6B59 DEFB $00      ; Bank card index
+; Room 1F
+ $6B5A DEFW $7B3E    ; UDGs
+ $6B5C DEFB $08,$19  ; Test tube location
+ $6B5E DEFB $07      ; Food item index
+ $6B5F DEFB $0F,$0D  ; Food co-ordinates
+ $6B61 DEFW $A531    ; Moving objects
+ $6B63 DEFB $04,$0E  ; Dynamite co-ordinates
+ $6B65 DEFB $00      ; Bank card index
+; Room 20
+ $6B66 DEFW $7B93    ; UDGs
+ $6B68 DEFB $08,$08  ; Test tube location
+ $6B6A DEFB $02      ; Food item index
+ $6B6B DEFB $06,$1B  ; Food co-ordinates
+ $6B6D DEFW $A577    ; Moving objects
+ $6B6F DEFB $0D,$19  ; Dynamite co-ordinates
+ $6B71 DEFB $00      ; Bank card index
+; Room 21
+ $6B72 DEFW $7C45    ; UDGs
+ $6B74 DEFB $05,$02  ; Test tube location
+ $6B76 DEFB $05      ; Food item index
+ $6B77 DEFB $05,$0C  ; Food co-ordinates
+ $6B79 DEFW $A5B5    ; Moving objects
+ $6B7B DEFB $08,$0B  ; Dynamite co-ordinates
+ $6B7D DEFB $00      ; Bank card index
+; Room 22
+ $6B7E DEFW $7C6D    ; UDGs
+ $6B80 DEFB $06,$02  ; Test tube location
+ $6B82 DEFB $C6      ; Food item index
+ $6B83 DEFB $06,$1C  ; Food co-ordinates
+ $6B85 DEFW $A5F3    ; Moving objects
+ $6B87 DEFB $0C,$0F  ; Dynamite co-ordinates
+ $6B89 DEFB $00      ; Bank card index
+; Room 23
+ $6B8A DEFW $7CBF    ; UDGs
+ $6B8C DEFB $11,$1C  ; Test tube location
+ $6B8E DEFB $00      ; Food item index
+ $6B8F DEFB $05,$16  ; Food co-ordinates
+ $6B91 DEFW $A641    ; Moving objects
+ $6B93 DEFB $10,$02  ; Dynamite co-ordinates
+ $6B95 DEFB $00      ; Bank card index
+; Room 24
+ $6B96 DEFW $7D50    ; UDGs
+ $6B98 DEFB $06,$1B  ; Test tube location
+ $6B9A DEFB $02      ; Food item index
+ $6B9B DEFB $0F,$0C  ; Food co-ordinates
+ $6B9D DEFW $A697    ; Moving objects
+ $6B9F DEFB $01,$02  ; Dynamite co-ordinates
+ $6BA1 DEFB $00      ; Bank card index
+; Room 25
+ $6BA2 DEFW $7DDB    ; UDGs
+ $6BA4 DEFB $0C,$0B  ; Test tube location
+ $6BA6 DEFB $C3      ; Food item index
+ $6BA7 DEFB $0E,$19  ; Food co-ordinates
+ $6BA9 DEFW $A6D5    ; Moving objects
+ $6BAB DEFB $08,$15  ; Dynamite co-ordinates
+ $6BAD DEFB $00      ; Bank card index
+; Room 26
+ $6BAE DEFW $7E63    ; UDGs
+ $6BB0 DEFB $04,$0F  ; Test tube location
+ $6BB2 DEFB $C0      ; Food item index
+ $6BB3 DEFB $05,$04  ; Food co-ordinates
+ $6BB5 DEFW $A71B    ; Moving objects
+ $6BB7 DEFB $0E,$0D  ; Dynamite co-ordinates
+ $6BB9 DEFB $00      ; Bank card index
+ $6BBA DEFW $7EC7    ; UDGs
+; Room 27
+ $6BBC DEFB $12,$14  ; Test tube location
+ $6BBE DEFB $00      ; Food item index
+ $6BBF DEFB $05,$06  ; Food co-ordinates
+ $6BC1 DEFW $A761    ; Moving objects
+ $6BC3 DEFB $07,$1C  ; Dynamite co-ordinates
+ $6BC5 DEFB $00      ; Bank card index
+; Room 28
+ $6BC6 DEFW $7F3D    ; UDGs
+ $6BC8 DEFB $10,$19  ; Test tube location
+ $6BCA DEFB $80      ; Food item index
+ $6BCB DEFB $10,$13  ; Food co-ordinates
+ $6BCD DEFW $A79F    ; Moving objects
+ $6BCF DEFB $10,$05  ; Dynamite co-ordinates
+ $6BD1 DEFB $00      ; Bank card index
+; Room 29
+ $6BD2 DEFW $7F89    ; UDGs
+ $6BD4 DEFB $0A,$1B  ; Test tube location
+ $6BD6 DEFB $80      ; Food item index
+ $6BD7 DEFB $0A,$0A  ; Food co-ordinates
+ $6BD9 DEFW $A7ED    ; Moving objects
+ $6BDB DEFB $0A,$05  ; Dynamite co-ordinates
+ $6BDD DEFB $00      ; Bank card index
+; Room 2A
+ $6BDE DEFW $7F96    ; UDGs
+ $6BE0 DEFB $03,$15  ; Test tube location
+ $6BE2 DEFB $C1      ; Food item index
+ $6BE3 DEFB $0A,$02  ; Food co-ordinates
+ $6BE5 DEFW $A82B    ; Moving objects
+ $6BE7 DEFB $10,$18  ; Dynamite co-ordinates
+ $6BE9 DEFB $00      ; Bank card index
+; Room 2B
+ $6BEA DEFW $8030    ; UDGs
+ $6BEC DEFB $10,$03  ; Test tube location
+ $6BEE DEFB $85      ; Food item index
+ $6BEF DEFB $10,$12  ; Food co-ordinates
+ $6BF1 DEFW $A871    ; Moving objects
+ $6BF3 DEFB $10,$0D  ; Dynamite co-ordinates
+ $6BF5 DEFB $00      ; Bank card index
+; Room 2C
+ $6BF6 DEFW $80AC    ; UDGs
+ $6BF8 DEFB $10,$17  ; Test tube location
+ $6BFA DEFB $00      ; Food item index
+ $6BFB DEFB $10,$0D  ; Food co-ordinates
+ $6BFD DEFW $A8B7    ; Moving objects
+ $6BFF DEFB $10,$03  ; Dynamite co-ordinates
+ $6C01 DEFB $00      ; Bank card index
+; Room 2D
+ $6C02 DEFW $80D7    ; UDGs
+ $6C04 DEFB $10,$18  ; Test tube location
+ $6C06 DEFB $41      ; Food item index
+ $6C07 DEFB $06,$02  ; Food co-ordinates
+ $6C09 DEFW $A8FD    ; Moving objects
+ $6C0B DEFB $0B,$06  ; Dynamite co-ordinates
+ $6C0D DEFB $00      ; Bank card index
+; Room 2E
+ $6C0E DEFW $8135    ; UDGs
+ $6C10 DEFB $03,$02  ; Test tube location
+ $6C12 DEFB $C6      ; Food item index
+ $6C13 DEFB $06,$14  ; Food co-ordinates
+ $6C15 DEFW $A93B    ; Moving objects
+ $6C17 DEFB $06,$08  ; Dynamite co-ordinates
+ $6C19 DEFB $00      ; Bank card index
+; Room 2F
+ $6C1A DEFW $8175    ; UDGs
+ $6C1C DEFB $08,$0F  ; Test tube location
+ $6C1E DEFB $C5      ; Food item index
+ $6C1F DEFB $10,$0D  ; Food co-ordinates
+ $6C21 DEFW $A989    ; Moving objects
+ $6C23 DEFB $02,$16  ; Dynamite co-ordinates
+ $6C25 DEFB $00      ; Bank card index
 
 ; Attributes marking walls
 ;
@@ -835,6 +1172,8 @@ b$6E0E DEFB $01,$04,$07,$0A,$03,$06,$09,$0C
  $6E5E DEFB $FF
 
 ; Room 00
+;
+; #CALL:print_room(#PC,room_00)
 b$6E5F DEFB $06,$17,$17,$02,$17,$11,$0E,$16
  $6E67 DEFB $16,$0A,$08,$39,$FC,$07,$02,$0A
  $6E6F DEFB $1A,$1A,$FE,$01,$06,$08,$00,$55
@@ -844,6 +1183,8 @@ b$6E5F DEFB $06,$17,$17,$02,$17,$11,$0E,$16
  $6E8F DEFB $FF
 
 ; Room 01
+;
+; #CALL:print_room(#PC,room_01)
 b$6E90 DEFB $02,$00,$42,$FE,$08,$04,$02,$14
  $6E98 DEFB $6C,$01,$14,$6C,$0E,$00,$55,$FE
  $6EA0 DEFB $01,$20,$08,$00,$55,$FE,$01,$20
@@ -856,6 +1197,8 @@ b$6E90 DEFB $02,$00,$42,$FE,$08,$04,$02,$14
  $6ED8 DEFB $06,$18,$40,$FF
 
 ; Room 02
+;
+; #CALL:print_room(#PC,room_02)
 b$6EDC DEFB $08,$09,$1B,$FC,$01,$07,$02,$00
  $6EE4 DEFB $42,$FE,$08,$04,$02,$10,$6C,$FD
  $6EEC DEFB $01,$02,$0E,$10,$55,$FE,$01,$10
@@ -869,6 +1212,8 @@ b$6EDC DEFB $08,$09,$1B,$FC,$01,$07,$02,$00
  $6F2C DEFB $6C,$03,$00,$A4,$03,$0A,$A5,$FF
 
 ; Room 03
+;
+; #CALL:print_room(#PC,room_03)
 b$6F34 DEFB $02,$02,$42,$FE,$08,$02,$02,$0D
  $6F3C DEFB $42,$FE,$0B,$02,$00,$0C,$4C,$02
  $6F44 DEFB $01,$27,$FD,$01,$03,$02,$03,$29
@@ -880,6 +1225,8 @@ b$6F34 DEFB $02,$02,$42,$FE,$08,$02,$02,$0D
  $6F74 DEFB $1E,$A4,$FF
 
 ; Room 04
+;
+; #CALL:print_room(#PC,room_04)
 b$6F77 DEFB $0E,$06,$42,$FE,$08,$03,$07,$05
  $6F7F DEFB $55,$FE,$01,$16,$0E,$04,$0B,$0E
  $6F87 DEFB $0B,$29,$FD,$01,$0F,$0B,$0F,$96
@@ -892,6 +1239,8 @@ b$6F77 DEFB $0E,$06,$42,$FE,$08,$03,$07,$05
  $6FBF DEFB $10,$16,$96,$FD,$01,$04,$FF
 
 ; Room 05
+;
+; #CALL:print_room(#PC,room_05)
 b$6FC6 DEFB $0C,$00,$1B,$FC,$01,$02,$0E,$00
  $6FCE DEFB $42,$FE,$07,$04,$0E,$1B,$0A,$02
  $6FD6 DEFB $12,$2C,$FD,$01,$03,$02,$0D,$2B
@@ -907,6 +1256,8 @@ b$6FC6 DEFB $0C,$00,$1B,$FC,$01,$02,$0E,$00
  $7026 DEFB $01,$1C,$A5,$FF
 
 ; Room 06
+;
+; #CALL:print_room(#PC,room_06)
 b$702A DEFB $0B,$1D,$1B,$FC,$01,$03,$0E,$18
  $7032 DEFB $42,$0E,$18,$09,$FE,$01,$03,$0A
  $703A DEFB $00,$1A,$FE,$01,$13,$06,$00,$41
@@ -923,6 +1274,8 @@ b$702A DEFB $0B,$1D,$1B,$FC,$01,$03,$0E,$18
  $7092 DEFB $3F,$FF
 
 ; Room 07
+;
+; #CALL:print_room(#PC,room_07)
 b$7094 DEFB $0A,$00,$1A,$FE,$01,$20,$02,$09
  $709C DEFB $B4,$FE,$07,$03,$06,$06,$15,$02
  $70A4 DEFB $06,$18,$11,$07,$3A,$06,$1E,$41
@@ -930,6 +1283,8 @@ b$7094 DEFB $0A,$00,$1A,$FE,$01,$20,$02,$09
  $70B4 DEFB $B3,$06,$1C,$CF,$FF
 
 ; Room 08
+;
+; #CALL:print_room(#PC,room_08)
 b$70B9 DEFB $00,$09,$57,$FE,$01,$0D,$00,$08
  $70C1 DEFB $58,$01,$07,$59,$01,$08,$5C,$FE
  $70C9 DEFB $04,$04,$05,$00,$42,$FE,$08,$03
@@ -943,6 +1298,8 @@ b$70B9 DEFB $00,$09,$57,$FE,$01,$0D,$00,$08
  $7109 DEFB $C1,$0D,$06,$C1,$FF
 
 ; Room 09
+;
+; #CALL:print_room(#PC,room_09)
 b$710E DEFB $02,$02,$51,$FE,$05,$06,$03,$00
  $7116 DEFB $10,$FE,$08,$04,$05,$00,$42,$FE
  $711E DEFB $08,$04,$0D,$00,$42,$FE,$08,$04
@@ -962,6 +1319,8 @@ b$710E DEFB $02,$02,$51,$FE,$05,$06,$03,$00
  $718E DEFB $56,$FF
 
 ; Room 0A
+;
+; #CALL:print_room(#PC,room_0A)
 b$7190 DEFB $13,$00,$42,$FE,$08,$04,$13,$10
  $7198 DEFB $6C,$FD,$01,$02,$12,$12,$6C,$13
  $71A0 DEFB $12,$96,$0C,$15,$2E,$FC,$01,$06
@@ -977,6 +1336,8 @@ b$7190 DEFB $13,$00,$42,$FE,$08,$04,$13,$10
  $71F0 DEFB $01,$14,$4C,$FF
 
 ; Room 0B
+;
+; #CALL:print_room(#PC,room_0B)
 b$71F4 DEFB $02,$00,$1D,$FE,$01,$13,$0E,$13
  $71FC DEFB $50,$FD,$01,$04,$07,$13,$50,$FD
  $7204 DEFB $01,$06,$0B,$15,$54,$FE,$01,$09
@@ -991,6 +1352,8 @@ b$71F4 DEFB $02,$00,$1D,$FE,$01,$13,$0E,$13
  $724C DEFB $11,$CF,$0E,$12,$56,$FF
 
 ; Room 0C
+;
+; #CALL:print_room(#PC,room_0C)
 b$7252 DEFB $02,$00,$1D,$FE,$01,$0A,$02,$16
  $725A DEFB $1D,$FE,$01,$0A,$06,$0F,$6B,$0D
  $7262 DEFB $0A,$5F,$0D,$0B,$60,$FE,$01,$0A
@@ -1012,6 +1375,8 @@ b$7252 DEFB $02,$00,$1D,$FE,$01,$0A,$02,$16
  $72E2 DEFB $09,$1B,$63,$FD,$01,$04,$FF
 
 ; Room 0D
+;
+; #CALL:print_room(#PC,room_0D)
 b$72E9 DEFB $13,$0D,$2B,$FD,$01,$06,$13,$12
  $72F1 DEFB $2C,$FD,$01,$06,$06,$0D,$2B,$FD
  $72F9 DEFB $01,$07,$06,$12,$2C,$FD,$01,$07
@@ -1030,6 +1395,8 @@ b$72E9 DEFB $13,$0D,$2B,$FD,$01,$06,$13,$12
  $7361 DEFB $FF
 
 ; Room 0E
+;
+; #CALL:print_room(#PC,room_0E)
 b$7362 DEFB $06,$00,$64,$00,$00,$62,$05,$00
  $736A DEFB $63,$FD,$01,$05,$13,$00,$41,$FD
  $7372 DEFB $01,$0D,$13,$0A,$41,$FD,$01,$0D
@@ -1052,6 +1419,8 @@ b$7362 DEFB $06,$00,$64,$00,$00,$62,$05,$00
  $73FA DEFB $A0,$01,$08,$A4,$01,$18,$A5,$FF
 
 ; Room 0F
+;
+; #CALL:print_room(#PC,room_0F)
 b$7402 DEFB $03,$08,$10,$FE,$08,$03,$13,$09
  $740A DEFB $B4,$FE,$07,$03,$02,$08,$6C,$FE
  $7412 DEFB $05,$03,$0D,$09,$42,$0D,$14,$42
@@ -1068,6 +1437,8 @@ b$7402 DEFB $03,$08,$10,$FE,$08,$03,$13,$09
  $746A DEFB $64,$08,$06,$13,$0C,$05,$13,$FF
 
 ; Room 10
+;
+; #CALL:print_room(#PC,room_10)
 b$7472 DEFB $00,$03,$0E,$FE,$01,$1A,$13,$00
  $747A DEFB $51,$FE,$05,$05,$03,$09,$68,$FE
  $7482 DEFB $01,$0E,$00,$09,$65,$FE,$01,$0E
@@ -1085,6 +1456,8 @@ b$7472 DEFB $00,$03,$0E,$FE,$01,$1A,$13,$00
  $74E2 DEFB $1E,$C1,$FF
 
 ; Room 11
+;
+; #CALL:print_room(#PC,room_11)
 b$74E5 DEFB $0C,$01,$5D,$FC,$01,$07,$13,$02
  $74ED DEFB $51,$FE,$05,$06,$13,$14,$6C,$0F
  $74F5 DEFB $00,$52,$FD,$07,$03,$13,$00,$53
@@ -1097,6 +1470,8 @@ b$74E5 DEFB $0C,$01,$5D,$FC,$01,$07,$13,$02
  $752D DEFB $09,$16,$C1,$FF
 
 ; Room 12
+;
+; #CALL:print_room(#PC,room_12)
 b$7531 DEFB $0C,$00,$32,$FE,$01,$1A,$13,$02
  $7539 DEFB $7A,$FE,$01,$1C,$0F,$1E,$52,$01
  $7541 DEFB $1E,$52,$0D,$1E,$94,$06,$1A,$94
@@ -1114,6 +1489,8 @@ b$7531 DEFB $0C,$00,$32,$FE,$01,$1A,$13,$02
  $75A1 DEFB $16,$6C,$12,$14,$4C,$FF
 
 ; Room 13
+;
+; #CALL:print_room(#PC,room_13)
 b$75A7 DEFB $07,$18,$1B,$FC,$01,$06,$13,$00
  $75AF DEFB $1D,$FE,$01,$13,$02,$17,$70,$FD
  $75B7 DEFB $01,$02,$06,$00,$32,$FE,$01,$18
@@ -1132,6 +1509,8 @@ b$75A7 DEFB $07,$18,$1B,$FC,$01,$06,$13,$00
  $761F DEFB $0F,$1C,$A5,$0E,$18,$C0,$FF
 
 ; Room 14
+;
+; #CALL:print_room(#PC,room_14)
 b$7626 DEFB $0D,$16,$1C,$FB,$01,$07,$07,$03
  $762E DEFB $1B,$FC,$01,$07,$06,$1D,$32,$FE
  $7636 DEFB $01,$03,$13,$16,$1D,$FE,$01,$0A
@@ -1150,6 +1529,8 @@ b$7626 DEFB $0D,$16,$1C,$FB,$01,$07,$07,$03
  $769E DEFB $0F,$07,$D0,$FF
 
 ; Room 15
+;
+; #CALL:print_room(#PC,room_15)
 b$76A2 DEFB $13,$00,$52,$FD,$02,$03,$06,$01
  $76AA DEFB $2E,$FC,$01,$0C,$0D,$00,$94,$06
  $76B2 DEFB $00,$94,$01,$00,$94,$08,$00,$52
@@ -1171,6 +1552,8 @@ b$76A2 DEFB $13,$00,$52,$FD,$02,$03,$06,$01
  $7732 DEFB $FF
 
 ; Room 16
+;
+; #CALL:print_room(#PC,room_16)
 b$7733 DEFB $02,$00,$02,$0B,$00,$01,$0E,$00
  $773B DEFB $03,$13,$00,$63,$12,$00,$63,$11
  $7743 DEFB $00,$62,$01,$02,$52,$FE,$02,$03
@@ -1193,6 +1576,8 @@ b$7733 DEFB $02,$00,$02,$0B,$00,$01,$0E,$00
  $77CB DEFB $62,$FF
 
 ; Room 17
+;
+; #CALL:print_room(#PC,room_17)
 b$77CD DEFB $13,$07,$51,$FE,$05,$05,$12,$08
  $77D5 DEFB $5C,$FE,$04,$06,$12,$08,$59,$0A
  $77DD DEFB $0D,$06,$FE,$04,$05,$09,$0D,$69
@@ -1208,6 +1593,8 @@ b$77CD DEFB $13,$07,$51,$FE,$05,$05,$12,$08
  $782D DEFB $FF
 
 ; Room 18
+;
+; #CALL:print_room(#PC,room_18)
 b$782E DEFB $11,$03,$0E,$FE,$01,$1A,$13,$09
  $7836 DEFB $52,$FE,$04,$04,$11,$09,$65,$FE
  $783E DEFB $01,$0E,$11,$08,$66,$11,$17,$67
@@ -1229,6 +1616,8 @@ b$782E DEFB $11,$03,$0E,$FE,$01,$1A,$13,$09
  $78BE DEFB $FE,$01,$07,$02,$07,$B2,$FF
 
 ; Room 19
+;
+; #CALL:print_room(#PC,room_19)
 b$78C5 DEFB $12,$00,$52,$FD,$02,$04,$0A,$00
  $78CD DEFB $94,$0C,$02,$C2,$05,$00,$52,$FD
  $78D5 DEFB $02,$03,$0D,$0E,$A0,$08,$0F,$9F
@@ -1238,6 +1627,8 @@ b$78C5 DEFB $12,$00,$52,$FD,$02,$04,$0A,$00
  $78F5 DEFB $FF
 
 ; Room 1A
+;
+; #CALL:print_room(#PC,room_1A)
 b$78F6 DEFB $12,$00,$32,$FE,$01,$1C,$00,$04
  $78FE DEFB $54,$FE,$01,$1A,$12,$1E,$52,$FD
  $7906 DEFB $02,$04,$0A,$1E,$94,$05,$1E,$52
@@ -1253,6 +1644,8 @@ b$78F6 DEFB $12,$00,$32,$FE,$01,$1C,$00,$04
  $7956 DEFB $03,$14,$C8,$05,$1C,$CF,$FF
 
 ; Room 1B
+;
+; #CALL:print_room(#PC,room_1B)
 b$795D DEFB $13,$02,$70,$FD,$01,$13,$0F,$15
  $7965 DEFB $70,$FD,$01,$04,$10,$15,$6F,$FE
  $796D DEFB $01,$03,$11,$02,$6F,$FE,$01,$17
@@ -1279,6 +1672,8 @@ b$795D DEFB $13,$02,$70,$FD,$01,$13,$0F,$15
  $7A15 DEFB $05,$0A,$FF
 
 ; Room 1C
+;
+; #CALL:print_room(#PC,room_1C)
 b$7A18 DEFB $13,$02,$33,$FE,$0A,$03,$07,$02
  $7A20 DEFB $33,$FE,$0A,$03,$00,$00,$32,$FE
  $7A28 DEFB $01,$20,$03,$0F,$96,$FD,$01,$04
@@ -1287,6 +1682,8 @@ b$7A18 DEFB $13,$02,$33,$FE,$0A,$03,$07,$02
  $7A40 DEFB $01,$1A,$12,$00,$40,$FF
 
 ; Room 1D
+;
+; #CALL:print_room(#PC,room_1D)
 b$7A46 DEFB $13,$0D,$2B,$12,$0D,$2B,$12,$12
  $7A4E DEFB $2C,$FD,$01,$12,$00,$12,$32,$FE
  $7A56 DEFB $01,$0E,$02,$00,$54,$FE,$01,$0D
@@ -1306,6 +1703,8 @@ b$7A46 DEFB $13,$0D,$2B,$12,$0D,$2B,$12,$12
  $7AC6 DEFB $D4,$FF
 
 ; Room 1E
+;
+; #CALL:print_room(#PC,room_1E)
 b$7AC8 DEFB $05,$00,$52,$FD,$02,$03,$0A,$00
  $7AD0 DEFB $94,$0C,$00,$52,$11,$00,$94,$FE
  $7AD8 DEFB $02,$04,$13,$00,$02,$13,$02,$52
@@ -1323,6 +1722,8 @@ b$7AC8 DEFB $05,$00,$52,$FD,$02,$03,$0A,$00
  $7B38 DEFB $1E,$94,$04,$02,$26,$FF
 
 ; Room 1F
+;
+; #CALL:print_room(#PC,room_1F)
 b$7B3E DEFB $09,$11,$52,$FD,$02,$05,$05,$1E
  $7B46 DEFB $52,$FD,$02,$03,$0C,$1E,$52,$0A
  $7B4E DEFB $1E,$94,$07,$1C,$96,$FD,$01,$06
@@ -1336,6 +1737,8 @@ b$7B3E DEFB $09,$11,$52,$FD,$02,$05,$05,$1E
  $7B8E DEFB $C4,$0B,$1D,$56,$FF
 
 ; Room 20
+;
+; #CALL:print_room(#PC,room_20)
 b$7B93 DEFB $13,$08,$6A,$FE,$02,$03,$13,$12
  $7B9B DEFB $6A,$FE,$02,$03,$11,$08,$65,$FE
  $7BA3 DEFB $01,$06,$11,$12,$65,$FE,$01,$06
@@ -1361,6 +1764,8 @@ b$7B93 DEFB $13,$08,$6A,$FE,$02,$03,$13,$12
  $7C43 DEFB $D0,$FF
 
 ; Room 21
+;
+; #CALL:print_room(#PC,room_21)
 b$7C45 DEFB $0B,$00,$52,$FD,$02,$03,$13,$00
  $7C4D DEFB $52,$11,$00,$94,$07,$00,$94,$02
  $7C55 DEFB $00,$94,$09,$02,$C2,$13,$02,$B1
@@ -1368,6 +1773,8 @@ b$7C45 DEFB $0B,$00,$52,$FD,$02,$03,$13,$00
  $7C65 DEFB $C4,$07,$15,$C4,$10,$1E,$6B,$FF
 
 ; Room 22
+;
+; #CALL:print_room(#PC,room_22)
 b$7C6D DEFB $11,$04,$54,$FE,$01,$1A,$01,$02
  $7C75 DEFB $1B,$02,$03,$1B,$13,$00,$50,$FD
  $7C7D DEFB $01,$0E,$02,$00,$50,$FD,$01,$03
@@ -1381,6 +1788,8 @@ b$7C6D DEFB $11,$04,$54,$FE,$01,$1A,$01,$02
  $7CBD DEFB $03,$FF
 
 ; Room 23
+;
+; #CALL:print_room(#PC,room_23)
 b$7CBF DEFB $12,$04,$1B,$13,$05,$1B,$13,$04
  $7CC7 DEFB $32,$FE,$01,$18,$00,$00,$0D,$FE
  $7CCF DEFB $01,$1E,$13,$1E,$50,$FD,$01,$0E
@@ -1402,6 +1811,8 @@ b$7CBF DEFB $12,$04,$1B,$13,$05,$1B,$13,$04
  $7D4F DEFB $FF
 
 ; Room 24
+;
+; #CALL:print_room(#PC,room_24)
 b$7D50 DEFB $00,$00,$0D,$FE,$01,$20,$11,$00
  $7D58 DEFB $32,$FE,$01,$20,$13,$0F,$96,$FD
  $7D60 DEFB $01,$03,$02,$0E,$9F,$FE,$01,$04
@@ -1422,6 +1833,8 @@ b$7D50 DEFB $00,$00,$0D,$FE,$01,$20,$11,$00
  $7DD8 DEFB $16,$D4,$FF
 
 ; Room 25
+;
+; #CALL:print_room(#PC,room_25)
 b$7DDB DEFB $00,$00,$0D,$FE,$01,$0B,$06,$0B
  $7DE3 DEFB $96,$FD,$01,$07,$02,$07,$9F,$FE
  $7DEB DEFB $01,$04,$00,$17,$0D,$FE,$01,$09
@@ -1441,6 +1854,8 @@ b$7DDB DEFB $00,$00,$0D,$FE,$01,$0B,$06,$0B
  $7E5B DEFB $B6,$0A,$14,$D3,$08,$14,$D2,$FF
 
 ; Room 26
+;
+; #CALL:print_room(#PC,room_26)
 b$7E63 DEFB $13,$00,$52,$FD,$08,$03,$09,$00
  $7E6B DEFB $94,$11,$00,$94,$01,$00,$52,$00
  $7E73 DEFB $02,$0D,$FE,$01,$1E,$13,$07,$54
@@ -1456,6 +1871,8 @@ b$7E63 DEFB $13,$00,$52,$FD,$08,$03,$09,$00
  $7EC3 DEFB $0B,$16,$4C,$FF
 
 ; Room 27
+;
+; #CALL:print_room(#PC,room_27)
 b$7EC7 DEFB $13,$11,$52,$11,$11,$94,$12,$0F
  $7ECF DEFB $6A,$10,$0F,$65,$10,$10,$65,$13
  $7ED7 DEFB $0F,$66,$13,$10,$65,$0C,$0F,$52
@@ -1473,6 +1890,8 @@ b$7EC7 DEFB $13,$11,$52,$11,$11,$94,$12,$0F
  $7F37 DEFB $11,$D4,$FE,$04,$03,$FF
 
 ; Room 28
+;
+; #CALL:print_room(#PC,room_28)
 b$7F3D DEFB $13,$0D,$6A,$FE,$02,$03,$0B,$00
  $7F45 DEFB $1A,$FE,$01,$0C,$11,$0D,$65,$FE
  $7F4D DEFB $01,$06,$11,$0C,$66,$11,$13,$67
@@ -1485,10 +1904,14 @@ b$7F3D DEFB $13,$0D,$6A,$FE,$02,$03,$0B,$00
  $7F85 DEFB $02,$10,$23,$FF
 
 ; Room 29
+;
+; #CALL:print_room(#PC,room_29)
 b$7F89 DEFB $0B,$00,$1A,$FE,$01,$20,$13,$00
  $7F91 DEFB $52,$12,$00,$53,$FF
 
 ; Room 2A
+;
+; #CALL:print_room(#PC,room_2A)
 b$7F96 DEFB $12,$02,$1B,$13,$03,$1B,$13,$02
  $7F9E DEFB $1D,$FE,$01,$1C,$13,$1E,$94,$13
  $7FA6 DEFB $00,$50,$FD,$01,$03,$0D,$00,$50
@@ -1511,6 +1934,8 @@ b$7F96 DEFB $12,$02,$1B,$13,$03,$1B,$13,$02
  $802E DEFB $D0,$FF
 
 ; Room 2B
+;
+; #CALL:print_room(#PC,room_2B)
 b$8030 DEFB $11,$00,$0D,$FE,$01,$1E,$01,$00
  $8038 DEFB $8E,$01,$02,$8D,$00,$04,$89,$FE
  $8040 DEFB $01,$1C,$00,$07,$82,$FE,$01,$16
@@ -1529,6 +1954,8 @@ b$8030 DEFB $11,$00,$0D,$FE,$01,$1E,$01,$00
  $80A8 DEFB $FE,$01,$04,$FF
 
 ; Room 2C
+;
+; #CALL:print_room(#PC,room_2C)
 b$80AC DEFB $11,$00,$0D,$FE,$01,$20,$00,$1C
  $80B4 DEFB $88,$01,$1E,$8E,$0B,$00,$55,$FE
  $80BC DEFB $01,$20,$09,$00,$99,$FE,$01,$20
@@ -1537,6 +1964,8 @@ b$80AC DEFB $11,$00,$0D,$FE,$01,$20,$00,$1C
  $80D4 DEFB $00,$50,$FF
 
 ; Room 2D
+;
+; #CALL:print_room(#PC,room_2D)
 b$80D7 DEFB $13,$0D,$2B,$FD,$01,$0B,$13,$12
  $80DF DEFB $2C,$FD,$01,$0B,$08,$12,$3D,$08
  $80E7 DEFB $0D,$3D,$01,$0D,$2D,$02,$0D,$48
@@ -1551,6 +1980,8 @@ b$80D7 DEFB $13,$0D,$2B,$FD,$01,$0B,$13,$12
  $812F DEFB $1E,$50,$12,$1E,$50,$FF
 
 ; Room 2E
+;
+; #CALL:print_room(#PC,room_2E)
 b$8135 DEFB $07,$00,$30,$06,$00,$69,$01,$00
  $813D DEFB $2F,$FE,$01,$03,$00,$03,$67,$11
  $8145 DEFB $02,$0D,$FE,$01,$1E,$07,$04,$0C
@@ -1561,6 +1992,8 @@ b$8135 DEFB $07,$00,$30,$06,$00,$69,$01,$00
  $816D DEFB $4C,$12,$02,$A4,$12,$1C,$A5,$FF
 
 ; Room 2F
+;
+; #CALL:print_room(#PC,room_2F)
 b$8175 DEFB $12,$0D,$94,$09,$0D,$52,$13,$1E
  $817D DEFB $52,$11,$1E,$94,$09,$1E,$52,$06
  $8185 DEFB $0D,$69,$06,$1E,$69,$00,$0B,$66
@@ -5408,33 +5841,35 @@ c$C881 CALL $E801    ; Clear the screen.
  $C88F DJNZ $C88C    ; Loop until all rooms are done.
  $C891 CALL $EF1E    ; { Make all moving objects visible.
  $C894 CALL $F345    ; }
- $C897 LD HL,$C866   ;
- $C89A LD DE,$C925   ;
- $C89D LD B,$04      ;
-*$C89F LD A,(DE)     ;
- $C8A0 CP (HL)       ;
- $C8A1 JR C,$C8AB    ;
- $C8A3 JR NZ,$C8B6   ;
- $C8A5 INC DE        ;
- $C8A6 INC HL        ;
- $C8A7 DJNZ $C89F    ;
- $C8A9 JR $C8B6      ;
-*$C8AB LD HL,$C866   ;
+; Update the high score if necessary.
+ $C897 LD HL,$C866   ; Put the current score in #REGhl. (#R$C866)
+ $C89A LD DE,$C925   ; Put the current high score in #REGde. (#R$C925)
+ $C89D LD B,$04      ; 4 digits to look at.
+*$C89F LD A,(DE)     ; Get the next high score digit.
+ $C8A0 CP (HL)       ; Is it lower than the current one?
+ $C8A1 JR C,$C8AB    ; Jump if so.
+ $C8A3 JR NZ,$C8B6   ; Otherwise, skip if it isn't equal.
+ $C8A5 INC DE        ; { Move to the next digit.
+ $C8A6 INC HL        ; }
+ $C8A7 DJNZ $C89F    ; { Loop while there are more digits to look at,
+ $C8A9 JR $C8B6      ; then jump forward. }
+; The high score should be updated.
+*$C8AB LD HL,$C866   ; { Copy the current score to the highest score.
  $C8AE LD DE,$C925   ;
  $C8B1 LD BC,$0004   ;
- $C8B4 LDIR          ;
-*$C8B6 CALL $D378    ;
- $C8B9 LD HL,$CE56   ;
+ $C8B4 LDIR          ; }
+*$C8B6 CALL $D378    ; Update the display area.
+ $C8B9 LD HL,$CE56   ; { Set 0 screns visited.
  $C8BC LD (HL),$00   ;
  $C8BE DEC HL        ;
- $C8BF LD (HL),$27   ;
- $C8C1 LD HL,$C8D2   ;
- $C8C4 LD DE,$C866   ;
+ $C8BF LD (HL),$27   ; }
+ $C8C1 LD HL,$C8D2   ; { Make the current game stats the
+ $C8C4 LD DE,$C866   ; same as the defaults.
  $C8C7 LD BC,$001B   ;
- $C8CA LDIR          ;
- $C8CC LD A,$2B      ;
+ $C8CA LDIR          ; }
+ $C8CC LD A,$2B      ; { Switch to the start room and return.
  $C8CE CALL $CBBD    ;
- $C8D1 RET           ;
+ $C8D1 RET           ; }
 
 ; Default values for game status buffers
 b$C8D2 DEFB $00,$00,$00,$00,$FF,$00,$0A,$01
@@ -5452,7 +5887,7 @@ b$C8F5 DEFB $45,$04,$07,$02,$43,$02,$03,$06
 ; Put Dan in the correct place when entering a room
 ;
 ; Used by the routine at #R$CBBD.
-c$C8FF LD DE,($C872) ;
+c$C8FF LD DE,($C872) ; Put Dan's co-ordinates in #REGde.
  $C903 LD HL,$62D6   ;
  $C906 LD A,$0E      ;
 *$C908 EX AF,AF'     ;
@@ -5484,11 +5919,12 @@ g$C925 DEFB $00,$00,$00,$00,$FF
 ; Update the main status area
 ;
 ; Used by the routines at #R$C800 and #R$CDD3.
-c$C92A LD HL,($C870) ;
- $C92D DEC HL        ;
- $C92E LD A,L        ;
- $C92F OR H          ;
- $C930 JR NZ,$C939   ;
+c$C92A LD HL,($C870) ; Get the frame count before the score should be updated. (#R$C870)
+ $C92D DEC HL        ; Decrease by 1 frame.
+ $C92E LD A,L        ; { Is it zero?
+ $C92F OR H          ; }
+ $C930 JR NZ,$C939   ; Jump forward if not.
+; Time to update the score.
  $C932 LD HL,$C86B   ;
  $C935 INC (HL)      ;
  $C936 LD HL,$0384   ;
@@ -9741,14 +10177,14 @@ c$E8F1 LD A,E        ; Get the Y co-ordinate.
  $E8F4 ADD A,$40     ; Add a base address of #N$40 to the the high byte of a screen address.
  $E8F6 PUSH AF       ; Remember this.
 ; This entry point is used by the routine at #R$E8E3.
-*$E8F7 LD A,E        ; Get the X co-ordinate.
+*$E8F7 LD A,E        ; Get the Y co-ordinate.
  $E8F8 AND $07       ; { Take the bottom 3 bits and multiply them by 32
  $E8FA SLA A         ; to get the correct offset for this line
  $E8FC SLA A         ; (ie: #N$20, #N$40, #N$60, #N$80, #N$A0, #N$E0)
  $E8FE SLA A         ;
  $E900 SLA A         ;
  $E902 SLA A         ; }
- $E904 ADD A,D       ; { Add the Y co-ordinate to get the right low byte of a screen address.
+ $E904 ADD A,D       ; { Add the X co-ordinate to get the right low byte of a screen address.
  $E905 LD E,A        ; }
  $E906 POP AF        ; { Restore the high byte into #REGd.
  $E907 LD D,A        ; }
@@ -10224,11 +10660,11 @@ c$ED06 LD A,(HL)     ; Get the width.
  $ED1C LD A,(HL)     ; Get the next command.
  $ED1D CP $FE        ; { Jump forward if this is "draw right".
  $ED1F JR Z,$ED36    ; }
- $ED21 CP $FD        ; { Jump forward if this is "draw left".
+ $ED21 CP $FD        ; { Jump forward if this is "draw up".
  $ED23 JR Z,$ED50    ; }
- $ED25 CP $FC        ; { Jump forward if this is "draw up".
+ $ED25 CP $FC        ; { Jump forward if this is "draw right and up".
  $ED27 JR Z,$ED6A    ; }
- $ED29 CP $FB        ; { Jump forward if this is "draw down".
+ $ED29 CP $FB        ; { Jump forward if this is "draw left and up".
  $ED2B JR Z,$ED85    ; }
 ; No special command here, so print the graphic.
  $ED2D PUSH HL       ; Remember the current position.
@@ -10260,11 +10696,11 @@ c$ED06 LD A,(HL)     ; Get the width.
  $ED4C INC HL        ;
  $ED4D INC HL        ;
  $ED4E JR $ED06      ;
-; Draw a string of UDGs to the left.
+; Draw a string of UDGs up.
 *$ED50 INC HL        ; Move to the next position.
  $ED51 PUSH HL       ;
  $ED52 PUSH BC       ;
- $ED53 LD C,(HL)     ; { Put }
+ $ED53 LD C,(HL)     ; 
  $ED54 INC HL        ;
  $ED55 LD B,(HL)     ;
  $ED56 POP HL        ;
@@ -10275,7 +10711,7 @@ c$ED06 LD A,(HL)     ; Get the width.
  $ED5D POP HL        ; { Restore the registers.
  $ED5E POP DE        ;
  $ED5F POP BC        ; }
- $ED60 LD A,E        ; { Decrease the X position.
+ $ED60 LD A,E        ; { Decrease the Y position.
  $ED61 SUB C         ;
  $ED62 LD E,A        ; }
  $ED63 DJNZ $ED57    ;
@@ -10283,7 +10719,7 @@ c$ED06 LD A,(HL)     ; Get the width.
  $ED66 INC HL        ;
  $ED67 INC HL        ;
  $ED68 JR $ED06      ;
-; Draw a string of UDGS up.
+; Draw a string of UDGS right and up.
 *$ED6A INC HL        ; Move to the next position.
  $ED6B PUSH HL       ; 
  $ED6C PUSH BC       ;
@@ -10307,7 +10743,7 @@ c$ED06 LD A,(HL)     ; Get the width.
  $ED81 INC HL        ;
  $ED82 INC HL        ;
  $ED83 JR $ED06      ;
-; Draw a string of UDGS down.
+; Draw a string of UDGS left and up.
 *$ED85 INC HL        ; Move to the next position.
  $ED86 PUSH HL       ;
  $ED87 PUSH BC       ;
@@ -10325,7 +10761,7 @@ c$ED06 LD A,(HL)     ; Get the width.
  $ED95 LD A,D        ;
  $ED96 ADD A,C       ;
  $ED97 LD D,A        ;
- $ED98 DEC E         ; Decrease the Y position.
+ $ED98 DEC E         ; Decrease the X position.
  $ED99 DJNZ $ED8C    ;
  $ED9B POP HL        ;
  $ED9C INC HL        ;

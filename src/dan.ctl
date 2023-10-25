@@ -37,8 +37,391 @@ D $6899 Used by the routine at #R$D9EC
 w $6919 Pitch frequences for musical notes
 b $6985 River graphics
 b $69E6 Room data offsets
-B $69E6,$240,$C*$30
 D $69E6 Used by the routine at #R$CBBD
+D $69E6 Room 00
+W $69E6 UDGs
+B $69E8 Test tube location
+B $69EA Food item index
+B $69EB Food co-ordinates
+W $69ED Moving objects
+B $69EF Dynamite co-ordinates
+B $69F1 Bank card index
+D $69F2 Room 01
+W $69F2 UDGs
+B $69F4 Test tube location
+B $69F6 Food item index
+B $69F7 Food co-ordinates
+W $69F9 Moving objects
+B $69FB Dynamite co-ordinates
+B $69FD Bank card index
+D $69FE Room 02
+W $69FE UDGs
+B $6A00 Test tube location
+B $6A02 Food item index
+B $6A03 Food co-ordinates
+W $6A05 Moving objects
+B $6A07 Dynamite co-ordinates
+B $6A09 Bank card index
+D $6A0A Room 03
+W $6A0A UDGs
+B $6A0C Test tube location
+B $6A0E Food item index
+B $6A0F Food co-ordinates
+W $6A11 Moving objects
+B $6A13 Dynamite co-ordinates
+B $6A15 Bank card index
+D $6A16 Room 04
+W $6A16 UDGs
+B $6A18 Test tube location
+B $6A1A Food item index
+B $6A1B Food co-ordinates
+W $6A1D Moving objects
+B $6A1F Dynamite co-ordinates
+B $6A21 Bank card index
+D $6A22 Room 05
+W $6A22 UDGs
+B $6A24 Test tube location
+B $6A26 Food item index
+B $6A27 Food co-ordinates
+W $6A29 Moving objects
+B $6A2B Dynamite co-ordinates
+B $6A2D Bank card index
+D $6A2E Room 06
+W $6A2E UDGs
+B $6A30 Test tube location
+B $6A32 Food item index
+B $6A33 Food co-ordinates
+W $6A35 Moving objects
+B $6A37 Dynamite co-ordinates
+B $6A39 Bank card index
+D $6A3A Room 07
+W $6A3A UDGs
+B $6A3C Test tube location
+B $6A3E Food item index
+B $6A3F Food co-ordinates
+W $6A41 Moving objects
+B $6A43 Dynamite co-ordinates
+B $6A45 Bank card index
+D $6A46 Room 08
+W $6A46 UDGs
+B $6A48 Test tube location
+B $6A4A Food item index
+B $6A4B Food co-ordinates
+W $6A4D Moving objects
+B $6A4F Dynamite co-ordinates
+B $6A51 Bank card index
+D $6A52 Room 09
+W $6A52 UDGs
+B $6A54 Test tube location
+B $6A56 Food item index
+B $6A57 Food co-ordinates
+W $6A59 Moving objects
+B $6A5B Dynamite co-ordinates
+B $6A5D Bank card index
+D $6A5E Room 0A
+W $6A5E UDGs
+B $6A60 Test tube location
+B $6A62 Food item index
+B $6A63 Food co-ordinates
+W $6A65 Moving objects
+B $6A67 Dynamite co-ordinates
+B $6A69 Bank card index
+D $6A6A Room 0B
+W $6A6A UDGs
+B $6A6C Test tube location
+B $6A6E Food item index
+B $6A6F Food co-ordinates
+W $6A71 Moving objects
+B $6A73 Dynamite co-ordinates
+B $6A75 Bank card index
+D $6A76 Room 0C
+W $6A76 UDGs
+B $6A78 Test tube location
+B $6A7A Food item index
+B $6A7B Food co-ordinates
+W $6A7D Moving objects
+B $6A7F Dynamite co-ordinates
+B $6A81 Bank card index
+D $6A82 Room 0D
+W $6A82 UDGs
+B $6A84 Test tube location
+B $6A86 Food item index
+B $6A87 Food co-ordinates
+W $6A89 Moving objects
+B $6A8B Dynamite co-ordinates
+B $6A8D Bank card index
+D $6A8E Room 0E
+W $6A8E UDGs
+B $6A90 Test tube location
+B $6A92 Food item index
+B $6A93 Food co-ordinates
+W $6A95 Moving objects
+B $6A97 Dynamite co-ordinates
+B $6A99 Bank card index
+D $6A9A Room 0F
+W $6A9A UDGs
+B $6A9C Test tube location
+B $6A9E Food item index
+B $6A9F Food co-ordinates
+W $6AA1 Moving objects
+B $6AA3 Dynamite co-ordinates
+B $6AA5 Bank card index
+D $6AA6 Room 10
+W $6AA6 UDGs
+B $6AA8 Test tube location
+B $6AAA Food item index
+B $6AAB Food co-ordinates
+W $6AAD Moving objects
+B $6AAF Dynamite co-ordinates
+B $6AB1 Bank card index
+D $6AB2 Room 11
+W $6AB2 UDGs
+B $6AB4 Test tube location
+B $6AB6 Food item index
+B $6AB7 Food co-ordinates
+W $6AB9 Moving objects
+B $6ABB Dynamite co-ordinates
+B $6ABD Bank card index
+D $6ABE Room 12
+W $6ABE UDGs
+B $6AC0 Test tube location
+B $6AC2 Food item index
+B $6AC3 Food co-ordinates
+W $6AC5 Moving objects
+B $6AC7 Dynamite co-ordinates
+B $6AC9 Bank card index
+D $6ACA Room 13
+W $6ACA UDGs
+B $6ACC Test tube location
+B $6ACE Food item index
+B $6ACF Food co-ordinates
+W $6AD1 Moving objects
+B $6AD3 Dynamite co-ordinates
+B $6AD5 Bank card index
+D $6AD6 Room 14
+W $6AD6 UDGs
+B $6AD8 Test tube location
+B $6ADA Food item index
+B $6ADB Food co-ordinates
+W $6ADD Moving objects
+B $6ADF Dynamite co-ordinates
+B $6AE1 Bank card index
+D $6AE2 Room 15
+W $6AE2 UDGs
+B $6AE4 Test tube location
+B $6AE6 Food item index
+B $6AE7 Food co-ordinates
+W $6AE9 Moving objects
+B $6AEB Dynamite co-ordinates
+B $6AED Bank card index
+D $6AEE Room 16
+W $6AEE UDGs
+B $6AF0 Test tube location
+B $6AF2 Food item index
+B $6AF3 Food co-ordinates
+W $6AF5 Moving objects
+B $6AF7 Dynamite co-ordinates
+B $6AF9 Bank card index
+D $6AFA Room 17
+W $6AFA UDGs
+B $6AFC Test tube location
+B $6AFE Food item index
+B $6AFF Food co-ordinates
+W $6B01 Moving objects
+B $6B03 Dynamite co-ordinates
+B $6B05 Bank card index
+D $6B06 Room 18
+W $6B06 UDGs
+B $6B08 Test tube location
+B $6B0A Food item index
+B $6B0B Food co-ordinates
+W $6B0D Moving objects
+B $6B0F Dynamite co-ordinates
+B $6B11 Bank card index
+D $6B12 Room 19
+W $6B12 UDGs
+B $6B14 Test tube location
+B $6B16 Food item index
+B $6B17 Food co-ordinates
+W $6B19 Moving objects
+B $6B1B Dynamite co-ordinates
+B $6B1D Bank card index
+D $6B1E Room 1A
+W $6B1E UDGs
+B $6B20 Test tube location
+B $6B22 Food item index
+B $6B23 Food co-ordinates
+W $6B25 Moving objects
+B $6B27 Dynamite co-ordinates
+B $6B29 Bank card index
+D $6B2A Room 1B
+W $6B2A UDGs
+B $6B2C Test tube location
+B $6B2E Food item index
+B $6B2F Food co-ordinates
+W $6B31 Moving objects
+B $6B33 Dynamite co-ordinates
+B $6B35 Bank card index
+D $6B36 Room 1C
+W $6B36 UDGs
+B $6B38 Test tube location
+B $6B3A Food item index
+B $6B3B Food co-ordinates
+W $6B3D Moving objects
+B $6B3F Dynamite co-ordinates
+B $6B41 Bank card index
+D $6B42 Room 1D
+W $6B42 UDGs
+B $6B44 Test tube location
+B $6B46 Food item index
+B $6B47 Food co-ordinates
+W $6B49 Moving objects
+B $6B4B Dynamite co-ordinates
+B $6B4D Bank card index
+D $6B4E Room 1E
+W $6B4E UDGs
+B $6B50 Test tube location
+B $6B52 Food item index
+B $6B53 Food co-ordinates
+W $6B55 Moving objects
+B $6B57 Dynamite co-ordinates
+B $6B59 Bank card index
+D $6B5A Room 1F
+W $6B5A UDGs
+B $6B5C Test tube location
+B $6B5E Food item index
+B $6B5F Food co-ordinates
+W $6B61 Moving objects
+B $6B63 Dynamite co-ordinates
+B $6B65 Bank card index
+D $6B66 Room 20
+W $6B66 UDGs
+B $6B68 Test tube location
+B $6B6A Food item index
+B $6B6B Food co-ordinates
+W $6B6D Moving objects
+B $6B6F Dynamite co-ordinates
+B $6B71 Bank card index
+D $6B72 Room 21
+W $6B72 UDGs
+B $6B74 Test tube location
+B $6B76 Food item index
+B $6B77 Food co-ordinates
+W $6B79 Moving objects
+B $6B7B Dynamite co-ordinates
+B $6B7D Bank card index
+D $6B7E Room 22
+W $6B7E UDGs
+B $6B80 Test tube location
+B $6B82 Food item index
+B $6B83 Food co-ordinates
+W $6B85 Moving objects
+B $6B87 Dynamite co-ordinates
+B $6B89 Bank card index
+D $6B8A Room 23
+W $6B8A UDGs
+B $6B8C Test tube location
+B $6B8E Food item index
+B $6B8F Food co-ordinates
+W $6B91 Moving objects
+B $6B93 Dynamite co-ordinates
+B $6B95 Bank card index
+D $6B96 Room 24
+W $6B96 UDGs
+B $6B98 Test tube location
+B $6B9A Food item index
+B $6B9B Food co-ordinates
+W $6B9D Moving objects
+B $6B9F Dynamite co-ordinates
+B $6BA1 Bank card index
+D $6BA2 Room 25
+W $6BA2 UDGs
+B $6BA4 Test tube location
+B $6BA6 Food item index
+B $6BA7 Food co-ordinates
+W $6BA9 Moving objects
+B $6BAB Dynamite co-ordinates
+B $6BAD Bank card index
+D $6BAE Room 26
+W $6BAE UDGs
+B $6BB0 Test tube location
+B $6BB2 Food item index
+B $6BB3 Food co-ordinates
+W $6BB5 Moving objects
+B $6BB7 Dynamite co-ordinates
+B $6BB9 Bank card index
+D $6BBA Room 27
+W $6BBA UDGs
+B $6BBC Test tube location
+B $6BBE Food item index
+B $6BBF Food co-ordinates
+W $6BC1 Moving objects
+B $6BC3 Dynamite co-ordinates
+B $6BC5 Bank card index
+D $6BC6 Room 28
+W $6BC6 UDGs
+B $6BC8 Test tube location
+B $6BCA Food item index
+B $6BCB Food co-ordinates
+W $6BCD Moving objects
+B $6BCF Dynamite co-ordinates
+B $6BD1 Bank card index
+D $6BD2 Room 29
+W $6BD2 UDGs
+B $6BD4 Test tube location
+B $6BD6 Food item index
+B $6BD7 Food co-ordinates
+W $6BD9 Moving objects
+B $6BDB Dynamite co-ordinates
+B $6BDD Bank card index
+D $6BDE Room 2A
+W $6BDE UDGs
+B $6BE0 Test tube location
+B $6BE2 Food item index
+B $6BE3 Food co-ordinates
+W $6BE5 Moving objects
+B $6BE7 Dynamite co-ordinates
+B $6BE9 Bank card index
+D $6BEA Room 2B
+W $6BEA UDGs
+B $6BEC Test tube location
+B $6BEE Food item index
+B $6BEF Food co-ordinates
+W $6BF1 Moving objects
+B $6BF3 Dynamite co-ordinates
+B $6BF5 Bank card index
+D $6BF6 Room 2C
+W $6BF6 UDGs
+B $6BF8 Test tube location
+B $6BFA Food item index
+B $6BFB Food co-ordinates
+W $6BFD Moving objects
+B $6BFF Dynamite co-ordinates
+B $6C01 Bank card index
+D $6C02 Room 2D
+W $6C02 UDGs
+B $6C04 Test tube location
+B $6C06 Food item index
+B $6C07 Food co-ordinates
+W $6C09 Moving objects
+B $6C0B Dynamite co-ordinates
+B $6C0D Bank card index
+D $6C0E Room 2E
+W $6C0E UDGs
+B $6C10 Test tube location
+B $6C12 Food item index
+B $6C13 Food co-ordinates
+W $6C15 Moving objects
+B $6C17 Dynamite co-ordinates
+B $6C19 Bank card index
+D $6C1A Room 2F
+W $6C1A UDGs
+B $6C1C Test tube location
+B $6C1E Food item index
+B $6C1F Food co-ordinates
+W $6C21 Moving objects
+B $6C23 Dynamite co-ordinates
+B $6C25 Bank card index
 b $6C26 Attributes marking walls
 D $6C26 Used by the routine at #R$CBBD
 D $6C26 Each data set is 8 bytes long. The choice is stored in bits 6+7 of offset 4 in the current room's store
@@ -471,7 +854,7 @@ b $CA1E "Good luck!"
 b $CA2B Attributes for intro screen
 b $CA3D Moving object data for intro screen
 D $CA3D Used by the routine at #R$CA5B
-b $CA43
+b $CA43 Movement table for objects in intro screen
 b $CA53 Laser movement for the intro screen
 g $CA57 Pointer to the current tune being played
 W $CA57
