@@ -522,11 +522,13 @@ b$6985 DEFB $82,$12,$00,$20,$81,$06,$48,$01
  $69DD DEFB $16,$00,$06,$18,$40,$24,$20,$38
  $69E5 DEFB $00
 
-; Room data offsets
+; Room 00 data
 ;
-; Used by the routine at #R$CBBD
+; Used by the routine at #R$CBBD.
+;
 ; .
-; Room 00
+;
+; #CALL:print_full_room(#PC,full_room_00)
 b$69E6 DEFW $6E5F    ; UDGs
  $69E8 DEFB $07,$02  ; Test tube location
  $69EA DEFB $15      ; Food item index
@@ -534,376 +536,705 @@ b$69E6 DEFW $6E5F    ; UDGs
  $69ED DEFW $9CA7    ; Moving objects
  $69EF DEFB $0F,$17  ; Dynamite co-ordinates
  $69F1 DEFB $00      ; Bank card index
-; Room 01
- $69F2 DEFW $6E90    ; UDGs
+
+; Room 01 data
+;
+; Used by the routine at #R$CBBD.
+;
+; .
+;
+; #CALL:print_full_room(#PC,full_room_01)
+b$69F2 DEFW $6E90    ; UDGs
  $69F4 DEFB $05,$18  ; Test tube location
  $69F6 DEFB $13      ; Food item index
  $69F7 DEFB $07,$0B  ; Food co-ordinates
  $69F9 DEFW $9CED    ; Moving objects
  $69FB DEFB $0D,$11  ; Dynamite co-ordinates
  $69FD DEFB $00      ; Bank card index
-; Room 02
- $69FE DEFW $6EDC    ; UDGs
+
+; Room 02 data
+;
+; Used by the routine at #R$CBBD.
+;
+; .
+;
+; #CALL:print_full_room(#PC,full_room_02)
+b$69FE DEFW $6EDC    ; UDGs
  $6A00 DEFB $09,$08  ; Test tube location
  $6A02 DEFB $01      ; Food item index
  $6A03 DEFB $0D,$17  ; Food co-ordinates
  $6A05 DEFW $9D23    ; Moving objects
  $6A07 DEFB $0F,$11  ; Dynamite co-ordinates
  $6A09 DEFB $00      ; Bank card index
-; Room 03
- $6A0A DEFW $6F34    ; UDGs
+
+; Room 03 data
+;
+; Used by the routine at #R$CBBD.
+;
+; .
+;
+; #CALL:print_full_room(#PC,full_room_03)
+b$6A0A DEFW $6F34    ; UDGs
  $6A0C DEFB $0D,$19  ; Test tube location
  $6A0E DEFB $00      ; Food item index
  $6A0F DEFB $0A,$11  ; Food co-ordinates
  $6A11 DEFW $9D61    ; Moving objects
  $6A13 DEFB $03,$06  ; Dynamite co-ordinates
  $6A15 DEFB $00      ; Bank card index
-; Room 04
- $6A16 DEFW $6F77    ; UDGs
+
+; Room 04 data
+;
+; Used by the routine at #R$CBBD.
+;
+; .
+;
+; #CALL:print_full_room(#PC,full_room_04)
+b$6A16 DEFW $6F77    ; UDGs
  $6A18 DEFB $10,$15  ; Test tube location
  $6A1A DEFB $04      ; Food item index
  $6A1B DEFB $0C,$0D  ; Food co-ordinates
  $6A1D DEFW $9DB7    ; Moving objects
  $6A1F DEFB $03,$16  ; Dynamite co-ordinates
  $6A21 DEFB $00      ; Bank card index
-; Room 05
- $6A22 DEFW $6FC6    ; UDGs
+
+; Room 05 data
+;
+; Used by the routine at #R$CBBD.
+;
+; .
+;
+; #CALL:print_full_room(#PC,full_room_05)
+b$6A22 DEFW $6FC6    ; UDGs
  $6A24 DEFB $0E,$1D  ; Test tube location
  $6A26 DEFB $05      ; Food item index
  $6A27 DEFB $0C,$1B  ; Food co-ordinates
  $6A29 DEFW $9DF5    ; Moving objects
  $6A2B DEFB $0F,$0B  ; Dynamite co-ordinates
  $6A2D DEFB $00      ; Bank card index
-; Room 06
- $6A2E DEFW $702A    ; UDGs
+
+; Room 06 data
+;
+; Used by the routine at #R$CBBD.
+;
+; .
+;
+; #CALL:print_full_room(#PC,full_room_06)
+b$6A2E DEFW $702A    ; UDGs
  $6A30 DEFB $05,$0B  ; Test tube location
  $6A32 DEFB $41      ; Food item index
  $6A33 DEFB $0B,$17  ; Food co-ordinates
  $6A35 DEFW $9E2B    ; Moving objects
  $6A37 DEFB $0C,$11  ; Dynamite co-ordinates
  $6A39 DEFB $00      ; Bank card index
-; Room 07 
- $6A3A DEFW $7094    ; UDGs
+
+; Room 07 data
+;
+; Used by the routine at #R$CBBD.
+;
+; .
+;
+; #CALL:print_full_room(#PC,full_room_07)
+b$6A3A DEFW $7094    ; UDGs
  $6A3C DEFB $04,$05  ; Test tube location
  $6A3E DEFB $07      ; Food item index
  $6A3F DEFB $0F,$08  ; Food co-ordinates
  $6A41 DEFW $9E79    ; Moving objects
  $6A43 DEFB $0F,$0C  ; Dynamite co-ordinates
  $6A45 DEFB $00      ; Bank card index
-; Room 08
- $6A46 DEFW $70B9    ; UDGs
+
+; Room 08 data
+;
+; Used by the routine at #R$CBBD.
+;
+; .
+;
+; #CALL:print_full_room(#PC,full_room_08)
+b$6A46 DEFW $70B9    ; UDGs
  $6A48 DEFB $0D,$08  ; Test tube location
  $6A4A DEFB $00      ; Food item index
  $6A4B DEFB $0B,$03  ; Food co-ordinates
  $6A4D DEFW $9EBF    ; Moving objects
  $6A4F DEFB $10,$17  ; Dynamite co-ordinates
  $6A51 DEFB $00      ; Bank card index
-; Room 09
- $6A52 DEFW $710E    ; UDGs
+
+; Room 09 data
+;
+; Used by the routine at #R$CBBD.
+;
+; .
+;
+; #CALL:print_full_room(#PC,full_room_09)
+b$6A52 DEFW $710E    ; UDGs
  $6A54 DEFB $0B,$18  ; Test tube location
  $6A56 DEFB $01      ; Food item index
  $6A57 DEFB $11,$1A  ; Food co-ordinates
  $6A59 DEFW $9EF5    ; Moving objects
  $6A5B DEFB $0B,$10  ; Dynamite co-ordinates
  $6A5D DEFB $00      ; Bank card index
-; Room 0A
- $6A5E DEFW $7190    ; UDGs
+
+; Room 0A data
+;
+; Used by the routine at #R$CBBD.
+;
+; .
+;
+; #CALL:print_full_room(#PC,full_room_0a)
+b$6A5E DEFW $7190    ; UDGs
  $6A60 DEFB $05,$02  ; Test tube location
  $6A62 DEFB $04      ; Food item index
  $6A63 DEFB $11,$16  ; Food co-ordinates
  $6A65 DEFW $9F3B    ; Moving objects
  $6A67 DEFB $0C,$09  ; Dynamite co-ordinates
  $6A69 DEFB $00      ; Bank card index
-; Room 0B
- $6A6A DEFW $71F4    ; UDGs
+
+; Room 0B data
+;
+; Used by the routine at #R$CBBD.
+;
+; .
+;
+; #CALL:print_full_room(#PC,full_room_0b)
+b$6A6A DEFW $71F4    ; UDGs
  $6A6C DEFB $0E,$15  ; Test tube location
  $6A6E DEFB $07      ; Food item index
  $6A6F DEFB $10,$0C  ; Food co-ordinates
  $6A71 DEFW $9F81    ; Moving objects
  $6A73 DEFB $09,$1C  ; Dynamite co-ordinates
  $6A75 DEFB $00      ; Bank card index
-; Room 0C
- $6A76 DEFW $7252    ; UDGs
+
+; Room 0C data
+;
+; Used by the routine at #R$CBBD.
+;
+; .
+;
+; #CALL:print_full_room(#PC,full_room_0c)
+b$6A76 DEFW $7252    ; UDGs
  $6A78 DEFB $0C,$17  ; Test tube location
  $6A7A DEFB $03      ; Food item index
  $6A7B DEFB $05,$06  ; Food co-ordinates
  $6A7D DEFW $9FCF    ; Moving objects
  $6A7F DEFB $0E,$05  ; Dynamite co-ordinates
  $6A81 DEFB $00      ; Bank card index
-; Room 0D
- $6A82 DEFW $72E9    ; UDGs
+
+; Room 0D data
+;
+; Used by the routine at #R$CBBD.
+;
+; .
+;
+; #CALL:print_full_room(#PC,full_room_0d)
+b$6A82 DEFW $72E9    ; UDGs
  $6A84 DEFB $0C,$05  ; Test tube location
  $6A86 DEFB $06      ; Food item index
  $6A87 DEFB $0C,$15  ; Food co-ordinates
  $6A89 DEFW $A00D    ; Moving objects
  $6A8B DEFB $0E,$14  ; Dynamite co-ordinates
  $6A8D DEFB $00      ; Bank card index
-; Room 0E
- $6A8E DEFW $7362    ; UDGs
+
+; Room 0E data
+;
+; Used by the routine at #R$CBBD.
+;
+; .
+;
+; #CALL:print_full_room(#PC,full_room_0e)
+b$6A8E DEFW $7362    ; UDGs
  $6A90 DEFB $0C,$14  ; Test tube location
  $6A92 DEFB $40      ; Food item index
  $6A93 DEFB $08,$0D  ; Food co-ordinates
  $6A95 DEFW $A053    ; Moving objects
  $6A97 DEFB $10,$0D  ; Dynamite co-ordinates
  $6A99 DEFB $00      ; Bank card index
-; Room 0F
- $6A9A DEFW $7402    ; UDGs
+
+; Room 0F data
+;
+; Used by the routine at #R$CBBD.
+;
+; .
+;
+; #CALL:print_full_room(#PC,full_room_0f)
+b$6A9A DEFW $7402    ; UDGs
  $6A9C DEFB $08,$0E  ; Test tube location
  $6A9E DEFB $44      ; Food item index
  $6A9F DEFB $0B,$1A  ; Food co-ordinates
  $6AA1 DEFW $A0A1    ; Moving objects
  $6AA3 DEFB $0E,$09  ; Dynamite co-ordinates
  $6AA5 DEFB $00      ; Bank card index
-; Room 10
- $6AA6 DEFW $7472    ; UDGs
+
+; Room 10 data
+;
+; Used by the routine at #R$CBBD.
+;
+; .
+;
+; #CALL:print_full_room(#PC,full_room_10)
+b$6AA6 DEFW $7472    ; UDGs
  $6AA8 DEFB $10,$08  ; Test tube location
  $6AAA DEFB $06      ; Food item index
  $6AAB DEFB $06,$16  ; Food co-ordinates
  $6AAD DEFW $A0DF    ; Moving objects
  $6AAF DEFB $10,$17  ; Dynamite co-ordinates
  $6AB1 DEFB $00      ; Bank card index
-; Room 11
- $6AB2 DEFW $74E5    ; UDGs
+
+; Room 11 data
+;
+; Used by the routine at #R$CBBD.
+;
+; .
+;
+; #CALL:print_full_room(#PC,full_room_11)
+b$6AB2 DEFW $74E5    ; UDGs
  $6AB4 DEFB $10,$12  ; Test tube location
  $6AB6 DEFB $83      ; Food item index
  $6AB7 DEFB $12,$02  ; Food co-ordinates
  $6AB9 DEFW $A12D    ; Moving objects
  $6ABB DEFB $07,$16  ; Dynamite co-ordinates
  $6ABD DEFB $00      ; Bank card index
-; Room 12
- $6ABE DEFW $7531    ; UDGs
+
+; Room 12 data
+;
+; Used by the routine at #R$CBBD.
+;
+; .
+;
+; #CALL:print_full_room(#PC,full_room_12)
+b$6ABE DEFW $7531    ; UDGs
  $6AC0 DEFB $0E,$18  ; Test tube location
  $6AC2 DEFB $02      ; Food item index
  $6AC3 DEFB $09,$0B  ; Food co-ordinates
  $6AC5 DEFW $A16B    ; Moving objects
  $6AC7 DEFB $05,$18  ; Dynamite co-ordinates
  $6AC9 DEFB $00      ; Bank card index
-; Room 13
- $6ACA DEFW $75A7    ; UDGs
+
+; Room 13 data
+;
+; Used by the routine at #R$CBBD.
+;
+; .
+;
+; #CALL:print_full_room(#PC,full_room_13)
+b$6ACA DEFW $75A7    ; UDGs
  $6ACC DEFB $05,$02  ; Test tube location
  $6ACE DEFB $C0      ; Food item index
  $6ACF DEFB $12,$02  ; Food co-ordinates
  $6AD1 DEFW $A1A9    ; Moving objects
  $6AD3 DEFB $12,$0B  ; Dynamite co-ordinates
  $6AD5 DEFB $00      ; Bank card index
-; Room 14
- $6AD6 DEFW $7626    ; UDGs
+
+; Room 14 data
+;
+; Used by the routine at #R$CBBD.
+;
+; .
+;
+; #CALL:print_full_room(#PC,full_room_14)
+b$6AD6 DEFW $7626    ; UDGs
  $6AD8 DEFB $0C,$1A  ; Test tube location
  $6ADA DEFB $01      ; Food item index
  $6ADB DEFB $05,$0A  ; Food co-ordinates
  $6ADD DEFW $A1F7    ; Moving objects
  $6ADF DEFB $12,$05  ; Dynamite co-ordinates
  $6AE1 DEFB $00      ; Bank card index
-; Room 15
- $6AE2 DEFW $76A2    ; UDGs
+
+; Room 15 data
+;
+; Used by the routine at #R$CBBD.
+;
+; .
+;
+; #CALL:print_full_room(#PC,full_room_15)
+b$6AE2 DEFW $76A2    ; UDGs
  $6AE4 DEFB $0E,$07  ; Test tube location
  $6AE6 DEFB $00      ; Food item index
  $6AE7 DEFB $0D,$1B  ; Food co-ordinates
  $6AE9 DEFW $A22D    ; Moving objects
  $6AEB DEFB $0C,$16  ; Dynamite co-ordinates
  $6AED DEFB $00      ; Bank card index
-; Room 16
- $6AEE DEFW $7733    ; UDGs
+
+; Room 16 data
+;
+; Used by the routine at #R$CBBD.
+;
+; .
+;
+; #CALL:print_full_room(#PC,full_room_16)
+b$6AEE DEFW $7733    ; UDGs
  $6AF0 DEFB $08,$1B  ; Test tube location
  $6AF2 DEFB $05      ; Food item index
  $6AF3 DEFB $06,$06  ; Food co-ordinates
  $6AF5 DEFW $A273    ; Moving objects
  $6AF7 DEFB $11,$18  ; Dynamite co-ordinates
  $6AF9 DEFB $00      ; Bank card index
-; Room 17
- $6AFA DEFW $77CD    ; UDGs
+
+; Room 17 data
+;
+; Used by the routine at #R$CBBD.
+;
+; .
+;
+; #CALL:print_full_room(#PC,full_room_17)
+b$6AFA DEFW $77CD    ; UDGs
  $6AFC DEFB $12,$07  ; Test tube location
  $6AFE DEFB $02      ; Food item index
  $6AFF DEFB $11,$09  ; Food co-ordinates
  $6B01 DEFW $A2B9    ; Moving objects
  $6B03 DEFB $0F,$15  ; Dynamite co-ordinates
  $6B05 DEFB $00      ; Bank card index
-; Room 18
- $6B06 DEFW $782E    ; UDGs
+
+; Room 18 data
+;
+; Used by the routine at #R$CBBD.
+;
+; .
+;
+; #CALL:print_full_room(#PC,full_room_18)
+b$6B06 DEFW $782E    ; UDGs
  $6B08 DEFB $08,$0F  ; Test tube location
  $6B0A DEFB $00      ; Food item index
  $6B0B DEFB $10,$1B  ; Food co-ordinates
  $6B0D DEFW $A307    ; Moving objects
  $6B0F DEFB $03,$03  ; Dynamite co-ordinates
  $6B11 DEFB $00      ; Bank card index
-; Room 19
- $6B12 DEFW $78C5    ; UDGs
+
+; Room 19 data
+;
+; Used by the routine at #R$CBBD.
+;
+; .
+;
+; #CALL:print_full_room(#PC,full_room_19)
+b$6B12 DEFW $78C5    ; UDGs
  $6B14 DEFB $0A,$09  ; Test tube location
  $6B16 DEFB $80      ; Food item index
  $6B17 DEFB $0A,$18  ; Food co-ordinates
  $6B19 DEFW $A345    ; Moving objects
  $6B1B DEFB $06,$18  ; Dynamite co-ordinates
  $6B1D DEFB $00      ; Bank card index
-; Room 1A
- $6B1E DEFW $78F6    ; UDGs
+
+; Room 1A data
+;
+; Used by the routine at #R$CBBD.
+;
+; .
+;
+; #CALL:print_full_room(#PC,full_room_1a)
+b$6B1E DEFW $78F6    ; UDGs
  $6B20 DEFB $04,$02  ; Test tube location
  $6B22 DEFB $C7      ; Food item index
  $6B23 DEFB $0A,$02  ; Food co-ordinates
  $6B25 DEFW $A39B    ; Moving objects
  $6B27 DEFB $11,$1A  ; Dynamite co-ordinates
  $6B29 DEFB $00      ; Bank card index
-; Room 1B
- $6B2A DEFW $795D    ; UDGs
+
+; Room 1B data
+;
+; Used by the routine at #R$CBBD.
+;
+; .
+;
+; #CALL:print_full_room(#PC,full_room_1b)
+b$6B2A DEFW $795D    ; UDGs
  $6B2C DEFB $11,$02  ; Test tube location
  $6B2E DEFB $40      ; Food item index
  $6B2F DEFB $0F,$17  ; Food co-ordinates
  $6B31 DEFW $A3E9    ; Moving objects
  $6B33 DEFB $03,$1A  ; Dynamite co-ordinates
  $6B35 DEFB $00      ; Bank card index
-; Room 1C
- $6B36 DEFW $7A18    ; UDGs
+
+; Room 1C data
+;
+; Used by the routine at #R$CBBD.
+;
+; .
+;
+; #CALL:print_full_room(#PC,full_room_1c)
+b$6B36 DEFW $7A18    ; UDGs
  $6B38 DEFB $12,$15  ; Test tube location
  $6B3A DEFB $46      ; Food item index
  $6B3B DEFB $0A,$0F  ; Food co-ordinates
  $6B3D DEFW $A437    ; Moving objects
  $6B3F DEFB $08,$07  ; Dynamite co-ordinates
  $6B41 DEFB $00      ; Bank card index
-; Room 1D
- $6B42 DEFW $7A46    ; UDGs
+
+; Room 1D data
+;
+; Used by the routine at #R$CBBD.
+;
+; .
+;
+; #CALL:print_full_room(#PC,full_room_1d)
+b$6B42 DEFW $7A46    ; UDGs
  $6B44 DEFB $0F,$17  ; Test tube location
  $6B46 DEFB $40      ; Food item index
  $6B47 DEFB $08,$08  ; Food co-ordinates
  $6B49 DEFW $A48D    ; Moving objects
  $6B4B DEFB $03,$04  ; Dynamite co-ordinates
  $6B4D DEFB $00      ; Bank card index
-; Room 1E
- $6B4E DEFW $7AC8    ; UDGs
+
+; Room 1E data
+;
+; Used by the routine at #R$CBBD.
+;
+; .
+;
+; #CALL:print_full_room(#PC,full_room_1e)
+b$6B4E DEFW $7AC8    ; UDGs
  $6B50 DEFB $04,$07  ; Test tube location
  $6B52 DEFB $03      ; Food item index
  $6B53 DEFB $10,$1B  ; Food co-ordinates
  $6B55 DEFW $A4E3    ; Moving objects
  $6B57 DEFB $0D,$0F  ; Dynamite co-ordinates
  $6B59 DEFB $00      ; Bank card index
-; Room 1F
- $6B5A DEFW $7B3E    ; UDGs
+
+; Room 1F data
+;
+; Used by the routine at #R$CBBD.
+;
+; .
+;
+; #CALL:print_full_room(#PC,full_room_1f)
+b$6B5A DEFW $7B3E    ; UDGs
  $6B5C DEFB $08,$19  ; Test tube location
  $6B5E DEFB $07      ; Food item index
  $6B5F DEFB $0F,$0D  ; Food co-ordinates
  $6B61 DEFW $A531    ; Moving objects
  $6B63 DEFB $04,$0E  ; Dynamite co-ordinates
  $6B65 DEFB $00      ; Bank card index
-; Room 20
- $6B66 DEFW $7B93    ; UDGs
+
+; Room 20 data
+;
+; Used by the routine at #R$CBBD.
+;
+; .
+;
+; #CALL:print_full_room(#PC,full_room_20)
+b$6B66 DEFW $7B93    ; UDGs
  $6B68 DEFB $08,$08  ; Test tube location
  $6B6A DEFB $02      ; Food item index
  $6B6B DEFB $06,$1B  ; Food co-ordinates
  $6B6D DEFW $A577    ; Moving objects
  $6B6F DEFB $0D,$19  ; Dynamite co-ordinates
  $6B71 DEFB $00      ; Bank card index
-; Room 21
- $6B72 DEFW $7C45    ; UDGs
+
+; Room 21 data
+;
+; Used by the routine at #R$CBBD.
+;
+; .
+;
+; #CALL:print_full_room(#PC,full_room_21)
+b$6B72 DEFW $7C45    ; UDGs
  $6B74 DEFB $05,$02  ; Test tube location
  $6B76 DEFB $05      ; Food item index
  $6B77 DEFB $05,$0C  ; Food co-ordinates
  $6B79 DEFW $A5B5    ; Moving objects
  $6B7B DEFB $08,$0B  ; Dynamite co-ordinates
  $6B7D DEFB $00      ; Bank card index
-; Room 22
- $6B7E DEFW $7C6D    ; UDGs
+
+; Room 22 data
+;
+; Used by the routine at #R$CBBD.
+;
+; .
+;
+; #CALL:print_full_room(#PC,full_room_22)
+b$6B7E DEFW $7C6D    ; UDGs
  $6B80 DEFB $06,$02  ; Test tube location
  $6B82 DEFB $C6      ; Food item index
  $6B83 DEFB $06,$1C  ; Food co-ordinates
  $6B85 DEFW $A5F3    ; Moving objects
  $6B87 DEFB $0C,$0F  ; Dynamite co-ordinates
  $6B89 DEFB $00      ; Bank card index
-; Room 23
- $6B8A DEFW $7CBF    ; UDGs
+
+; Room 23 data
+;
+; Used by the routine at #R$CBBD.
+;
+; .
+;
+; #CALL:print_full_room(#PC,full_room_23)
+b$6B8A DEFW $7CBF    ; UDGs
  $6B8C DEFB $11,$1C  ; Test tube location
  $6B8E DEFB $00      ; Food item index
  $6B8F DEFB $05,$16  ; Food co-ordinates
  $6B91 DEFW $A641    ; Moving objects
  $6B93 DEFB $10,$02  ; Dynamite co-ordinates
  $6B95 DEFB $00      ; Bank card index
-; Room 24
- $6B96 DEFW $7D50    ; UDGs
+
+; Room 24 data
+;
+; Used by the routine at #R$CBBD.
+;
+; .
+;
+; #CALL:print_full_room(#PC,full_room_24)
+b$6B96 DEFW $7D50    ; UDGs
  $6B98 DEFB $06,$1B  ; Test tube location
  $6B9A DEFB $02      ; Food item index
  $6B9B DEFB $0F,$0C  ; Food co-ordinates
  $6B9D DEFW $A697    ; Moving objects
  $6B9F DEFB $01,$02  ; Dynamite co-ordinates
  $6BA1 DEFB $00      ; Bank card index
-; Room 25
- $6BA2 DEFW $7DDB    ; UDGs
+
+; Room 25 data
+;
+; Used by the routine at #R$CBBD.
+;
+; .
+;
+; #CALL:print_full_room(#PC,full_room_25)
+b$6BA2 DEFW $7DDB    ; UDGs
  $6BA4 DEFB $0C,$0B  ; Test tube location
  $6BA6 DEFB $C3      ; Food item index
  $6BA7 DEFB $0E,$19  ; Food co-ordinates
  $6BA9 DEFW $A6D5    ; Moving objects
  $6BAB DEFB $08,$15  ; Dynamite co-ordinates
  $6BAD DEFB $00      ; Bank card index
-; Room 26
- $6BAE DEFW $7E63    ; UDGs
+
+; Room 26 data
+;
+; Used by the routine at #R$CBBD.
+;
+; .
+;
+; #CALL:print_full_room(#PC,full_room_26)
+b$6BAE DEFW $7E63    ; UDGs
  $6BB0 DEFB $04,$0F  ; Test tube location
  $6BB2 DEFB $C0      ; Food item index
  $6BB3 DEFB $05,$04  ; Food co-ordinates
  $6BB5 DEFW $A71B    ; Moving objects
  $6BB7 DEFB $0E,$0D  ; Dynamite co-ordinates
  $6BB9 DEFB $00      ; Bank card index
- $6BBA DEFW $7EC7    ; UDGs
-; Room 27
+
+; Room 27 data
+;
+; Used by the routine at #R$CBBD.
+;
+; .
+;
+; #CALL:print_full_room(#PC,full_room_27)
+b$6BBA DEFW $7EC7    ; UDGs
  $6BBC DEFB $12,$14  ; Test tube location
  $6BBE DEFB $00      ; Food item index
  $6BBF DEFB $05,$06  ; Food co-ordinates
  $6BC1 DEFW $A761    ; Moving objects
  $6BC3 DEFB $07,$1C  ; Dynamite co-ordinates
  $6BC5 DEFB $00      ; Bank card index
-; Room 28
- $6BC6 DEFW $7F3D    ; UDGs
+
+; Room 28 data
+;
+; Used by the routine at #R$CBBD.
+;
+; .
+;
+; #CALL:print_full_room(#PC,full_room_28)
+b$6BC6 DEFW $7F3D    ; UDGs
  $6BC8 DEFB $10,$19  ; Test tube location
  $6BCA DEFB $80      ; Food item index
  $6BCB DEFB $10,$13  ; Food co-ordinates
  $6BCD DEFW $A79F    ; Moving objects
  $6BCF DEFB $10,$05  ; Dynamite co-ordinates
  $6BD1 DEFB $00      ; Bank card index
-; Room 29
- $6BD2 DEFW $7F89    ; UDGs
+
+; Room 29 data
+;
+; Used by the routine at #R$CBBD.
+;
+; .
+;
+; #CALL:print_full_room(#PC,full_room_29)
+b$6BD2 DEFW $7F89    ; UDGs
  $6BD4 DEFB $0A,$1B  ; Test tube location
  $6BD6 DEFB $80      ; Food item index
  $6BD7 DEFB $0A,$0A  ; Food co-ordinates
  $6BD9 DEFW $A7ED    ; Moving objects
  $6BDB DEFB $0A,$05  ; Dynamite co-ordinates
  $6BDD DEFB $00      ; Bank card index
-; Room 2A
- $6BDE DEFW $7F96    ; UDGs
+
+; Room 2A data
+;
+; Used by the routine at #R$CBBD.
+;
+; .
+;
+; #CALL:print_full_room(#PC,full_room_2a)
+b$6BDE DEFW $7F96    ; UDGs
  $6BE0 DEFB $03,$15  ; Test tube location
  $6BE2 DEFB $C1      ; Food item index
  $6BE3 DEFB $0A,$02  ; Food co-ordinates
  $6BE5 DEFW $A82B    ; Moving objects
  $6BE7 DEFB $10,$18  ; Dynamite co-ordinates
  $6BE9 DEFB $00      ; Bank card index
-; Room 2B
- $6BEA DEFW $8030    ; UDGs
+
+; Room 2B data
+;
+; Used by the routine at #R$CBBD.
+;
+; .
+;
+; #CALL:print_full_room(#PC,full_room_2b)
+b$6BEA DEFW $8030    ; UDGs
  $6BEC DEFB $10,$03  ; Test tube location
  $6BEE DEFB $85      ; Food item index
  $6BEF DEFB $10,$12  ; Food co-ordinates
  $6BF1 DEFW $A871    ; Moving objects
  $6BF3 DEFB $10,$0D  ; Dynamite co-ordinates
  $6BF5 DEFB $00      ; Bank card index
-; Room 2C
- $6BF6 DEFW $80AC    ; UDGs
+
+; Room 2C data
+;
+; Used by the routine at #R$CBBD.
+;
+; .
+;
+; #CALL:print_full_room(#PC,full_room_2c)
+b$6BF6 DEFW $80AC    ; UDGs
  $6BF8 DEFB $10,$17  ; Test tube location
  $6BFA DEFB $00      ; Food item index
  $6BFB DEFB $10,$0D  ; Food co-ordinates
  $6BFD DEFW $A8B7    ; Moving objects
  $6BFF DEFB $10,$03  ; Dynamite co-ordinates
  $6C01 DEFB $00      ; Bank card index
-; Room 2D
- $6C02 DEFW $80D7    ; UDGs
+
+; Room 2D data
+;
+; Used by the routine at #R$CBBD.
+;
+; .
+;
+; #CALL:print_full_room(#PC,full_room_2d)
+b$6C02 DEFW $80D7    ; UDGs
  $6C04 DEFB $10,$18  ; Test tube location
  $6C06 DEFB $41      ; Food item index
  $6C07 DEFB $06,$02  ; Food co-ordinates
  $6C09 DEFW $A8FD    ; Moving objects
  $6C0B DEFB $0B,$06  ; Dynamite co-ordinates
  $6C0D DEFB $00      ; Bank card index
-; Room 2E
- $6C0E DEFW $8135    ; UDGs
+
+; Room 2E data
+;
+; Used by the routine at #R$CBBD.
+;
+; .
+;
+; #CALL:print_full_room(#PC,full_room_2e)
+b$6C0E DEFW $8135    ; UDGs
  $6C10 DEFB $03,$02  ; Test tube location
  $6C12 DEFB $C6      ; Food item index
  $6C13 DEFB $06,$14  ; Food co-ordinates
  $6C15 DEFW $A93B    ; Moving objects
  $6C17 DEFB $06,$08  ; Dynamite co-ordinates
  $6C19 DEFB $00      ; Bank card index
-; Room 2F
- $6C1A DEFW $8175    ; UDGs
+
+; Room 2F data
+;
+; Used by the routine at #R$CBBD.
+;
+; .
+;
+; #CALL:print_full_room(#PC,full_room_2f)
+b$6C1A DEFW $8175    ; UDGs
  $6C1C DEFB $08,$0F  ; Test tube location
  $6C1E DEFB $C5      ; Food item index
  $6C1F DEFB $10,$0D  ; Food co-ordinates
@@ -3761,26 +4092,32 @@ b$9C83 DEFB $02,$02,$15,$48,$51,$24,$0A,$50
  $9CA3 DEFB $0C,$AA,$00,$06
 
 ; Room moving objects 00
-b$9CA7 DEFB $34,$18,$25,$10,$14,$12,$03,$1A
- $9CAF DEFB $01,$03,$02,$42,$01,$02,$04,$04
- $9CB7 DEFB $03,$0A,$02,$43,$01,$02,$09,$0B
- $9CBF DEFB $03,$0A,$80,$42,$01,$02,$0B,$12
- $9CC7 DEFB $0A,$0D,$02,$41,$01,$01,$0D,$1A
- $9CCF DEFB $0B,$0D,$81,$44,$01,$01,$10,$0C
- $9CD7 DEFB $08,$0F,$80,$46,$01,$03,$08,$13
- $9CDF DEFB $0F,$1B,$02,$43,$01,$01,$04,$0A
- $9CE7 DEFB $02,$11,$02,$47,$01,$02
+;
+; #CALL:print_sprites(#PC,sprites_00)
+b$9CA7 DEFB $34,$18,$25,$10,$14,$12
+ $9CAD DEFB $03,$1A,$01,$03,$02,$42,$01,$02
+ $9CB5 DEFB $04,$04,$03,$0A,$02,$43,$01,$02
+ $9CBD DEFB $09,$0B,$03,$0A,$80,$42,$01,$02
+ $9CC5 DEFB $0B,$12,$0A,$0D,$02,$41,$01,$01
+ $9CCD DEFB $0D,$1A,$0B,$0D,$81,$44,$01,$01
+ $9CD5 DEFB $10,$0C,$08,$0F,$80,$46,$01,$03
+ $9CDD DEFB $08,$13,$0F,$1B,$02,$43,$01,$01
+ $9CE5 DEFB $04,$0A,$02,$11,$02,$47,$01,$02
 
 ; Room moving objects 01
-b$9CED DEFB $0B,$0B,$21,$21,$05,$01,$0C,$02
- $9CF5 DEFB $05,$0C,$02,$46,$01,$02,$06,$0E
- $9CFD DEFB $05,$0C,$80,$42,$01,$02,$08,$08
- $9D05 DEFB $05,$0C,$00,$47,$01,$02,$0B,$14
- $9D0D DEFB $05,$0C,$80,$41,$01,$02,$0B,$1A
- $9D15 DEFB $05,$0C,$02,$43,$01,$02,$03,$05
- $9D1D DEFB $03,$0A,$01,$43,$01,$01
+;
+; #CALL:print_sprites(#PC,sprites_01)
+b$9CED DEFB $0B,$0B,$21,$21,$05,$01
+ $9CF3 DEFB $0C,$02,$05,$0C,$02,$46,$01,$02
+ $9CFB DEFB $06,$0E,$05,$0C,$80,$42,$01,$02
+ $9D03 DEFB $08,$08,$05,$0C,$00,$47,$01,$02
+ $9D0B DEFB $0B,$14,$05,$0C,$80,$41,$01,$02
+ $9D13 DEFB $0B,$1A,$05,$0C,$02,$43,$01,$02
+ $9D1B DEFB $03,$05,$03,$0A,$01,$43,$01,$01
 
 ; Room moving objects 02
+;
+; #CALL:print_sprites(#PC,sprites_02)
 b$9D23 DEFB $27,$0E,$0C,$21,$13,$21,$0D,$09
  $9D2B DEFB $0A,$0C,$02,$43,$01,$02,$0B,$14
  $9D33 DEFB $05,$0C,$02,$43,$01,$01,$09,$1A
@@ -3791,6 +4128,8 @@ b$9D23 DEFB $27,$0E,$0C,$21,$13,$21,$0D,$09
  $9D5B DEFB $15,$18,$81,$42,$01,$02
 
 ; Room moving objects 03
+;
+; #CALL:print_sprites(#PC,sprites_03)
 b$9D61 DEFB $1B,$19,$2D,$0F,$13,$15,$08,$03
  $9D69 DEFB $03,$0C,$02,$43,$01,$01,$03,$0B
  $9D71 DEFB $03,$08,$80,$42,$01,$02,$06,$12
@@ -3804,490 +4143,578 @@ b$9D61 DEFB $1B,$19,$2D,$0F,$13,$15,$08,$03
  $9DB1 DEFB $16,$1B,$80,$42,$01,$02
 
 ; Room moving objects 04
-b$9DB7 DEFB $0E,$01,$24,$08,$13,$12,$0B,$02
- $9DBF DEFB $06,$0D,$81,$42,$01,$02,$01,$0E
- $9DC7 DEFB $00,$02,$80,$44,$01,$03,$05,$1B
- $9DCF DEFB $03,$08,$02,$43,$01,$02,$01,$12
- $9DD7 DEFB $00,$02,$80,$47,$01,$02,$0B,$06
- $9DDF DEFB $04,$07,$80,$43,$01,$02,$0C,$12
- $9DE7 DEFB $0F,$1A,$02,$46,$01,$02,$06,$14
- $9DEF DEFB $0C,$14,$02,$42,$01,$02
+;
+; #CALL:print_sprites(#PC,sprites_04)
+b$9DB7 DEFB $0E,$01,$24,$08,$13,$12
+ $9DBD DEFB $0B,$02,$06,$0D,$81,$42,$01,$02
+ $9DC5 DEFB $01,$0E,$00,$02,$80,$44,$01,$03
+ $9DCD DEFB $05,$1B,$03,$08,$02,$43,$01,$02
+ $9DD5 DEFB $01,$12,$00,$02,$80,$47,$01,$02
+ $9DDD DEFB $0B,$06,$04,$07,$80,$43,$01,$02
+ $9DE5 DEFB $0C,$12,$0F,$1A,$02,$46,$01,$02
+ $9DED DEFB $06,$14,$0C,$14,$02,$42,$01,$02
 
 ; Room moving objects 05
-b$9DF5 DEFB $18,$1B,$02,$02,$14,$01,$0B,$0F
- $9DFD DEFB $0A,$0D,$01,$43,$01,$01,$03,$0A
- $9E05 DEFB $01,$03,$81,$44,$01,$01,$03,$14
- $9E0D DEFB $02,$03,$02,$46,$01,$02,$05,$17
- $9E15 DEFB $02,$08,$01,$42,$01,$01,$06,$02
- $9E1D DEFB $01,$06,$03,$47,$01,$03,$0A,$06
- $9E25 DEFB $02,$07,$02,$42,$01,$03
+;
+; #CALL:print_sprites(#PC,sprites_05)
+b$9DF5 DEFB $18,$1B,$02,$02,$14,$01
+ $9DFB DEFB $0B,$0F,$0A,$0D,$01,$43,$01,$01
+ $9E03 DEFB $03,$0A,$01,$03,$81,$44,$01,$01
+ $9E0B DEFB $03,$14,$02,$03,$02,$46,$01,$02
+ $9E13 DEFB $05,$17,$02,$08,$01,$42,$01,$01
+ $9E1B DEFB $06,$02,$01,$06,$03,$47,$01,$03
+ $9E23 DEFB $0A,$06,$02,$07,$02,$42,$01,$03
 
 ; Room moving objects 06
-b$9E2B DEFB $0B,$1C,$25,$1F,$24,$21,$09,$15
- $9E33 DEFB $02,$0C,$02,$41,$01,$02,$03,$19
- $9E3B DEFB $03,$0C,$01,$43,$01,$02,$04,$12
- $9E43 DEFB $03,$05,$02,$43,$01,$01,$02,$08
- $9E4B DEFB $00,$06,$80,$44,$01,$02,$06,$02
- $9E53 DEFB $03,$07,$02,$46,$01,$01,$04,$1C
- $9E5B DEFB $00,$05,$02,$47,$01,$02,$10,$09
- $9E63 DEFB $03,$0C,$02,$43,$01,$02,$0B,$09
- $9E6B DEFB $00,$09,$02,$42,$01,$02,$08,$08
- $9E73 DEFB $07,$0D,$80,$47,$03,$02
+;
+; #CALL:print_sprites(#PC,sprites_06)
+b$9E2B DEFB $0B,$1C,$25,$1F,$24,$21
+ $9E31 DEFB $09,$15,$02,$0C,$02,$41,$01,$02
+ $9E39 DEFB $03,$19,$03,$0C,$01,$43,$01,$02
+ $9E41 DEFB $04,$12,$03,$05,$02,$43,$01,$01
+ $9E49 DEFB $02,$08,$00,$06,$80,$44,$01,$02
+ $9E51 DEFB $06,$02,$03,$07,$02,$46,$01,$01
+ $9E59 DEFB $04,$1C,$00,$05,$02,$47,$01,$02
+ $9E61 DEFB $10,$09,$03,$0C,$02,$43,$01,$02
+ $9E69 DEFB $0B,$09,$00,$09,$02,$42,$01,$02
+ $9E71 DEFB $08,$08,$07,$0D,$80,$47,$03,$02
 
 ; Room moving objects 07
-b$9E79 DEFB $0E,$27,$10,$0D,$11,$33,$0D,$1A
- $9E81 DEFB $0B,$0C,$02,$42,$01,$02,$0B,$02
- $9E89 DEFB $0B,$0C,$02,$43,$01,$02,$10,$14
- $9E91 DEFB $0F,$14,$02,$46,$01,$03,$0B,$0F
- $9E99 DEFB $07,$11,$01,$47,$01,$03,$03,$10
- $9EA1 DEFB $0A,$13,$02,$44,$01,$02,$08,$08
- $9EA9 DEFB $03,$0C,$02,$42,$01,$01,$08,$10
- $9EB1 DEFB $0D,$11,$01,$47,$02,$02,$08,$17
- $9EB9 DEFB $16,$1A,$80,$43,$01,$02
+;
+; #CALL:print_sprites(#PC,sprites_07)
+b$9E79 DEFB $0E,$27,$10,$0D,$11,$33
+ $9E7F DEFB $0D,$1A,$0B,$0C,$02,$42,$01,$02
+ $9E87 DEFB $0B,$02,$0B,$0C,$02,$43,$01,$02
+ $9E8F DEFB $10,$14,$0F,$14,$02,$46,$01,$03
+ $9E97 DEFB $0B,$0F,$07,$11,$01,$47,$01,$03
+ $9E9F DEFB $03,$10,$0A,$13,$02,$44,$01,$02
+ $9EA7 DEFB $08,$08,$03,$0C,$02,$42,$01,$01
+ $9EAF DEFB $08,$10,$0D,$11,$01,$47,$02,$02
+ $9EB7 DEFB $08,$17,$16,$1A,$80,$43,$01,$02
 
 ; Room moving objects 08
-b$9EBF DEFB $27,$27,$21,$25,$03,$12,$0C,$0A
- $9EC7 DEFB $0B,$10,$01,$43,$01,$02,$0A,$10
- $9ECF DEFB $07,$0C,$83,$47,$01,$02,$0E,$1B
- $9ED7 DEFB $0B,$10,$00,$46,$01,$02,$06,$04
- $9EDF DEFB $02,$07,$02,$42,$01,$02,$10,$0B
- $9EE7 DEFB $09,$14,$01,$42,$01,$01,$0A,$0B
- $9EEF DEFB $04,$0F,$82,$46,$01,$01
+;
+; #CALL:print_sprites(#PC,sprites_08)
+b$9EBF DEFB $27,$27,$21,$25,$03,$12
+ $9EC5 DEFB $0C,$0A,$0B,$10,$01,$43,$01,$02
+ $9ECD DEFB $0A,$10,$07,$0C,$83,$47,$01,$02
+ $9ED5 DEFB $0E,$1B,$0B,$10,$00,$46,$01,$02
+ $9EDD DEFB $06,$04,$02,$07,$02,$42,$01,$02
+ $9EE5 DEFB $10,$0B,$09,$14,$01,$42,$01,$01
+ $9EED DEFB $0A,$0B,$04,$0F,$82,$46,$01,$01
 
 ; Room moving objects 09
-b$9EF5 DEFB $01,$26,$21,$22,$13,$13,$0A,$14
- $9EFD DEFB $02,$0B,$02,$44,$01,$02,$09,$04
- $9F05 DEFB $07,$0C,$02,$41,$01,$02,$07,$09
- $9F0D DEFB $07,$0C,$00,$42,$01,$02,$0A,$0E
- $9F15 DEFB $07,$0C,$00,$47,$01,$02,$06,$19
- $9F1D DEFB $16,$1A,$02,$43,$01,$02,$11,$04
- $9F25 DEFB $02,$07,$01,$46,$01,$01,$11,$0B
- $9F2D DEFB $07,$0C,$01,$43,$01,$01,$0B,$1B
- $9F35 DEFB $19,$1C,$02,$47,$01,$02
+;
+; #CALL:print_sprites(#PC,sprites_09)
+b$9EF5 DEFB $01,$26,$21,$22,$13,$13
+ $9EFB DEFB $0A,$14,$02,$0B,$02,$44,$01,$02
+ $9F03 DEFB $09,$04,$07,$0C,$02,$41,$01,$02
+ $9F0B DEFB $07,$09,$07,$0C,$00,$42,$01,$02
+ $9F13 DEFB $0A,$0E,$07,$0C,$00,$47,$01,$02
+ $9F1B DEFB $06,$19,$16,$1A,$02,$43,$01,$02
+ $9F23 DEFB $11,$04,$02,$07,$01,$46,$01,$01
+ $9F2B DEFB $11,$0B,$07,$0C,$01,$43,$01,$01
+ $9F33 DEFB $0B,$1B,$19,$1C,$02,$47,$01,$02
 
 ; Room moving objects 0A
-b$9F3B DEFB $28,$23,$24,$17,$12,$14,$08,$15
- $9F43 DEFB $03,$08,$02,$44,$01,$02,$05,$1C
- $9F4B DEFB $03,$07,$00,$43,$01,$02,$09,$1A
- $9F53 DEFB $03,$0C,$81,$47,$01,$02,$10,$09
- $9F5B DEFB $02,$0C,$81,$43,$01,$02,$07,$0B
- $9F63 DEFB $0A,$0C,$02,$42,$01,$02,$07,$0F
- $9F6B DEFB $0F,$11,$80,$46,$01,$02,$00,$0B
- $9F73 DEFB $07,$0B,$02,$43,$01,$02,$00,$0F
- $9F7B DEFB $0D,$11,$01,$46,$01,$02
+;
+; #CALL:print_sprites(#PC,sprites_0a)
+b$9F3B DEFB $28,$23,$24,$17,$12,$14
+ $9F41 DEFB $08,$15,$03,$08,$02,$44,$01,$02
+ $9F49 DEFB $05,$1C,$03,$07,$00,$43,$01,$02
+ $9F51 DEFB $09,$1A,$03,$0C,$81,$47,$01,$02
+ $9F59 DEFB $10,$09,$02,$0C,$81,$43,$01,$02
+ $9F61 DEFB $07,$0B,$0A,$0C,$02,$42,$01,$02
+ $9F69 DEFB $07,$0F,$0F,$11,$80,$46,$01,$02
+ $9F71 DEFB $00,$0B,$07,$0B,$02,$43,$01,$02
+ $9F79 DEFB $00,$0F,$0D,$11,$01,$46,$01,$02
 
 ; Room moving objects 0B
-b$9F81 DEFB $35,$0A,$22,$0D,$24,$12,$03,$15
- $9F89 DEFB $03,$07,$03,$46,$01,$02,$0F,$1C
- $9F91 DEFB $0C,$0F,$02,$42,$01,$02,$0A,$04
- $9F99 DEFB $04,$0D,$03,$43,$01,$02,$0B,$06
- $9FA1 DEFB $04,$0D,$02,$42,$01,$02,$0C,$08
- $9FA9 DEFB $04,$0D,$01,$47,$01,$02,$0D,$0A
- $9FB1 DEFB $04,$0D,$00,$46,$01,$02,$0A,$16
- $9FB9 DEFB $12,$16,$02,$43,$01,$02,$10,$18
- $9FC1 DEFB $0F,$19,$80,$47,$01,$01,$10,$07
- $9FC9 DEFB $05,$09,$82,$44,$01,$01
+;
+; #CALL:print_sprites(#PC,sprites_0b)
+b$9F81 DEFB $35,$0A,$22,$0D,$24,$12
+ $9F87 DEFB $03,$15,$03,$07,$03,$46,$01,$02
+ $9F8F DEFB $0F,$1C,$0C,$0F,$02,$42,$01,$02
+ $9F97 DEFB $0A,$04,$04,$0D,$03,$43,$01,$02
+ $9F9F DEFB $0B,$06,$04,$0D,$02,$42,$01,$02
+ $9FA7 DEFB $0C,$08,$04,$0D,$01,$47,$01,$02
+ $9FAF DEFB $0D,$0A,$04,$0D,$00,$46,$01,$02
+ $9FB7 DEFB $0A,$16,$12,$16,$02,$43,$01,$02
+ $9FBF DEFB $10,$18,$0F,$19,$80,$47,$01,$01
+ $9FC7 DEFB $10,$07,$05,$09,$82,$44,$01,$01
 
 ; Room moving objects 0C
-b$9FCF DEFB $30,$06,$1D,$1D,$24,$01,$0B,$18
- $9FD7 DEFB $07,$0D,$03,$44,$01,$01,$0A,$02
- $9FDF DEFB $07,$11,$02,$42,$01,$01,$0C,$07
- $9FE7 DEFB $07,$0F,$02,$44,$01,$02,$03,$0B
- $9FEF DEFB $03,$08,$80,$46,$02,$02,$05,$13
- $9FF7 DEFB $03,$08,$00,$43,$01,$02,$0C,$1D
- $9FFF DEFB $07,$0D,$83,$47,$01,$01,$0B,$13
- $A007 DEFB $09,$14,$83,$42,$02,$02,$18,$18
- $A00F DEFB $09,$2E,$05,$12,$0B,$1A,$04,$0D
- $A017 DEFB $02,$44,$01,$02,$06,$14,$03,$07
- $A01F DEFB $81,$47,$01,$04,$08,$0A,$02,$08
- $A027 DEFB $02,$43,$01,$02,$09,$07,$03,$10
- $A02F DEFB $81,$42,$01,$02,$09,$02,$05,$10
- $A037 DEFB $02,$46,$01,$01,$0B,$0C,$06,$0C
- $A03F DEFB $01,$47,$01,$02,$11,$17,$14,$1B
- $A047 DEFB $02,$43,$01,$01,$01,$17,$14,$1B
- $A04F DEFB $80,$42,$01,$01
-
-; Room moving objects 0E
-b$A053 DEFB $12,$12,$0F,$17,$06,$12,$0B,$01
- $A05B DEFB $08,$0B,$01,$44,$01,$01,$07,$03
- $A063 DEFB $02,$07,$80,$42,$01,$01,$0A,$08
- $A06B DEFB $09,$0B,$03,$41,$01,$01,$0A,$12
- $A073 DEFB $07,$0A,$82,$43,$01,$01,$09,$16
- $A07B DEFB $06,$0F,$00,$46,$01,$01,$0B,$05
- $A083 DEFB $0A,$0C,$03,$47,$01,$01,$0D,$0D
- $A08B DEFB $0A,$0F,$80,$44,$01,$02,$05,$08
- $A093 DEFB $06,$09,$02,$43,$01,$02,$05,$11
- $A09B DEFB $10,$14,$81,$47,$01,$02
-
-; Room moving objects 0F
-b$A0A1 DEFB $3B,$34,$09,$3C,$11,$14,$05,$02
- $A0A9 DEFB $02,$03,$03,$42,$01,$02,$09,$03
- $A0B1 DEFB $06,$0D,$02,$43,$01,$02,$0F,$07
- $A0B9 DEFB $02,$09,$03,$42,$01,$02,$05,$18
- $A0C1 DEFB $0A,$19,$81,$43,$01,$02,$0A,$12
- $A0C9 DEFB $0E,$15,$83,$41,$01,$02,$0F
+;
+; #CALL:print_sprites(#PC,sprites_0c)
+b$9FCF DEFB $30,$06,$1D,$1D,$24,$01
+ $9FD5 DEFB $0B,$18,$07,$0D,$03,$44,$01,$01
+ $9FDD DEFB $0A,$02,$07,$11,$02,$42,$01,$01
+ $9FE5 DEFB $0C,$07,$07,$0F,$02,$44,$01,$02
+ $9FED DEFB $03,$0B,$03,$08,$80,$46,$02,$02
+ $9FF5 DEFB $05,$13,$03,$08,$00,$43,$01,$02
+ $9FFD DEFB $0C,$1D,$07,$0D,$83,$47,$01,$01
+ $A005 DEFB $0B,$13,$09,$14,$83,$42,$02,$02
 
 ; Room moving objects 0D
-b$A0D0 DEFB $0F,$09,$18,$01,$46,$01,$02,$0A
- $A0D8 DEFB $0F,$09,$10,$80,$47,$01,$02
+;
+; #CALL:print_sprites(#PC,sprites_0d)
+b$A00D DEFB $18,$18,$09,$2E,$05,$12
+ $A013 DEFB $0B,$1A,$04,$0D,$02,$44,$01,$02
+ $A01B DEFB $06,$14,$03,$07,$81,$47,$01,$04
+ $A023 DEFB $08,$0A,$02,$08,$02,$43,$01,$02
+ $A02B DEFB $09,$07,$03,$10,$81,$42,$01,$02
+ $A033 DEFB $09,$02,$05,$10,$02,$46,$01,$01
+ $A03B DEFB $0B,$0C,$06,$0C,$01,$47,$01,$02
+ $A043 DEFB $11,$17,$14,$1B,$02,$43,$01,$01
+ $A04B DEFB $01,$17,$14,$1B,$80,$42,$01,$01
+
+; Room moving objects 0E
+;
+; #CALL:print_sprites(#PC,sprites_0e)
+b$A053 DEFB $12,$12,$0F,$17,$06,$12
+ $A059 DEFB $0B,$01,$08,$0B,$01,$44,$01,$01
+ $A061 DEFB $07,$03,$02,$07,$80,$42,$01,$01
+ $A069 DEFB $0A,$08,$09,$0B,$03,$41,$01,$01
+ $A071 DEFB $0A,$12,$07,$0A,$82,$43,$01,$01
+ $A079 DEFB $09,$16,$06,$0F,$00,$46,$01,$01
+ $A081 DEFB $0B,$05,$0A,$0C,$03,$47,$01,$01
+ $A089 DEFB $0D,$0D,$0A,$0F,$80,$44,$01,$02
+ $A091 DEFB $05,$08,$06,$09,$02,$43,$01,$02
+ $A099 DEFB $05,$11,$10,$14,$81,$47,$01,$02
+
+; Room moving objects 0F
+;
+; #CALL:print_sprites(#PC,sprites_0f)
+b$A0A1 DEFB $3B,$34,$09,$3C,$11,$14
+ $A0A7 DEFB $05,$02,$02,$03,$03,$42,$01,$02
+ $A0AF DEFB $09,$03,$06,$0D,$02,$43,$01,$02
+ $A0B7 DEFB $0F,$07,$02,$09,$03,$42,$01,$02
+ $A0BF DEFB $05,$18,$0A,$19,$81,$43,$01,$02
+ $A0C7 DEFB $0A,$12,$0E,$15,$83,$41,$01,$02
+ $A0CF DEFB $0F,$0F,$09,$18,$01,$46,$01,$02
+ $A0D7 DEFB $0A,$0F,$09,$10,$80,$47,$01,$02
 
 ; Room moving objects 10
-b$A0DF DEFB $1E,$0A,$1D,$1D,$35,$01,$0D,$0B
- $A0E7 DEFB $0C,$0D,$03,$42,$01,$02,$0D,$0F
- $A0EF DEFB $0C,$0D,$80,$44,$01,$02,$0C,$13
- $A0F7 DEFB $0C,$0D,$00,$41,$01,$02,$08,$18
- $A0FF DEFB $02,$0D,$02,$43,$01,$01,$0D,$1A
- $A107 DEFB $06,$11,$80,$44,$01,$01,$02,$0B
- $A10F DEFB $01,$04,$80,$46,$03,$03,$02,$13
- $A117 DEFB $01,$04,$02,$43,$01,$03,$0D,$1C
- $A11F DEFB $08,$0D,$03,$42,$01,$01,$11,$04
- $A127 DEFB $02,$04,$02,$42,$02,$03
+;
+; #CALL:print_sprites(#PC,sprites_10)
+b$A0DF DEFB $1E,$0A,$1D,$1D,$35,$01
+ $A0E5 DEFB $0D,$0B,$0C,$0D,$03,$42,$01,$02
+ $A0ED DEFB $0D,$0F,$0C,$0D,$80,$44,$01,$02
+ $A0F5 DEFB $0C,$13,$0C,$0D,$00,$41,$01,$02
+ $A0FD DEFB $08,$18,$02,$0D,$02,$43,$01,$01
+ $A105 DEFB $0D,$1A,$06,$11,$80,$44,$01,$01
+ $A10D DEFB $02,$0B,$01,$04,$80,$46,$03,$03
+ $A115 DEFB $02,$13,$01,$04,$02,$43,$01,$03
+ $A11D DEFB $0D,$1C,$08,$0D,$03,$42,$01,$01
+ $A125 DEFB $11,$04,$02,$04,$02,$42,$02,$03
 
 ; Room moving objects 11
-b$A12D DEFB $34,$34,$10,$24,$05,$11,$07,$05
- $A135 DEFB $04,$0A,$02,$42,$01,$01,$0B,$0B
- $A13D DEFB $02,$0D,$00,$44,$01,$02,$01,$16
- $A145 DEFB $00,$02,$01,$43,$01,$02,$05,$14
- $A14D DEFB $04,$09,$02,$47,$01,$02,$0A,$08
- $A155 DEFB $09,$0C,$02,$46,$01,$01,$05,$0D
- $A15D DEFB $08,$13,$81,$47,$01,$02,$11,$0D
- $A165 DEFB $09,$0E,$02,$42,$01,$03
+;
+; #CALL:print_sprites(#PC,sprites_11)
+b$A12D DEFB $34,$34,$10,$24,$05,$11
+ $A133 DEFB $07,$05,$04,$0A,$02,$42,$01,$01
+ $A13B DEFB $0B,$0B,$02,$0D,$00,$44,$01,$02
+ $A143 DEFB $01,$16,$00,$02,$01,$43,$01,$02
+ $A14B DEFB $05,$14,$04,$09,$02,$47,$01,$02
+ $A153 DEFB $0A,$08,$09,$0C,$02,$46,$01,$01
+ $A15B DEFB $05,$0D,$08,$13,$81,$47,$01,$02
+ $A163 DEFB $11,$0D,$09,$0E,$02,$42,$01,$03
 
 ; Room moving objects 12
-b$A16B DEFB $36,$13,$17,$21,$22,$21,$03,$08
- $A173 DEFB $03,$06,$02,$42,$01,$03,$03,$0F
- $A17B DEFB $03,$06,$80,$44,$01,$03,$06,$02
- $A183 DEFB $03,$07,$02,$46,$01,$02,$07,$16
- $A18B DEFB $03,$0C,$80,$43,$01,$01,$11,$0B
- $A193 DEFB $07,$0B,$02,$43,$01,$02,$11,$0F
- $A19B DEFB $0D,$11,$01,$46,$01,$02,$0D,$0C
- $A1A3 DEFB $09,$12,$02,$47,$01,$02
+;
+; #CALL:print_sprites(#PC,sprites_12)
+b$A16B DEFB $36,$13,$17,$21,$22,$21
+ $A171 DEFB $03,$08,$03,$06,$02,$42,$01,$03
+ $A179 DEFB $03,$0F,$03,$06,$80,$44,$01,$03
+ $A181 DEFB $06,$02,$03,$07,$02,$46,$01,$02
+ $A189 DEFB $07,$16,$03,$0C,$80,$43,$01,$01
+ $A191 DEFB $11,$0B,$07,$0B,$02,$43,$01,$02
+ $A199 DEFB $11,$0F,$0D,$11,$01,$46,$01,$02
+ $A1A1 DEFB $0D,$0C,$09,$12,$02,$47,$01,$02
 
 ; Room moving objects 13
-b$A1A9 DEFB $32,$32,$1A,$1D,$03,$42,$09,$05
- $A1B1 DEFB $08,$0B,$02,$43,$01,$02,$0B,$0B
- $A1B9 DEFB $08,$0B,$03,$44,$01,$02,$0A,$11
- $A1C1 DEFB $08,$0B,$81,$41,$01,$02,$01,$08
- $A1C9 DEFB $04,$15,$02,$46,$01,$01,$02,$08
- $A1D1 DEFB $04,$15,$80,$43,$01,$01,$05,$08
- $A1D9 DEFB $04,$15,$02,$42,$01,$02,$05,$08
- $A1E1 DEFB $04,$15,$80,$47,$01,$02,$0F,$05
- $A1E9 DEFB $04,$07,$02,$42,$01,$02,$0F,$0E
- $A1F1 DEFB $0D,$10,$80,$47,$01,$02
+;
+; #CALL:print_sprites(#PC,sprites_13)
+b$A1A9 DEFB $32,$32,$1A,$1D,$03,$42
+ $A1AF DEFB $09,$05,$08,$0B,$02,$43,$01,$02
+ $A1B7 DEFB $0B,$0B,$08,$0B,$03,$44,$01,$02
+ $A1BF DEFB $0A,$11,$08,$0B,$81,$41,$01,$02
+ $A1C7 DEFB $01,$08,$04,$15,$02,$46,$01,$01
+ $A1CF DEFB $02,$08,$04,$15,$80,$43,$01,$01
+ $A1D7 DEFB $05,$08,$04,$15,$02,$42,$01,$02
+ $A1DF DEFB $05,$08,$04,$15,$80,$47,$01,$02
+ $A1E7 DEFB $0F,$05,$04,$07,$02,$42,$01,$02
+ $A1EF DEFB $0F,$0E,$0D,$10,$80,$47,$01,$02
 
 ; Room moving objects 14
-b$A1F7 DEFB $23,$2A,$16,$21,$12,$12,$0D,$1C
- $A1FF DEFB $08,$0E,$00,$44,$01,$01,$06,$0C
- $A207 DEFB $03,$09,$02,$42,$01,$03,$06,$12
- $A20F DEFB $03,$09,$81,$43,$01,$03,$10,$0F
- $A217 DEFB $08,$15,$02,$46,$01,$01,$03,$05
- $A21F DEFB $02,$06,$02,$43,$02,$02,$03,$19
- $A227 DEFB $16,$1A,$81,$47,$01,$03
+;
+; #CALL:print_sprites(#PC,sprites_14)
+b$A1F7 DEFB $23,$2A,$16,$21,$12,$12
+ $A1FD DEFB $0D,$1C,$08,$0E,$00,$44,$01,$01
+ $A205 DEFB $06,$0C,$03,$09,$02,$42,$01,$03
+ $A20D DEFB $06,$12,$03,$09,$81,$43,$01,$03
+ $A215 DEFB $10,$0F,$08,$15,$02,$46,$01,$01
+ $A21D DEFB $03,$05,$02,$06,$02,$43,$02,$02
+ $A225 DEFB $03,$19,$16,$1A,$81,$47,$01,$03
 
 ; Room moving objects 15
-b$A22D DEFB $05,$1C,$2E,$16,$13,$31,$0C,$18
- $A235 DEFB $0A,$0E,$02,$46,$01,$03,$03,$04
- $A23D DEFB $01,$04,$02,$43,$01,$03,$05,$07
- $A245 DEFB $04,$07,$81,$42,$01,$03,$0A,$0A
- $A24D DEFB $07,$0A,$09,$44,$01,$02,$05,$18
- $A255 DEFB $12,$1B,$02,$47,$01,$01,$12,$17
- $A25D DEFB $14,$1B,$02,$42,$01,$01,$09,$1A
- $A265 DEFB $18,$1B,$02,$44,$01,$01,$11,$06
- $A26D DEFB $05,$09,$00,$43,$01,$03
+;
+; #CALL:print_sprites(#PC,sprites_15)
+b$A22D DEFB $05,$1C,$2E,$16,$13,$31
+ $A233 DEFB $0C,$18,$0A,$0E,$02,$46,$01,$03
+ $A23B DEFB $03,$04,$01,$04,$02,$43,$01,$03
+ $A243 DEFB $05,$07,$04,$07,$81,$42,$01,$03
+ $A24B DEFB $0A,$0A,$07,$0A,$09,$44,$01,$02
+ $A253 DEFB $05,$18,$12,$1B,$02,$47,$01,$01
+ $A25B DEFB $12,$17,$14,$1B,$02,$42,$01,$01
+ $A263 DEFB $09,$1A,$18,$1B,$02,$44,$01,$01
+ $A26B DEFB $11,$06,$05,$09,$00,$43,$01,$03
 
 ; Room moving objects 16
-b$A273 DEFB $30,$30,$0C,$1D,$02,$33,$0E,$0F
- $A27B DEFB $0D,$0E,$02,$42,$01,$02,$0D,$11
- $A283 DEFB $0D,$0E,$02,$44,$01,$02,$04,$0E
- $A28B DEFB $0C,$10,$80,$42,$01,$02,$07,$14
- $A293 DEFB $13,$17,$82,$41,$01,$02,$0A,$0F
- $A29B DEFB $0D,$11,$00,$44,$01,$02,$04,$17
- $A2A3 DEFB $15,$19,$02,$46,$01,$02,$07,$0D
- $A2AB DEFB $0A,$13,$03,$47,$01,$02,$0A,$19
- $A2B3 DEFB $17,$1B,$00,$42,$01,$02
+;
+; #CALL:print_sprites(#PC,sprites_16)
+b$A273 DEFB $30,$30,$0C,$1D,$02,$33
+ $A279 DEFB $0E,$0F,$0D,$0E,$02,$42,$01,$02
+ $A281 DEFB $0D,$11,$0D,$0E,$02,$44,$01,$02
+ $A289 DEFB $04,$0E,$0C,$10,$80,$42,$01,$02
+ $A291 DEFB $07,$14,$13,$17,$82,$41,$01,$02
+ $A299 DEFB $0A,$0F,$0D,$11,$00,$44,$01,$02
+ $A2A1 DEFB $04,$17,$15,$19,$02,$46,$01,$02
+ $A2A9 DEFB $07,$0D,$0A,$13,$03,$47,$01,$02
+ $A2B1 DEFB $0A,$19,$17,$1B,$00,$42,$01,$02
 
 ; Room moving objects 17
-b$A2B9 DEFB $1E,$1E,$22,$38,$04,$23,$07,$0F
- $A2C1 DEFB $07,$0D,$80,$43,$01,$02,$0B,$13
- $A2C9 DEFB $07,$0D,$81,$47,$01,$02,$0C,$17
- $A2D1 DEFB $07,$0D,$00,$46,$01,$02,$0D,$1B
- $A2D9 DEFB $07,$0D,$01,$42,$01,$02,$11,$12
- $A2E1 DEFB $0C,$12,$02,$44,$01,$01,$11,$19
- $A2E9 DEFB $14,$1A,$81,$43,$01,$01,$0E,$08
- $A2F1 DEFB $02,$08,$02,$42,$01,$01,$0A,$05
- $A2F9 DEFB $02,$09,$03,$43,$01,$02,$04,$02
- $A301 DEFB $02,$05,$00,$44,$01,$02
+;
+; #CALL:print_sprites(#PC,sprites_17)
+b$A2B9 DEFB $1E,$1E,$22,$38,$04,$23
+ $A2BF DEFB $07,$0F,$07,$0D,$80,$43,$01,$02
+ $A2C7 DEFB $0B,$13,$07,$0D,$81,$47,$01,$02
+ $A2CF DEFB $0C,$17,$07,$0D,$00,$46,$01,$02
+ $A2D7 DEFB $0D,$1B,$07,$0D,$01,$42,$01,$02
+ $A2DF DEFB $11,$12,$0C,$12,$02,$44,$01,$01
+ $A2E7 DEFB $11,$19,$14,$1A,$81,$43,$01,$01
+ $A2EF DEFB $0E,$08,$02,$08,$02,$42,$01,$01
+ $A2F7 DEFB $0A,$05,$02,$09,$03,$43,$01,$02
+ $A2FF DEFB $04,$02,$02,$05,$00,$44,$01,$02
 
 ; Room moving objects 18
-b$A307 DEFB $31,$39,$03,$03,$32,$02,$09,$06
- $A30F DEFB $05,$0C,$02,$44,$02,$02,$0C,$08
- $A317 DEFB $06,$0D,$02,$43,$02,$02,$0A,$17
- $A31F DEFB $04,$0D,$81,$44,$01,$01,$07,$0D
- $A327 DEFB $06,$0C,$80,$46,$01,$02,$04,$10
- $A32F DEFB $03,$09,$02,$42,$01,$02,$0F,$0A
- $A337 DEFB $05,$0C,$02,$44,$01,$02,$0F,$16
- $A33F DEFB $14,$18,$02,$43,$01,$01
+;
+; #CALL:print_sprites(#PC,sprites_18)
+b$A307 DEFB $31,$39,$03,$03,$32,$02
+ $A30D DEFB $09,$06,$05,$0C,$02,$44,$02,$02
+ $A315 DEFB $0C,$08,$06,$0D,$02,$43,$02,$02
+ $A31D DEFB $0A,$17,$04,$0D,$81,$44,$01,$01
+ $A325 DEFB $07,$0D,$06,$0C,$80,$46,$01,$02
+ $A32D DEFB $04,$10,$03,$09,$02,$42,$01,$02
+ $A335 DEFB $0F,$0A,$05,$0C,$02,$44,$01,$02
+ $A33D DEFB $0F,$16,$14,$18,$02,$43,$01,$01
 
 ; Room moving objects 19
-b$A345 DEFB $12,$30,$38,$2D,$16,$12,$04,$02
- $A34D DEFB $03,$05,$02,$46,$01,$02,$07,$05
- $A355 DEFB $06,$0B,$02,$42,$01,$01,$05,$0A
- $A35D DEFB $03,$08,$02,$43,$01,$02,$0D,$0C
- $A365 DEFB $08,$0D,$01,$44,$01,$02,$0A,$14
- $A36D DEFB $09,$0E,$02,$42,$01,$02,$08,$16
- $A375 DEFB $03,$08,$80,$47,$01,$02,$07,$1A
- $A37D DEFB $05,$0A,$02,$46,$01,$01,$11,$0C
- $A385 DEFB $02,$12,$01,$47,$01,$02,$03,$07
- $A38D DEFB $04,$09,$02,$47,$01,$02,$03,$16
- $A395 DEFB $15,$1A,$80,$43,$01,$02
+;
+; #CALL:print_sprites(#PC,sprites_19)
+b$A345 DEFB $12,$30,$38,$2D,$16,$12
+ $A34B DEFB $04,$02,$03,$05,$02,$46,$01,$02
+ $A353 DEFB $07,$05,$06,$0B,$02,$42,$01,$01
+ $A35B DEFB $05,$0A,$03,$08,$02,$43,$01,$02
+ $A363 DEFB $0D,$0C,$08,$0D,$01,$44,$01,$02
+ $A36B DEFB $0A,$14,$09,$0E,$02,$42,$01,$02
+ $A373 DEFB $08,$16,$03,$08,$80,$47,$01,$02
+ $A37B DEFB $07,$1A,$05,$0A,$02,$46,$01,$01
+ $A383 DEFB $11,$0C,$02,$12,$01,$47,$01,$02
+ $A38B DEFB $03,$07,$04,$09,$02,$47,$01,$02
+ $A393 DEFB $03,$16,$15,$1A,$80,$43,$01,$02
 
 ; Room moving objects 1A
-b$A39B DEFB $07,$07,$21,$03,$04,$14,$09,$09
- $A3A3 DEFB $07,$0C,$02,$42,$01,$02,$0C,$0E
- $A3AB DEFB $09,$0E,$00,$43,$01,$01,$0B,$13
- $A3B3 DEFB $07,$0C,$82,$47,$01,$02,$0B,$18
- $A3BB DEFB $09,$0E,$80,$44,$01,$01,$01,$09
- $A3C3 DEFB $07,$0A,$02,$46,$01,$02,$10,$09
- $A3CB DEFB $06,$0B,$00,$47,$01,$02,$10,$12
- $A3D3 DEFB $10,$15,$81,$42,$01,$02,$08,$0D
- $A3DB DEFB $0B,$10,$02,$46,$01,$01,$08,$17
- $A3E3 DEFB $15,$1A,$00,$43,$01,$01
+;
+; #CALL:print_sprites(#PC,sprites_1a)
+b$A39B DEFB $07,$07,$21,$03,$04,$14
+ $A3A1 DEFB $09,$09,$07,$0C,$02,$42,$01,$02
+ $A3A9 DEFB $0C,$0E,$09,$0E,$00,$43,$01,$01
+ $A3B1 DEFB $0B,$13,$07,$0C,$82,$47,$01,$02
+ $A3B9 DEFB $0B,$18,$09,$0E,$80,$44,$01,$01
+ $A3C1 DEFB $01,$09,$07,$0A,$02,$46,$01,$02
+ $A3C9 DEFB $10,$09,$06,$0B,$00,$47,$01,$02
+ $A3D1 DEFB $10,$12,$10,$15,$81,$42,$01,$02
+ $A3D9 DEFB $08,$0D,$0B,$10,$02,$46,$01,$01
+ $A3E1 DEFB $08,$17,$15,$1A,$00,$43,$01,$01
 
 ; Room moving objects 1B
-b$A3E9 DEFB $15,$39,$2C,$1A,$13,$14,$05,$17
- $A3F1 DEFB $04,$06,$81,$43,$01,$02,$05,$0A
- $A3F9 DEFB $04,$06,$02,$46,$01,$01,$04,$0D
- $A401 DEFB $04,$06,$80,$42,$01,$01,$06,$10
- $A409 DEFB $04,$06,$00,$44,$01,$01,$0D,$0C
- $A411 DEFB $0C,$12,$02,$47,$01,$02,$12,$08
- $A419 DEFB $04,$15,$02,$46,$01,$01,$13,$08
- $A421 DEFB $04,$15,$80,$43,$01,$01,$01,$10
- $A429 DEFB $06,$1A,$02,$47,$01,$01,$01,$17
- $A431 DEFB $06,$1A,$02,$46,$01,$01
+;
+; #CALL:print_sprites(#PC,sprites_1b)
+b$A3E9 DEFB $15,$39,$2C,$1A,$13,$14
+ $A3EF DEFB $05,$17,$04,$06,$81,$43,$01,$02
+ $A3F7 DEFB $05,$0A,$04,$06,$02,$46,$01,$01
+ $A3FF DEFB $04,$0D,$04,$06,$80,$42,$01,$01
+ $A407 DEFB $06,$10,$04,$06,$00,$44,$01,$01
+ $A40F DEFB $0D,$0C,$0C,$12,$02,$47,$01,$02
+ $A417 DEFB $12,$08,$04,$15,$02,$46,$01,$01
+ $A41F DEFB $13,$08,$04,$15,$80,$43,$01,$01
+ $A427 DEFB $01,$10,$06,$1A,$02,$47,$01,$01
+ $A42F DEFB $01,$17,$06,$1A,$02,$46,$01,$01
 
 ; Room moving objects 1C
-b$A437 DEFB $06,$06,$2D,$08,$00,$46,$01,$05
- $A43F DEFB $03,$0B,$02,$44,$01,$01,$01,$19
- $A447 DEFB $13,$1A,$81,$43,$01,$01,$0C,$07
- $A44F DEFB $02,$0C,$02,$42,$01,$01,$0C,$15
- $A457 DEFB $0F,$19,$82,$43,$01,$01,$04,$05
- $A45F DEFB $04,$0C,$02,$43,$01,$02,$04,$14
- $A467 DEFB $11,$18,$03,$44,$01,$02,$0A,$04
- $A46F DEFB $03,$0B,$80,$46,$01,$02,$0A,$16
- $A477 DEFB $11,$19,$02,$47,$01,$02,$10,$09
- $A47F DEFB $02,$0C,$80,$41,$01,$02,$10,$14
- $A487 DEFB $10,$1A,$02,$44,$01,$02
+;
+; #CALL:print_sprites(#PC,sprites_1c)
+b$A437 DEFB $06,$06,$2D,$08,$00,$46
+ $A43D DEFB $01,$05,$03,$0B,$02,$44,$01,$01
+ $A445 DEFB $01,$19,$13,$1A,$81,$43,$01,$01
+ $A44D DEFB $0C,$07,$02,$0C,$02,$42,$01,$01
+ $A455 DEFB $0C,$15,$0F,$19,$82,$43,$01,$01
+ $A45D DEFB $04,$05,$04,$0C,$02,$43,$01,$02
+ $A465 DEFB $04,$14,$11,$18,$03,$44,$01,$02
+ $A46D DEFB $0A,$04,$03,$0B,$80,$46,$01,$02
+ $A475 DEFB $0A,$16,$11,$19,$02,$47,$01,$02
+ $A47D DEFB $10,$09,$02,$0C,$80,$41,$01,$02
+ $A485 DEFB $10,$14,$10,$1A,$02,$44,$01,$02
 
 ; Room moving objects 1D
-b$A48D DEFB $34,$35,$2D,$29,$23,$14,$0A,$15
- $A495 DEFB $07,$0D,$02,$43,$01,$02,$09,$18
- $A49D DEFB $07,$0D,$80,$44,$01,$02,$0B,$03
- $A4A5 DEFB $0A,$0D,$02,$47,$01,$02,$0D,$06
- $A4AD DEFB $0A,$0D,$81,$42,$01,$02,$0A,$09
- $A4B5 DEFB $0A,$0D,$00,$43,$01,$02,$01,$18
- $A4BD DEFB $14,$1A,$02,$42,$01,$02,$00,$02
- $A4C5 DEFB $02,$0D,$02,$42,$01,$01,$04,$15
- $A4CD DEFB $14,$17,$02,$47,$01,$02,$04,$1B
- $A4D5 DEFB $19,$1C,$81,$46,$01,$02,$07,$05
- $A4DD DEFB $02,$06,$02,$42,$01,$02
+;
+; #CALL:print_sprites(#PC,sprites_1d)
+b$A48D DEFB $34,$35,$2D,$29,$23,$14
+ $A493 DEFB $0A,$15,$07,$0D,$02,$43,$01,$02
+ $A49B DEFB $09,$18,$07,$0D,$80,$44,$01,$02
+ $A4A3 DEFB $0B,$03,$0A,$0D,$02,$47,$01,$02
+ $A4AB DEFB $0D,$06,$0A,$0D,$81,$42,$01,$02
+ $A4B3 DEFB $0A,$09,$0A,$0D,$00,$43,$01,$02
+ $A4BB DEFB $01,$18,$14,$1A,$02,$42,$01,$02
+ $A4C3 DEFB $00,$02,$02,$0D,$02,$42,$01,$01
+ $A4CB DEFB $04,$15,$14,$17,$02,$47,$01,$02
+ $A4D3 DEFB $04,$1B,$19,$1C,$81,$46,$01,$02
+ $A4DB DEFB $07,$05,$02,$06,$02,$42,$01,$02
 
 ; Room moving objects 1E
-b$A4E3 DEFB $31,$14,$0F,$2E,$22,$23,$04,$05
- $A4EB DEFB $03,$06,$01,$43,$01,$01,$04,$1C
- $A4F3 DEFB $03,$04,$00,$41,$01,$02,$04,$0C
- $A4FB DEFB $03,$04,$02,$42,$01,$02,$04,$14
- $A503 DEFB $03,$04,$81,$46,$01,$02,$00,$1A
- $A50B DEFB $17,$1A,$80,$46,$01,$01,$0E,$04
- $A513 DEFB $02,$05,$01,$44,$01,$02,$0A,$0B
- $A51B DEFB $02,$19,$02,$47,$01,$01,$10,$0B
- $A523 DEFB $0A,$11,$02,$43,$01,$01,$10,$12
- $A52B DEFB $10,$17,$01,$46,$01,$01
+;
+; #CALL:print_sprites(#PC,sprites_1e)
+b$A4E3 DEFB $31,$14,$0F,$2E,$22,$23
+ $A4E9 DEFB $04,$05,$03,$06,$01,$43,$01,$01
+ $A4F1 DEFB $04,$1C,$03,$04,$00,$41,$01,$02
+ $A4F9 DEFB $04,$0C,$03,$04,$02,$42,$01,$02
+ $A501 DEFB $04,$14,$03,$04,$81,$46,$01,$02
+ $A509 DEFB $00,$1A,$17,$1A,$80,$46,$01,$01
+ $A511 DEFB $0E,$04,$02,$05,$01,$44,$01,$02
+ $A519 DEFB $0A,$0B,$02,$19,$02,$47,$01,$01
+ $A521 DEFB $10,$0B,$0A,$11,$02,$43,$01,$01
+ $A529 DEFB $10,$12,$10,$17,$01,$46,$01,$01
 
 ; Room moving objects 1F
-b$A531 DEFB $13,$28,$33,$02,$22,$31,$0B,$03
- $A539 DEFB $07,$0C,$01,$41,$01,$02,$10,$08
- $A541 DEFB $0E,$11,$00,$44,$01,$02,$06,$17
- $A549 DEFB $03,$06,$80,$42,$01,$02,$06,$1A
- $A551 DEFB $03,$06,$02,$43,$01,$02,$0B,$0F
- $A559 DEFB $0C,$17,$02,$46,$01,$01,$03,$08
- $A561 DEFB $05,$0A,$02,$43,$01,$01,$0C,$0A
- $A569 DEFB $02,$0D,$00,$47,$01,$01,$0E,$12
- $A571 DEFB $11,$1C,$80,$43,$01,$03
+;
+; #CALL:print_sprites(#PC,sprites_1f)
+b$A531 DEFB $13,$28,$33,$02,$22,$31
+ $A537 DEFB $0B,$03,$07,$0C,$01,$41,$01,$02
+ $A53F DEFB $10,$08,$0E,$11,$00,$44,$01,$02
+ $A547 DEFB $06,$17,$03,$06,$80,$42,$01,$02
+ $A54F DEFB $06,$1A,$03,$06,$02,$43,$01,$02
+ $A557 DEFB $0B,$0F,$0C,$17,$02,$46,$01,$01
+ $A55F DEFB $03,$08,$05,$0A,$02,$43,$01,$01
+ $A567 DEFB $0C,$0A,$02,$0D,$00,$47,$01,$01
+ $A56F DEFB $0E,$12,$11,$1C,$80,$43,$01,$03
 
 ; Room moving objects 20
-b$A577 DEFB $06,$06,$04,$09,$04,$12,$05,$05
- $A57F DEFB $01,$08,$02,$47,$01,$02,$02,$0B
- $A587 DEFB $02,$09,$81,$46,$01,$01,$03,$13
- $A58F DEFB $01,$09,$02,$43,$01,$01,$09,$19
- $A597 DEFB $02,$09,$80,$41,$02,$02,$0B,$03
- $A59F DEFB $00,$03,$02,$42,$01,$02,$0F,$09
- $A5A7 DEFB $08,$0B,$00,$44,$01,$02,$0F,$14
- $A5AF DEFB $12,$16,$02,$42,$02,$03
+;
+; #CALL:print_sprites(#PC,sprites_20)
+b$A577 DEFB $06,$06,$04,$09,$04,$12
+ $A57D DEFB $05,$05,$01,$08,$02,$47,$01,$02
+ $A585 DEFB $02,$0B,$02,$09,$81,$46,$01,$01
+ $A58D DEFB $03,$13,$01,$09,$02,$43,$01,$01
+ $A595 DEFB $09,$19,$02,$09,$80,$41,$02,$02
+ $A59D DEFB $0B,$03,$00,$03,$02,$42,$01,$02
+ $A5A5 DEFB $0F,$09,$08,$0B,$00,$44,$01,$02
+ $A5AD DEFB $0F,$14,$12,$16,$02,$42,$02,$03
 
 ; Room moving objects 21
-b$A5B5 DEFB $14,$14,$33,$00,$03,$13,$05,$08
- $A5BD DEFB $02,$0D,$02,$44,$01,$03,$05,$10
- $A5C5 DEFB $03,$08,$81,$42,$01,$02,$07,$1A
- $A5CD DEFB $03,$08,$00,$43,$01,$02,$02,$13
- $A5D5 DEFB $0E,$19,$03,$47,$01,$01,$0F,$03
- $A5DD DEFB $02,$0D,$00,$43,$01,$03,$0F,$0E
- $A5E5 DEFB $09,$14,$01,$47,$01,$03,$0F,$15
- $A5ED DEFB $14,$19,$02,$44,$01,$03
+;
+; #CALL:print_sprites(#PC,sprites_21)
+b$A5B5 DEFB $14,$14,$33,$00,$03,$13
+ $A5BB DEFB $05,$08,$02,$0D,$02,$44,$01,$03
+ $A5C3 DEFB $05,$10,$03,$08,$81,$42,$01,$02
+ $A5CB DEFB $07,$1A,$03,$08,$00,$43,$01,$02
+ $A5D3 DEFB $02,$13,$0E,$19,$03,$47,$01,$01
+ $A5DB DEFB $0F,$03,$02,$0D,$00,$43,$01,$03
+ $A5E3 DEFB $0F,$0E,$09,$14,$01,$47,$01,$03
+ $A5EB DEFB $0F,$15,$14,$19,$02,$44,$01,$03
 
 ; Room moving objects 22
-b$A5F3 DEFB $32,$32,$2E,$2F,$02,$43,$0D,$08
- $A5FB DEFB $0B,$0E,$00,$42,$01,$02,$0C,$14
- $A603 DEFB $0B,$0E,$81,$43,$01,$02,$08,$07
- $A60B DEFB $02,$0B,$02,$43,$01,$01,$08,$1A
- $A613 DEFB $12,$1B,$01,$42,$01,$01,$0B,$03
- $A61B DEFB $02,$09,$03,$46,$01,$01,$0B,$14
- $A623 DEFB $14,$1B,$02,$47,$01,$01,$00,$0C
- $A62B DEFB $07,$10,$02,$47,$01,$01,$00,$15
- $A633 DEFB $13,$1C,$80,$43,$01,$01,$0F,$1B
- $A63B DEFB $1A,$1B,$02,$46,$01,$02
+;
+; #CALL:print_sprites(#PC,sprites_22)
+b$A5F3 DEFB $32,$32,$2E,$2F,$02,$43
+ $A5F9 DEFB $0D,$08,$0B,$0E,$00,$42,$01,$02
+ $A601 DEFB $0C,$14,$0B,$0E,$81,$43,$01,$02
+ $A609 DEFB $08,$07,$02,$0B,$02,$43,$01,$01
+ $A611 DEFB $08,$1A,$12,$1B,$01,$42,$01,$01
+ $A619 DEFB $0B,$03,$02,$09,$03,$46,$01,$01
+ $A621 DEFB $0B,$14,$14,$1B,$02,$47,$01,$01
+ $A629 DEFB $00,$0C,$07,$10,$02,$47,$01,$01
+ $A631 DEFB $00,$15,$13,$1C,$80,$43,$01,$01
+ $A639 DEFB $0F,$1B,$1A,$1B,$02,$46,$01,$02
 
 ; Room moving objects 23
-b$A641 DEFB $2A,$1C,$1A,$21,$15,$22,$07,$09
- $A649 DEFB $01,$08,$03,$44,$01,$01,$06,$0E
- $A651 DEFB $06,$08,$01,$42,$01,$01,$07,$11
- $A659 DEFB $06,$08,$01,$43,$01,$01,$07,$14
- $A661 DEFB $06,$08,$80,$44,$01,$01,$08,$17
- $A669 DEFB $06,$08,$81,$47,$01,$01,$06,$1A
- $A671 DEFB $06,$08,$82,$46,$01,$01,$12,$10
- $A679 DEFB $06,$1A,$00,$47,$01,$01,$12,$10
- $A681 DEFB $06,$1A,$81,$46,$01,$01,$01,$18
- $A689 DEFB $0C,$1A,$01,$47,$01,$02,$0E,$06
- $A691 DEFB $04,$08,$02,$43,$01,$02
+;
+; #CALL:print_sprites(#PC,sprites_23)
+b$A641 DEFB $2A,$1C,$1A,$21,$15,$22
+ $A647 DEFB $07,$09,$01,$08,$03,$44,$01,$01
+ $A64F DEFB $06,$0E,$06,$08,$01,$42,$01,$01
+ $A657 DEFB $07,$11,$06,$08,$01,$43,$01,$01
+ $A65F DEFB $07,$14,$06,$08,$80,$44,$01,$01
+ $A667 DEFB $08,$17,$06,$08,$81,$47,$01,$01
+ $A66F DEFB $06,$1A,$06,$08,$82,$46,$01,$01
+ $A677 DEFB $12,$10,$06,$1A,$00,$47,$01,$01
+ $A67F DEFB $12,$10,$06,$1A,$81,$46,$01,$01
+ $A687 DEFB $01,$18,$0C,$1A,$01,$47,$01,$02
+ $A68F DEFB $0E,$06,$04,$08,$02,$43,$01,$02
 
 ; Room moving objects 24
-b$A697 DEFB $2B,$2B,$2D,$3A,$04,$12,$0B,$05
- $A69F DEFB $09,$0B,$02,$43,$01,$01,$03,$16
- $A6A7 DEFB $03,$09,$80,$47,$01,$02,$04,$0D
- $A6AF DEFB $01,$07,$02,$47,$01,$01,$02,$12
- $A6B7 DEFB $01,$07,$02,$46,$01,$01,$01,$19
- $A6BF DEFB $18,$1A,$01,$42,$01,$02,$0A,$08
- $A6C7 DEFB $07,$0D,$02,$44,$01,$02,$0A,$16
- $A6CF DEFB $10,$16,$80,$42,$01,$02
+;
+; #CALL:print_sprites(#PC,sprites_24)
+b$A697 DEFB $2B,$2B,$2D,$3A,$04,$12
+ $A69D DEFB $0B,$05,$09,$0B,$02,$43,$01,$01
+ $A6A5 DEFB $03,$16,$03,$09,$80,$47,$01,$02
+ $A6AD DEFB $04,$0D,$01,$07,$02,$47,$01,$01
+ $A6B5 DEFB $02,$12,$01,$07,$02,$46,$01,$01
+ $A6BD DEFB $01,$19,$18,$1A,$01,$42,$01,$02
+ $A6C5 DEFB $0A,$08,$07,$0D,$02,$44,$01,$02
+ $A6CD DEFB $0A,$16,$10,$16,$80,$42,$01,$02
 
 ; Room moving objects 25
-b$A6D5 DEFB $2A,$39,$2F,$29,$13,$22,$0D,$05
- $A6DD DEFB $02,$0D,$02,$46,$01,$01,$05,$18
- $A6E5 DEFB $02,$05,$02,$43,$01,$02,$01,$1A
- $A6ED DEFB $01,$04,$00,$47,$01,$02,$0C,$1C
- $A6F5 DEFB $05,$0C,$01,$42,$01,$02,$05,$02
- $A6FD DEFB $02,$03,$01,$47,$01,$02,$09,$18
- $A705 DEFB $17,$1A,$02,$44,$01,$02,$0F,$15
- $A70D DEFB $12,$17,$00,$43,$01,$02,$11,$02
- $A715 DEFB $02,$0D,$02,$42,$01,$01
+;
+; #CALL:print_sprites(#PC,sprites_25)
+b$A6D5 DEFB $2A,$39,$2F,$29,$13,$22
+ $A6DB DEFB $0D,$05,$02,$0D,$02,$46,$01,$01
+ $A6E3 DEFB $05,$18,$02,$05,$02,$43,$01,$02
+ $A6EB DEFB $01,$1A,$01,$04,$00,$47,$01,$02
+ $A6F3 DEFB $0C,$1C,$05,$0C,$01,$42,$01,$02
+ $A6FB DEFB $05,$02,$02,$03,$01,$47,$01,$02
+ $A703 DEFB $09,$18,$17,$1A,$02,$44,$01,$02
+ $A70B DEFB $0F,$15,$12,$17,$00,$43,$01,$02
+ $A713 DEFB $11,$02,$02,$0D,$02,$42,$01,$01
 
 ; Room moving objects 26
-b$A71B DEFB $2A,$2A,$0F,$1F,$03,$23,$0B,$05
- $A723 DEFB $08,$0F,$02,$42,$01,$02,$0B,$0B
- $A72B DEFB $08,$0B,$80,$46,$01,$02,$0A,$10
- $A733 DEFB $07,$0A,$81,$47,$01,$02,$11,$1A
- $A73B DEFB $17,$1A,$80,$46,$01,$01,$05,$19
- $A743 DEFB $15,$1A,$02,$42,$01,$02,$0F,$0B
- $A74B DEFB $07,$0E,$00,$44,$01,$01,$0F,$12
- $A753 DEFB $0D,$14,$01,$42,$01,$01,$0A,$1A
- $A75B DEFB $19,$1B,$02,$43,$01,$02
+;
+; #CALL:print_sprites(#PC,sprites_26)
+b$A71B DEFB $2A,$2A,$0F,$1F,$03,$23
+ $A721 DEFB $0B,$05,$08,$0F,$02,$42,$01,$02
+ $A729 DEFB $0B,$0B,$08,$0B,$80,$46,$01,$02
+ $A731 DEFB $0A,$10,$07,$0A,$81,$47,$01,$02
+ $A739 DEFB $11,$1A,$17,$1A,$80,$46,$01,$01
+ $A741 DEFB $05,$19,$15,$1A,$02,$42,$01,$02
+ $A749 DEFB $0F,$0B,$07,$0E,$00,$44,$01,$01
+ $A751 DEFB $0F,$12,$0D,$14,$01,$42,$01,$01
+ $A759 DEFB $0A,$1A,$19,$1B,$02,$43,$01,$02
 
 ; Room moving objects 27
-b$A761 DEFB $0A,$20,$3C,$04,$13,$12,$09,$11
- $A769 DEFB $09,$0B,$02,$44,$01,$01,$04,$09
- $A771 DEFB $02,$08,$02,$42,$01,$02,$0A,$0B
- $A779 DEFB $09,$0F,$81,$43,$01,$02,$0E,$03
- $A781 DEFB $0D,$10,$00,$46,$01,$02,$06,$17
- $A789 DEFB $12,$18,$02,$47,$01,$02,$0E,$12
- $A791 DEFB $11,$19,$82,$42,$01,$01,$03,$11
- $A799 DEFB $07,$14,$81,$43,$01,$01
+;
+; #CALL:print_sprites(#PC,sprites_27)
+b$A761 DEFB $0A,$20,$3C,$04,$13,$12
+ $A767 DEFB $09,$11,$09,$0B,$02,$44,$01,$01
+ $A76F DEFB $04,$09,$02,$08,$02,$42,$01,$02
+ $A777 DEFB $0A,$0B,$09,$0F,$81,$43,$01,$02
+ $A77F DEFB $0E,$03,$0D,$10,$00,$46,$01,$02
+ $A787 DEFB $06,$17,$12,$18,$02,$47,$01,$02
+ $A78F DEFB $0E,$12,$11,$19,$82,$42,$01,$01
+ $A797 DEFB $03,$11,$07,$14,$81,$43,$01,$01
 
 ; Room moving objects 28
-b$A79F DEFB $3B,$1E,$1F,$00,$42,$21,$01,$0A
- $A7A7 DEFB $00,$01,$02,$44,$01,$02,$00,$13
- $A7AF DEFB $00,$01,$00,$41,$01,$02,$0F,$08
- $A7B7 DEFB $0C,$10,$02,$43,$01,$02,$0F,$15
- $A7BF DEFB $0C,$10,$80,$46,$01,$02,$09,$0F
- $A7C7 DEFB $03,$0A,$02,$42,$01,$02,$05,$1A
- $A7CF DEFB $00,$07,$81,$47,$01,$01,$09,$04
- $A7D7 DEFB $02,$05,$00,$47,$01,$01,$09,$08
- $A7DF DEFB $07,$0A,$01,$41,$01,$01,$0E,$10
- $A7E7 DEFB $0D,$10,$02,$44,$01,$02
+;
+; #CALL:print_sprites(#PC,sprites_28)
+b$A79F DEFB $3B,$1E,$1F,$00,$42,$21
+ $A7A5 DEFB $01,$0A,$00,$01,$02,$44,$01,$02
+ $A7AD DEFB $00,$13,$00,$01,$00,$41,$01,$02
+ $A7B5 DEFB $0F,$08,$0C,$10,$02,$43,$01,$02
+ $A7BD DEFB $0F,$15,$0C,$10,$80,$46,$01,$02
+ $A7C5 DEFB $09,$0F,$03,$0A,$02,$42,$01,$02
+ $A7CD DEFB $05,$1A,$00,$07,$81,$47,$01,$01
+ $A7D5 DEFB $09,$04,$02,$05,$00,$47,$01,$01
+ $A7DD DEFB $09,$08,$07,$0A,$01,$41,$01,$01
+ $A7E5 DEFB $0E,$10,$0D,$10,$02,$44,$01,$02
 
 ; Room moving objects 29
-b$A7ED DEFB $28,$28,$21,$21,$07,$00,$02,$03
- $A7F5 DEFB $00,$07,$02,$43,$01,$02,$03,$08
- $A7FD DEFB $00,$07,$00,$42,$01,$02,$05,$0B
- $A805 DEFB $00,$07,$80,$47,$01,$02,$06,$0E
- $A80D DEFB $00,$07,$80,$41,$01,$02,$04,$14
- $A815 DEFB $00,$07,$02,$46,$01,$02,$05,$17
- $A81D DEFB $00,$07,$82,$42,$01,$02,$01,$1C
- $A825 DEFB $00,$07,$02,$44,$01,$02
+;
+; #CALL:print_sprites(#PC,sprites_29)
+b$A7ED DEFB $28,$28,$21,$21,$07,$00
+ $A7F3 DEFB $02,$03,$00,$07,$02,$43,$01,$02
+ $A7FB DEFB $03,$08,$00,$07,$00,$42,$01,$02
+ $A803 DEFB $05,$0B,$00,$07,$80,$47,$01,$02
+ $A80B DEFB $06,$0E,$00,$07,$80,$41,$01,$02
+ $A813 DEFB $04,$14,$00,$07,$02,$46,$01,$02
+ $A81B DEFB $05,$17,$00,$07,$82,$42,$01,$02
+ $A823 DEFB $01,$1C,$00,$07,$02,$44,$01,$02
 
 ; Room moving objects 2A
-b$A82B DEFB $1B,$12,$2F,$38,$23,$21,$0B,$05
- $A833 DEFB $08,$0C,$02,$42,$01,$02,$00,$1D
- $A83B DEFB $00,$03,$02,$44,$01,$02,$05,$0E
- $A843 DEFB $05,$0E,$02,$43,$01,$01,$08,$12
- $A84B DEFB $05,$0E,$03,$44,$01,$01,$0B,$16
- $A853 DEFB $05,$0E,$81,$42,$01,$01,$11,$0C
- $A85B DEFB $07,$10,$02,$47,$01,$01,$11,$18
- $A863 DEFB $13,$1C,$80,$43,$01,$01,$03,$04
- $A86B DEFB $02,$06,$02,$46,$01,$02
+;
+; #CALL:print_sprites(#PC,sprites_2A)
+b$A82B DEFB $1B,$12,$2F,$38,$23,$21
+ $A831 DEFB $0B,$05,$08,$0C,$02,$42,$01,$02
+ $A839 DEFB $00,$1D,$00,$03,$02,$44,$01,$02
+ $A841 DEFB $05,$0E,$05,$0E,$02,$43,$01,$01
+ $A849 DEFB $08,$12,$05,$0E,$03,$44,$01,$01
+ $A851 DEFB $0B,$16,$05,$0E,$81,$42,$01,$01
+ $A859 DEFB $11,$0C,$07,$10,$02,$47,$01,$01
+ $A861 DEFB $11,$18,$13,$1C,$80,$43,$01,$01
+ $A869 DEFB $03,$04,$02,$06,$02,$46,$01,$02
 
 ; Room moving objects 2B
-b$A871 DEFB $26,$26,$21,$08,$04,$13,$0D,$0A
- $A879 DEFB $0A,$0D,$02,$43,$01,$02,$0C,$0F
- $A881 DEFB $0A,$0D,$80,$47,$01,$02,$0B,$14
- $A889 DEFB $0A,$0D,$00,$42,$01,$02,$0D,$05
- $A891 DEFB $0A,$0D,$81,$42,$01,$02,$12,$18
- $A899 DEFB $0C,$1A,$01,$47,$01,$02,$08,$10
- $A8A1 DEFB $0B,$15,$81,$44,$01,$03,$08,$03
- $A8A9 DEFB $02,$04,$03,$46,$01,$03,$0A,$1A
- $A8B1 DEFB $18,$1A,$02,$43,$01,$03
+;
+; #CALL:print_sprites(#PC,sprites_2B)
+b$A871 DEFB $26,$26,$21,$08,$04,$13
+ $A877 DEFB $0D,$0A,$0A,$0D,$02,$43,$01,$02
+ $A87F DEFB $0C,$0F,$0A,$0D,$80,$47,$01,$02
+ $A887 DEFB $0B,$14,$0A,$0D,$00,$42,$01,$02
+ $A88F DEFB $0D,$05,$0A,$0D,$81,$42,$01,$02
+ $A897 DEFB $12,$18,$0C,$1A,$01,$47,$01,$02
+ $A89F DEFB $08,$10,$0B,$15,$81,$44,$01,$03
+ $A8A7 DEFB $08,$03,$02,$04,$03,$46,$01,$03
+ $A8AF DEFB $0A,$1A,$18,$1A,$02,$43,$01,$03
 
 ; Room moving objects 2C
-b$A8B7 DEFB $05,$19,$17,$33,$23,$21,$0B,$0A
- $A8BF DEFB $0A,$0E,$02,$47,$01,$02,$0E,$14
- $A8C7 DEFB $0A,$0E,$00,$42,$01,$02,$0B,$05
- $A8CF DEFB $0A,$0E,$83,$46,$01,$01,$0D,$19
- $A8D7 DEFB $0A,$0E,$80,$43,$01,$01,$0A,$0F
- $A8DF DEFB $0A,$0E,$82,$41,$01,$01,$07,$12
- $A8E7 DEFB $0D,$14,$80,$42,$01,$02,$07,$0A
- $A8EF DEFB $03,$0A,$80,$46,$01,$02,$01,$0F
- $A8F7 DEFB $02,$1A,$02,$43,$01,$01
+;
+; #CALL:print_sprites(#PC,sprites_2C)
+b$A8B7 DEFB $05,$19,$17,$33,$23,$21
+ $A8BD DEFB $0B,$0A,$0A,$0E,$02,$47,$01,$02
+ $A8C5 DEFB $0E,$14,$0A,$0E,$00,$42,$01,$02
+ $A8CD DEFB $0B,$05,$0A,$0E,$83,$46,$01,$01
+ $A8D5 DEFB $0D,$19,$0A,$0E,$80,$43,$01,$01
+ $A8DD DEFB $0A,$0F,$0A,$0E,$82,$41,$01,$01
+ $A8E5 DEFB $07,$12,$0D,$14,$80,$42,$01,$02
+ $A8ED DEFB $07,$0A,$03,$0A,$80,$46,$01,$02
+ $A8F5 DEFB $01,$0F,$02,$1A,$02,$43,$01,$01
 
 ; Room moving objects 2D
-b$A8FD DEFB $34,$34,$2D,$37,$22,$12,$02,$0B
- $A905 DEFB $00,$03,$02,$47,$01,$02,$03,$14
- $A90D DEFB $00,$05,$03,$42,$01,$01,$02,$04
- $A915 DEFB $02,$09,$80,$43,$01,$02,$05,$08
- $A91D DEFB $02,$09,$81,$46,$01,$02,$0C,$18
- $A925 DEFB $14,$1A,$02,$47,$01,$03,$0F,$05
- $A92D DEFB $03,$07,$02,$42,$01,$02,$07,$19
- $A935 DEFB $17,$1C,$02,$46,$01,$01
+;
+; #CALL:print_sprites(#PC,sprites_2D)
+b$A8FD DEFB $34,$34,$2D,$37,$22,$12
+ $A903 DEFB $02,$0B,$00,$03,$02,$47,$01,$02
+ $A90B DEFB $03,$14,$00,$05,$03,$42,$01,$01
+ $A913 DEFB $02,$04,$02,$09,$80,$43,$01,$02
+ $A91B DEFB $05,$08,$02,$09,$81,$46,$01,$02
+ $A923 DEFB $0C,$18,$14,$1A,$02,$47,$01,$03
+ $A92B DEFB $0F,$05,$03,$07,$02,$42,$01,$02
+ $A933 DEFB $07,$19,$17,$1C,$02,$46,$01,$01
 
 ; Room moving objects 2E
-b$A93B DEFB $13,$13,$11,$04,$06,$21,$07,$06
- $A943 DEFB $04,$09,$82,$46,$01,$01,$08,$0A
- $A94B DEFB $04,$09,$02,$43,$01,$01,$04,$0E
- $A953 DEFB $04,$09,$80,$44,$01,$01,$09,$12
- $A95B DEFB $04,$09,$81,$41,$01,$01,$08,$16
- $A963 DEFB $04,$09,$02,$47,$01,$01,$04,$1A
- $A96B DEFB $04,$09,$82,$42,$01,$01,$0F,$0B
- $A973 DEFB $05,$0D,$02,$47,$01,$02,$0F,$12
- $A97B DEFB $11,$17,$81,$43,$01,$02,$00,$0F
- $A983 DEFB $04,$1A,$02,$46,$01,$02
+;
+; #CALL:print_sprites(#PC,sprites_2E)
+b$A93B DEFB $13,$13,$11,$04,$06,$21
+ $A941 DEFB $07,$06,$04,$09,$82,$46,$01,$01
+ $A949 DEFB $08,$0A,$04,$09,$02,$43,$01,$01
+ $A951 DEFB $04,$0E,$04,$09,$80,$44,$01,$01
+ $A959 DEFB $09,$12,$04,$09,$81,$41,$01,$01
+ $A961 DEFB $08,$16,$04,$09,$02,$47,$01,$01
+ $A969 DEFB $04,$1A,$04,$09,$82,$42,$01,$01
+ $A971 DEFB $0F,$0B,$05,$0D,$02,$47,$01,$02
+ $A979 DEFB $0F,$12,$11,$17,$81,$43,$01,$02
+ $A981 DEFB $00,$0F,$04,$1A,$02,$46,$01,$02
 
 ; Room moving objects 2F
-b$A989 DEFB $1B,$06,$08,$10,$11,$15,$0C,$19
- $A991 DEFB $09,$0C,$02,$46,$01,$02,$02,$07
- $A999 DEFB $01,$07,$02,$42,$01,$02,$10,$15
- $A9A1 DEFB $0F,$17,$02,$43,$01,$03,$0C,$03
- $A9A9 DEFB $02,$08,$81,$47,$01,$02,$0A,$06
- $A9B1 DEFB $06,$0C,$02,$43,$01,$02,$0A,$0F
- $A9B9 DEFB $0F,$14,$02,$42,$01,$02,$07,$14
- $A9C1 DEFB $13,$18,$02,$43,$01,$02,$03,$12
- $A9C9 DEFB $0F,$14,$02,$47,$01,$02
+;
+; #CALL:print_sprites(#PC,sprites_2F)
+b$A989 DEFB $1B,$06,$08,$10,$11,$15
+ $A98F DEFB $0C,$19,$09,$0C,$02,$46,$01,$02
+ $A997 DEFB $02,$07,$01,$07,$02,$42,$01,$02
+ $A99F DEFB $10,$15,$0F,$17,$02,$43,$01,$03
+ $A9A7 DEFB $0C,$03,$02,$08,$81,$47,$01,$02
+ $A9AF DEFB $0A,$06,$06,$0C,$02,$43,$01,$02
+ $A9B7 DEFB $0A,$0F,$0F,$14,$02,$42,$01,$02
+ $A9BF DEFB $07,$14,$13,$18,$02,$43,$01,$02
+ $A9C7 DEFB $03,$12,$0F,$14,$02,$47,$01,$02
 
 ; UDG D4
 ;
@@ -9601,15 +10028,15 @@ c$E592 LD L,(IX+$07) ;
  $E59C PUSH HL       ;
  $E59D POP IY        ;
 ; This entry point is used by the routine at #R$CA5B.
-*$E59F LD HL,($DED8) ;
+*$E59F LD HL,($DED8) ; 
  $E5A2 LD ($D6BB),HL ;
- $E5A5 LD HL,$DEDA   ;
+ $E5A5 LD HL,$DEDA   ; 
  $E5A8 LD ($D6BD),HL ;
  $E5AB LD A,($E540)  ;
  $E5AE CALL $D6BF    ;
- $E5B1 LD HL,($DFCA) ;
+ $E5B1 LD HL,($DFCA) ; 
  $E5B4 LD ($D6BB),HL ;
- $E5B7 LD HL,$DFCC   ;
+ $E5B7 LD HL,$DFCC   ; 
  $E5BA LD ($D6BD),HL ;
  $E5BD LD A,($E541)  ;
  $E5C0 CALL $D6BF    ;

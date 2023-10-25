@@ -1,143 +1,215 @@
 [Rooms:Room 00]
-#HTML(#R$6E5F<br/><img src="images/room_00.png"/>)
+#HTML(#R$69E6<br/><img src="images/full_room_00.png"/>)
 
 [Rooms:Room 01]
-#HTML(#R$6E90<br/><img src="images/room_01.png"/>)
+#HTML(#R$69F2<br/><img src="images/full_room_01.png"/>)
 
 [Rooms:Room 02]
-#HTML(#R$6EDC<br/><img src="images/room_02.png"/>)
+#HTML(#R$69FE<br/><img src="images/full_room_02.png"/>)
 
 [Rooms:Room 03]
-#HTML(#R$6F34<br/><img src="images/room_03.png"/>)
+#HTML(#R$6A0A<br/><img src="images/full_room_03.png"/>)
 
 [Rooms:Room 04]
-#HTML(#R$6F77<br/><img src="images/room_04.png"/>)
+#HTML(#R$6A16<br/><img src="images/full_room_04.png"/>)
 
 [Rooms:Room 05]
-#HTML(#R$6FC6<br/><img src="images/room_05.png"/>)
+#HTML(#R$6A22<br/><img src="images/full_room_05.png"/>)
 
 [Rooms:Room 06]
-#HTML(#R$702A<br/><img src="images/room_06.png"/>)
+#HTML(#R$6A82<br/><img src="images/full_room_06.png"/>)
 
 [Rooms:Room 07]
-#HTML(#R$7094<br/><img src="images/room_07.png"/>)
+#HTML(#R$6A3A<br/><img src="images/full_room_07.png"/>)
 
 [Rooms:Room 08]
-#HTML(#R$70B9<br/><img src="images/room_08.png"/>)
+#HTML(#R$6A46<br/><img src="images/full_room_08.png"/>)
 
 [Rooms:Room 09]
-#HTML(#R$710E<br/><img src="images/room_09.png"/>)
+#HTML(#R$6A52<br/><img src="images/full_room_09.png"/>)
 
 [Rooms:Room 0A]
-#HTML(#R$7190<br/><img src="images/room_0a.png"/>)
+#HTML(#R$6A5E<br/><img src="images/full_room_0a.png"/>)
 
 [Rooms:Room 0B]
-#HTML(#R$71F4<br/><img src="images/room_0b.png"/>)
+#HTML(#R$6A6A<br/><img src="images/full_room_0b.png"/>)
 
 [Rooms:Room 0C]
-#HTML(#R$7252<br/><img src="images/room_0c.png"/>)
+#HTML(#R$6A76<br/><img src="images/full_room_0c.png"/>)
 
 [Rooms:Room 0D]
-#HTML(#R$72E9<br/><img src="images/room_0d.png"/>)
+#HTML(#R$6A82<br/><img src="images/full_room_0d.png"/>)
 
 [Rooms:Room 0E]
-#HTML(#R$7362<br/><img src="images/room_00e.png"/>)
+#HTML(#R$6A8E<br/><img src="images/full_room_00e.png"/>)
 
 [Rooms:Room 0F]
-#HTML(#R$7402<br/><img src="images/room_0f.png"/>)
+#HTML(#R$6A9A<br/><img src="images/full_room_0f.png"/>)
 
 [Rooms:Room 10]
-#HTML(#R$7472<br/><img src="images/room_10.png"/>)
+#HTML(#R$6AA6<br/><img src="images/full_room_10.png"/>)
 
 [Rooms:Room 11]
-#HTML(#R$74E5<br/><img src="images/room_11.png"/>)
+#HTML(#R$6AB2<br/><img src="images/full_room_11.png"/>)
 
 [Rooms:Room 12]
-#HTML(#R$7531<br/><img src="images/room_12.png"/>)
+#HTML(#R$6ABE<br/><img src="images/full_room_12.png"/>)
 
 [Rooms:Room 13]
-#HTML(#R$75A7<br/><img src="images/room_13.png"/>)
+#HTML(#R$6ACA<br/><img src="images/full_room_13.png"/>)
 
 [Rooms:Room 14]
-#HTML(#R$7626<br/><img src="images/room_14.png"/>)
+#HTML(#R$6AD6<br/><img src="images/full_room_14.png"/>)
 
 [Rooms:Room 15]
-#HTML(#R$76A2<br/><img src="images/room_15.png"/>)
+#HTML(#R$6AE2<br/><img src="images/full_room_15.png"/>)
 
 [Rooms:Room 16]
-#HTML(#R$7733<br/><img src="images/room_16.png"/>)
+#HTML(#R$6AEE<br/><img src="images/full_room_16.png"/>)
 
 [Rooms:Room 17]
-#HTML(#R$77CD<br/><img src="images/room_17.png"/>)
+#HTML(#R$6AFA<br/><img src="images/full_room_17.png"/>)
 
 [Rooms:Room 18]
-#HTML(#R$782E<br/><img src="images/room_18.png"/>)
+#HTML(#R$6B06<br/><img src="images/full_room_18.png"/>)
 
 [Rooms:Room 19]
-#HTML(#R$78C5<br/><img src="images/room_19.png"/>)
+#HTML(#R$6B12<br/><img src="images/full_room_19.png"/>)
 
 [Rooms:Room 1A]
-#HTML(#R$78F6<br/><img src="images/room_1a.png"/>)
+#HTML(#R$6B1E<br/><img src="images/full_room_1a.png"/>)
 
 [Rooms:Room 1B]
-#HTML(#R$795D<br/><img src="images/room_1b.png"/>)
+#HTML(#R$6B2A<br/><img src="images/full_room_1b.png"/>)
 
 [Rooms:Room 1C]
-#HTML(#R$7A18<br/><img src="images/room_1c.png"/>)
+#HTML(#R$6B36<br/><img src="images/full_room_1c.png"/>)
 
 [Rooms:Room 1D]
-#HTML(#R$7A46<br/><img src="images/room_1d.png"/>)
+#HTML(#R$6B42<br/><img src="images/full_room_1d.png"/>)
 
 [Rooms:Room 1E]
-#HTML(#R$7AC8<br/><img src="images/room_01e.png"/>)
+#HTML(#R$6B4E<br/><img src="images/full_room_01e.png"/>)
 
 [Rooms:Room 1F]
-#HTML(#R$7B3E<br/><img src="images/room_1f.png"/>)
+#HTML(#R$6B5A<br/><img src="images/full_room_1f.png"/>)
 
 [Rooms:Room 20]
-#HTML(#R$7B93<br/><img src="images/room_20.png"/>)
+#HTML(#R$6B66<br/><img src="images/full_room_20.png"/>)
 
 [Rooms:Room 21]
-#HTML(#R$7C45<br/><img src="images/room_21.png"/>)
+#HTML(#R$6B72<br/><img src="images/full_room_21.png"/>)
 
 [Rooms:Room 22]
-#HTML(#R$7C6D<br/><img src="images/room_22.png"/>)
+#HTML(#R$7C6D<br/><img src="images/full_room_22.png"/>)
 
 [Rooms:Room 23]
-#HTML(#R$7CBF<br/><img src="images/room_23.png"/>)
+#HTML(#R$6B8A<br/><img src="images/full_room_23.png"/>)
 
 [Rooms:Room 24]
-#HTML(#R$7D50<br/><img src="images/room_24.png"/>)
+#HTML(#R$6B96<br/><img src="images/full_room_24.png"/>)
 
 [Rooms:Room 25]
-#HTML(#R$7DDB<br/><img src="images/room_25.png"/>)
+#HTML(#R$6BA2<br/><img src="images/full_room_25.png"/>)
 
 [Rooms:Room 26]
-#HTML(#R$7E63<br/><img src="images/room_26.png"/>)
+#HTML(#R$6BAE<br/><img src="images/full_room_26.png"/>)
 
 [Rooms:Room 27]
-#HTML(#R$7EC7<br/><img src="images/room_27.png"/>)
+#HTML(#R$6BBA<br/><img src="images/full_room_27.png"/>)
 
 [Rooms:Room 28]
-#HTML(#R$7F3D<br/><img src="images/room_28.png"/>)
+#HTML(#R$6BC6<br/><img src="images/full_room_28.png"/>)
 
 [Rooms:Room 29]
-#HTML(#R$7F89<br/><img src="images/room_29.png"/>)
+#HTML(#R$6BD2<br/><img src="images/full_room_29.png"/>)
 
 [Rooms:Room 2A]
-#HTML(#R$7F96<br/><img src="images/room_2a.png"/>)
+#HTML(#R$6BDE<br/><img src="images/full_room_2a.png"/>)
 
 [Rooms:Room 2B]
-#HTML(#R$8030<br/><img src="images/room_2b.png"/>)
+#HTML(#R$6BEA<br/><img src="images/full_room_2b.png"/>)
 
 [Rooms:Room 2C]
-#HTML(#R$80AC<br/><img src="images/room_2c.png"/>)
+#HTML(#R$6BF6<br/><img src="images/full_room_2c.png"/>)
 
 [Rooms:Room 2D]
-#HTML(#R$80D7<br/><img src="images/room_2d.png"/>)
+#HTML(#R$6C02<br/><img src="images/full_room_2d.png"/>)
 
 [Rooms:Room 2E]
-#HTML(#R$8135<br/><img src="images/room_2e.png"/>)
+#HTML(#R$6C0E<br/><img src="images/full_room_2e.png"/>)
 
 [Rooms:Room 2F]
-#HTML(#R$8175<br/><img src="images/room_2f.png"/>)
+#HTML(#R$6C1A<br/><img src="images/full_room_2f.png"/>)
+
+[Rooms:Map]
+#HTML(
+    <table>
+        <tr>
+            <td>Roof</td>
+            <td><img src="./images/full_room_2F.png" width=128px height=96px /></td>
+            <td><img src="./images/full_room_2E.png" width=128px height=96px /></td>
+            <td><img src="./images/full_room_2D.png" width=128px height=96px /></td>
+            <td><img src="./images/full_room_2C.png" width=128px height=96px /></td>
+            <td><img src="./images/full_room_2B.png" width=128px height=96px /></td>
+            <td><img src="./images/full_room_2A.png" width=128px height=96px /></td>
+            <td><img src="./images/full_room_29.png" width=128px height=96px /></td>
+            <td><img src="./images/full_room_28.png" width=128px height=96px /></td>
+        </tr>
+        <tr>
+            <td>Second floor</td>
+            <td><img src="./images/full_room_27.png" width=128px height=96px /></td>
+            <td><img src="./images/full_room_26.png" width=128px height=96px /></td>
+            <td><img src="./images/full_room_25.png" width=128px height=96px /></td>
+            <td><img src="./images/full_room_24.png" width=128px height=96px /></td>
+            <td><img src="./images/full_room_23.png" width=128px height=96px /></td>
+            <td><img src="./images/full_room_22.png" width=128px height=96px /></td>
+            <td><img src="./images/full_room_21.png" width=128px height=96px /></td>
+            <td><img src="./images/full_room_20.png" width=128px height=96px /></td>
+        </tr>
+        <tr>
+            <td>First floor</td>
+            <td><img src="./images/full_room_1F.png" width=128px height=96px /></td>
+            <td><img src="./images/full_room_1E.png" width=128px height=96px /></td>
+            <td><img src="./images/full_room_1D.png" width=128px height=96px /></td>
+            <td><img src="./images/full_room_1C.png" width=128px height=96px /></td>
+            <td><img src="./images/full_room_1B.png" width=128px height=96px /></td>
+            <td><img src="./images/full_room_1A.png" width=128px height=96px /></td>
+            <td><img src="./images/full_room_19.png" width=128px height=96px /></td>
+            <td><img src="./images/full_room_18.png" width=128px height=96px /></td>
+        </tr>
+        <tr>
+            <td>Ground floor</td>
+            <td><img src="./images/full_room_17.png" width=128px height=96px /></td>
+            <td><img src="./images/full_room_16.png" width=128px height=96px /></td>
+            <td><img src="./images/full_room_15.png" width=128px height=96px /></td>
+            <td><img src="./images/full_room_14.png" width=128px height=96px /></td>
+            <td><img src="./images/full_room_13.png" width=128px height=96px /></td>
+            <td><img src="./images/full_room_12.png" width=128px height=96px /></td>
+            <td><img src="./images/full_room_11.png" width=128px height=96px /></td>
+            <td><img src="./images/full_room_10.png" width=128px height=96px /></td>
+        </tr>
+         <tr>
+            <td>Basement</td>
+            <td><img src="./images/full_room_0F.png" width=128px height=96px /></td>
+            <td><img src="./images/full_room_0E.png" width=128px height=96px /></td>
+            <td><img src="./images/full_room_0D.png" width=128px height=96px /></td>
+            <td><img src="./images/full_room_0C.png" width=128px height=96px /></td>
+            <td><img src="./images/full_room_0B.png" width=128px height=96px /></td>
+            <td><img src="./images/full_room_0A.png" width=128px height=96px /></td>
+            <td><img src="./images/full_room_09.png" width=128px height=96px /></td>
+            <td><img src="./images/full_room_08.png" width=128px height=96px /></td>
+        </tr>
+        <tr>
+            <td>River</td>
+            <td><img src="./images/full_room_07.png" width=128px height=96px /></td>
+            <td><img src="./images/full_room_06.png" width=128px height=96px /></td>
+            <td><img src="./images/full_room_05.png" width=128px height=96px /></td>
+            <td><img src="./images/full_room_04.png" width=128px height=96px /></td>
+            <td><img src="./images/full_room_03.png" width=128px height=96px /></td>
+            <td><img src="./images/full_room_02.png" width=128px height=96px /></td>
+            <td><img src="./images/full_room_01.png" width=128px height=96px /></td>
+            <td><img src="./images/full_room_00.png" width=128px height=96px /></td>
+        </tr>
+    </table>
+)

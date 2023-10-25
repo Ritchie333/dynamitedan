@@ -10,14 +10,76 @@ class DanHtmlWriter(HtmlWriter):
 
     repeat_attr = 0
 
+    def print_full_room( self, cwd, addr, fName ):
+        bg = self.make_background()
+        udg_ptr = self.get_ptr( addr )
+        self.get_room( udg_ptr, bg )
+        
+        spr_ptr = self.get_ptr( addr + 7 )
+        self.get_sprites( spr_ptr, bg )
+
+        self.print_food( addr, bg )
+        self.print_test_tube( addr, bg )
+        self.print_dynamite( addr, bg )
+
+        if( addr < 0x6A46 ):
+            self.print_river( bg )
+
+        frame = Frame( bg, 1 )
+        return self.handle_image( frame, fName, cwd )
+
+    def print_test_tube( self, addr, bg ):
+        y = self.snapshot[ addr + 2 ]
+        x = self.snapshot[ addr + 3 ]
+        udg_addr = 0xef5d
+        depth = self.snapshot[ udg_addr + 1 ]
+        udgs = self.build_udgs( udg_addr )
+        ny = y - ( depth - 1 )
+        skoolkit.graphics.overlay_udgs( bg, udgs, x * 8, ny * 8, 0, lambda bg, fg : 6 )
+
+    def print_dynamite( self, addr, bg ):
+        y = self.snapshot[ addr + 9 ]
+        x = self.snapshot[ addr + 10 ]
+        udg_addr = 0xef49
+        udgs = self.build_udgs( udg_addr )
+        skoolkit.graphics.overlay_udgs( bg, udgs, x * 8, y * 8, 0, lambda bg, fg : 2 )
+
+    def print_food( self, addr, bg ):
+        base = 0x65da
+        id = self.snapshot[ addr + 4 ] & 7
+        udg_addr = self.get_ref( base, id )
+        depth = self.snapshot[ udg_addr + 1 ]
+        udgs = self.build_udgs( udg_addr )
+        y = self.snapshot[ addr + 5 ]
+        x = self.snapshot[ addr + 6 ]
+        ny = y - ( depth - 1 )
+        skoolkit.graphics.overlay_udgs( bg, udgs, x * 8, ny * 8, 0, lambda bg, fg : fg )
+
+    def print_river( self, bg ):
+        udgs = []
+        base = 0x6985
+        for i in range( 0, 12 ):
+            addr = i * 8 + base
+            data = []
+            for j in range( 0, 8 ):
+               data.append( self.snapshot[ addr + j ] )
+            udgs.append( Udg( 0x4f, data ) )
+        skoolkit.graphics.overlay_udgs( bg, [udgs], 0, 184, 0, lambda bg, fg : fg )
+        skoolkit.graphics.overlay_udgs( bg, [udgs], 96, 184, 0, lambda bg, fg : fg )
+        skoolkit.graphics.overlay_udgs( bg, [udgs], 192, 184, 0, lambda bg, fg : fg )
+
     def print_room( self, cwd, udg_ptr, fName ):
-    
+        bg = self.make_background()
+
+        self.get_room( udg_ptr, bg )
+        frame = Frame( bg, 2 )
+        return self.handle_image( frame, fName, cwd )
+
+    def get_room( self, udg_ptr, bg ):
         repeat_right = int( 0xfe )
         repeat_up = int( 0xfd )
         repeat_right_down = int( 0xfc )
         repeat_right_up = int( 0xfb )
-
-        bg = self.make_background()
 
         while self.snapshot[ udg_ptr ] != 0xff:
             y = self.snapshot[ udg_ptr ]
@@ -45,8 +107,7 @@ class DanHtmlWriter(HtmlWriter):
             else:
                 self.overlay_udgs_by_id( bg, x, y, id )
                 udg_ptr = udg_ptr + 3
-        frame = Frame( bg, 2 )
-        return self.handle_image( frame, fName, cwd )
+        return bg
 
     def overlay_udgs_by_id( self, bg, x, y, id ):
         # Note that single UDGs are drawn in reverse depth!
@@ -113,27 +174,64 @@ class DanHtmlWriter(HtmlWriter):
             data.append( self.snapshot[ scrAddr + width * i ] )
         return Udg( attr, data )
 
+    def print_sprites( self, cwd, addr, fName ):
+        bg = self.make_background()
+        self.get_sprites( addr, bg )
+        frame = Frame( bg, 2 )
+        return self.handle_image( frame, fName, cwd )
+
+    def get_sprites( self, addr, bg ):
+        ids = []
+        for i in range( 0, 4 ):
+            id = self.snapshot[ addr + i ]
+            ids.append( self.get_sprite_addr( id ) )
+        id_totals = []
+        id_totals.append( self.snapshot[ addr + 4 ] >> 4 )
+        id_totals.append( self.snapshot[ addr + 4 ] & 0xf )
+        id_totals.append( self.snapshot[ addr + 5 ] >> 4 )
+        id_totals.append( self.snapshot[ addr + 5 ] & 0xf)
+        cur_addr = addr + 6
+        for i in range( 0, 4 ):
+            for j in range( 0, id_totals[ i ] ):
+                x = self.snapshot[ cur_addr + 1 ]
+                y = self.snapshot[ cur_addr + 0 ]
+                attr = self.snapshot[ cur_addr + 5 ]
+                udgs = self.get_graphic( ids[ i ], 0, attr )
+                skoolkit.graphics.overlay_udgs( bg, udgs, x * 8, y * 8, 0, lambda bg, fg : attr )
+                cur_addr = cur_addr + 8
+        return bg
+
+    def get_sprite_addr( self, id ):
+        base = 0xae60
+        ptr = id * 2 + base
+        addr = self.get_ptr( ptr )
+        return addr
+
     def print_graphic( self, cwd, addr, nFrames, fName ):
+        frames = []
+        for i in range( 0, nFrames ):
+            udgs = self.get_graphic( addr, i, 7 )
+            frames.append( Frame( udgs, 3 ) )
+        return self.handle_image( frames, fName, cwd )
+    
+    def get_graphic( self, addr, nFrame, attr ):
         fByte = self.snapshot[ addr ]
         width = fByte & 3
         depth = ( fByte & 12 ) >> 2
         size = 8 * depth * width
-        frames = []
-        for i in range( 0, nFrames ):
-            scrAddr = addr + 1 + ( i * size )
-            udgs = []
-            for y in range( 0, depth ):
-                udgLine = []
-                for x in range( 0, width ):
-                    lineAddr = y * 8 * width + x + scrAddr
-                    data = []
-                    for i in range( 0, 8 ):
-                        cellAddr = lineAddr + width * i
-                        data.append( self.snapshot[ cellAddr ] )
-                    udgLine.append( Udg( 7, data ) )
-                udgs.append( udgLine )
-            frames.append( Frame( udgs, 3 ) )
-        return self.handle_image( frames, fName, cwd )    
+        scrAddr = addr + 1 + ( nFrame * size )
+        udgs = []
+        for y in range( 0, depth ):
+            udgLine = []
+            for x in range( 0, width ):
+                lineAddr = y * 8 * width + x + scrAddr
+                data = []
+                for i in range( 0, 8 ):
+                    cellAddr = lineAddr + width * i
+                    data.append( self.snapshot[ cellAddr ] )
+                udgLine.append( Udg( attr, data ) )
+            udgs.append( udgLine )
+        return udgs
             
     def print_dan( self, cwd, addr, reverse, fName ):
         frames = []

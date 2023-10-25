@@ -676,53 +676,101 @@ b $9C53 UDG 37
 b $9C67 UDG 38
 b $9C83 UDG 39
 b $9CA7 Room moving objects 00
+B $9CA7,6
 b $9CED Room moving objects 01
+B $9CED,6
 b $9D23 Room moving objects 02
+B $9C23,6
 b $9D61 Room moving objects 03
+B $9C61,6
 b $9DB7 Room moving objects 04
+B $9DB7,6
 b $9DF5 Room moving objects 05
+B $9DF5,6
 b $9E2B Room moving objects 06
+B $9E2B,6
 b $9E79 Room moving objects 07
+B $9E79,6
 b $9EBF Room moving objects 08
+B $9EBF,6
 b $9EF5 Room moving objects 09
+B $9EF5,6
 b $9F3B Room moving objects 0A
+B $9F3B,6
 b $9F81 Room moving objects 0B
+B $9F81,6
 b $9FCF Room moving objects 0C
-b $A0D0 Room moving objects 0D
+B $9FCF,6
+b $A00D Room moving objects 0D
+B $A00D,6
 b $A053 Room moving objects 0E
+B $A053,6
 b $A0A1 Room moving objects 0F
+B $A0A1,6
 b $A0DF Room moving objects 10
+B $A0DF,6
 b $A12D Room moving objects 11
+B $A12D,6
 b $A16B Room moving objects 12
+B $A16B,6
 b $A1A9 Room moving objects 13
+B $A1A9,6
 b $A1F7 Room moving objects 14
+B $A1F7,6
 b $A22D Room moving objects 15
+B $A22D,6
 b $A273 Room moving objects 16
+B $A273,6
 b $A2B9 Room moving objects 17
+B $A2B9,6
 b $A307 Room moving objects 18
+B $A307,6
 b $A345 Room moving objects 19
+B $A345,6
 b $A39B Room moving objects 1A
-b $A3E9 Room moving objects 1B
+B $A39B,6
+b $A3E9 Room moving objects 
+B $A3E9,6
 b $A437 Room moving objects 1C
+B $A437,6
 b $A48D Room moving objects 1D
+B $A48D,6
 b $A4E3 Room moving objects 1E
+B $A4E3,6
 b $A531 Room moving objects 1F
+B $A531,6
 b $A577 Room moving objects 20
+B $A577,6
 b $A5B5 Room moving objects 21
+B $A5B5,6
 b $A5F3 Room moving objects 22
+B $A5F3,6
 b $A641 Room moving objects 23
+B $A641,6
 b $A697 Room moving objects 24
+B $A697,6
 b $A6D5 Room moving objects 25
+B $A6D5,6
 b $A71B Room moving objects 26
+B $A71B,6
 b $A761 Room moving objects 27
+B $A761,6
 b $A79F Room moving objects 28
+B $A79F,6
 b $A7ED Room moving objects 29
+B $A7ED,6
 b $A82B Room moving objects 2A
+B $A82B,6
 b $A871 Room moving objects 2B
+B $A871,6
 b $A8B7 Room moving objects 2C
+B $A8B7,6
 b $A8FD Room moving objects 2D
+B $A8FD,6
 b $A93B Room moving objects 2E
+B $A93B,6
 b $A989 Room moving objects 2F
+B $A989,6
 b $A9CF UDG D4
 b $A9F5 UDG 3A
 b $AA87 UDG 3B
