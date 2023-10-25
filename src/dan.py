@@ -24,7 +24,7 @@ class DanHtmlWriter(HtmlWriter):
             x = self.snapshot[ udg_ptr + 1 ]
             id = self.snapshot[ udg_ptr + 2 ]
             repeat = self.snapshot[ udg_ptr + 3 ]
-            if( repeat >= repeat_left_down and repeat <= repeat_right ):
+            if( repeat >= repeat_left_up and repeat <= repeat_right ):
                 every = self.snapshot[ udg_ptr + 4 ]
                 length = self.snapshot[ udg_ptr + 5 ]
                 udg_ptr = udg_ptr + 6
