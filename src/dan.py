@@ -14,8 +14,8 @@ class DanHtmlWriter(HtmlWriter):
     
         repeat_right = int( 0xfe )
         repeat_up = int( 0xfd )
-        repeat_right_down = int( 0xfc )
-        repeat_left_down = int( 0xfb )
+        repeat_right_up = int( 0xfc )
+        repeat_left_up = int( 0xfb )
 
         bg = self.make_background()
 
@@ -24,7 +24,7 @@ class DanHtmlWriter(HtmlWriter):
             x = self.snapshot[ udg_ptr + 1 ]
             id = self.snapshot[ udg_ptr + 2 ]
             repeat = self.snapshot[ udg_ptr + 3 ]
-            if( repeat >= 0xFB and repeat <= 0xFE ):
+            if( repeat >= repeat_left_down and repeat <= repeat_right ):
                 every = self.snapshot[ udg_ptr + 4 ]
                 length = self.snapshot[ udg_ptr + 5 ]
                 udg_ptr = udg_ptr + 6
@@ -36,12 +36,12 @@ class DanHtmlWriter(HtmlWriter):
                     for j in range( 0, 0 - length, -1 ):
                         ny = y + every * j
                         self.overlay_udgs_by_id( bg, x, ny, id )
-                if repeat_right_down == repeat:
+                if repeat_right_up == repeat:
                     for j in range( 0, length ):
                         nx = x + every * j
                         ny = y + every * j
                         self.overlay_udgs_by_id( bg, nx, ny, id )     
-                if repeat_left_down == repeat:
+                if repeat_left_up == repeat:
                     for j in range( 0, 0 - length, -1 ):
                         nx = x - every * j
                         ny = y + every * j
