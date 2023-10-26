@@ -431,7 +431,11 @@ b$677F DEFB $3C,$72,$72,$72,$72,$3C ; #CALL:print_char($00,char_00)
 ;
 ; .
 ;
-; #UDGARRAY1,7($6899-$6911-8)(raft)
+; #UDGARRAY4,2($6899-$68B1-8)(*raft_0)
+; #UDGARRAY4,2($68B9-$68D1-8)(*raft_1)
+; #UDGARRAY4,2($68D9-$68F1-8)(*raft_2)
+; #UDGARRAY4,2($68F9-$6911-8)(*raft_3)
+; #UDGARRAY*raft_0;raft_1;raft_2;raft_3(raft)
 b$6899 DEFB $00,$03,$00,$03,$03,$00,$01,$01
  $68A1 DEFB $AA,$FF,$03,$03,$70,$88,$3D,$69
  $68A9 DEFB $AA,$FF,$00,$06,$76,$88,$3D,$69
@@ -6762,7 +6766,7 @@ c$CBBD LD ($CFCA),A   ; Get the current room. (#R$CFCA).
  $CBF9 CALL $CE76     ; Draw any additional objects if relevant.
  $CBFC LD A,($CFCA)   ; { Put the current room in #REGb.
  $CBFF LD B,A         ; }
- $CC00 CALL $F3EC     ; Draw any bank cards.
+ $CC00 CALL $F3EC     ; Draw any special objects.
  $CC03 CALL $C8FF     ; Put Dan in the right place.
  $CC06 LD HL,$C87C    ; { Get the lift co-ordinate.
  $CC09 LD A,(HL)      ; }
@@ -7047,23 +7051,24 @@ c$CD8A LD A,$08      ; { Set 8 frames to run in the "touched" object sequence. (
 ; Run a frame in the "lose a life" sequence
 ;
 ; Used by the routine at #R$CFD9.
-c$CD9A LD HL,$C880   ;
- $CD9D LD A,(HL)     ;
- $CD9E AND A         ;
- $CD9F JR Z,$CDA3    ;
- $CDA1 DEC (HL)      ;
- $CDA2 RET           ;
-*$CDA3 LD HL,$DA8A   ;
- $CDA6 RES 1,(HL)    ;
- $CDA8 LD HL,$C86D   ;
- $CDAB LD A,(HL)     ;
- $CDAC CP $08        ;
- $CDAE JR Z,$CDB9    ;
- $CDB0 INC (HL)      ;
- $CDB1 SLA A         ;
- $CDB3 SLA A         ;
- $CDB5 CALL $DB01    ;
- $CDB8 RET           ;
+c$CD9A LD HL,$C880   ; Get the current tick counter. (#R$C880)
+ $CD9D LD A,(HL)     ; { Is it zero?
+ $CD9E AND A         ; }
+ $CD9F JR Z,$CDA3    ; Jump forward if it is.
+ $CDA1 DEC (HL)      ; { Otherwise decrease the tick counter and return.
+ $CDA2 RET           ; }
+; A frame needs to be updated.
+*$CDA3 LD HL,$DA8A   ; Point #REGhl at the current sound state. (#$DA8A)
+ $CDA6 RES 1,(HL)    ; Reset bit 1, to stop all sounds and play this effect instead.
+ $CDA8 LD HL,$C86D   ; { Put the current energy (#R$C86D) in #REGa.
+ $CDAB LD A,(HL)     ; }
+ $CDAC CP $08        ; Is it 8 (full)?
+ $CDAE JR Z,$CDB9    ; Jump forward if it is.
+ $CDB0 INC (HL)      ; Increase the energy.
+ $CDB1 SLA A         ; { Multiply the energy amount by 4.
+ $CDB3 SLA A         ; }
+ $CDB5 CALL $DB01    ; { Play the sound and return.
+ $CDB8 RET           ; }
 ; All frames have been run, now remove one life.
 *$CDB9 LD HL,$C86C   ; Point #REGhl at the number of lives.
  $CDBC LD A,$19      ; { Have we got #N$19 lives?
@@ -7082,62 +7087,63 @@ c$CD9A LD HL,$C880   ;
 ; Display the "game over" sequence
 ;
 ; Used by the routine at #R$CD9A.
-c$CDD3 POP HL        ;
- $CDD4 POP HL        ;
- $CDD5 LD HL,$C87F   ;
- $CDD8 SET 7,(HL)    ;
+c$CDD3 POP HL        ; { Tidy the stack, so returning from here will go
+ $CDD4 POP HL        ; back to the main entry point. }
+ $CDD5 LD HL,$C87F   ; Point #REGhl at some flags. (#$C87F)
+ $CDD8 SET 7,(HL)    ; Set bit 7 (laser firing)
 ; This entry point is used by the routine at #R$DBEE.
-*$CDDA CALL $E820    ;
- $CDDD LD HL,$E800   ;
- $CDE0 LD A,(HL)     ;
- $CDE1 AND $F8       ;
- $CDE3 LD (HL),A     ;
- $CDE4 OUT ($FE),A   ;
- $CDE6 LD HL,$DA8A   ;
- $CDE9 LD (HL),$00   ;
- $CDEB LD HL,$CE68   ;
- $CDEE CALL $ED06    ;
- $CDF1 LD HL,$E6D9   ;
- $CDF4 LD (HL),$7F   ;
- $CDF6 INC HL        ;
- $CDF7 LD (HL),$00   ;
- $CDF9 LD IY,$CE72   ;
-*$CDFD CALL $E6F6    ;
- $CE00 LD HL,$DA8A   ;
- $CE03 RES 1,(HL)    ;
- $CE05 CALL $DA8D    ;
- $CE08 LD A,($E6DA)  ;
- $CE0B CALL $F021    ;
- $CE0E CALL $C92A    ;
- $CE11 LD A,($E6DA)  ;
- $CE14 AND A         ;
- $CE15 JR NZ,$CDFD   ;
- $CE17 LD A,$B8      ;
-*$CE19 PUSH AF       ;
- $CE1A CALL $F3D3    ;
- $CE1D LD DE,$0209   ;
- $CE20 CALL $E84E    ;
- $CE23 CALL $DAFA    ;
- $CE26 CALL $C92A    ;
- $CE29 CALL $DA8D    ;
- $CE2C POP AF        ;
- $CE2D INC A         ;
- $CE2E CP $BB        ;
- $CE30 JR NZ,$CE19   ;
-*$CE32 CALL $C92A    ;
- $CE35 CALL $DA8D    ;
+*$CDDA CALL $E820    ; Clear the screen to cyan ink / black paper.
+ $CDDD LD HL,$E800   ; { Put the last read state of port #N$FE in #REGa.
+ $CDE0 LD A,(HL)     ; }
+ $CDE1 AND $F8       ; { Keep only the top 5 bits, this ensures a black
+ $CDE3 LD (HL),A     ; border is set. }
+ $CDE4 OUT ($FE),A   ; Set the border colour.
+ $CDE6 LD HL,$DA8A   ; Get the current sound state. (#R$DA8A)
+ $CDE9 LD (HL),$00   ; Turn all sound off, the game's over.
+ $CDEB LD HL,$CE68   ; Point #REGhl towards Blitzen on the "game over" screen.
+ $CDEE CALL $ED06    ; Print it.
+ $CDF1 LD HL,$E6D9   ; Point #REGhl at the tick count for lasers.
+ $CDF4 LD (HL),$7F   ; Set it so it will fire immediately.
+ $CDF6 INC HL        ; { Start drawing the laser bolt in black.
+ $CDF7 LD (HL),$00   ; }
+ $CDF9 LD IY,$CE72   ; Point #REGiy at Blitzen's laser data. (#R$CE72)
+*$CDFD CALL $E6F6    ; Update the laser.
+ $CE00 LD HL,$DA8A   ; Get the current sound state. (#R$DA8A)
+ $CE03 RES 1,(HL)    ; Reset bit 1 to play a sound effect.
+ $CE05 CALL $DA8D    ; Play the sound.
+ $CE08 LD A,($E6DA)  ; Put the current laser colour in #REGa.
+ $CE0B CALL $F021    ; Animate Dan dying.
+ $CE0E CALL $C92A    ; Update the main status area.
+ $CE11 LD A,($E6DA)  ; Get the current laser colour.
+ $CE14 AND A         ; Is it zero?
+ $CE15 JR NZ,$CDFD   ; Jump forward if it isn't.
+ $CE17 LD A,$B8      ; Point Blitzen to the next UDG. (#R$92B4)
+*$CE19 PUSH AF       ; Remember #REGaf.
+ $CE1A CALL $F3D3    ; Convert the UDG into an address.
+ $CE1D LD DE,$0209   ; Set the size in #REGde.
+ $CE20 CALL $E84E    ; Draw the UDG.
+ $CE23 CALL $DAFA    ; Pause.
+ $CE26 CALL $C92A    ; Update the main status area.
+ $CE29 CALL $DA8D    ; Play the laser sound.
+ $CE2C POP AF        ; Restore #REGaf.
+ $CE2D INC A         ; Move to the next UDG for Blitzen.
+ $CE2E CP $BB        ; Have we reached the final one? (#R$9487)
+ $CE30 JR NZ,$CE19   ; Loop back to draw the next one if not.
+*$CE32 CALL $C92A    ; Update the main status area.
+ $CE35 CALL $DA8D    ; Play the laser sound.
  $CE38 CALL $DAFA    ; Pause.
- $CE3B LD A,($C86B)  ;
- $CE3E AND A         ;
- $CE3F JR NZ,$CE32   ;
+ $CE3B LD A,($C86B)  ; { Is there anything to be added to the final score?
+ $CE3E AND A         ; }
+ $CE3F JR NZ,$CE32   ; Loop back until there isn't.
+; The final score has been updated and Dan has been killed by Blitzen.
  $CE41 LD HL,$CE53   ; Point #REGhl at the "screens visited" message. (#R$CE53)
  $CE44 CALL $DDE0    ; Print the message.
- $CE47 LD B,$32      ;
-*$CE49 PUSH BC       ;
+ $CE47 LD B,$32      ; Loop round the pause routine this many times.
+*$CE49 PUSH BC       ; {
  $CE4A CALL $DAFA    ; Pause.
- $CE4D POP BC        ;
- $CE4E DJNZ $CE49    ;
- $CE50 JP $C804      ;
+ $CE4D POP BC        ; }
+ $CE4E DJNZ $CE49    ; Loop until all iterations completed.
+ $CE50 JP $C804      ; Jump back to start a new game.
 
 ; Screens visited message
 ;
@@ -7155,6 +7161,10 @@ b$CE53 DEFB $0A,$07,$00,$00,$27,$1B,$0C,$1A
 ; Dr Blitzen on "game over" screen, shooting Dan
 ;
 ; Used by the routine at #R$CDD3
+;
+; .
+;
+; #CALL:print_room(#PC,blitzen_end)
 b$CE68 DEFB $0C,$02,$B7,$12,$1B,$15,$0E,$1B
  $CE70 DEFB $18,$FF
 
@@ -7971,6 +7981,8 @@ c$D378 LD HL,$D3AC   ; Point #REGhl at the UDGs for the display area. (#R$D3AC)
  $D3AB RET           ; Return.
 
 ; UDGs for display area
+;
+; #CALL:print_room(#PC,display)
 b$D3AC DEFB $17,$14,$7C,$17,$09,$7D,$14,$0A
  $D3B4 DEFB $7E,$FE,$01,$0A,$17,$0B,$7F,$FE
  $D3BC DEFB $01,$09,$17,$0A,$80,$15,$00,$81
@@ -9434,26 +9446,27 @@ c$DBEE LD HL,$DA8A   ;
 *$DC41 POP HL        ;
  $DC42 JP $CDDA      ;
 ; Dan is submerged; display the "air bubble" graphic while drowning
-*$DC45 LD A,($DBED)  ;
- $DC48 CPL           ;
- $DC49 SRL A         ;
- $DC4B CP $0C        ;
- $DC4D JR C,$DC51    ;
- $DC4F LD A,$0B      ;
-*$DC51 ADD A,A       ;
+*$DC45 LD A,($DBED)  ; Get Dan's height above the waterline.
+ $DC48 CPL           ; { Invert the bits and shift left to give
+ $DC49 SRL A         ; an index between 00 and #N7F. } 
+ $DC4B CP $0C        ; { If the index is above #N0C, use #N0B instead.
+ $DC4D JR C,$DC51    ; 
+ $DC4F LD A,$0B      ; }
+; Got a graphic index between 0 and #N0B, so display it.
+*$DC51 ADD A,A       ; { Multiply by 8 to get a suitable offset.
  $DC52 ADD A,A       ;
- $DC53 ADD A,A       ;
- $DC54 LD C,A        ;
- $DC55 LD B,$00      ;
- $DC57 LD HL,$F485   ;
- $DC5A ADD HL,BC     ;
- $DC5B LD A,($C873)  ;
- $DC5E INC A         ;
- $DC5F LD D,A        ;
- $DC60 LD E,$12      ;
- $DC62 LD BC,$0101   ;
- $DC65 CALL $E87A    ;
- $DC68 RET           ;
+ $DC53 ADD A,A       ; }
+ $DC54 LD C,A        ; { Put this in #REGbc.
+ $DC55 LD B,$00      ; }
+ $DC57 LD HL,$F485   ; { Add the base address of the "drowning" graphic
+ $DC5A ADD HL,BC     ; (#R$F485) }
+ $DC5B LD A,($C873)  ; Get Dan's X co-ordinate.
+ $DC5E INC A         ; { Set one more than this as the column.
+ $DC5F LD D,A        ; }
+ $DC60 LD E,$12      ; Row is always #N$12.
+ $DC62 LD BC,$0101   ; Size is always 1x1.
+ $DC65 CALL $E87A    ; { Put the graphic on screen and return.
+ $DC68 RET           ; }
 
 ; List of Dan's frames that mark the lift as moving
 b$DC69 DEFB $03,$05,$06,$07
@@ -9619,19 +9632,19 @@ c$DCF6 LD HL,$DA8A   ; Get the current sound state. (#R$DA8A)
 ; Wait for the user to press ENTER, then fire a laser ray
 ;
 ; Used by the routines at #R$DB63, #R$DCF6 and #R$E62F.
-c$DD8D LD HL,$F4E5   ;
- $DD90 CALL $EEF1    ;
- $DD93 LD HL,$F4FE   ;
- $DD96 CALL $ED06    ;
- $DD99 LD BC,$1601   ;
+c$DD8D LD HL,$F4E5   ; { Print "Enter / Fire to continue".
+ $DD90 CALL $EEF1    ; }
+ $DD93 LD HL,$F4FE   ; { Print the laser around this.
+ $DD96 CALL $ED06    ; }
+ $DD99 LD BC,$1601   ; { Fill the area with flashing black on yellow.
  $DD9C LD DE,$0517   ;
  $DD9F LD A,$B0      ;
- $DDA1 CALL $E8BA    ;
- $DDA4 LD HL,$E6D9   ;
- $DDA7 LD (HL),$7F   ;
- $DDA9 INC HL        ;
- $DDAA LD (HL),$00   ;
- $DDAC LD IY,$F59C   ;
+ $DDA1 CALL $E8BA    ; }
+ $DDA4 LD HL,$E6D9   ; Point #REGhl at the tick counter for lasers. (#R$E6D9)
+ $DDA7 LD (HL),$7F   ; Set it so it will fire immediately.
+ $DDA9 INC HL        ; { Set the laser frame to 0.
+ $DDAA LD (HL),$00   ; }
+ $DDAC LD IY,$F59C   ; Point #REGiy at the lasers for the instructions. (#R$F59C)
 *$DDB0 LD A,($DCF5)  ;
  $DDB3 AND A         ;
  $DDB4 JR Z,$DDBF    ;
@@ -9658,71 +9671,78 @@ c$DD8D LD HL,$F4E5   ;
 ; Used by the routines at #R$CA5B, #R$CDD3, #R$DB63 and #R$DCF6.
 ;
 ; HL Pointer to message graphic data
-c$DDE0 CALL $EEF1    ;
- $DDE3 LD DE,$00FF   ;
- $DDE6 LD B,$AA      ;
- $DDE8 CALL $DAB2    ;
- $DDEB LD DE,$00FF   ;
- $DDEE LD B,$FF      ;
- $DDF0 CALL $DAB2    ;
- $DDF3 RET           ;
+c$DDE0 CALL $EEF1    ; Display the message.
+ $DDE3 LD DE,$00FF   ; Set the frequency.
+ $DDE6 LD B,$AA      ; Set the length.
+ $DDE8 CALL $DAB2    ; Beep
+ $DDEB LD DE,$00FF   ; Set the frequency.
+ $DDEE LD B,$FF      ; Set the length.
+ $DDF0 CALL $DAB2    ; Beep.
+ $DDF3 RET           ; Return.
 
 ; Picked up the plans
 ;
 ; Used by the routine at #R$D567.
-c$DDF4 LD DE,$0506   ;
- $DDF7 LD BC,$0303   ;
- $DDFA CALL $E897    ;
- $DDFD LD A,$C8      ;
+c$DDF4 LD DE,$0506   ; Put the position in #REGde.
+ $DDF7 LD BC,$0303   ; Put the size in #REGbc.
+ $DDFA CALL $E897    ; Remove the object.
+ $DDFD LD A,$C8      ; { Add 200 to the score.
  $DDFF LD HL,$C86B   ;
  $DE02 ADD A,(HL)    ;
- $DE03 LD (HL),A     ;
- $DE04 LD HL,$C87E   ;
- $DE07 SET 1,(HL)    ;
- $DE09 EXX           ;
- $DE0A RET           ;
+ $DE03 LD (HL),A     ; }
+ $DE04 LD HL,$C87E   ; Point #REGhl at the flags. (#R$C87E)
+ $DE07 SET 1,(HL)    ; Set that Dan has the plans.
+ $DE09 EXX           ; { Swap main registers and return.
+ $DE0A RET           ; }
 
 ; Picked up an oxygen tank
 ;
 ; Used by the routines at #R$D895 and #R$D951.
-c$DE0B RES 0,(IX+$0B) ;
- $DE0F LD HL,$C87E    ;
- $DE12 SET 6,(HL)     ;
- $DE14 LD A,$4B       ;
- $DE16 LD DE,$FE2B    ;
- $DE19 JR $DE3A       ;
+;
+; IX Pointer to room data
+c$DE0B RES 0,(IX+$0B) ; Mark the oxygen tank as collected.
+ $DE0F LD HL,$C87E    ; Point #REGhl at the flags. (#R$C87E)
+ $DE12 SET 6,(HL)     ; Set that Dan has the oxygen tank.
+ $DE14 LD A,$4B       ; Add 75 to the score.
+ $DE16 LD DE,$FE2B    ; Point #REGde at the relevant tune. (#R$FE2B)
+ $DE19 JR $DE3A       ; Move forward to play a tune.
 
 ; Picked up a credit card
 ;
 ; Used by the routines at #R$D895 and #R$D951.
-c$DE1B RES 1,(IX+$0B) ;
- $DE1F LD A,R         ;
- $DE21 AND $7F        ;
- $DE23 LD DE,$FE45    ;
- $DE26 JR $DE3A       ;
+;
+; IX Pointer to room data
+c$DE1B RES 1,(IX+$0B) ; Mark the credit card as collected.
+ $DE1F LD A,R         ; { Get a random value between 0 and #N$7F
+ $DE21 AND $7F        ; to add to the score.}
+ $DE23 LD DE,$FE45    ; Point #REGde at the relevant tune. (#R$FE45)
+ $DE26 JR $DE3A       ; Move forward to play a tune.
 
 ; Picked up an aerosol
 ;
 ; Used by the routines at #R$D895 and #R$D951.
-c$DE28 RES 2,(IX+$0B) ;
- $DE2C XOR A          ;
- $DE2D LD ($DE51),A   ;
- $DE30 LD HL,$C87E    ;
- $DE33 SET 5,(HL)     ;
- $DE35 LD A,$19       ;
- $DE37 LD DE,$FE65    ;
-; This entry point is used by the routines at #R$DE0B and #R$DE1B.
-*$DE3A LD HL,$C86B    ;
- $DE3D ADD A,(HL)     ;
- $DE3E LD (HL),A      ;
- $DE3F EX DE,HL       ;
- $DE40 CALL $DB0B     ;
- $DE43 LD A,($CFCA)   ;
- $DE46 CALL $F3E0     ;
- $DE49 LD BC,$0202    ;
- $DE4C CALL $E897     ;
- $DE4F OR A           ;
- $DE50 RET            ;
+;
+; IX Pointer to room data
+c$DE28 RES 2,(IX+$0B) ; Mark the aerosol as collected.
+ $DE2C XOR A          ; { Set the time left on the aerosol to the maximum.
+ $DE2D LD ($DE51),A   ; }
+ $DE30 LD HL,$C87E    ; Point #REGhl at the flags. (#R$C87E)
+ $DE33 SET 5,(HL)     ; Set that Dan has the aerosol.
+ $DE35 LD A,$19       ; Add 25 to the score.
+ $DE37 LD DE,$FE65    ; Point #REGde at the relevant tune. (#R$FE65)
+; This entry point is used by the routines at #R$DE0B and #R$DE1B,
+; where #REGa holds the points awarded and #REGde points to a tune to play.
+*$DE3A LD HL,$C86B    ; Point #REGhl at the amount to add to the score.
+ $DE3D ADD A,(HL)     ; { Add this amount.
+ $DE3E LD (HL),A      ; }
+ $DE3F EX DE,HL       ; Swap #REGde and #REGhl so that #REGhl points to the tune.
+ $DE40 CALL $DB0B     ; Start playing the tune.
+ $DE43 LD A,($CFCA)   ; Put the current room (#R$FCFA) in #REGa.
+ $DE46 CALL $F3E0     ; Return the location of the special object in #REGde.
+ $DE49 LD BC,$0202    ; Size is always 2 rows x 2 columns.
+ $DE4C CALL $E897     ; Remove the object.
+ $DE4F OR A           ; { Reset the zero flag and return.
+ $DE50 RET            ; }
 
 ; Time left for the aerosol to run
 b$DE51 DEFB $00
@@ -9760,6 +9780,8 @@ c$DE52 LD HL,$C87E   ; Get the flags. (#R$C87E)
  $DE7E RET           ; Reset
 
 ; Dynamite graphic in status area
+;
+; #UDG$DE7F,7
 b$DE7F DEFB $00,$02,$09,$18,$30,$60,$C0,$80
 
 ; Picked up a special item (test tube or dynamite)
@@ -10264,8 +10286,12 @@ c$E663 LD IY,$EDBC   ;
 
 ; Tick counters for lasers.
 ;
+; Used by the routine in #R$E6F6.
+;
+; .
+;
 ; This counter increments by 1 for every run round the main loop. When it
-; reaches $80, the laser fires.
+; reaches #N$80, the laser fires.
 g$E6D9 DEFB $00
 
 ; Current colour to draw the laser bolt with
@@ -11529,6 +11555,8 @@ c$EF7C LD HL,$EF48    ;
  $EFBB RET            ;
 
 ; Intro screen UDGs
+;
+; #CALL:print_room(#PC,introudgs)
 b$EFBC DEFB $00,$00,$66,$01,$01,$2F,$FE,$01
  $EFC4 DEFB $1E,$01,$0A,$C3,$00,$1F,$67,$03
  $EFCC DEFB $02,$4F,$03,$1A,$4F,$03,$04,$4E
@@ -11998,33 +12026,33 @@ c$F3E0 ADD A,A       ; Double the room number to get a word offset.
  $F3EA LD D,(HL)     ;
  $F3EB RET           ;
 
-; Draw any bank cards in the room
+; Draw any special objects in the room
 ;
 ; Used by the routine at #R$CBBD.
 ;
 ; B Room number to check
 ; IX Pointer to room data
 c$F3EC LD A,(IX+$0B) ; Get bit flags for this room.
-; Check type 1.
+; Check for an oxygen tank.
  $F3EF BIT 0,A       ; Is bit 0 set?
  $F3F1 JR Z,$F3F7    ; No, so skip this.
- $F3F3 LD C,$CD      ; { Draw bank card #N$CD.
+ $F3F3 LD C,$CD      ; { Draw an oxygen tank. (#R$8A01)
  $F3F5 JR $F404      ; }
-; Check type 2.
+; Check for a bank card.
 *$F3F7 BIT 1,A       ; Is bit 1 set?
  $F3F9 JR Z,$F3FF    ; No, so skip this.
- $F3FB LD C,$CB      ; { Draw bank card #N$CB.
+ $F3FB LD C,$CB      ; { Draw a bank card. (#R$89C7)
  $F3FD JR $F404      ; }
-; Check type 3.
+; Check for an aerosol.
 *$F3FF BIT 2,A       ; Is bit 2 set?
- $F401 RET Z         ; Return if not, there are no bank cards here.
- $F402 LD C,$CC      ; Otherwise draw bank card #N$CC.
-; Now draw the card.
-*$F404 LD A,B        ; { Get the bank card location for this room.
+ $F401 RET Z         ; Return if not, there are no special objects here.
+ $F402 LD C,$CC      ; Otherwise draw aerosol. (#R$89ED).
+; Now draw the object.
+*$F404 LD A,B        ; { Get the special object location for this room.
  $F405 CALL $F3E0    ; }
  $F408 LD A,C        ; { Convert the UDG type to a graphic address.
  $F409 CALL $F3D3    ; }
- $F40C CALL $E84E    ; { Draw the card and return.
+ $F40C CALL $E84E    ; { Draw the object and return.
  $F40F RET           ; }
 
 ; Bank card locations
@@ -12068,6 +12096,11 @@ c$F470 LD B,(HL)     ; Get the number of times to repeat.
  $F484 RET           ; }
 
 ; Dan drowning graphic
+;
+; #UDG$F485,7(*drowning_0) #UDG$F48D,7(*drowning_1) #UDG$F495,7(*drowning_2) #UDG$F49D,7(*drowning_3)
+; #UDG$F4A5,7(*drowning_4) #UDG$F4AD,7(*drowning_5) #UDG$F4B5,7(*drowning_6) #UDG$F4BD,7(*drowning_7)
+; #UDG$F4C5,7(*drowning_8) #UDG$F4CD,7(*drowning_9) #UDG$F4D5,7(*drowning_a) #UDG$F4DD,7(*drowning_b)
+; #UDGARRAY*drowning_0;drowning_1;drowning_2;drowning_3;drowning_4;drowning_5;drowning_6;drowning_7;drowning_8;drowning_9;drowning_a;drowning_b(drowning)
 b$F485 DEFB $00,$00,$00,$00,$00,$24,$10,$00
  $F48D DEFB $00,$00,$00,$00,$24,$24,$08,$00
  $F495 DEFB $00,$00,$04,$40,$14,$08,$20,$02
@@ -12080,10 +12113,19 @@ b$F485 DEFB $00,$00,$00,$00,$00,$24,$10,$00
  $F4CD DEFB $00,$00,$00,$00,$00,$04,$10,$22
  $F4D5 DEFB $00,$00,$00,$00,$00,$20,$04,$08
  $F4DD DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $F4E5 DEFB $17,$05,$0E,$17,$1C,$0E,$1A,$2D
+
+; "Enter / Fire to continue"
+;
+; #CALL:print_string(#PC,f4e5)
+b$F4E5 DEFB $17,$05,$0E,$17,$1C,$0E,$1A,$2D
  $F4ED DEFB $0F,$12,$1A,$0E,$27,$1C,$00,$27
  $F4F5 DEFB $0C,$00,$17,$1C,$12,$17,$1D,$0E
- $F4FD DEFB $FF,$17,$00,$A4,$17,$1E,$A5,$FF
+ $F4FD DEFB $FF
+ 
+; Laser graphics for instructions
+;
+; #CALL:print_room(#PC,instructions_laser)
+b$F4FE DEFB $17,$00,$A4,$17,$1E,$A5,$FF
 
 ; Screen positions for instructions page 3 UDGs
 b$F505 DEFB $00,$00,$00,$00,$00,$04,$02,$09
@@ -12118,6 +12160,8 @@ b$F587 DEFB $02,$0F,$0B,$01,$00,$0B,$03,$03
  $F58F DEFB $10,$13,$17
 
 ; Instructions page 4 UDGs to add
+;
+; #CALL:print_room(#PC,instructionsudg4)
 b$F592 DEFB $07,$07,$CC,$04,$07,$CB,$0D,$07
  $F59A DEFB $CD,$FF
 

@@ -119,8 +119,9 @@ walls ie: cannot be walked through. }
 { 05 - 06 | The x and y co-ordinates to draw the food item }
 { 07 - 08 | Pointer to list of moving objects }
 { 09 - 0A | Location of dynamite in the room, if any }
-{ 0B | If bits 0, 1 or 2 are set, this prints a bank card of UDG
-CB CC or CD in the room. If bit 7 is set, this room has been visited. }
+{ 0B | If bits 0, 1 or 2 are set, this prints a bank card, an aerosol,
+or an oxygen tank in the room respectively. (#R$F3EC)
+If bit 7 is set, this room has been visited. }
 TABLE#
 
 [DataStructures:UDG format]
