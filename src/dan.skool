@@ -376,7 +376,8 @@ b$6747 DEFB $02,$03,$FF,$7F,$FF,$7F,$FF,$7F
  $6777 DEFB $00,$EF,$78,$78,$78,$78,$45,$50
 
 ; Character set (6-high)
-; Character set (6-high)
+;
+; Used by the routine at #R$EEF1.
 b$677F DEFB $3C,$72,$72,$72,$72,$3C ; #CALL:print_char($00,char_00)
  $6785 DEFB $1C,$3C,$1C,$1C,$1C,$3E ; #CALL:print_char($01,char_01)
  $678B DEFB $3C,$4E,$0E,$3C,$60,$7E ; #CALL:print_char($02,char_02)
@@ -9564,7 +9565,7 @@ c$DCE8 ADD A,A       ; Double the item ID to get a word offset.
  $DCF4 RET           ; Return.
 
 ; Set bit 0 to denote items are only being drawn for instructions
-b$DCF5 DEFB $00
+g$DCF5 DEFB $00
 
 ; Display instructions
 ;
@@ -9745,7 +9746,7 @@ c$DE28 RES 2,(IX+$0B) ; Mark the aerosol as collected.
  $DE50 RET            ; }
 
 ; Time left for the aerosol to run
-b$DE51 DEFB $00
+g$DE51 DEFB $00
 
 ; Update "aerosol immunity" if it is still active
 ;
@@ -9781,7 +9782,7 @@ c$DE52 LD HL,$C87E   ; Get the flags. (#R$C87E)
 
 ; Dynamite graphic in status area
 ;
-; #UDG$DE7F,7
+; #UDG$DE7F,6
 b$DE7F DEFB $00,$02,$09,$18,$30,$60,$C0,$80
 
 ; Picked up a special item (test tube or dynamite)
@@ -11117,6 +11118,8 @@ c$ECA4 LD L,(IY+$01) ;
  $ECBC RET           ;
 
 ; Laser graphics
+;
+; #UDGARRAY4,7,2($ECBD,3;$ECC5,4;$ECCD,5;$ECD5,6)(laser)
 b$ECBD DEFB $00,$02,$05,$88,$88,$50,$20,$00
  $ECC5 DEFB $00,$00,$00,$11,$AA,$44,$00,$00
  $ECCD DEFB $20,$50,$50,$88,$88,$05,$05,$02
@@ -11950,12 +11953,12 @@ c$F345 LD HL,$69EA   ; Point #REGhl to the flags in the first room.
 ; Bitmask for what objects to select in initialisation
 ;
 ; Used by the routines in #R$F345 and #R$F3A4
-b$F3A0 DEFB $00,$00
+g$F3A0 DEFB $00,$00
 
 ; Pointer to object data in current room being looked at
 ;
 ; Used by the routine in #R$F345
-w$F3A2 DEFW $69EA
+g$F3A2 DEFW $69EA
 
 ; Put special objects randomly in a room
 ;
