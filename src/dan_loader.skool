@@ -491,7 +491,7 @@ c$FF70 LD A,$00      ; { Set the border to black
  $FF87 LDIR          ; }
 *$FF89 LD HL,$FFA3   ; Start of block to decrypt
  $FF8C LD BC,$0045   ; Length of block
-*$FF8F LD A,D        ; D is 12, set up by the code at #$FE6F
+*$FF8F LD A,D        ; D is 12, set up by the code at #R$FE6F.
  $FF90 XOR (HL)      ; Flip bits
  $FF91 LD (HL),A     ; Store decrypted value
  $FF92 INC HL        ; Point to next byte

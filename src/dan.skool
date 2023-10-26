@@ -450,6 +450,8 @@ b$6899 DEFB $00,$03,$00,$03,$03,$00,$01,$01
  $6911 DEFB $00,$00,$00,$00,$00,$00,$00,$00
 
 ; Pitch frequences for musical notes
+;
+; Used by the routine at #R$DA9E
 w$6919 DEFW $0AFF
  $691B DEFW $0BF0
  $691D DEFW $0CE3
@@ -6250,6 +6252,10 @@ g$C87D DEFB $2D
 ; If bit 7 is reset, Dan has got the plans and is in the blimp
 g$C87E DEFB $00
 
+; Various flags
+;
+; Set bit 0 if a set of rainbow lifts is operating
+; .
 ; Set bit 7 if a laser is firing
 g$C87F DEFB $00
 
@@ -6859,7 +6865,7 @@ c$CC5F LD A,($CFCA)  ;
 ; Move the lift
 ;
 ; Used by the routine at #R$C800.
-c$CC89 CALL $DC71    ;
+c$CC89 CALL $DC71    ; Is Dan standing by the lift?
  $CC8C LD BC,($C87A) ;
  $CC90 LD A,($CFCA)  ;
  $CC93 LD H,A        ;
@@ -7404,14 +7410,15 @@ g$CFD3 DEFB $00,$00,$00,$00,$00,$00
 ; Update Dan's status and check for movement
 ;
 ; Used by the routine at #R$C800.
-c$CFD9 LD A,($C87E)  ;
- $CFDC BIT 7,A       ;
- $CFDE RET NZ        ;
- $CFDF LD A,($C874)  ;
- $CFE2 BIT 7,A       ;
- $CFE4 JP NZ,$DBEE   ;
- $CFE7 BIT 5,A       ;
- $CFE9 CALL NZ,$CD9A ;
+c$CFD9 LD A,($C87E)  ; Get some flags. (#R$C87E)
+ $CFDC BIT 7,A       ; Is bit 7 (Dan has the plans) reset?
+ $CFDE RET NZ        ; Return if so - once Dan's in the blimp, no need to move.
+ $CFDF LD A,($C874)  ; Get some more flags. (#R$C874)
+ $CFE2 BIT 7,A       ; Is Dan above water?
+ $CFE4 JP NZ,$DBEE   ; If not, he's in the river and drowning - jump forward.
+ $CFE7 BIT 5,A       ; Is Dan in a safe spot?
+ $CFE9 CALL NZ,$CD9A ; If not, he must be in trouble, so update a frame of the
+                     ; "lose a life" sequence.
  $CFEC LD A,($C87F)  ;
  $CFEF BIT 0,A       ;
  $CFF1 JP NZ,$D08A   ;
@@ -7662,11 +7669,11 @@ c$D1B2 LD A,D        ;
  $D1CB LD B,A        ;
  $D1CC RET           ;
 
-; Command flags
+; Collision flags
 ;
-; Set bit 7 to gain an extra life
+; Bits 0 - 2 hold the attribute (0-7) that Dan has collided with
 ; .
-; Set bit 6 to lose a life
+; Bit 7 is set to mark that Dan has collided with this object
 b$D1CD DEFB $00
 
 ; Draw Dan and do any collision detection
@@ -7690,7 +7697,7 @@ c$D1CE LD A,($C880)   ; Get the frame count. (#R$C880)
  $D1E7 LD D,(HL)      ; }
 *$D1E8 LD HL,$62D6    ; Point #REGhl at the working graphic buffer. (#R$62D6)
 ; There is now a working sprite for Dan, so find the right place on screen to put it.
- $D1EB EXX            ; Swap #REGbc, #REGde and #REGhl.
+ $D1EB EXX            ; Swap #REGbc, #REGde and #REGhl so the graphic addresses can be preserved.
  $D1EC LD DE,($C872)  ; Put Dan's co-ordinates in #REGde.
  $D1F0 LD A,($DBED)   ; Get the height to draw.
  $D1F3 LD B,A         ; Iterate for this number of rows.
@@ -7702,184 +7709,216 @@ c$D1CE LD A,($C880)   ; Get the frame count. (#R$C880)
  $D1FD EX DE,HL       ; { Put the screen address in #REGhl
  $D1FE POP DE         ; and the attribute address in #REGde.}
 ; Found a place on screen to draw Dan, so do it.
- $D1FF LD C,$02       ;
-*$D201 PUSH DE        ;
- $D202 PUSH HL        ;
- $D203 LD B,$03       ;
-*$D205 LD A,(HL)      ;
- $D206 CP $45         ;
- $D208 JR NZ,$D210    ;
- $D20A EXX            ;
+ $D1FF LD C,$02       ; 2 UDG cells to draw.
+*$D201 PUSH DE        ; { Store #REGde and #REGhl.
+ $D202 PUSH HL        ; }
+ $D203 LD B,$03       ; 3 columns to draw.
+*$D205 LD A,(HL)      ; Get the current attribute on screen.
+ $D206 CP $45         ; Is it empty (bright cyan on black)?
+ $D208 JR NZ,$D210    ; Jump forward if it isn't.
+; Dan's in empty space.
+ $D20A EXX            ; { Set the current working graphic data to 0 and jump forward.
  $D20B XOR A          ;
  $D20C LD (HL),A      ;
- $D20D EXX            ;
- $D20E JR $D238       ;
-*$D210 AND A          ;
- $D211 JR NZ,$D216    ;
- $D213 EXX            ;
- $D214 JR $D21F       ;
-*$D216 AND $78        ;
- $D218 CP $40         ;
- $D21A JR NZ,$D238    ;
- $D21C EXX            ;
- $D21D XOR A          ;
- $D21E LD (HL),A      ;
-*$D21F LD A,(DE)      ;
- $D220 INC DE         ;
- $D221 INC HL         ;
- $D222 EXX            ;
- $D223 EX DE,HL       ;
- $D224 PUSH AF        ;
- $D225 AND (HL)       ;
- $D226 JR Z,$D22E     ;
- $D228 LD A,(DE)      ;
- $D229 SET 7,A        ;
- $D22B LD ($D1CD),A   ;
-*$D22E POP AF         ;
- $D22F OR (HL)        ;
- $D230 EX DE,HL       ;
- $D231 LD (DE),A      ;
- $D232 INC DE         ;
- $D233 INC L          ;
- $D234 DJNZ $D205     ;
+ $D20D EXX            ; 
+ $D20E JR $D238       ; }
+; Dan's not in empty space, need to figure out what's here.
+; If Dan's collided with some dynamite or a test tube, the cycling attribute will equal 0
+; at this point, and be picked up.
+*$D210 AND A          ; Is the attribute zero? (ie: dynamite or test tube)
+ $D211 JR NZ,$D216    ; Jump forward if it isn't.
+ $D213 EXX            ; { Otherwise exchange the main registers and jump forward.
+ $D214 JR $D21F       ; }
+; Dan's collided with something.
+*$D216 AND $78        ; Get bits 3-6.
+ $D218 CP $40         ; Is only bit 6 set?
+ $D21A JR NZ,$D238    ; Jump forward if it isn't.
+ $D21C EXX            ; Swap the main registers to make the graphic and buffer active in #REGhl and #REGde.
+ $D21D XOR A          ; { Set the current working graphic data to 0.
+ $D21E LD (HL),A      ; }
+*$D21F LD A,(DE)      ; Put the next graphic data in #REGa.
+ $D220 INC DE         ; { Move to the next position in the buffer.
+ $D221 INC HL         ; }
+ $D222 EXX            ; Swap the main registers to make the screen and attributes active in #REGhl and #REGde.
+ $D223 EX DE,HL       ; Swap #REGde and #REGhl.
+ $D224 PUSH AF        ; Remember #REGaf.
+ $D225 AND (HL)       ; Does the graphic data match what's on screen?
+ $D226 JR Z,$D22E     ; Jump forward if so.
+; Dan has collided with something, find out what.
+ $D228 LD A,(DE)      ; Get the attribute.
+ $D229 SET 7,A        ; Set bit 7 (Dan collided with something).
+ $D22B LD ($D1CD),A   ; Store this in the collision flags (#$D1CD).
+*$D22E POP AF         ; Restore #REGaf.
+ $D22F OR (HL)        ; Overlay this graphic data with what's on screen.
+ $D230 EX DE,HL       ; Swap #REGde and #REGhl.
+ $D231 LD (DE),A      ; Set the screen data to be a combination of the graphics.
+ $D232 INC DE         ; Move to the next position on screen.
+ $D233 INC L          ; Move to the next attribute.
+ $D234 DJNZ $D205     ; Loop while there are more columns to check.
  $D236 JR $D243       ;
-*$D238 EXX            ;
- $D239 LD A,(DE)      ;
- $D23A OR (HL)        ;
- $D23B INC DE         ;
- $D23C INC HL         ;
- $D23D EXX            ;
- $D23E LD (DE),A      ;
- $D23F INC DE         ;
- $D240 INC L          ;
- $D241 DJNZ $D205     ;
-*$D243 POP HL         ;
- $D244 POP DE         ;
- $D245 INC D          ;
- $D246 DEC C          ;
- $D247 JR NZ,$D201    ;
- $D249 POP DE         ;
- $D24A INC E          ;
- $D24B INC E          ;
- $D24C POP BC         ;
- $D24D DJNZ $D1F4     ;
- $D24F LD HL,$D1CD    ;
- $D252 BIT 7,(HL)     ;
- $D254 RET Z          ;
- $D255 RES 7,(HL)     ;
- $D257 LD A,(HL)      ;
- $D258 AND A          ;
- $D259 JP Z,$DE87     ;
-; Dan has hit a moving object
- $D25C LD A,($CFCA)   ;
- $D25F CP $1B         ;
- $D261 JR NZ,$D270    ;
- $D263 LD A,($D1CD)   ;
- $D266 CP $43         ;
- $D268 JP Z,$CD8A     ;
- $D26B CP $47         ;
- $D26D JP Z,$CD8A     ;
-*$D270 LD A,($C87E)   ;
- $D273 BIT 5,A        ;
- $D275 JR Z,$D286     ;
- $D277 LD HL,$FE71    ;
- $D27A CALL $DB0B     ;
- $D27D LD A,$14       ;
+; Handle Dan in empty space.
+*$D238 EXX            ; Swap registers to the graphic buffers are active in #REGhl and #REGde.
+ $D239 LD A,(DE)      ; Put the next graphic byte in #REGa.
+ $D23A OR (HL)        ; Merge with what's in the graphic buffer.
+ $D23B INC DE         ; { Move to the next position in the buffer.
+ $D23C INC HL         ; }
+ $D23D EXX            ; Swap registers so the screen and attributes are active in #REGhl and #REGde.
+ $D23E LD (DE),A      ; Put this graphic byte on screen.
+ $D23F INC DE         ; Move forward on screen.
+ $D240 INC L          ; Move forward in the attributes.
+ $D241 DJNZ $D205     ; Loop while there are more columns to check.
+; All done with checking this column, see if there is more to do.
+*$D243 POP HL         ; { Restore #REGhl and #REGde.
+ $D244 POP DE         ; }
+ $D245 INC D          ; Move down a row.
+ $D246 DEC C          ; { Loop until all rows have been checked.
+ $D247 JR NZ,$D201    ; }
+ $D249 POP DE         ; Restore #REGde.
+ $D24A INC E          ; { Move forward two columns.
+ $D24B INC E          ; }
+ $D24C POP BC         ; Restore #REGbc.
+ $D24D DJNZ $D1F4     ; Loop back while there are more UDGs to draw.
+; Having drawn Dan, see what, if anything, he collided with.
+ $D24F LD HL,$D1CD    ; Get the collision attribute and flags (#R$D1CD).
+ $D252 BIT 7,(HL)     ; Is bit 7 set (collided with something)?
+ $D254 RET Z          ; Return if it isn't.
+ $D255 RES 7,(HL)     ; { Get the collision attribute.
+ $D257 LD A,(HL)      ; }
+ $D258 AND A          ; It it zero?
+ $D259 JP Z,$DE87     ; If so, Dan's hit a good object (test tube or dynamite), so handle it.
+; Dan has hit a moving object.
+ $D25C LD A,($CFCA)   ; Get the current room. (#R$FCFA)
+ $D25F CP $1B         ; Is it the safe room? (#R$6B1E)
+ $D261 JR NZ,$D270    ; Jump forward if it isn't.
+; Dan's in the safe room, if he's hit Dr. Blitzen or Donna then he's in real trouble
+; as they are immune from aerosol and won't disappear.
+ $D263 LD A,($D1CD)   ; Get the collision attribute. (#R$D1CD)
+ $D266 CP $43         ; Has Dan hit bright magenta?
+ $D268 JP Z,$CD8A     ; If so, Dan has hit Blitzen - lose a life and return immmediately.
+ $D26B CP $47         ; Has Dan hit a bright white?
+ $D26D JP Z,$CD8A     ; If so, Dan has hit Donna - lose a life and return immediately.
+; Dan's hit an object that's not Blitzen or Donna. The aerosol might get him out of trouble.
+*$D270 LD A,($C87E)   ; Get some flags. (#R$C87E)
+ $D273 BIT 5,A        ; Is bit 5 (Dan has the aerosol) set?
+ $D275 JR Z,$D286     ; Jump forward if not.
+; Dan's got the aerosol, so hitting the object isn't fatal.
+ $D277 LD HL,$FE71    ; { Play the "got a moving object with the aerosol" tune.
+ $D27A CALL $DB0B     ; (#R$FE71)}
+ $D27D LD A,$14       ; { Add #N14 to the score.
  $D27F LD HL,$C86B    ;
  $D282 ADD A,(HL)     ;
- $D283 LD (HL),A      ;
- $D284 JR $D289       ;
-*$D286 CALL $CD8A     ;
-*$D289 LD L,(IX+$07)  ;
- $D28C LD H,(IX+$08)  ;
- $D28F LD DE,$0006    ;
- $D292 ADD HL,DE      ;
- $D293 PUSH HL        ;
- $D294 POP IY         ;
- $D296 LD BC,($DED8)  ;
- $D29A LD A,($E540)   ;
- $D29D CALL $D2BF     ;
- $D2A0 LD BC,($DFCA)  ;
- $D2A4 LD A,($E541)   ;
- $D2A7 CALL $D2BF     ;
- $D2AA LD BC,($E0BC)  ;
- $D2AE LD A,($E542)   ;
- $D2B1 CALL $D2BF     ;
- $D2B4 LD BC,($E2FE)  ;
- $D2B8 LD A,($E543)   ;
- $D2BB CALL $D2BF     ;
- $D2BE RET            ;
-*$D2BF AND A          ;
- $D2C0 RET Z          ;
- $D2C1 LD L,A         ;
-*$D2C2 LD A,($D1CD)   ;
- $D2C5 CP (IY+$05)    ;
- $D2C8 JR NZ,$D2D5    ;
- $D2CA LD E,(IY+$00)  ;
- $D2CD LD D,(IY+$01)  ;
- $D2D0 CALL $DB38     ;
- $D2D3 JR C,$D2DE     ;
-*$D2D5 LD DE,$0008    ;
- $D2D8 ADD IY,DE      ;
- $D2DA DEC L          ;
- $D2DB JR NZ,$D2C2    ;
- $D2DD RET            ;
-*$D2DE LD D,(IY+$01)  ;
- $D2E1 LD A,(IY+$00)  ;
+ $D283 LD (HL),A      ; }
+ $D284 JR $D289       ; Skip over starting the "lose a life" sequence as Dan's got the aerosol.
+; Dan hit a moving object without the aerosol. Bad news.
+*$D286 CALL $CD8A     ; Start the "lose a life" sequence.
+; Now Dan has hit the moving object, and it's not Blitzen or Donna, get rid of it.
+*$D289 LD L,(IX+$07)  ; { Point #REGhl at the moving objects table for this room.
+ $D28C LD H,(IX+$08)  ; }
+ $D28F LD DE,$0006    ; { Skip past the header.
+ $D292 ADD HL,DE      ; }
+ $D293 PUSH HL        ; { Point #REGiy at the start of the tables.
+ $D294 POP IY         ; }
+ $D296 LD BC,($DED8)  ; Point #REGbc at the first moving graphics buffer. (#R$DED8)
+ $D29A LD A,($E540)   ; Point #REGa at the count of moving objects. (#R$E540)
+ $D29D CALL $D2BF     ; Look for the object and remove it.
+ $D2A0 LD BC,($DFCA)  ; Point #REGbc at the second moving graphics buffer. (#R$DFCA)
+ $D2A4 LD A,($E541)   ; Point #REGa at the count of moving objects. (#R$E540)
+ $D2A7 CALL $D2BF     ; Look for the object and remove it.
+ $D2AA LD BC,($E0BC)  ; Point #REGbc at the third moving graphics buffer. (#R$E0BC)
+ $D2AE LD A,($E542)   ; Point #REGa at the count of moving objects. (#R$E540)
+ $D2B1 CALL $D2BF     ; Look for the object and remove it.
+ $D2B4 LD BC,($E2FE)  ; Point #REGbc at the fourth moving graphics buffer. (#R$E2FE)
+ $D2B8 LD A,($E543)   ; Point #REGa at the count of moving objects. (#R$E540)
+ $D2BB CALL $D2BF     ; Look for the object and remove it.
+ $D2BE RET            ; All done, return.
+
+; Remove an object that Dan collided with from the room.
+;
+; Used by the routine at #R$D1CE.
+;
+; A Count of objects in the room
+; BC Pointer to the moving graphics buffer
+; IY Pointer to moving objects data in the room
+c$D2BF AND A          ; Are there any objects left?
+ $D2C0 RET Z          ; Return if there aren't.
+ $D2C1 LD L,A         ; Put the object count in #REGhl.
+*$D2C2 LD A,($D1CD)   ; Get the collision attribute (#R$D1CD).
+ $D2C5 CP (IY+$05)    ; Does it equal this one?
+ $D2C8 JR NZ,$D2D5    ; Move forward if it doesn't.
+; The attribute matches the one collided with, now check the position.
+ $D2CA LD E,(IY+$00)  ; { Put the co-ordinates in #REGde.
+ $D2CD LD D,(IY+$01)  ; }
+ $D2D0 CALL $DB38     ; Has Dan collided with it?
+ $D2D3 JR C,$D2DE     ; Yes, so remove it.
+*$D2D5 LD DE,$0008    ; { Otherwise, move to the next object.
+ $D2D8 ADD IY,DE      ; }
+ $D2DA DEC L          ; Decrement the object count.
+ $D2DB JR NZ,$D2C2    ; { Loop until we've looked at all objects.
+ $D2DD RET            ; }
+; Found the object Dan collided with, so remove it.
+*$D2DE LD D,(IY+$01)  ; { Put the position of the object in #REGde.
+ $D2E1 LD A,(IY+$00)  ; 
  $D2E4 ADD A,C        ;
  $D2E5 DEC A          ;
- $D2E6 LD E,A         ;
- $D2E7 SET 6,(IY+$04) ;
- $D2EB CALL $E897     ;
- $D2EE POP HL         ;
- $D2EF RET            ;
+ $D2E6 LD E,A         ; }
+ $D2E7 SET 6,(IY+$04) ; Set the "object removed" flag.
+ $D2EB CALL $E897     ; Remove the object from screen.
+ $D2EE POP HL         ; { Clear the stack, so return won't pass to the calling routine (#R$D1CE)
+$D2EF RET             ; but to the routine above that ie: do an early return. 
+                      ; (For homework, look up "tail call optimisation").
+                      ; }
 
 ; Bounce off a trampoline
 ;
 ; Used by the routine at #R$D895.
-c$D2F0 LD A,($C872)  ;
+c$D2F0 LD A,($C872)  ; Put Dan's Y co-ordinate (#R$C872) in #REGa.
  $D2F3 AND $07       ;
  $D2F5 AND A         ;
  $D2F6 JP NZ,$D950   ;
- $D2F9 LD A,($C876)  ;
- $D2FC LD L,A        ;
- $D2FD LD A,($C874)  ;
- $D300 LD B,A        ;
- $D301 LD A,L        ;
- $D302 CP $03        ;
- $D304 JR NC,$D319   ;
+ $D2F9 LD A,($C876)  ; { Put the height fallen by (#R$C876) in #REGl.
+ $D2FC LD L,A        ; }
+ $D2FD LD A,($C874)  ; { Put some flags (#R$C874) in #REGb.
+ $D300 LD B,A        ; }
+ $D301 LD A,L        ; { Has Dan fallen less than 3 lines?
+ $D302 CP $03        ; }
+ $D304 JR NC,$D319   ; Jump if so.
  $D306 LD A,($C874)  ;
  $D309 AND $22       ;
  $D30B LD ($C874),A  ;
- $D30E XOR A         ;
- $D30F LD ($C876),A  ;
- $D312 CALL $D567    ;
- $D315 POP DE        ;
- $D316 JP $D1CE      ;
-*$D319 PUSH HL       ;
+ $D30E XOR A         ; { Set the height fallen to 0.
+ $D30F LD ($C876),A  ; }
+ $D312 CALL $D567    ; Propel Dan upwards.
+ $D315 POP DE        ; Clean up the stack.
+ $D316 JP $D1CE      ; Jump forward to redraw Dan.
+; Dan has landed on a trampoline, check for input and react accordingly.
+*$D319 PUSH HL       ; { Store the main registers.
  $D31A PUSH DE       ;
- $D31B PUSH BC       ;
- $D31C CALL $E9BC    ;
- $D31F LD A,C        ;
- $D320 POP BC        ;
+ $D31B PUSH BC       ; }
+ $D31C CALL $E9BC    ; { Get some user input and put it in #REGa.
+ $D31F LD A,C        ; }
+ $D320 POP BC        ; { Restore the registers.
  $D321 POP DE        ;
- $D322 POP HL        ;
- $D323 LD C,A        ;
- $D324 BIT 0,C       ;
- $D326 JR Z,$D32E    ;
- $D328 SRL L         ;
- $D32A INC L         ;
- $D32B LD A,L        ;
- $D32C JR $D332      ;
-*$D32E LD A,L        ;
+ $D322 POP HL        ; }
+ $D323 LD C,A        ; Put the user input back in #REGc.
+ $D324 BIT 0,C       ; Is Dan jumping?
+ $D326 JR Z,$D32E    ; Move forward if he isn't.
+; Dan is jumping on the trampoline.
+ $D328 SRL L         ; { Double the height to fall and add 1.
+ $D32A INC L         ; }
+ $D32B LD A,L        ; { Put this in #REGa for the next bit of code.
+ $D32C JR $D332      ; }
+; Dan is not jumping on the trampoline.
+*$D32E LD A,L        ; { Halve the height fallen and add the original height.
  $D32F SRL A         ;
- $D331 ADD A,L       ;
+ $D331 ADD A,L       ; }
+; Having determined the height to fall, find out the direction.
 *$D332 LD ($C879),A  ;
- $D335 BIT 2,C       ;
- $D337 RES 3,B       ;
- $D339 JR NZ,$D361   ;
- $D33B SET 3,B       ;
- $D33D BIT 1,C       ;
+ $D335 BIT 2,C       ; Is Dan jumping straight ahead?
+ $D337 RES 3,B       ; Reset bit 3 in #REGb (moving sideways).
+ $D339 JR NZ,$D361   ; Jump foward if Dan is jumping straight ahead.
+; Dan is jumping or moving in a particular direction.
+ $D33B SET 3,B       ; Set bit 3 in #REGb (moving sideways).
+ $D33D BIT 1,C       ; Is Dan moving or jumping left?
  $D33F JR NZ,$D34A   ;
  $D341 BIT 1,B       ;
  $D343 JR NZ,$D361   ;
@@ -7909,27 +7948,27 @@ c$D2F0 LD A,($C872)  ;
 ; Print the display area
 ;
 ; Used by the routine at #R$C881.
-c$D378 LD HL,$D3AC   ;
- $D37B CALL $ED06    ;
- $D37E LD HL,$D3D4   ;
- $D381 CALL $EEF1    ;
- $D384 LD A,$4F      ;
+c$D378 LD HL,$D3AC   ; Point #REGhl at the UDGs for the display area. (#R$D3AC)
+ $D37B CALL $ED06    ; Print them.
+ $D37E LD HL,$D3D4   ; Point #REGhl at the text for the display area. (#R$D3D4)
+ $D381 CALL $EEF1    ; Print it.
+ $D384 LD A,$4F      ; { Fill bright white on blue for the score box.
  $D386 LD BC,$0801   ;
  $D389 LD DE,$0016   ;
- $D38C CALL $E8BA    ;
+ $D38C CALL $E8BA    ; 
  $D38F LD BC,$0A02   ;
  $D392 LD DE,$0A16   ;
- $D395 CALL $E8BA    ;
- $D398 LD HL,$5AE0   ;
+ $D395 CALL $E8BA    ; }
+ $D398 LD HL,$5AE0   ; { Draw the energy bars, from white down to blue. 
  $D39B LD B,$07      ;
 *$D39D LD (HL),B     ;
  $D39E INC L         ;
- $D39F DJNZ $D39D    ;
- $D3A1 LD (HL),B     ;
- $D3A2 LD HL,$C925   ;
- $D3A5 LD DE,$51D0   ;
- $D3A8 CALL $EEF9    ;
- $D3AB RET           ;
+ $D39F DJNZ $D39D    ; 
+ $D3A1 LD (HL),B     ; }
+ $D3A2 LD HL,$C925   ; Point #REGhl at the high score.
+ $D3A5 LD DE,$51D0   ; { Print it.
+ $D3A8 CALL $EEF9    ; }
+ $D3AB RET           ; Return.
 
 ; UDGs for display area
 b$D3AC DEFB $17,$14,$7C,$17,$09,$7D,$14,$0A
@@ -8165,23 +8204,23 @@ c$D4B5 EXX           ;
 ;
 ; DE Current co-ordinates of Dan
 ; HL Pointer to working graphic buffer
-c$D550 LD C,$0E      ;
-*$D552 PUSH DE       ;
- $D553 CALL $E8D2    ;
- $D556 LD B,$02      ;
-*$D558 LD A,(DE)     ;
- $D559 LD (HL),A     ;
- $D55A INC D         ;
- $D55B INC HL        ;
+c$D550 LD C,$0E      ; #N$0E UDGs to look at.
+*$D552 PUSH DE       ; Remember #REGde.
+ $D553 CALL $E8D2    ; Convert the co-ordinates to a screen address.
+ $D556 LD B,$02      ; Two rows to copy.
+*$D558 LD A,(DE)     ; Get the byte from screen.
+ $D559 LD (HL),A     ; Copy it to the buffer.
+ $D55A INC D         ; Move down a row.
+ $D55B INC HL        ; { Move forward in the buffer.
  $D55C INC HL        ;
- $D55D INC HL        ;
- $D55E DJNZ $D558    ;
- $D560 POP DE        ;
- $D561 INC E         ;
- $D562 INC E         ;
- $D563 DEC C         ;
- $D564 JR NZ,$D552   ;
- $D566 RET           ;
+ $D55D INC HL        ; }
+ $D55E DJNZ $D558    ; Loop while there are more rows.
+ $D560 POP DE        ; Restore #REGde.
+ $D561 INC E         ; { Move forward to the next UDG space.
+ $D562 INC E         ; }
+ $D563 DEC C         ; { Loop while there are more columns to draw.
+ $D564 JR NZ,$D552   ; }
+ $D566 RET           ; Return.
 
 ; Move Dan upwards while jumping
 ;
@@ -8271,49 +8310,55 @@ c$D567 EXX           ;
 ; Fall through the air, moving onto one screen down if necessary
 ;
 ; Used by the routines at #R$D079, #R$D0DC, #R$D123 and #R$D16F.
-c$D607 EXX           ;
- $D608 LD A,($C872)  ;
- $D60B CP $84        ;
- $D60D JR NZ,$D61E   ;
- $D60F LD A,$02      ;
- $D611 LD ($C872),A  ;
- $D614 LD A,($CFCA)  ;
- $D617 SUB $08       ;
- $D619 CALL $CBBD    ;
- $D61C EXX           ;
- $D61D RET           ;
+c$D607 EXX           ; Swap main registers.
+ $D608 LD A,($C872)  ; Get Dan's Y co-ordinate.
+ $D60B CP $84        ; Is it the maximum? (#N$84)
+ $D60D JR NZ,$D61E   ; Jump forward if not.
+; Dan has fallen into another room.
+ $D60F LD A,$02      ; { Set the Y co-ordinate to the top. (02)
+ $D611 LD ($C872),A  ; }
+ $D614 LD A,($CFCA)  ; Get the current room (#R$CFCA)
+ $D617 SUB $08       ; Subtract 8 to get the room below.
+ $D619 CALL $CBBD    ; Switch to this room.
+ $D61C EXX           ; { Swap main registers and return.
+ $D61D RET           ; }
 
 ; Fall through the air one frame
 ;
 ; Used by the routines at #R$D607 and #R$DBEE.
-c$D61E INC A         ;
- $D61F INC A         ;
- $D620 LD ($C872),A  ;
- $D623 LD A,($C87B)  ;
- $D626 BIT 2,A       ;
- $D628 JR NZ,$D639   ;
- $D62A LD A,($CFCB)  ;
- $D62D DEC A         ;
- $D62E AND A         ;
- $D62F JR NZ,$D633   ;
- $D631 LD A,$0C      ;
-*$D633 LD ($CFCB),A  ;
- $D636 CALL $DB01    ;
-*$D639 LD HL,$62D6   ;
- $D63C PUSH HL       ;
- $D63D LD BC,$0006   ;
- $D640 ADD HL,BC     ;
- $D641 POP DE        ;
- $D642 LD BC,$004E   ;
- $D645 LDIR          ;
+;
+; A Current Y co-ordinate
+c$D61E INC A         ; { Add 2 to the Y co-ordinate and set it.
+ $D61F INC A         ; 
+ $D620 LD ($C872),A  ; }
+ $D623 LD A,($C87B)  ; Get some lift flags. (#R$C87B)
+ $D626 BIT 2,A       ; Is Dan standing on the lift?
+ $D628 JR NZ,$D639   ; Jump forward if so.
+; Dan is in mid air.
+ $D62A LD A,($CFCB)  ; Get the note to play while falling. 
+ $D62D DEC A         ; { Decrement the note to 0, 
+ $D62E AND A         ; then start again from #N0C,
+ $D62F JR NZ,$D633   ; cycling repeatedly. 
+ $D631 LD A,$0C      ; 
+*$D633 LD ($CFCB),A  ; }
+ $D636 CALL $DB01    ; Play the "falling through air" sound.
+; Update the graphic buffer, shifting everything down by two rows.
+*$D639 LD HL,$62D6   ; Point #REGhl to Dan's current graphic (#R$62D6)
+ $D63C PUSH HL       ; Remember this value.
+ $D63D LD BC,$0006   ; { Move forward 2 rows.
+ $D640 ADD HL,BC     ; }
+ $D641 POP DE        ; Restore the original pointer.
+ $D642 LD BC,$004E   ; { Copy all the data forward.
+ $D645 LDIR          ; }
  $D647 EX DE,HL      ;
- $D648 LD DE,($C872) ;
- $D64C LD A,$1A      ;
+; Now copy the data from the row below into the buffer.
+ $D648 LD DE,($C872) ; Get Dan's Y co-ordinate in #REGde.
+ $D64C LD A,$1A      ; { Add #N1A to the X co-ordinate.
  $D64E ADD A,E       ;
- $D64F LD E,A        ;
- $D650 CALL $D655    ;
- $D653 EXX           ;
- $D654 RET           ;
+ $D64F LD E,A        ; }
+ $D650 CALL $D655    ; Copy the data to the working buffer.
+ $D653 EXX           ; { Swap registers and return. 
+ $D654 RET           ; }
 
 ; Copy a sprite to a working buffer
 ;
@@ -8321,20 +8366,20 @@ c$D61E INC A         ;
 ;
 ; DE Co-ordinates of the sprite
 ; HL Address to copy to
-c$D655 CALL $E8D2    ;
- $D658 LD C,$02      ;
-*$D65A PUSH DE       ;
- $D65B LD B,$03      ;
-*$D65D LD A,(DE)     ;
- $D65E LD (HL),A     ;
- $D65F INC HL        ;
- $D660 INC E         ;
- $D661 DJNZ $D65D    ;
- $D663 POP DE        ;
- $D664 INC D         ;
- $D665 DEC C         ;
+c$D655 CALL $E8D2    ; Convert the co-ordinates to a screen address.
+ $D658 LD C,$02      ; 2 rows to copy.
+*$D65A PUSH DE       ; Remember #REGde.
+ $D65B LD B,$03      ; 3 columns to copy.
+*$D65D LD A,(DE)     ; Get the screen data.
+ $D65E LD (HL),A     ; Put it in the buffer.
+ $D65F INC HL        ; Move to the next buffer position.
+ $D660 INC E         ; Move forward a column.
+ $D661 DJNZ $D65D    ; Loop while there are more columns in this row to copy.
+ $D663 POP DE        ; Restore #REGde.
+ $D664 INC D         ; Move down a row.
+ $D665 DEC C         ; { Loop until all rows are done.
  $D666 JR NZ,$D65A   ;
- $D668 RET           ;
+ $D668 RET           ; }
 
 ; Convert a sprite ID to its graphic address
 ;
@@ -8423,18 +8468,18 @@ w$D6BD DEFW $DEDA
 ;
 ; Used by the routine at #R$E592.
 ;
-; A Flags for the object
+; A Number of objects
 ; IY Pointer to the room's sprite table
-c$D6BF AND A         ;
- $D6C0 RET Z         ;
- $D6C1 LD B,A        ;
-*$D6C2 PUSH BC       ;
- $D6C3 LD D,(IY+$04) ;
- $D6C6 LD E,(IY+$00) ;
- $D6C9 DEC (IY+$06)  ;
- $D6CC JR NZ,$D716   ;
- $D6CE LD A,(IY+$07) ;
- $D6D1 LD (IY+$06),A ;
+c$D6BF AND A         ; { Return if there are 0 objects to draw.
+ $D6C0 RET Z         ; }
+ $D6C1 LD B,A        ; Put the count of objects in #REGb.
+*$D6C2 PUSH BC       ; Remember the count in #REGbc.
+ $D6C3 LD D,(IY+$04) ; 
+ $D6C6 LD E,(IY+$00) ; Put the current Y co-ordinate in #REGe.
+ $D6C9 DEC (IY+$06)  ; Decrement the frame count.
+ $D6CC JR NZ,$D716   ; Jump forward if it hasn't hit zero.
+ $D6CE LD A,(IY+$07) ; { Set the frame count back to the highest value.
+ $D6D1 LD (IY+$06),A ; }
  $D6D4 BIT 7,D       ;
  $D6D6 JR NZ,$D6FA   ;
  $D6D8 LD A,D        ;
@@ -8452,7 +8497,7 @@ c$D6BF AND A         ;
  $D6EE DEC A         ;
  $D6EF ADD A,E       ;
  $D6F0 LD E,A        ;
- $D6F1 CALL $D7D6    ;
+ $D6F1 CALL $D7D6    ; Draw in the attributes.
  $D6F4 POP DE        ;
  $D6F5 DEC E         ;
  $D6F6 LD D,$03      ;
@@ -8469,21 +8514,21 @@ c$D6BF AND A         ;
  $D70A LD D,$03      ;
  $D70C JR $D716      ;
 *$D70E PUSH DE       ;
- $D70F CALL $D7D6    ;
+ $D70F CALL $D7D6    ; Draw in the attributes.
  $D712 POP DE        ;
  $D713 LD D,$81      ;
  $D715 INC E         ;
 *$D716 LD (IY+$00),E ;
- $D719 LD A,(IY+$04) ;
+ $D719 LD A,(IY+$04) ; 
  $D71C AND $40       ;
  $D71E OR D          ;
  $D71F LD (IY+$04),A ;
- $D722 CALL $D7E7    ;
- $D725 POP BC        ;
- $D726 LD DE,$0008   ;
- $D729 ADD IY,DE     ;
- $D72B DJNZ $D6C2    ;
- $D72D RET           ;
+ $D722 CALL $D7E7    ; Draw the sprite.
+ $D725 POP BC        ; Restore the count in #REGbc.
+ $D726 LD DE,$0008   ; { Move forward to the next object.
+ $D729 ADD IY,DE     ; }
+ $D72B DJNZ $D6C2    ; { Loop until all objects of this type are drawn.
+ $D72D RET           ; }
 
 ; Current X co-ordinate for the horizontal sprite being drawn
 g$D72E DEFB $00
@@ -8498,18 +8543,18 @@ w$D730 DEFW $E0BE
 ;
 ; Used by the routine at #R$E592.
 ;
-; A Flags for the object
+; A Number of objects to draw
 ; IY Pointer to the room's sprite table
-c$D732 AND A         ;
- $D733 RET Z         ;
- $D734 LD B,A        ;
-*$D735 PUSH BC       ;
+c$D732 AND A         ; { Return if there are zero objects to draw.
+ $D733 RET Z         ; }
+ $D734 LD B,A        ; Put the count of objects in #REGb.
+*$D735 PUSH BC       ; Remember the count in #REGbc.
  $D736 LD E,(IY+$04) ;
- $D739 LD D,(IY+$01) ;
- $D73C DEC (IY+$06)  ;
- $D73F JR NZ,$D78A   ;
- $D741 LD A,(IY+$07) ;
- $D744 LD (IY+$06),A ;
+ $D739 LD D,(IY+$01) ; Put the current Y co-ordinate in #REGd.
+ $D73C DEC (IY+$06)  ; Decrement the frame count.
+ $D73F JR NZ,$D78A   ; Jump forward if it hasn't hit zero.
+ $D741 LD A,(IY+$07) ; { Set the frame count back to the highest value.
+ $D744 LD (IY+$06),A ; }
  $D747 BIT 7,E       ;
  $D749 JR NZ,$D76E   ;
  $D74B LD A,E        ;
@@ -8528,7 +8573,7 @@ c$D732 AND A         ;
  $D761 LD A,($D72F)  ;
  $D764 ADD A,D       ;
  $D765 LD D,A        ;
- $D766 CALL $D7A2    ;
+ $D766 CALL $D7A2    ; Draw in the attributes.
  $D769 POP DE        ;
  $D76A LD E,$04      ;
  $D76C JR $D78A      ;
@@ -8544,7 +8589,7 @@ c$D732 AND A         ;
  $D77E LD E,$04      ;
  $D780 JR $D78A      ;
 *$D782 PUSH DE       ;
- $D783 CALL $D7A2    ;
+ $D783 CALL $D7A2    ; Draw in the attributes.
  $D786 POP DE        ;
  $D787 LD E,$80      ;
  $D789 INC D         ;
@@ -8553,14 +8598,14 @@ c$D732 AND A         ;
  $D790 AND $40       ;
  $D792 OR E          ;
  $D793 LD (IY+$04),A ;
- $D796 CALL $D7B7    ;
- $D799 POP BC        ;
- $D79A LD DE,$0008   ;
- $D79D ADD IY,DE     ;
- $D79F DJNZ $D735    ;
- $D7A1 RET           ;
+ $D796 CALL $D7B7    ; Draw the sprite.
+ $D799 POP BC        ; Restore the count in #REGbc.
+ $D79A LD DE,$0008   ; { Move forward to the next object.
+ $D79D ADD IY,DE     ; }
+ $D79F DJNZ $D735    ; { Loop until all objects of this type are drawn.
+ $D7A1 RET           ; }
 
-; Colour in a sprite vertically
+; Colour in a sprite horizontally
 ;
 ; Used by the routine at #R$D732.
 ;
@@ -8602,7 +8647,7 @@ c$D7B7 LD A,E        ;
  $D7D2 CALL $E96B    ;
  $D7D5 RET           ;
 
-; Colour in a sprite horizontally
+; Colour in a sprite vertically
 ;
 ; Used by the routine at #R$D6BF.
 ;
@@ -8728,13 +8773,13 @@ c$D815 LD A,(DE)     ;
  $D87E ADD HL,BC     ;
  $D87F LD BC,$0048   ;
 *$D882 EX AF,AF'     ;
- $D883 PUSH BC       ;
+ $D883 PUSH BC       ; { Reverse direction.
  $D884 PUSH DE       ;
  $D885 PUSH HL       ;
  $D886 CALL $D9B0    ;
  $D889 POP HL        ;
  $D88A POP DE        ;
- $D88B POP BC        ;
+ $D88B POP BC        ; }
  $D88C ADD HL,BC     ;
  $D88D EX DE,HL      ;
  $D88E ADD HL,BC     ;
@@ -8953,42 +8998,47 @@ g$D9E8 DEFB $00
 g$D9E9 DEFB $00
 
 ; Current room the raft is in
-g$D9EA DEFB $00,$01
+g$D9EA DEFB $00
+
+; Tick count until the raft should be moved
+g$D9EB DEFB $01
 
 ; Update the raft
 ;
 ; Used by the routines at #R$C800 and #R$D3EC.
-c$D9EC LD A,($D9EA)  ;
- $D9EF LD B,A        ;
- $D9F0 LD A,($CFCA)  ;
- $D9F3 LD C,A        ;
- $D9F4 LD DE,($D9E8) ;
- $D9F8 LD HL,$D9EB   ;
+c$D9EC LD A,($D9EA)  ; { Put the room the raft is in (#R$D9EA) in #REGb.
+ $D9EF LD B,A        ; }
+ $D9F0 LD A,($CFCA)  ; { Put the current room (#R$CFCA) in #REGc.
+ $D9F3 LD C,A        ; }
+ $D9F4 LD DE,($D9E8) ; Get the raft x-cordinate and frame (#R$D9E8, #R$D9E9) in #REGde.
+ $D9F8 LD HL,$D9EB   ; { Decrement the tick count and jump forward until it reaches 0.
  $D9FB DEC (HL)      ;
- $D9FC JR NZ,$DA1B   ;
- $D9FE LD (HL),$03   ;
- $DA00 INC E         ;
- $DA01 LD A,E        ;
- $DA02 CP $04        ;
- $DA04 JR NZ,$DA37   ;
- $DA06 LD E,$00      ;
- $DA08 DEC D         ;
- $DA09 LD A,D        ;
- $DA0A CP $FC        ;
- $DA0C JR NZ,$DA37   ;
- $DA0E LD D,$1C      ;
- $DA10 INC B         ;
- $DA11 LD A,B        ;
+ $D9FC JR NZ,$DA1B   ; }
+ $D9FE LD (HL),$03   ; Reset the tick count to 3.
+ $DA00 INC E         ; Move to the next animation frame.
+ $DA01 LD A,E        ; { Has it reached 4?
+ $DA02 CP $04        ; }
+ $DA04 JR NZ,$DA37   ; No, so move forward.
+; The raft needs moving.
+ $DA06 LD E,$00      ; Otherwise set it back to 0.
+ $DA08 DEC D         ; Move left one column.
+ $DA09 LD A,D        ; { Has the raft reached the edge of the screen?
+ $DA0A CP $FC        ; }
+ $DA0C JR NZ,$DA37   ; Jump forward if it hasn't.
+ $DA0E LD D,$1C      ; Put the raft on the right of the screen.
+ $DA10 INC B         ; Put the raft in the room to the left.
+ $DA11 LD A,B        ; { Ensure the room cycles between 0 - 7.
  $DA12 AND $07       ;
- $DA14 LD B,A        ;
- $DA15 LD A,C        ;
- $DA16 CP B          ;
- $DA17 JR NZ,$DA1B   ;
+ $DA14 LD B,A        ; }
+ $DA15 LD A,C        ; { Is the raft in this room?
+ $DA16 CP B          ; }
+ $DA17 JR NZ,$DA1B   ; Jump forward if it's not.
+; The raft is in this room.
  $DA19 LD D,$1F      ;
-*$DA1B LD A,C        ;
- $DA1C CP $08        ;
- $DA1E JR NC,$DA33   ;
- $DA20 INC A         ;
+*$DA1B LD A,C        ; 
+ $DA1C CP $08        ; 
+ $DA1E JR NC,$DA33   ; 
+ $DA20 INC A         ; 
  $DA21 CP B          ;
  $DA22 JR C,$DA2E    ;
  $DA24 LD A,B        ;
@@ -9025,8 +9075,8 @@ c$D9EC LD A,($D9EA)  ;
  $DA50 LD A,C        ;
  $DA51 CP $20        ;
  $DA53 JR NC,$DA56   ;
- $DA55 ADD HL,BC     ;
-*$DA56 LD B,$04      ;
+ $DA55 ADD HL,BC     ; Add the offset to get the current graphic.
+*$DA56 LD B,$04      ; Draw 4 columns.
 *$DA58 LD A,C        ;
  $DA59 CP $20        ;
  $DA5B JR C,$DA66    ;
@@ -9046,17 +9096,17 @@ c$D9EC LD A,($D9EA)  ;
  $DA6E DJNZ $DA6A    ;
  $DA70 POP HL        ;
  $DA71 POP BC        ;
- $DA72 LD H,$5A      ;
- $DA74 LD A,$02      ;
- $DA76 LD (HL),A     ;
+ $DA72 LD H,$5A      ; Set to the next to bottom row of the screen.
+ $DA74 LD A,$02      ; { Fill with red on black.
+ $DA76 LD (HL),A     ; }
  $DA77 LD H,$50      ;
  $DA79 INC L         ;
-*$DA7A INC C         ;
- $DA7B DJNZ $DA58    ;
+*$DA7A INC C         ; Move to the next column.
+ $DA7B DJNZ $DA58    ; Loop until all columns drawn.
  $DA7D LD A,C        ;
  $DA7E CP $20        ;
  $DA80 RET NC        ;
- $DA81 LD H,$5A      ;
+ $DA81 LD H,$5A      ; 
  $DA83 LD A,$45      ;
  $DA85 LD (HL),A     ;
  $DA86 RET           ;
@@ -9080,27 +9130,28 @@ w$DA8B DEFW $DAFA
 ; Play a note or a sound effect
 ;
 ; Used by the routines at #R$C800, #R$CA5B, #R$CDD3 and #R$DD8D.
-c$DA8D LD A,($DA8A)  ;
- $DA90 BIT 1,A       ;
- $DA92 JP NZ,$DAE5   ;
- $DA95 BIT 0,A       ;
- $DA97 JP NZ,$DB17   ;
- $DA9A LD HL,($DA8B) ;
- $DA9D JP (HL)       ;
+c$DA8D LD A,($DA8A)  ; Get the current sound state. (#R$DA8A)
+ $DA90 BIT 1,A       ; Is bit 1 (Dan okay) set?
+ $DA92 JP NZ,$DAE5   ; Jump forward if so.
+ $DA95 BIT 0,A       ; Is bit 0 (Play a tune) set?
+ $DA97 JP NZ,$DB17   ; Jump forward if so.
+ $DA9A LD HL,($DA8B) ; { Otherwise take the next action (#R$DA8B) and perform it.
+ $DA9D JP (HL)       ; }
 
 ; Play a sound
-c$DA9E LD HL,$DAFA   ;
- $DAA1 LD ($DA8B),HL ;
- $DAA4 LD A,($DA87)  ;
-; This entry point is used by the routine at #R$DB17.
-*$DAA7 ADD A,A       ;
- $DAA8 LD E,A        ;
- $DAA9 LD D,$00      ;
- $DAAB LD HL,$6919   ;
- $DAAE ADD HL,DE     ;
- $DAAF LD E,(HL)     ;
- $DAB0 INC HL        ;
- $DAB1 LD B,(HL)     ;
+c$DA9E LD HL,$DAFA   ; { Set the next sound action (#R$DA8B) to pause. (#R$DAFA)
+ $DAA1 LD ($DA8B),HL ; }
+ $DAA4 LD A,($DA87)  ; Get the current note.
+; This entry point is used by the routine at #R$DB17, where the current note
+; is already set in #REGa.
+*$DAA7 ADD A,A       ; Double it to get a word offset.
+ $DAA8 LD E,A        ; { Put this value in #REGde.
+ $DAA9 LD D,$00      ; }
+ $DAAB LD HL,$6919   ; { Add the base offset of the pitches (#R$6919).
+ $DAAE ADD HL,DE     ; }
+ $DAAF LD E,(HL)     ; Put the frequency in #REGde. (#REGd is already 0.)
+ $DAB0 INC HL        ; { Put the length in #REGb.
+ $DAB1 LD B,(HL)     ; }
 
 ; Beep
 ;
@@ -9210,9 +9261,9 @@ c$DB17 LD HL,($DA88) ; Get the address of the current note in #REGhl.
  $DB34 LD ($DA8A),A  ; }
  $DB37 RET           ; Return.
 
-; Return with the carry flag set if Dan has moved over a glowing item
+; Return with the carry flag set if Dan has moved over an object item
 ;
-; Used by the routines at #R$D1CE and #R$DE87.
+; Used by the routines at #R$D2BF and #R$DE87.
 ;
 ; DE Co-ordinates of the item.
 c$DB38 PUSH HL       ; Remember #REGhl.
@@ -9413,45 +9464,47 @@ b$DC6D DEFB $00,$01,$02,$04
 ; Check if Dan is standing by the lift
 ;
 ; Used by the routines at #R$CC89 and #R$CFD9.
-c$DC71 LD DE,($C87C) ;
- $DC75 LD HL,($C872) ;
- $DC78 LD A,($C87B)  ;
- $DC7B AND $01       ;
- $DC7D LD C,A        ;
- $DC7E LD A,($CFCA)  ;
- $DC81 CP D          ;
- $DC82 JR NZ,$DCBC   ;
- $DC84 LD A,L        ;
- $DC85 ADD A,$1A     ;
- $DC87 CP E          ;
- $DC88 JR NZ,$DCBC   ;
- $DC8A LD A,H        ;
- $DC8B SUB $0D       ;
- $DC8D CP $05        ;
- $DC8F JR NC,$DCBC   ;
- $DC91 SET 1,C       ;
- $DC93 LD A,H        ;
+c$DC71 LD DE,($C87C) ; Put the lift's co-ordinate and room (#R$C87C, #R$C87D) in #REGde.
+ $DC75 LD HL,($C872) ; Put Dan's co-ordinates (#R$C872, #R$C873) in #REGhl.
+ $DC78 LD A,($C87B)  ; Put the lift flags (#R$C87B) in #REGa.
+ $DC7B AND $01       ; { Put bit 1 in #REGc.
+ $DC7D LD C,A        ; }
+ $DC7E LD A,($CFCA)  ; Get the current room. (#R$CFCA)
+ $DC81 CP D          ; Is it the room the lift is in?
+ $DC82 JR NZ,$DCBC   ; No, it isn't, so jump forward.
+; The lift is in this room.
+ $DC84 LD A,L        ; Get Dan's Y co-ordinate.
+ $DC85 ADD A,$1A     ; {Add #N$1A (?)}
+ $DC87 CP E          ; Does it match the lift's Y co-ordinate?
+ $DC88 JR NZ,$DCBC   ; No, so jump forward.
+ $DC8A LD A,H        ; Get Dan's X co-ordinate.
+ $DC8B SUB $0D       ; { Is Dan by the lift shaft?
+ $DC8D CP $05        ; }
+ $DC8F JR NC,$DCBC   ; No, so jump forward.
+; Dan is near the lift.
+ $DC91 SET 1,C       ; Set bit 1 (Dan is on the lift)
+ $DC93 LD A,H        ; 
  $DC94 CP $0F        ;
  $DC96 JR Z,$DCB5    ;
- $DC98 LD HL,$DC69   ;
+ $DC98 LD HL,$DC69   ; Get the list of Dan's frames that will start the lift. (#R$DC69)
  $DC9B CP $0E        ;
  $DC9D JR Z,$DCA8    ;
- $DC9F LD HL,$DC6D   ;
+ $DC9F LD HL,$DC6D   ; Get the list of Dan's frames that will stop the lift. (#R$DC69)
  $DCA2 CP $10        ;
  $DCA4 JR Z,$DCA8    ;
  $DCA6 JR $DCBC      ;
 *$DCA8 LD B,$04      ;
- $DCAA LD A,($C875)  ;
-*$DCAD CP (HL)       ;
+ $DCAA LD A,($C875)  ; Get Dan's current animation frame.
+*$DCAD CP (HL)       ; 
  $DCAE JR Z,$DCB5    ;
  $DCB0 INC HL        ;
  $DCB1 DJNZ $DCAD    ;
  $DCB3 JR $DCBC      ;
-*$DCB5 SET 2,C       ;
+*$DCB5 SET 2,C       ; Mark the lift as moving.
  $DCB7 LD A,$0D      ;
  $DCB9 LD ($DBED),A  ;
-*$DCBC LD A,C        ;
- $DCBD LD ($C87B),A  ;
+*$DCBC LD A,C        ; { Write the lift flags back to memory.
+ $DCBD LD ($C87B),A  ; }
  $DCC0 RET           ;
 
 ; Draw a food item
@@ -9677,32 +9730,34 @@ b$DE51 DEFB $00
 ; Update "aerosol immunity" if it is still active
 ;
 ; Used by the routine at #R$C800.
-c$DE52 LD HL,$C87E   ;
- $DE55 BIT 5,(HL)    ;
- $DE57 RET Z         ;
- $DE58 BIT 7,(HL)    ;
- $DE5A RET NZ        ;
- $DE5B EX DE,HL      ;
- $DE5C LD HL,$DE51   ;
- $DE5F DEC (HL)      ;
- $DE60 LD A,(HL)     ;
- $DE61 AND A         ;
- $DE62 JR NZ,$DE67   ;
- $DE64 EX DE,HL      ;
- $DE65 RES 5,(HL)    ;
-*$DE67 AND $07       ;
- $DE69 LD C,A        ;
- $DE6A LD A,($E800)  ;
- $DE6D AND $F8       ;
- $DE6F OR C          ;
- $DE70 OUT ($FE),A   ;
- $DE72 LD ($E800),A  ;
- $DE75 LD A,C        ;
- $DE76 AND $04       ;
+c$DE52 LD HL,$C87E   ; Get the flags. (#R$C87E)
+ $DE55 BIT 5,(HL)    ; Is bit 5 (got the aerosol) still active?
+ $DE57 RET Z         ; Return if not.
+ $DE58 BIT 7,(HL)    ; Is bit 7 (game not won) active?
+ $DE5A RET NZ        ; Return if it is - if Dan's completed the game
+                     ; there's no need for aerosol.
+ $DE5B EX DE,HL      ; Put the flags in #REGde.
+ $DE5C LD HL,$DE51   ; Point #REGhl at the time left for the aerosol.
+ $DE5F DEC (HL)      ; Decrement it by one.
+ $DE60 LD A,(HL)     ; { Is there any left?
+ $DE61 AND A         ; }
+ $DE62 JR NZ,$DE67   ; Yes, so move forward.
+; The aerosol has run out.
+ $DE64 EX DE,HL      ; Swap #REGde and #REGhl.
+ $DE65 RES 5,(HL)    ; Reset flag 5 (got the aerosol)
+*$DE67 AND $07       ; { Put bits 0-2 of the time left in #REGc
+ $DE69 LD C,A        ; to use as a border colour.}
+ $DE6A LD A,($E800)  ; Get the last read state of port #N$FE.
+ $DE6D AND $F8       ; Keep the top 5 bits.
+ $DE6F OR C          ; Add in the new border.
+ $DE70 OUT ($FE),A   ; { Set the border and remember this state.
+ $DE72 LD ($E800),A  ; }
+ $DE75 LD A,C        ; { Get bit 4 of the time left
+ $DE76 AND $04       ;  to use as a tune.
  $DE78 RRA           ;
- $DE79 ADD A,$05     ;
- $DE7B CALL $DB01    ;
- $DE7E RET           ;
+ $DE79 ADD A,$05     ; }
+ $DE7B CALL $DB01    ; Play the sound running while the aerosol is active.
+ $DE7E RET           ; Reset
 
 ; Dynamite graphic in status area
 b$DE7F DEFB $00,$02,$09,$18,$30,$60,$C0,$80
@@ -9712,40 +9767,42 @@ b$DE7F DEFB $00,$02,$09,$18,$30,$60,$C0,$80
 ; Used by the routine at #R$D1CE.
 ;
 ; IX Pointer to current room data
-c$DE87 LD E,(IX+$09)  ;
- $DE8A LD D,(IX+$0A)  ;
- $DE8D DEC E          ;
- $DE8E DEC E          ;
- $DE8F CALL $DB38     ;
- $DE92 JR NC,$DEB8    ;
- $DE94 RES 5,(IX+$04) ;
- $DE98 INC E          ;
- $DE99 INC E          ;
- $DE9A LD BC,$0201    ;
- $DE9D CALL $E897     ;
- $DEA0 LD HL,$C878    ;
- $DEA3 LD A,(HL)      ;
- $DEA4 INC (HL)       ;
- $DEA5 LD E,$17       ;
- $DEA7 LD D,A         ;
- $DEA8 LD BC,$0101    ;
- $DEAB LD HL,$DE7F    ;
- $DEAE CALL $E87A     ;
- $DEB1 LD A,$64       ;
- $DEB3 LD HL,$EE8B    ;
- $DEB6 JR $DED1       ;
-*$DEB8 LD E,(IX+$02)  ;
- $DEBB LD D,(IX+$03)  ;
- $DEBE LD BC,$0102    ;
- $DEC1 CALL $E897     ;
- $DEC4 RES 4,(IX+$04) ;
- $DEC8 LD HL,$C86C    ;
- $DECB INC (HL)       ;
- $DECC LD A,$32       ;
- $DECE LD HL,$EEBD    ;
-*$DED1 LD ($C86B),A   ;
- $DED4 CALL $DB0B     ;
- $DED7 RET            ;
+c$DE87 LD E,(IX+$09)  ; { Put the location of dynamite in #REGde.
+ $DE8A LD D,(IX+$0A)  ; }
+ $DE8D DEC E          ; { Move back two columns.
+ $DE8E DEC E          ; }
+ $DE8F CALL $DB38     ; Is Dan at this location?
+ $DE92 JR NC,$DEB8    ; No, so jump forward.
+; Dan has got the dynamite.
+ $DE94 RES 5,(IX+$04) ; Reset flag 5 (dynamite collected)
+ $DE98 INC E          ; { Move forward two columns.
+ $DE99 INC E          ; }
+ $DE9A LD BC,$0201    ; { Remove the dynamite from screen.
+ $DE9D CALL $E897     ; }
+ $DEA0 LD HL,$C878    ; { Get the count of dynamite picked up (#R$C878)
+ $DEA3 LD A,(HL)      ; }
+ $DEA4 INC (HL)       ; Increment it.
+ $DEA5 LD E,$17       ; Draw on row #N17
+ $DEA7 LD D,A         ; Draw on the column with the number of dynamite collected
+ $DEA8 LD BC,$0101    ; Size is one row and one column.
+ $DEAB LD HL,$DE7F    ; Point #REGhl at the dynamite static graphic. (#R$DE7F)
+ $DEAE CALL $E87A     ; Draw the dynamite in the status area.
+ $DEB1 LD A,$64       ; Add #N$64 to the score.
+ $DEB3 LD HL,$EE8B    ; Point #REGhl at the "picked up dynamite" tune.
+ $DEB6 JR $DED1       ; Jump forward.
+; Dan has got a test tube.
+*$DEB8 LD E,(IX+$02)  ; { Put the location of the test tube in #REGde.
+ $DEBB LD D,(IX+$03)  ; }
+ $DEBE LD BC,$0102    ; Width is one columm and two rows.
+ $DEC1 CALL $E897     ; Draw the graphic.
+ $DEC4 RES 4,(IX+$04) ; Reset flag 4 (test tube collected)
+ $DEC8 LD HL,$C86C    ; Point #REGhl at the number of lives.
+ $DECB INC (HL)       ; Increment it.
+ $DECC LD A,$32       ; Add #N$32 to the score.
+ $DECE LD HL,$EEBD    ; Point #REGhl at the "picked up a test tube" tune.
+*$DED1 LD ($C86B),A   ; Set the points to be awarded. (#R$C86B)
+ $DED4 CALL $DB0B     ; { Play the tune and return.
+ $DED7 RET            ; }
 
 ; Moving graphics buffer 0
 ;
@@ -10020,39 +10077,48 @@ c$E544 LD L,(IX+$07) ; { Get the pointer to moving object data
 ;
 ; Used by the routine at #R$C800.
 ;
+; IX Pointer to room data
 ; IY Pointer to moving object data
-c$E592 LD L,(IX+$07) ;
- $E595 LD H,(IX+$08) ;
- $E598 LD DE,$0006   ;
- $E59B ADD HL,DE     ;
- $E59C PUSH HL       ;
- $E59D POP IY        ;
-; This entry point is used by the routine at #R$CA5B.
-*$E59F LD HL,($DED8) ; 
- $E5A2 LD ($D6BB),HL ;
- $E5A5 LD HL,$DEDA   ; 
- $E5A8 LD ($D6BD),HL ;
- $E5AB LD A,($E540)  ;
- $E5AE CALL $D6BF    ;
- $E5B1 LD HL,($DFCA) ; 
- $E5B4 LD ($D6BB),HL ;
- $E5B7 LD HL,$DFCC   ; 
- $E5BA LD ($D6BD),HL ;
- $E5BD LD A,($E541)  ;
- $E5C0 CALL $D6BF    ;
- $E5C3 LD HL,($E0BC) ;
- $E5C6 LD ($D72E),HL ;
- $E5C9 LD HL,$E0BE   ;
- $E5CC LD ($D730),HL ;
- $E5CF LD A,($E542)  ;
- $E5D2 CALL $D732    ;
- $E5D5 LD HL,($E2FE) ;
- $E5D8 LD ($D72E),HL ;
- $E5DB LD HL,$E300   ;
- $E5DE LD ($D730),HL ;
- $E5E1 LD A,($E543)  ;
- $E5E4 CALL $D732    ;
- $E5E7 RET           ;
+c$E592 LD L,(IX+$07) ; { Point #REGhl at the moving object data.
+ $E595 LD H,(IX+$08) ; }
+ $E598 LD DE,$0006   ; { Move past the header to the actual data.
+ $E59B ADD HL,DE     ; }
+ $E59C PUSH HL       ; { Point #REGiy to this.
+ $E59D POP IY        ; }
+; This entry point is used by the routine at #R$CA5B,
+; where IY already points to the right place.
+;
+; .
+; Move the first vertical objects.
+*$E59F LD HL,($DED8) ; Point #REGhl at the the first buffer. (#R$DED8)
+ $E5A2 LD ($D6BB),HL ; Copy the X and Y co-ordinates. (#R$D6BB).
+ $E5A5 LD HL,$DEDA   ; Point #REGhl at the next sprite to draw.
+ $E5A8 LD ($D6BD),HL ; Copy this. (#R$D6BD)
+ $E5AB LD A,($E540)  ; Put the number of moving objects of this type in #REGa.
+ $E5AE CALL $D6BF    ; Move the objects.
+; Move the second vertical objects.
+ $E5B1 LD HL,($DFCA) ; Point #REGhl at the the second buffer. (#R$DFCA)
+ $E5B4 LD ($D6BB),HL ; Copy the X and Y co-ordinates. (#R$D6BB).
+ $E5B7 LD HL,$DFCC   ; Point #REGhl at the next sprite to draw.
+ $E5BA LD ($D6BD),HL ; Copy this. (#R$D6BD)
+ $E5BD LD A,($E541)  ; Put the number of moving objects of this type in #REGa.
+ $E5C0 CALL $D6BF    ; Move the objects.
+; Move the first horizontal objects.
+ $E5C3 LD HL,($E0BC) ; Point #REGhl at the the third buffer. (#R$E0BC)
+ $E5C6 LD ($D72E),HL ; Copy the X and Y co-ordinates. (#R$D72E).
+ $E5C9 LD HL,$E0BE   ; Point #REGhl at the next sprite to draw.
+ $E5CC LD ($D730),HL ; Copy this. (#R$D730)
+ $E5CF LD A,($E542)  ; Put the number of moving objects of this type in #REGa.
+ $E5D2 CALL $D732    ; Move the objects.
+; Move the second horizontal objects.
+ $E5D5 LD HL,($E2FE) ; Point #REGhl at the the fourth buffer. (#R$E2FE)
+ $E5D8 LD ($D72E),HL ; Copy the X and Y co-ordinates. (#R$D72E).
+ $E5DB LD HL,$E300   ; Point #REGhl at the next sprite to draw.
+ $E5DE LD ($D730),HL ; Copy this. (#R$D730)
+ $E5E1 LD A,($E543)  ; Put the number of moving objects of this type in #REGa.
+ $E5E4 CALL $D732    ; Move the objects.
+; All done.
+ $E5E7 RET           ; Return.
 
 ; See if Dan is in the blimp with the plans, and if so, launch it
 ;
@@ -10358,10 +10424,10 @@ c$E782 LD A,($C87F)  ;
  $E7C3 SUB $20       ;
  $E7C5 CP B          ;
  $E7C6 JR NC,$E7D7   ;
- $E7C8 LD HL,$C874   ;
- $E7CB BIT 5,(HL)    ;
- $E7CD JR NZ,$E7D7   ;
- $E7CF CALL $CD8A    ;
+ $E7C8 LD HL,$C874   ; Get the flags. (#R$C874)
+ $E7CB BIT 5,(HL)    ; Is bit 5 (Dan safe) set?
+ $E7CD JR NZ,$E7D7   ; Jump forward if it is.
+ $E7CF CALL $CD8A    ; Otherwise lose a life.
  $E7D2 LD HL,$E6DA   ;
  $E7D5 SET 7,(HL)    ;
 ; Pause for a short interval. This entry point is also used by the routine at
@@ -12512,5 +12578,9 @@ b$FE77 DEFB $04,$06,$0C,$00,$17,$10,$1A,$0A
  $FF07 DEFB $1D,$1A,$27,$18,$1A,$12,$22,$0E
  $FF0F DEFB $26,$FF
 
+; Unused
+u$FF11 DEFB $00,$DB,$02,$4D,$00,$B7,$5C,$F3
+ $FF19 DEFB $0D,$C3,$18
+
 ; End
-i$FF11
+i$FF1C

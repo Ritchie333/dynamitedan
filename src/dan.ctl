@@ -1314,4 +1314,5 @@ b $FE65 Picked up aerosol tune
 b $FE71 Fought moving object while aerosol active tune
 b $FE77 Game won text
 D $FE77 Used by the routine at #R$E62F
-i $FF11 End
+u $FF11
+i $FF1C End

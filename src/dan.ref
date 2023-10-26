@@ -199,7 +199,8 @@ The fields are:
 { 01 | Fixed y co-ordinate (horizontal) or x co-ordinate (veritcal) }
 { 02 | Minimum x (horizontal) or y (vertical) co-ordinate }
 { 03 | Maximum x (horizontal) or y (vertical) co-ordinate }
-{ 04 | Bitfield of flags }
+{ 04 | Bitfield of flags. If bit 6 is set, Dan collided with the object
+and it should not be drawn. }
 { 05 | Attribute to colour the sprite in }
 { 06 | Current frame number }
 { 07 | Total number of frames }
