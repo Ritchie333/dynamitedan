@@ -6226,7 +6226,7 @@ g$C876 DEFB $00
 
 ; Height for the next jump
 ;
-; This is normally $0B, but can be increased when on a trampoline
+; This is normally #N$0B, but can be increased when on a trampoline
 g$C877 DEFB $0B
 
 ; Number of dynamite sticks collected
@@ -7588,8 +7588,8 @@ c$D0DC LD A,($C874)  ; Get some flags. (#R$C874)
 *$D0F4 CALL $D567    ;
  $D0F7 INC L         ;
  $D0F8 JR $D108      ;
-*$D0FA LD A,($C877)  ;
- $D0FD SUB $02       ;
+*$D0FA LD A,($C877)  ; Get the current jump height (#R$C877).
+ $D0FD SUB $02       ; Subtract 2 from it.
  $D0FF CP L          ;
  $D100 JR NZ,$D104   ;
  $D102 RES 4,B       ;
@@ -7611,45 +7611,47 @@ c$D0DC LD A,($C874)  ; Get some flags. (#R$C874)
 ; Make Dan jump
 ;
 ; Used by the routine at #R$CFD9.
-c$D123 LD A,($C876)  ;
- $D126 LD L,A        ;
- $D127 LD A,($C874)  ;
- $D12A LD B,A        ;
- $D12B LD A,($C877)  ;
- $D12E LD H,A        ;
- $D12F BIT 2,B       ;
+c$D123 LD A,($C876)  ; { Put the height fallen by (#R$C876) in #REGl.
+ $D126 LD L,A        ; }
+ $D127 LD A,($C874)  ; { Put Dan's flags (#R$C874) in #REGb.
+ $D12A LD B,A        ; }
+ $D12B LD A,($C877)  ; { Put the current jump height (#R$C877) in #REGh.
+ $D12E LD H,A        ; }
+ $D12F BIT 2,B       ; Is bit 2 (falling onto a trampoline) set?
  $D131 JR NZ,$D14B   ;
  $D133 LD A,L        ;
  $D134 CP H          ;
  $D135 JR NZ,$D145   ;
- $D137 SET 2,B       ;
+ $D137 SET 2,B       ; Set bit 2 (falling onto a trampoline).
  $D139 LD L,$00      ;
  $D13B PUSH HL       ;
- $D13C LD A,($CFCB)  ;
- $D13F CALL $DB01    ;
+ $D13C LD A,($CFCB)  ; Get the current note to play while in mid-air. (#R$CFCB)
+ $D13F CALL $DB01    ; Play a sound.
  $D142 POP HL        ;
  $D143 JR $D155      ;
-*$D145 INC L         ;
- $D146 CALL $D567    ;
+*$D145 INC L         ; Increase the height fallen (what comes up must come down!)
+ $D146 CALL $D567    ; Move Dan upwards while jumping.
  $D149 JR $D155      ;
-*$D14B INC L         ;
- $D14C CALL $D607    ;
+*$D14B INC L         ; Increase the height fallen.
+ $D14C CALL $D607    ; Fall through the air.
  $D14F LD A,L        ;
  $D150 CP H          ;
  $D151 JR NZ,$D155   ;
  $D153 RES 0,B       ;
-*$D155 BIT 3,B       ;
- $D157 JR Z,$D165    ;
- $D159 BIT 1,B       ;
- $D15B JR Z,$D162    ;
- $D15D CALL $D4B5    ;
- $D160 JR $D165      ;
-*$D162 CALL $D3EC    ;
-*$D165 LD A,B        ;
- $D166 LD ($C874),A  ;
- $D169 LD A,L        ;
- $D16A LD ($C876),A  ;
- $D16D JR $D1CE      ;
+*$D155 BIT 3,B       ; Does Dan need changing direction?
+ $D157 JR Z,$D165    ; Skip the next bit of code if not.
+; Dan needs changing direction.
+ $D159 BIT 1,B       ; Is Dan facing right?
+ $D15B JR Z,$D162    ; Skip the next bit if not.
+ $D15D CALL $D4B5    ; Move Dan right.
+ $D160 JR $D165      ; Skip the next bit.
+*$D162 CALL $D3EC    ; Move Dan left.
+; Write all the data back out to memory.
+*$D165 LD A,B        ; { Write the flags back to memory.
+ $D166 LD ($C874),A  ; }
+ $D169 LD A,L        ; { Write the height fallen back to memory.
+ $D16A LD ($C876),A  ; }
+ $D16D JR $D1CE      ; Redraw Dan and do any collision detection.
 
 ; Move Dan on the lift
 ;
@@ -10946,7 +10948,7 @@ c$E96B PUSH BC        ;
  $E9B9 RET            ;
 
 ; Current input routine
-w$E9BA DEFW $F271
+g$E9BA DEFW $F271
 
 ; Execute the current input routine
 ;
