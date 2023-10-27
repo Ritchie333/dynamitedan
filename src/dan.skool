@@ -7721,7 +7721,7 @@ c$D1B2 LD A,D        ; { Is the lift in room 05? (#R$6A22)
 ; Bits 0 - 2 hold the attribute (0-7) that Dan has collided with
 ; .
 ; Bit 7 is set to mark that Dan has collided with this object
-b$D1CD DEFB $00
+g$D1CD DEFB $00
 
 ; Draw Dan and do any collision detection
 ;
@@ -8029,6 +8029,12 @@ b$D3AC DEFB $17,$14,$7C,$17,$09,$7D,$14,$0A
 ; Text for display area
 ;
 ; "ENERGY" / "SC0RE:" / "HI:"
+;
+; .
+;
+; #CALL:print_multi_string( #PC, 0, d_energy )
+; #CALL:print_multi_string( #PC, 1, d_score )
+; #CALL:print_multi_string( #PC, 2, d_hi )
 b$D3D4 DEFB $16,$02,$0E,$17,$0E,$1A,$10,$21
  $D3DC DEFB $FE,$15,$0A,$1B,$0C,$00,$1A,$0E
  $D3E4 DEFB $23,$FE,$16,$0D,$11,$12,$23,$FF
@@ -8515,7 +8521,7 @@ g$D6BC DEFB $00
 ; Pointer to current vertical sprite being drawn
 ;
 ; Used by the routine at #R$D7E7
-w$D6BD DEFW $DEDA
+g$D6BD DEFW $DEDA
 
 ; Move vertical objects in the room
 ;
@@ -8590,7 +8596,7 @@ g$D72E DEFB $00
 g$D72F DEFB $00
 
 ; Pointer to current horizontal sprite being drawn
-w$D730 DEFW $E0BE
+g$D730 DEFW $E0BE
 
 ; Move horizontal objects in the room
 ;
@@ -8748,7 +8754,9 @@ c$D7E7 LD A,($D6BC)  ;
  $D812 RET           ;
 
 ; Offset for current moving object table
-w$D813 DEFW $0000
+;
+; Used in the routine at #R$D815.
+g$D813 DEFW $0000
 
 ; Copy a sprite's graphic into a working buffer
 ;
@@ -9179,20 +9187,20 @@ c$D9EC LD A,($D9EA)  ; { Put the room the raft is in (#R$D9EA) in #REGb.
  $DA86 RET           ;
 
 ; Current type of tune being played
-b$DA87 DEFB $05
+g$DA87 DEFB $05
 
 ; Current note in a tune being played
-b$DA88 DEFB $46,$EE
+g$DA88 DEFB $46,$EE
 
 ; Current state of playing a sound (used by #R$DA8D)
 ;
 ; If bit 0 is not set, play a tune instead
 ; .
 ; If bit 1 is not set, the "lose a life" effect should be played instead
-b$DA8A DEFB $00
+g$DA8A DEFB $00
 
 ; Next action to take during playing a sound (used by #R$DA8D)
-w$DA8B DEFW $DAFA
+g$DA8B DEFW $DAFA
 
 ; Play a note or a sound effect
 ;
