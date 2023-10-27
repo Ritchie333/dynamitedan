@@ -111,6 +111,8 @@ routine in #R$CBBD. The structure is :
 { 00 - 01 | Pointer to list of static UDGs }
 { 02 - 03 | Location of a test tube in the room, if any }
 { 04 | Bits 0-2 contain an index (from 0-7) of a food item.
+Bit 4 is set if there is a test tube in the room.
+Bit 5 is set if there is dynamite in the room.
 Bits 6-7 are an index (0-3) into an array at #R$6C26 containing
 two custom attribute bytes that represent floors (in addition to a
 hard-coded six more) ie: can be stood on,

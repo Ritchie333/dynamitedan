@@ -542,7 +542,7 @@ b$69E6 DEFW $6E5F    ; UDGs
  $69EB DEFB $08,$08  ; Food co-ordinates
  $69ED DEFW $9CA7    ; Moving objects
  $69EF DEFB $0F,$17  ; Dynamite co-ordinates
- $69F1 DEFB $00      ; Bank card index
+ $69F1 DEFB $00      ; Special object index
 
 ; Room 01 data
 ;
@@ -557,7 +557,7 @@ b$69F2 DEFW $6E90    ; UDGs
  $69F7 DEFB $07,$0B  ; Food co-ordinates
  $69F9 DEFW $9CED    ; Moving objects
  $69FB DEFB $0D,$11  ; Dynamite co-ordinates
- $69FD DEFB $00      ; Bank card index
+ $69FD DEFB $00      ; Special object index
 
 ; Room 02 data
 ;
@@ -572,7 +572,7 @@ b$69FE DEFW $6EDC    ; UDGs
  $6A03 DEFB $0D,$17  ; Food co-ordinates
  $6A05 DEFW $9D23    ; Moving objects
  $6A07 DEFB $0F,$11  ; Dynamite co-ordinates
- $6A09 DEFB $00      ; Bank card index
+ $6A09 DEFB $00      ; Special object index
 
 ; Room 03 data
 ;
@@ -587,7 +587,7 @@ b$6A0A DEFW $6F34    ; UDGs
  $6A0F DEFB $0A,$11  ; Food co-ordinates
  $6A11 DEFW $9D61    ; Moving objects
  $6A13 DEFB $03,$06  ; Dynamite co-ordinates
- $6A15 DEFB $00      ; Bank card index
+ $6A15 DEFB $00      ; Special object index
 
 ; Room 04 data
 ;
@@ -602,7 +602,7 @@ b$6A16 DEFW $6F77    ; UDGs
  $6A1B DEFB $0C,$0D  ; Food co-ordinates
  $6A1D DEFW $9DB7    ; Moving objects
  $6A1F DEFB $03,$16  ; Dynamite co-ordinates
- $6A21 DEFB $00      ; Bank card index
+ $6A21 DEFB $00      ; Special object index
 
 ; Room 05 data
 ;
@@ -617,7 +617,7 @@ b$6A22 DEFW $6FC6    ; UDGs
  $6A27 DEFB $0C,$1B  ; Food co-ordinates
  $6A29 DEFW $9DF5    ; Moving objects
  $6A2B DEFB $0F,$0B  ; Dynamite co-ordinates
- $6A2D DEFB $00      ; Bank card index
+ $6A2D DEFB $00      ; Special object index
 
 ; Room 06 data
 ;
@@ -632,7 +632,7 @@ b$6A2E DEFW $702A    ; UDGs
  $6A33 DEFB $0B,$17  ; Food co-ordinates
  $6A35 DEFW $9E2B    ; Moving objects
  $6A37 DEFB $0C,$11  ; Dynamite co-ordinates
- $6A39 DEFB $00      ; Bank card index
+ $6A39 DEFB $00      ; Special object index
 
 ; Room 07 data
 ;
@@ -647,7 +647,7 @@ b$6A3A DEFW $7094    ; UDGs
  $6A3F DEFB $0F,$08  ; Food co-ordinates
  $6A41 DEFW $9E79    ; Moving objects
  $6A43 DEFB $0F,$0C  ; Dynamite co-ordinates
- $6A45 DEFB $00      ; Bank card index
+ $6A45 DEFB $00      ; Special object index
 
 ; Room 08 data
 ;
@@ -662,7 +662,7 @@ b$6A46 DEFW $70B9    ; UDGs
  $6A4B DEFB $0B,$03  ; Food co-ordinates
  $6A4D DEFW $9EBF    ; Moving objects
  $6A4F DEFB $10,$17  ; Dynamite co-ordinates
- $6A51 DEFB $00      ; Bank card index
+ $6A51 DEFB $00      ; Special object index
 
 ; Room 09 data
 ;
@@ -677,7 +677,7 @@ b$6A52 DEFW $710E    ; UDGs
  $6A57 DEFB $11,$1A  ; Food co-ordinates
  $6A59 DEFW $9EF5    ; Moving objects
  $6A5B DEFB $0B,$10  ; Dynamite co-ordinates
- $6A5D DEFB $00      ; Bank card index
+ $6A5D DEFB $00      ; Special object index
 
 ; Room 0A data
 ;
@@ -692,7 +692,7 @@ b$6A5E DEFW $7190    ; UDGs
  $6A63 DEFB $11,$16  ; Food co-ordinates
  $6A65 DEFW $9F3B    ; Moving objects
  $6A67 DEFB $0C,$09  ; Dynamite co-ordinates
- $6A69 DEFB $00      ; Bank card index
+ $6A69 DEFB $00      ; Special object index
 
 ; Room 0B data
 ;
@@ -707,7 +707,7 @@ b$6A6A DEFW $71F4    ; UDGs
  $6A6F DEFB $10,$0C  ; Food co-ordinates
  $6A71 DEFW $9F81    ; Moving objects
  $6A73 DEFB $09,$1C  ; Dynamite co-ordinates
- $6A75 DEFB $00      ; Bank card index
+ $6A75 DEFB $00      ; Special object index
 
 ; Room 0C data
 ;
@@ -722,7 +722,7 @@ b$6A76 DEFW $7252    ; UDGs
  $6A7B DEFB $05,$06  ; Food co-ordinates
  $6A7D DEFW $9FCF    ; Moving objects
  $6A7F DEFB $0E,$05  ; Dynamite co-ordinates
- $6A81 DEFB $00      ; Bank card index
+ $6A81 DEFB $00      ; Special object index
 
 ; Room 0D data
 ;
@@ -737,7 +737,7 @@ b$6A82 DEFW $72E9    ; UDGs
  $6A87 DEFB $0C,$15  ; Food co-ordinates
  $6A89 DEFW $A00D    ; Moving objects
  $6A8B DEFB $0E,$14  ; Dynamite co-ordinates
- $6A8D DEFB $00      ; Bank card index
+ $6A8D DEFB $00      ; Special object index
 
 ; Room 0E data
 ;
@@ -752,7 +752,7 @@ b$6A8E DEFW $7362    ; UDGs
  $6A93 DEFB $08,$0D  ; Food co-ordinates
  $6A95 DEFW $A053    ; Moving objects
  $6A97 DEFB $10,$0D  ; Dynamite co-ordinates
- $6A99 DEFB $00      ; Bank card index
+ $6A99 DEFB $00      ; Special object index
 
 ; Room 0F data
 ;
@@ -767,7 +767,7 @@ b$6A9A DEFW $7402    ; UDGs
  $6A9F DEFB $0B,$1A  ; Food co-ordinates
  $6AA1 DEFW $A0A1    ; Moving objects
  $6AA3 DEFB $0E,$09  ; Dynamite co-ordinates
- $6AA5 DEFB $00      ; Bank card index
+ $6AA5 DEFB $00      ; Special object index
 
 ; Room 10 data
 ;
@@ -782,7 +782,7 @@ b$6AA6 DEFW $7472    ; UDGs
  $6AAB DEFB $06,$16  ; Food co-ordinates
  $6AAD DEFW $A0DF    ; Moving objects
  $6AAF DEFB $10,$17  ; Dynamite co-ordinates
- $6AB1 DEFB $00      ; Bank card index
+ $6AB1 DEFB $00      ; Special object index
 
 ; Room 11 data
 ;
@@ -797,7 +797,7 @@ b$6AB2 DEFW $74E5    ; UDGs
  $6AB7 DEFB $12,$02  ; Food co-ordinates
  $6AB9 DEFW $A12D    ; Moving objects
  $6ABB DEFB $07,$16  ; Dynamite co-ordinates
- $6ABD DEFB $00      ; Bank card index
+ $6ABD DEFB $00      ; Special object index
 
 ; Room 12 data
 ;
@@ -812,7 +812,7 @@ b$6ABE DEFW $7531    ; UDGs
  $6AC3 DEFB $09,$0B  ; Food co-ordinates
  $6AC5 DEFW $A16B    ; Moving objects
  $6AC7 DEFB $05,$18  ; Dynamite co-ordinates
- $6AC9 DEFB $00      ; Bank card index
+ $6AC9 DEFB $00      ; Special object index
 
 ; Room 13 data
 ;
@@ -827,7 +827,7 @@ b$6ACA DEFW $75A7    ; UDGs
  $6ACF DEFB $12,$02  ; Food co-ordinates
  $6AD1 DEFW $A1A9    ; Moving objects
  $6AD3 DEFB $12,$0B  ; Dynamite co-ordinates
- $6AD5 DEFB $00      ; Bank card index
+ $6AD5 DEFB $00      ; Special object index
 
 ; Room 14 data
 ;
@@ -842,7 +842,7 @@ b$6AD6 DEFW $7626    ; UDGs
  $6ADB DEFB $05,$0A  ; Food co-ordinates
  $6ADD DEFW $A1F7    ; Moving objects
  $6ADF DEFB $12,$05  ; Dynamite co-ordinates
- $6AE1 DEFB $00      ; Bank card index
+ $6AE1 DEFB $00      ; Special object index
 
 ; Room 15 data
 ;
@@ -857,7 +857,7 @@ b$6AE2 DEFW $76A2    ; UDGs
  $6AE7 DEFB $0D,$1B  ; Food co-ordinates
  $6AE9 DEFW $A22D    ; Moving objects
  $6AEB DEFB $0C,$16  ; Dynamite co-ordinates
- $6AED DEFB $00      ; Bank card index
+ $6AED DEFB $00      ; Special object index
 
 ; Room 16 data
 ;
@@ -872,7 +872,7 @@ b$6AEE DEFW $7733    ; UDGs
  $6AF3 DEFB $06,$06  ; Food co-ordinates
  $6AF5 DEFW $A273    ; Moving objects
  $6AF7 DEFB $11,$18  ; Dynamite co-ordinates
- $6AF9 DEFB $00      ; Bank card index
+ $6AF9 DEFB $00      ; Special object index
 
 ; Room 17 data
 ;
@@ -887,7 +887,7 @@ b$6AFA DEFW $77CD    ; UDGs
  $6AFF DEFB $11,$09  ; Food co-ordinates
  $6B01 DEFW $A2B9    ; Moving objects
  $6B03 DEFB $0F,$15  ; Dynamite co-ordinates
- $6B05 DEFB $00      ; Bank card index
+ $6B05 DEFB $00      ; Special object index
 
 ; Room 18 data
 ;
@@ -902,7 +902,7 @@ b$6B06 DEFW $782E    ; UDGs
  $6B0B DEFB $10,$1B  ; Food co-ordinates
  $6B0D DEFW $A307    ; Moving objects
  $6B0F DEFB $03,$03  ; Dynamite co-ordinates
- $6B11 DEFB $00      ; Bank card index
+ $6B11 DEFB $00      ; Special object index
 
 ; Room 19 data
 ;
@@ -917,7 +917,7 @@ b$6B12 DEFW $78C5    ; UDGs
  $6B17 DEFB $0A,$18  ; Food co-ordinates
  $6B19 DEFW $A345    ; Moving objects
  $6B1B DEFB $06,$18  ; Dynamite co-ordinates
- $6B1D DEFB $00      ; Bank card index
+ $6B1D DEFB $00      ; Special object index
 
 ; Room 1A data
 ;
@@ -932,7 +932,7 @@ b$6B1E DEFW $78F6    ; UDGs
  $6B23 DEFB $0A,$02  ; Food co-ordinates
  $6B25 DEFW $A39B    ; Moving objects
  $6B27 DEFB $11,$1A  ; Dynamite co-ordinates
- $6B29 DEFB $00      ; Bank card index
+ $6B29 DEFB $00      ; Special object index
 
 ; Room 1B data
 ;
@@ -947,7 +947,7 @@ b$6B2A DEFW $795D    ; UDGs
  $6B2F DEFB $0F,$17  ; Food co-ordinates
  $6B31 DEFW $A3E9    ; Moving objects
  $6B33 DEFB $03,$1A  ; Dynamite co-ordinates
- $6B35 DEFB $00      ; Bank card index
+ $6B35 DEFB $00      ; Special object index
 
 ; Room 1C data
 ;
@@ -962,7 +962,7 @@ b$6B36 DEFW $7A18    ; UDGs
  $6B3B DEFB $0A,$0F  ; Food co-ordinates
  $6B3D DEFW $A437    ; Moving objects
  $6B3F DEFB $08,$07  ; Dynamite co-ordinates
- $6B41 DEFB $00      ; Bank card index
+ $6B41 DEFB $00      ; Special object index
 
 ; Room 1D data
 ;
@@ -977,7 +977,7 @@ b$6B42 DEFW $7A46    ; UDGs
  $6B47 DEFB $08,$08  ; Food co-ordinates
  $6B49 DEFW $A48D    ; Moving objects
  $6B4B DEFB $03,$04  ; Dynamite co-ordinates
- $6B4D DEFB $00      ; Bank card index
+ $6B4D DEFB $00      ; Special object index
 
 ; Room 1E data
 ;
@@ -992,7 +992,7 @@ b$6B4E DEFW $7AC8    ; UDGs
  $6B53 DEFB $10,$1B  ; Food co-ordinates
  $6B55 DEFW $A4E3    ; Moving objects
  $6B57 DEFB $0D,$0F  ; Dynamite co-ordinates
- $6B59 DEFB $00      ; Bank card index
+ $6B59 DEFB $00      ; Special object index
 
 ; Room 1F data
 ;
@@ -1007,7 +1007,7 @@ b$6B5A DEFW $7B3E    ; UDGs
  $6B5F DEFB $0F,$0D  ; Food co-ordinates
  $6B61 DEFW $A531    ; Moving objects
  $6B63 DEFB $04,$0E  ; Dynamite co-ordinates
- $6B65 DEFB $00      ; Bank card index
+ $6B65 DEFB $00      ; Special object index
 
 ; Room 20 data
 ;
@@ -1022,7 +1022,7 @@ b$6B66 DEFW $7B93    ; UDGs
  $6B6B DEFB $06,$1B  ; Food co-ordinates
  $6B6D DEFW $A577    ; Moving objects
  $6B6F DEFB $0D,$19  ; Dynamite co-ordinates
- $6B71 DEFB $00      ; Bank card index
+ $6B71 DEFB $00      ; Special object index
 
 ; Room 21 data
 ;
@@ -1037,7 +1037,7 @@ b$6B72 DEFW $7C45    ; UDGs
  $6B77 DEFB $05,$0C  ; Food co-ordinates
  $6B79 DEFW $A5B5    ; Moving objects
  $6B7B DEFB $08,$0B  ; Dynamite co-ordinates
- $6B7D DEFB $00      ; Bank card index
+ $6B7D DEFB $00      ; Special object index
 
 ; Room 22 data
 ;
@@ -1052,7 +1052,7 @@ b$6B7E DEFW $7C6D    ; UDGs
  $6B83 DEFB $06,$1C  ; Food co-ordinates
  $6B85 DEFW $A5F3    ; Moving objects
  $6B87 DEFB $0C,$0F  ; Dynamite co-ordinates
- $6B89 DEFB $00      ; Bank card index
+ $6B89 DEFB $00      ; Special object index
 
 ; Room 23 data
 ;
@@ -1067,7 +1067,7 @@ b$6B8A DEFW $7CBF    ; UDGs
  $6B8F DEFB $05,$16  ; Food co-ordinates
  $6B91 DEFW $A641    ; Moving objects
  $6B93 DEFB $10,$02  ; Dynamite co-ordinates
- $6B95 DEFB $00      ; Bank card index
+ $6B95 DEFB $00      ; Special object index
 
 ; Room 24 data
 ;
@@ -1082,7 +1082,7 @@ b$6B96 DEFW $7D50    ; UDGs
  $6B9B DEFB $0F,$0C  ; Food co-ordinates
  $6B9D DEFW $A697    ; Moving objects
  $6B9F DEFB $01,$02  ; Dynamite co-ordinates
- $6BA1 DEFB $00      ; Bank card index
+ $6BA1 DEFB $00      ; Special object index
 
 ; Room 25 data
 ;
@@ -1097,7 +1097,7 @@ b$6BA2 DEFW $7DDB    ; UDGs
  $6BA7 DEFB $0E,$19  ; Food co-ordinates
  $6BA9 DEFW $A6D5    ; Moving objects
  $6BAB DEFB $08,$15  ; Dynamite co-ordinates
- $6BAD DEFB $00      ; Bank card index
+ $6BAD DEFB $00      ; Special object index
 
 ; Room 26 data
 ;
@@ -1112,7 +1112,7 @@ b$6BAE DEFW $7E63    ; UDGs
  $6BB3 DEFB $05,$04  ; Food co-ordinates
  $6BB5 DEFW $A71B    ; Moving objects
  $6BB7 DEFB $0E,$0D  ; Dynamite co-ordinates
- $6BB9 DEFB $00      ; Bank card index
+ $6BB9 DEFB $00      ; Special object index
 
 ; Room 27 data
 ;
@@ -1127,7 +1127,7 @@ b$6BBA DEFW $7EC7    ; UDGs
  $6BBF DEFB $05,$06  ; Food co-ordinates
  $6BC1 DEFW $A761    ; Moving objects
  $6BC3 DEFB $07,$1C  ; Dynamite co-ordinates
- $6BC5 DEFB $00      ; Bank card index
+ $6BC5 DEFB $00      ; Special object index
 
 ; Room 28 data
 ;
@@ -1142,7 +1142,7 @@ b$6BC6 DEFW $7F3D    ; UDGs
  $6BCB DEFB $10,$13  ; Food co-ordinates
  $6BCD DEFW $A79F    ; Moving objects
  $6BCF DEFB $10,$05  ; Dynamite co-ordinates
- $6BD1 DEFB $00      ; Bank card index
+ $6BD1 DEFB $00      ; Special object index
 
 ; Room 29 data
 ;
@@ -1157,7 +1157,7 @@ b$6BD2 DEFW $7F89    ; UDGs
  $6BD7 DEFB $0A,$0A  ; Food co-ordinates
  $6BD9 DEFW $A7ED    ; Moving objects
  $6BDB DEFB $0A,$05  ; Dynamite co-ordinates
- $6BDD DEFB $00      ; Bank card index
+ $6BDD DEFB $00      ; Special object index
 
 ; Room 2A data
 ;
@@ -1172,7 +1172,7 @@ b$6BDE DEFW $7F96    ; UDGs
  $6BE3 DEFB $0A,$02  ; Food co-ordinates
  $6BE5 DEFW $A82B    ; Moving objects
  $6BE7 DEFB $10,$18  ; Dynamite co-ordinates
- $6BE9 DEFB $00      ; Bank card index
+ $6BE9 DEFB $00      ; Special object index
 
 ; Room 2B data
 ;
@@ -1187,7 +1187,7 @@ b$6BEA DEFW $8030    ; UDGs
  $6BEF DEFB $10,$12  ; Food co-ordinates
  $6BF1 DEFW $A871    ; Moving objects
  $6BF3 DEFB $10,$0D  ; Dynamite co-ordinates
- $6BF5 DEFB $00      ; Bank card index
+ $6BF5 DEFB $00      ; Special object index
 
 ; Room 2C data
 ;
@@ -1202,7 +1202,7 @@ b$6BF6 DEFW $80AC    ; UDGs
  $6BFB DEFB $10,$0D  ; Food co-ordinates
  $6BFD DEFW $A8B7    ; Moving objects
  $6BFF DEFB $10,$03  ; Dynamite co-ordinates
- $6C01 DEFB $00      ; Bank card index
+ $6C01 DEFB $00      ; Special object index
 
 ; Room 2D data
 ;
@@ -1217,7 +1217,7 @@ b$6C02 DEFW $80D7    ; UDGs
  $6C07 DEFB $06,$02  ; Food co-ordinates
  $6C09 DEFW $A8FD    ; Moving objects
  $6C0B DEFB $0B,$06  ; Dynamite co-ordinates
- $6C0D DEFB $00      ; Bank card index
+ $6C0D DEFB $00      ; Special object index
 
 ; Room 2E data
 ;
@@ -1232,7 +1232,7 @@ b$6C0E DEFW $8135    ; UDGs
  $6C13 DEFB $06,$14  ; Food co-ordinates
  $6C15 DEFW $A93B    ; Moving objects
  $6C17 DEFB $06,$08  ; Dynamite co-ordinates
- $6C19 DEFB $00      ; Bank card index
+ $6C19 DEFB $00      ; Special object index
 
 ; Room 2F data
 ;
@@ -1247,7 +1247,7 @@ b$6C1A DEFW $8175    ; UDGs
  $6C1F DEFB $10,$0D  ; Food co-ordinates
  $6C21 DEFW $A989    ; Moving objects
  $6C23 DEFB $02,$16  ; Dynamite co-ordinates
- $6C25 DEFB $00      ; Bank card index
+ $6C25 DEFB $00      ; Special object index
 
 ; Attributes marking walls
 ;
@@ -6803,7 +6803,7 @@ c$CBBD LD ($CFCA),A   ; Get the current room. (#R$CFCA).
 ; Draw the river
 ;
 ; Used by the routine at #R$CBBD.
-c$CC36 LD A,($CFCA)  ; Get the current room.
+c$CC36 LD A,($CFCA)  ; Get the current room. (#R$CFCA)
  $CC39 CP $08        ; Is it less than 8?
  $CC3B RET NC        ; If so, the room is not at ground level, so return.
 ; The room is at ground level, so draw the river.
@@ -6837,9 +6837,9 @@ g$CC5E DEFB $03
 ; Animate the river
 ;
 ; Used by the routine at #R$C800.
-c$CC5F LD A,($CFCA)  ;
- $CC62 CP $08        ;
- $CC64 RET NC        ;
+c$CC5F LD A,($CFCA)  ; Get the current room. (#R$CFCA).
+ $CC62 CP $08        ; Is it greater than 8?
+ $CC64 RET NC        ; Return if it is, the room's not by the river.
  $CC65 LD HL,$CC5E   ;
  $CC68 DEC (HL)      ;
  $CC69 JR Z,$CC6C    ;
@@ -6872,7 +6872,7 @@ c$CC5F LD A,($CFCA)  ;
 ; Used by the routine at #R$C800.
 c$CC89 CALL $DC71    ; Is Dan standing by the lift?
  $CC8C LD BC,($C87A) ;
- $CC90 LD A,($CFCA)  ;
+ $CC90 LD A,($CFCA)  ; Get the current room. (#R$CFCA)
  $CC93 LD H,A        ;
  $CC94 LD DE,($C87C) ;
  $CC98 LD A,C        ;
@@ -7224,7 +7224,7 @@ w$CEAB DEFW $CF77
 ; Used by the routine at #R$C800.
 c$CEAD LD B,$03      ; Number of rooms to check.
  $CEAF LD HL,$CEA4   ; Point #REGhl to the first action.
- $CEB2 LD A,($CFCA)  ; Get the current room.
+ $CEB2 LD A,($CFCA)  ; Get the current room. (#R$CFCA)
 *$CEB5 CP (HL)       ; Is the special action in this room?
  $CEB6 JR Z,$CEBE    ; Jump forward if it is.
  $CEB8 INC HL        ; { Move to the next entry.
@@ -7268,7 +7268,7 @@ g$CEE8 DEFB $ED,$58
 
 ; Current height of rainbow lift
 ;
-; Used be the routine at #R$CEF0
+; Used by the routine at #R$CEF0
 g$CEEA DEFB $06,$08
 
 ; Trigger positions for rainbow lifts
@@ -7499,14 +7499,14 @@ c$CFD9 LD A,($C87E)  ; Get some flags. (#R$C87E)
 ; Increase the height fallen and adjust position
 ;
 ; Used by the routine at #R$CFD9.
-c$D079 LD HL,$C876   ;
- $D07C LD A,(HL)     ;
- $D07D CP $FF        ;
- $D07F JR NZ,$D083   ;
- $D081 LD (HL),$1C   ;
-*$D083 INC (HL)      ;
- $D084 CALL $D607    ;
- $D087 JP $D1CE      ;
+c$D079 LD HL,$C876   ; Point #REGhl at the height fallen. (#R$C876)
+ $D07C LD A,(HL)     ; { Is the value #N$FF?
+ $D07D CP $FF        ; }
+ $D07F JR NZ,$D083   ; Jump forward if it isn't.
+ $D081 LD (HL),$1C   ; Otherwise reset to #N$1C.
+*$D083 INC (HL)      ; Increase the height.
+ $D084 CALL $D607    ; Update falling through the air.
+ $D087 JP $D1CE      ; Redraw Dan and check for any collision detection.
 
 ; Move Dan up a rainbow lift
 ;
@@ -7647,7 +7647,7 @@ c$D16F LD A,($C87B)  ;
  $D18C ADD A,$1A     ;
  $D18E LD E,A        ;
  $D18F LD ($C87C),A  ;
- $D192 LD A,($CFCA)  ;
+ $D192 LD A,($CFCA)  ; Get the current room. (#R$CFCA)
  $D195 LD ($C87D),A  ;
  $D198 CALL $CD2B    ;
  $D19B LD DE,($C87C) ;
@@ -7798,7 +7798,7 @@ c$D1CE LD A,($C880)   ; Get the frame count. (#R$C880)
  $D258 AND A          ; It it zero?
  $D259 JP Z,$DE87     ; If so, Dan's hit a good object (test tube or dynamite), so handle it.
 ; Dan has hit a moving object.
- $D25C LD A,($CFCA)   ; Get the current room. (#R$FCFA)
+ $D25C LD A,($CFCA)   ; Get the current room. (#R$CFCA)
  $D25F CP $1B         ; Is it the safe room? (#R$6B1E)
  $D261 JR NZ,$D270    ; Jump forward if it isn't.
 ; Dan's in the safe room, if he's hit Dr. Blitzen or Donna then he's in real trouble
@@ -8048,7 +8048,7 @@ c$D3EC EXX           ;
  $D43C LD ($C873),A  ;
  $D43F LD A,$07      ;
  $D441 LD ($C875),A  ;
- $D444 LD A,($CFCA)  ;
+ $D444 LD A,($CFCA)  ; Get the current room. (#R$CFCA)
  $D447 LD B,A        ;
  $D448 AND $07       ;
  $D44A CP $07        ;
@@ -8170,7 +8170,7 @@ c$D4B5 EXX           ;
 *$D505 XOR A         ;
  $D506 LD ($C875),A  ;
  $D509 LD ($C873),A  ;
- $D50C LD A,($CFCA)  ;
+ $D50C LD A,($CFCA)  ; Get the current room. (#R$CFCA)
  $D50F LD B,A        ;
  $D510 AND $07       ;
  $D512 JR NZ,$D519   ;
@@ -8275,8 +8275,8 @@ c$D567 EXX           ;
  $D5A6 JR NZ,$D5B7   ;
  $D5A8 LD A,$82      ;
  $D5AA LD ($C872),A  ;
- $D5AD LD A,($CFCA)  ;
- $D5B0 ADD A,$08     ;
+ $D5AD LD A,($CFCA)  ; Get the current room. (#R$CFCA)
+ $D5B0 ADD A,$08     ; Add 8 to move up one level.
  $D5B2 CALL $CBBD    ;
  $D5B5 EXX           ;
  $D5B6 RET           ;
@@ -8330,7 +8330,7 @@ c$D607 EXX           ; Swap main registers.
 ; Dan has fallen into another room.
  $D60F LD A,$02      ; { Set the Y co-ordinate to the top. (02)
  $D611 LD ($C872),A  ; }
- $D614 LD A,($CFCA)  ; Get the current room (#R$CFCA)
+ $D614 LD A,($CFCA)  ; Get the current room. (#R$CFCA)
  $D617 SUB $08       ; Subtract 8 to get the room below.
  $D619 CALL $CBBD    ; Switch to this room.
  $D61C EXX           ; { Swap main registers and return.
@@ -8848,9 +8848,9 @@ c$D895 LD A,($C87B)  ;
  $D8EA LD E,$02      ;
  $D8EC CALL $D9AA    ;
  $D8EF JR NZ,$D8FE   ;
- $D8F1 LD A,($CFCA)  ;
- $D8F4 CP $08        ;
- $D8F6 JP NC,$D2F0   ;
+ $D8F1 LD A,($CFCA)  ; Get the current room. (#R$CFCA)
+ $D8F4 CP $08        ; Is it less than 8?
+ $D8F6 JP NC,$D2F0   ; Jump forward if it isn't.
  $D8F9 LD A,$0D      ;
  $D8FB JP $D919      ;
 *$D8FE LD E,$4F      ;
@@ -9444,7 +9444,7 @@ c$DBEE LD HL,$DA8A   ;
  $DC3D CALL $CBBD    ;
  $DC40 RET           ;
 ; Dan has drowned. Game over.
-*$DC41 POP HL        ;
+*$DC41 POP HL        ; Tidy up the stack so returning 
  $DC42 JP $CDDA      ;
 ; Dan is submerged; display the "air bubble" graphic while drowning
 *$DC45 LD A,($DBED)  ; Get Dan's height above the waterline.
@@ -10223,22 +10223,22 @@ g$E662 DEFB $00
 ; Update any teleporter in this room
 ;
 ; Used by the routine at #R$C800.
-c$E663 LD IY,$EDBC   ;
- $E667 LD B,$0A      ;
- $E669 LD A,($CFCA)  ;
-*$E66C CP (IY+$00)   ;
- $E66F JR Z,$E679    ;
- $E671 LD DE,$0006   ;
- $E674 ADD IY,DE     ;
- $E676 DJNZ $E66C    ;
- $E678 RET           ;
+c$E663 LD IY,$EDBC   ; Point #REGiy at the table of teleporters. (#R$E663)
+ $E667 LD B,$0A      ; 10 entries to check.
+ $E669 LD A,($CFCA)  ; Get the current room. (#R$CFCA)
+*$E66C CP (IY+$00)   ; Is this entry for this room?
+ $E66F JR Z,$E679    ; If so, jump forward and handle it.
+ $E671 LD DE,$0006   ; { Move to the next entry in the table.
+ $E674 ADD IY,DE     ; }
+ $E676 DJNZ $E66C    ; { Loop until all entries have been looked at.
+ $E678 RET           ; }
 ; This room has a teleporter, update it
-*$E679 LD HL,$E662   ;
- $E67C INC (HL)      ;
- $E67D LD A,(HL)     ;
- $E67E LD L,(IY+$01) ;
- $E681 LD H,(IY+$02) ;
- $E684 LD B,$04      ;
+*$E679 LD HL,$E662   ; Point #REGhl at the current colour sequence for the teleporter.
+ $E67C INC (HL)      ; { Increment it and put the result in #REGa.
+ $E67D LD A,(HL)     ; }
+ $E67E LD L,(IY+$01) ; { Put the teleporter co-ordinates in #REGhl.
+ $E681 LD H,(IY+$02) ; }
+ $E684 LD B,$04      ; 4 rows to draw.
 *$E686 AND $07       ;
  $E688 JR NZ,$E68B   ;
  $E68A INC A         ;
@@ -10259,31 +10259,31 @@ c$E663 LD IY,$EDBC   ;
  $E6A1 RLCA          ;
  $E6A2 RLCA          ;
  $E6A3 RLCA          ;
-*$E6A4 CALL $ECA4    ;
+*$E6A4 CALL $ECA4    ; Flash the teleporter.
  $E6A7 LD C,A        ;
  $E6A8 RRCA          ;
- $E6A9 CALL $DB01    ;
- $E6AC LD DE,($C872) ;
- $E6B0 CALL $E909    ;
- $E6B3 EX DE,HL      ;
- $E6B4 LD DE,$0040   ;
- $E6B7 ADD HL,DE     ;
+ $E6A9 CALL $DB01    ; Play the sound effect.
+ $E6AC LD DE,($C872) ; Put Dan's position in #REGde.
+ $E6B0 CALL $E909    ; { Convert this to an attribute address and put it in #REGhl.
+ $E6B3 EX DE,HL      ; }
+ $E6B4 LD DE,$0040   ; { Move down one row in the attribute buffer.
+ $E6B7 ADD HL,DE     ; }
  $E6B8 INC L         ;
- $E6B9 LD A,($E662)  ;
- $E6BC CP $FF        ;
- $E6BE RET NZ        ;
- $E6BF LD A,(HL)     ;
+ $E6B9 LD A,($E662)  ; Get the current colour sequence for the teleporter.
+ $E6BC CP $FF        ; { Return if it is not active.
+ $E6BE RET NZ        ; }
+ $E6BF LD A,(HL)     ; 
  $E6C0 CP C          ;
- $E6C1 LD A,$45      ;
+ $E6C1 LD A,$45      ; Set bright cyan on black.
  $E6C3 JP NZ,$ECA4   ;
-; The teleporter has flashed and Dan is standing under it
- $E6C6 LD A,(IY+$04) ;
- $E6C9 LD ($C872),A  ;
- $E6CC LD A,(IY+$05) ;
- $E6CF LD ($C873),A  ;
- $E6D2 LD A,(IY+$03) ;
- $E6D5 CALL $CBBD    ;
- $E6D8 RET           ;
+; The teleporter has flashed and Dan is standing under it.
+ $E6C6 LD A,(IY+$04) ; { Set the new Y co-ordinate (#R$C872).
+ $E6C9 LD ($C872),A  ; }
+ $E6CC LD A,(IY+$05) ; { Set the new X co-ordinate (#R$C873).
+ $E6CF LD ($C873),A  ; }
+ $E6D2 LD A,(IY+$03) ; Put the new room number in #REGa.
+ $E6D5 CALL $CBBD    ; { Switch to the new room and return.
+ $E6D8 RET           ; }
 
 ; Tick counters for lasers.
 ;
@@ -10304,61 +10304,64 @@ g$E6DB DEFB $00
 ; See if there is a laser in this room, and if so, update it
 ;
 ; Used by the routine at #R$C800.
-c$E6DC LD IY,$EDF8   ;
- $E6E0 LD B,$0F      ;
- $E6E2 LD A,($CFCA)  ;
-*$E6E5 CP (IY+$00)   ;
- $E6E8 JR Z,$E6F6    ;
- $E6EA LD DE,$0004   ;
- $E6ED ADD IY,DE     ;
- $E6EF DJNZ $E6E5    ;
- $E6F1 LD C,$14      ;
- $E6F3 JP $E7D7      ;
+c$E6DC LD IY,$EDF8   ; Point #REGiy at the laser data. (#R$EDF8)
+ $E6E0 LD B,$0F      ; 15 entries to check.
+ $E6E2 LD A,($CFCA)  ; Get the current room. (#R$CFCA)
+*$E6E5 CP (IY+$00)   ; Does it match this one.
+ $E6E8 JR Z,$E6F6    ; Jump forward if it does.
+ $E6EA LD DE,$0004   ; { Otherwise point to the next entry.
+ $E6ED ADD IY,DE     ; }
+ $E6EF DJNZ $E6E5    ; Loop while there are more entries to look at.
+ $E6F1 LD C,$14      ; { Pause and return.
+ $E6F3 JP $E7D7      ; }
 
 ; Update any lasers in the room
 ;
 ; Used by the routines at #R$CA5B, #R$CDD3, #R$DD8D and #R$E6DC.
 ;
 ; IY Pointer to laser data
-c$E6F6 LD C,(IY+$03) ;
- $E6F9 LD HL,$E6D9   ;
- $E6FC INC (HL)      ;
- $E6FD BIT 7,(HL)    ;
- $E6FF JP Z,$E7D7    ;
- $E702 LD A,(HL)     ;
- $E703 AND $03       ;
- $E705 LD B,A        ;
- $E706 ADD A,A       ;
+c$E6F6 LD C,(IY+$03) ; Put the width in #REGc.
+ $E6F9 LD HL,$E6D9   ; Get the curent tick count. (#R$E6D9)
+ $E6FC INC (HL)      ; Increment it.
+ $E6FD BIT 7,(HL)    ; Is it at #N$80 or above?
+ $E6FF JP Z,$E7D7    ; Jump if it isn't.
+; The laser should be firing now.
+ $E702 LD A,(HL)     ; Get the current tick count.
+ $E703 AND $03       ; { Put the lowest two bits in #REGb.
+ $E705 LD B,A        ; }
+ $E706 ADD A,A       ; { Multiply by 8 to get a suitable UDG offset.
  $E707 ADD A,A       ;
- $E708 ADD A,A       ;
- $E709 LD E,A        ;
- $E70A LD D,$00      ;
- $E70C LD HL,$ECBD   ;
- $E70F ADD HL,DE     ;
- $E710 EX DE,HL      ;
- $E711 LD A,B        ;
- $E712 ADD A,$03     ;
- $E714 LD ($E6DB),A  ;
- $E717 LD HL,$E6DA   ;
- $E71A BIT 7,(HL)    ;
- $E71C JR Z,$E742    ;
- $E71E DEC (HL)      ;
- $E71F CALL $ECF4    ;
- $E722 CALL $E775    ;
- $E725 LD A,(HL)     ;
- $E726 AND $3F       ;
- $E728 JR NZ,$E73A   ;
- $E72A XOR A         ;
- $E72B LD (HL),A     ;
- $E72C DEC HL        ;
- $E72D LD (HL),A     ;
- $E72E LD L,(IY+$01) ;
- $E731 LD H,(IY+$02) ;
- $E734 CALL $E76C    ;
- $E737 JP $E7D7      ;
-*$E73A CALL $E756    ;
- $E73D CALL $E76C    ;
- $E740 JR $E782      ;
+ $E708 ADD A,A       ; }
+ $E709 LD E,A        ; { Put this in #REGde.
+ $E70A LD D,$00      ; }
+ $E70C LD HL,$ECBD   ; { Add the base address of the laser graphic. (#R$ECBD)
+ $E70F ADD HL,DE     ; }
+ $E710 EX DE,HL      ; Swap #REGde and #REGhl so #REGhl has the actual graphic to use.
+ $E711 LD A,B        ; { Add 3 to the previously stored two bits of the tick count
+ $E712 ADD A,$03     ; to use as the length. (#R$E6DB)
+ $E714 LD ($E6DB),A  ; }
+ $E717 LD HL,$E6DA   ; Get the current colour. (#R$E6DA)
+ $E71A BIT 7,(HL)    ; Is bit 7 set?
+ $E71C JR Z,$E742    ; Jump forward if it isn't.
+ $E71E DEC (HL)      ; Otherwise move down a colour.
+ $E71F CALL $ECF4    ; Change the colour
+ $E722 CALL $E775    ; Play the "laser fired" sound effect.
+ $E725 LD A,(HL)     ; { Remove the bright and flash parts of the colour.
+ $E726 AND $3F       ; }
+ $E728 JR NZ,$E73A   ; Jump forward while the laser has a non-black colour.
+; The laser needs to be erased.
+ $E72A XOR A         ; { Set the colour to black
+ $E72B LD (HL),A     ; }
+ $E72C DEC HL        ; { Get the tick count (#R$E6D9) to 0.
+ $E72D LD (HL),A     ; }
+ $E72E LD L,(IY+$01) ; { Put the position in #REGhl.
+ $E731 LD H,(IY+$02) ; }
+ $E734 CALL $E76C    ; Clear a section of laser.
+ $E737 JP $E7D7      ; Pause and return.
+; The laser should be drawn.
+*$E73A CALL $E756    ; Draw one frame
+ $E73D CALL $E76C    ; Clear any redundant sections.
+ $E740 JR $E782      ; Move the laser forward.
 *$E742 INC (HL)      ;
  $E743 CALL $ECF4    ;
  $E746 CALL $E775    ;
@@ -10367,29 +10370,35 @@ c$E6F6 LD C,(IY+$03) ;
  $E74C CP C          ;
  $E74D JR NZ,$E751   ;
  $E74F SET 7,(HL)    ;
-*$E751 CALL $E756    ;
+*$E751 CALL $E756    ; Draw one frame.
  $E754 JR $E782      ;
-*$E756 LD B,A        ;
+
+; Draw one frame of the laser
+; 
+; Used by the routine at #RE6F6.
+;
+; A Number of columns to draw
+*$E756 LD B,A        ; Put the number of columns in #REGb.
  $E757 LD A,C        ;
  $E758 SUB B         ;
  $E759 LD C,A        ;
- $E75A LD L,(IY+$01) ;
- $E75D LD H,(IY+$02) ;
-*$E760 PUSH BC       ;
- $E761 LD A,($E6DB)  ;
- $E764 CALL $ECDD    ;
- $E767 INC L         ;
- $E768 POP BC        ;
- $E769 DJNZ $E760    ;
- $E76B RET           ;
+ $E75A LD L,(IY+$01) ; { Put the laser position in #REGhl.
+ $E75D LD H,(IY+$02) ; }
+*$E760 PUSH BC       ; Remember #REGbc.
+ $E761 LD A,($E6DB)  ; Get the current colour. (#R$E6DB)
+ $E764 CALL $ECDD    ; Move the laser by one frame.
+ $E767 INC L         ; Move forward a column.
+ $E768 POP BC        ; Restore #REGbc.
+ $E769 DJNZ $E760    ; { Loop until all columns have been drawn.
+ $E76B RET           ; }
 
 ; Clear a section of laser when it is retreating
 ;
 ; Used by the routine at #R$E6F6.
-c$E76C LD A,$45      ;
- $E76E LD DE,$3D00   ;
- $E771 CALL $ECDD    ;
- $E774 RET           ;
+c$E76C LD A,$45      ; Use bright cyan on black as a colour.
+ $E76E LD DE,$3D00   ; Point #REGde at the empty space graphic in the ROM.
+ $E771 CALL $ECDD    ; { Print this graphic and return.
+ $E774 RET           ; }
 
 ; Play a laser sound effect
 ;
@@ -10398,10 +10407,10 @@ c$E775 LD A,($E6DB)  ;
  $E778 ADD A,A       ;
  $E779 ADD A,(HL)    ;
  $E77A RES 7,A       ;
- $E77C PUSH HL       ;
+ $E77C PUSH HL       ; { Play the sound and return.
  $E77D CALL $DB01    ;
  $E780 POP HL        ;
- $E781 RET           ;
+ $E781 RET           ; }
 
 ; Move the laser bolt one frame
 ;
@@ -10509,7 +10518,7 @@ c$E820 LD HL,$4000   ; { Clear the screen from #N$4000 - #N$5000.
  $E826 LD (HL),L     ; 
  $E827 LD D,H        ; 
  $E828 LD E,$01      ; 
- $E82A LDIR          ;
+ $E82A LDIR          ; }
  $E82C XOR A         ;
  $E82D LD B,$08      ;
 *$E82F PUSH BC       ;
@@ -10780,33 +10789,33 @@ c$E916 LD DE,$4000   ; Point #REGde to the start of screen.
  $E93C JR $E91B      ; Loop back to update more.
  $E93E RET           ; This is never executed, the function executes at #R$E931.
 
-; Toggle the colours on any test tubes or dynamite so they glow
+; Set the colours on any test tubes or dynamite to black
 ;
 ; Used by the routines at #R$C800 and #R$DD8D.
 ;
 ; IX Pointer to the current room's static object data
-c$E93F BIT 5,(IX+$04) ;
- $E943 JR Z,$E952     ;
- $E945 LD E,(IX+$09)  ;
- $E948 LD D,(IX+$0A)  ;
- $E94B CALL $E8E3     ;
- $E94E XOR A          ;
- $E94F LD (DE),A      ;
- $E950 INC E          ;
- $E951 LD (DE),A      ;
-*$E952 BIT 4,(IX+$04) ;
- $E956 RET Z          ;
- $E957 LD E,(IX+$02)  ;
- $E95A LD D,(IX+$03)  ;
- $E95D CALL $E8E3     ;
- $E960 EX DE,HL       ;
- $E961 XOR A          ;
- $E962 LD (HL),A      ;
- $E963 LD BC,$0020    ;
+c$E93F BIT 5,(IX+$04) ; Is there dynamite in the room?
+ $E943 JR Z,$E952     ; Jump forward if there isn't.
+ $E945 LD E,(IX+$09)  ; { Put the dynamite co-ordinates in #REGde.
+ $E948 LD D,(IX+$0A)  ; }
+ $E94B CALL $E8E3     ; Convert this into an attribute address.
+ $E94E XOR A          ; { Set the attribute to black.
+ $E94F LD (DE),A      ; }
+ $E950 INC E          ; { Move forward a column and do the same.
+ $E951 LD (DE),A      ; }
+*$E952 BIT 4,(IX+$04) ; Is there a test tube in the room?
+ $E956 RET Z          ; Return if there isn't.
+ $E957 LD E,(IX+$02)  ; { Put the test tube co-ordinates in #REGde.
+ $E95A LD D,(IX+$03)  ; }
+ $E95D CALL $E8E3     ; Convert this into an attribute address.
+ $E960 EX DE,HL       ; Swap #REGde and #REGhl.
+ $E961 XOR A          ; { Set the attribute to black.
+ $E962 LD (HL),A      ; }
+ $E963 LD BC,$0020    ; { Move forward a row and do the same.
  $E966 AND A          ;
  $E967 SBC HL,BC      ;
- $E969 LD (HL),A      ;
- $E96A RET            ;
+ $E969 LD (HL),A      ; }
+ $E96A RET            ; Return.
 
 ; Draw a moving sprite
 ;
@@ -11101,21 +11110,22 @@ b$EC26 DEFB $03,$07,$27,$27,$27,$0D,$21,$17
 ; Used by the routine at #R$E663.
 ;
 ; IY Pointer to current teleporter's data
-c$ECA4 LD L,(IY+$01) ;
- $ECA7 LD H,(IY+$02) ;
- $ECAA LD DE,$0020   ;
- $ECAD ADD HL,DE     ;
- $ECAE LD C,$04      ;
-*$ECB0 PUSH HL       ;
- $ECB1 LD B,$04      ;
-*$ECB3 LD (HL),A     ;
- $ECB4 INC L         ;
- $ECB5 DJNZ $ECB3    ;
- $ECB7 POP HL        ;
- $ECB8 ADD HL,DE     ;
- $ECB9 DEC C         ;
+; A Attribute to use
+c$ECA4 LD L,(IY+$01) ; { Put the co-ordinates in #REGhl.
+ $ECA7 LD H,(IY+$02) ; }
+ $ECAA LD DE,$0020   ; { Move forward a row.
+ $ECAD ADD HL,DE     ; }
+ $ECAE LD C,$04      ; 4 rows to draw.
+*$ECB0 PUSH HL       ; Store #REGhl.
+ $ECB1 LD B,$04      ; 4 columns to draw.
+*$ECB3 LD (HL),A     ; Set the attribute.
+ $ECB4 INC L         ; Move forward a column.
+ $ECB5 DJNZ $ECB3    ; Loop until all columns in this row are drawn.
+ $ECB7 POP HL        ; Restore #REGhl.
+ $ECB8 ADD HL,DE     ; Move forward a row.
+ $ECB9 DEC C         ; { Loop until all rows are drawn.
  $ECBA JR NZ,$ECB0   ;
- $ECBC RET           ;
+ $ECBC RET           ; }
 
 ; Laser graphics
 ;
@@ -11132,8 +11142,8 @@ b$ECBD DEFB $00,$02,$05,$88,$88,$50,$20,$00
 ; HL Current screen position of laser
 ; DE Current laser bolt graphic
 ; A Colour to draw the laser with
-c$ECDD PUSH HL       ;
- $ECDE PUSH DE       ;
+c$ECDD PUSH HL       ; { Store #REGhl and #REGde.
+ $ECDE PUSH DE       ; }
  $ECDF LD (HL),A     ;
  $ECE0 LD A,H        ;
  $ECE1 AND $03       ;
@@ -11142,24 +11152,24 @@ c$ECDD PUSH HL       ;
  $ECE5 RLCA          ;
  $ECE6 OR $40        ;
  $ECE8 LD H,A        ;
- $ECE9 LD B,$08      ;
-*$ECEB LD A,(DE)     ;
- $ECEC LD (HL),A     ;
- $ECED INC H         ;
- $ECEE INC DE        ;
- $ECEF DJNZ $ECEB    ;
- $ECF1 POP DE        ;
+ $ECE9 LD B,$08      ; 8 lines to draw.
+*$ECEB LD A,(DE)     ; Get the UDG data.
+ $ECEC LD (HL),A     ; Copy it to screen.
+ $ECED INC H         ; Move forward a line.
+ $ECEE INC DE        ; Move forward in the graphic buffer.
+ $ECEF DJNZ $ECEB    ; Loop until all 8 lines are drawn.
+ $ECF1 POP DE        ; { Restore #REGhl and #REGde and return.
  $ECF2 POP HL        ;
- $ECF3 RET           ;
+ $ECF3 RET           ; }
 
 ; Change colour of the laser being drawn across screen
 ;
 ; Used by the routine at #R$E6F6.
 ;
 ; HL Pointer to entry containing current laser colour
-c$ECF4 LD A,(HL)     ;
- $ECF5 AND $3F       ;
- $ECF7 LD B,A        ;
+c$ECF4 LD A,(HL)     ; Get the colour.
+ $ECF5 AND $3F       ; Remove bright and flash bits.
+ $ECF7 LD B,A        ; Store this in #REGb.
  $ECF8 LD A,C        ;
  $ECF9 CP B          ;
  $ECFA RET NC        ;
@@ -11314,27 +11324,27 @@ c$ED06 LD A,(HL)     ; Get the width.
 ; Current colour to set for the next letter on the main title
 ;
 ; Used by the routine at #R$EDA2
-b$EDA1 DEFB $00
+g$EDA1 DEFB $00
 
 ; Rotate the colours on the title screen's main message
 ;
 ; Used by the routine at #R$CA5B.
-c$EDA2 LD HL,$EDA1   ;
- $EDA5 INC (HL)      ;
- $EDA6 LD A,(HL)     ;
- $EDA7 AND $03       ;
- $EDA9 CP $03        ;
- $EDAB RET NZ        ;
- $EDAC LD A,($5878)  ;
- $EDAF LD C,A        ;
- $EDB0 LD B,$13      ;
- $EDB2 LD HL,$5867   ;
-*$EDB5 LD A,(HL)     ;
- $EDB6 LD (HL),C     ;
- $EDB7 LD C,A        ;
- $EDB8 INC L         ;
- $EDB9 DJNZ $EDB5    ;
- $EDBB RET           ;
+c$EDA2 LD HL,$EDA1   ; Point #REGhl at the current colour. (#R$EDA1)
+ $EDA5 INC (HL)      ; Increment it.
+ $EDA6 LD A,(HL)     ; { Take the bottom 2 bits.
+ $EDA7 AND $03       ; }
+ $EDA9 CP $03        ; Is the colour now magenta?
+ $EDAB RET NZ        ; Return if it isn't.
+ $EDAC LD A,($5878)  ; Point A at the last attribute.
+ $EDAF LD C,A        ; Copy this to #REGc.
+ $EDB0 LD B,$13      ; #N$13 columns to draw.
+ $EDB2 LD HL,$5867   ; Point #REGhl to the start of the attributes to change.
+*$EDB5 LD A,(HL)     ; Put the current attribute in #REGa.
+ $EDB6 LD (HL),C     ; Replace it with the previous attribute in #REGc.
+ $EDB7 LD C,A        ; Make the previous attribute the current.
+ $EDB8 INC L         ; Move forward a column.
+ $EDB9 DJNZ $EDB5    ; { Loop until all columns are re-coloured.
+ $EDBB RET           ; }
 
 ; List of teleporters
 ;
@@ -11494,7 +11504,7 @@ c$EF1E LD HL,($69ED) ; Point #REGhl at the moving objects buffer. (#R$69E6 + 7 /
  $EF47 RET           ; }
 
 ; Counter to make glowing objects alternate between colour and black
-b$EF48 DEFB $00
+g$EF48 DEFB $00
 
 ; UDG - Dynamite
 ;
@@ -11525,37 +11535,37 @@ b$EF71 DEFB $06,$06,$05,$05,$04,$04,$03,$02
 ; Pointer to current attribute state of glowing objects
 ;
 ; Used by the routine at #R$EF7C.
-w$EF7A DEFW $EF71
+g$EF7A DEFW $EF71
 
 ; Draw any glowing objects (dynamite or test tubes)
 ;
 ; Used by the routines at #R$C800 and #R$DD8D.
-c$EF7C LD HL,$EF48    ;
- $EF7F INC (HL)       ;
- $EF80 BIT 0,(HL)     ;
- $EF82 RET Z          ;
- $EF83 LD HL,($EF7A)  ;
- $EF86 INC HL         ;
- $EF87 LD A,(HL)      ;
- $EF88 CP $07         ;
- $EF8A JR NZ,$EF8F    ;
- $EF8C LD HL,$EF71    ;
-*$EF8F LD ($EF7A),HL  ;
- $EF92 LD ($EF5C),A   ;
- $EF95 LD ($EF70),A   ;
- $EF98 BIT 5,(IX+$04) ;
- $EF9C JR Z,$EFAA     ;
- $EF9E LD E,(IX+$09)  ;
- $EFA1 LD D,(IX+$0A)  ;
- $EFA4 LD HL,$EF49    ;
- $EFA7 CALL $E84E     ;
-*$EFAA BIT 4,(IX+$04) ;
- $EFAE RET Z          ;
- $EFAF LD E,(IX+$02)  ;
- $EFB2 LD D,(IX+$03)  ;
- $EFB5 LD HL,$EF5D    ;
- $EFB8 CALL $E84E     ;
- $EFBB RET            ;
+c$EF7C LD HL,$EF48    ; Get the tick count. (#R$EF48)
+ $EF7F INC (HL)       ; Increment it.
+ $EF80 BIT 0,(HL)     ; { Return if bit 0 is no longer set.
+ $EF82 RET Z          ; }
+ $EF83 LD HL,($EF7A)  ; { Set #REGa to the next attribute
+ $EF86 INC HL         ; in the table at #R$EF7A.
+ $EF87 LD A,(HL)      ; }
+ $EF88 CP $07         ; Is it 7?
+ $EF8A JR NZ,$EF8F    ; Skip the next code if it is.
+ $EF8C LD HL,$EF71    ; Otherwise, loop back to the start of the buffer.
+*$EF8F LD ($EF7A),HL  ; Set the current pointer to the attribute.
+ $EF92 LD ($EF5C),A   ; Set the attribute for the dynamite.
+ $EF95 LD ($EF70),A   ; Set the attribute for the test tube.
+ $EF98 BIT 5,(IX+$04) ; Is there any dynamite in the room?
+ $EF9C JR Z,$EFAA     ; Jump forward if not.
+ $EF9E LD E,(IX+$09)  ; { Put the dynamite co-ordinates in #REGde.
+ $EFA1 LD D,(IX+$0A)  ; }
+ $EFA4 LD HL,$EF49    ; Point #REGhl at the dynamite UDG (#R$EF49).
+ $EFA7 CALL $E84E     ; Draw it.
+*$EFAA BIT 4,(IX+$04) ; Is there a test tube in the room?
+ $EFAE RET Z          ; Return if not.
+ $EFAF LD E,(IX+$02)  ; { Put the test tube co-ordinates in #REGde.
+ $EFB2 LD D,(IX+$03)  ; }
+ $EFB5 LD HL,$EF5D    ; Point #REGhl at the test tube UDG (#R$EF5D).
+ $EFB8 CALL $E84E     ; Draw it.
+ $EFBB RET            ; Return.
 
 ; Intro screen UDGs
 ;
@@ -11926,12 +11936,12 @@ c$F345 LD HL,$69EA   ; Point #REGhl to the flags in the first room.
  $F361 LD (HL),$30   ;
  $F363 LD HL,$69EA   ; { Set the object data pointer to the first room.
  $F366 LD ($F3A2),HL ; }
- $F369 LD B,$08      ;
- $F36B CALL $F3A4    ;
- $F36E LD A,$10      ;
- $F370 LD ($F3A0),A  ;
- $F373 LD B,$0F      ;
- $F375 CALL $F3A4    ;
+ $F369 LD B,$08      ; 
+ $F36B CALL $F3A4    ; 
+ $F36E LD A,$10      ; 
+ $F370 LD ($F3A0),A  ; 
+ $F373 LD B,$0F      ; 
+ $F375 CALL $F3A4    ; 
  $F378 LD HL,$F3A0   ;
  $F37B LD (HL),$01   ;
  $F37D INC HL        ;
