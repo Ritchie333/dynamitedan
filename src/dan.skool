@@ -6203,12 +6203,17 @@ g$C873 DEFB $10
 
 ; Various flags
 ;
-; If bit 0 is set, Dan is jumping
-; .
-; If bit 5 is set, Dan is safe; if reset, he has touched a moving object and
-; will lose a life
-; .
-; If bit 7 is set, Dan is above water; if reset, he has fallen in the river
+; #TABLE( default, center )
+; { =h bit | =h description }
+; { 0 | Dan is jumping }
+; { 1 | Dan is facing right }
+; { 2 | Dan is falling onto a trampoline }
+; { 3 | Dan is changing direction when hitting a trampoline }
+; { 4 | Dan is rising off a trampoline }
+; { 5 | Dan is safe (ie: if reset he will lose a life) }
+; { 6 | Dan is in mid-air and falling }
+; { 7 | Dan is drowning }
+; TABLE#
 g$C874 DEFB $22
 
 ; Current animation frame
@@ -6230,12 +6235,16 @@ g$C878 DEFB $00
 ; Height when landing on a trampoline without jumping
 g$C879 DEFB $00
 
-; Lift flags
+; Time until lift next moves
 g$C87A DEFB $64
 
 ; Lift flags
 ;
-; If bit 2 is set, Dan is standing on the lift
+; #TABLE( default, center)
+; { =h bit | =j description }
+; { 0 | lift is moving up }
+; { 2 | Dan is standing on the lift }
+; TABLE#
 g$C87B DEFB $01
 
 ; Current lift y co-ordinate
@@ -6871,38 +6880,42 @@ c$CC5F LD A,($CFCA)  ; Get the current room. (#R$CFCA).
 ;
 ; Used by the routine at #R$C800.
 c$CC89 CALL $DC71    ; Is Dan standing by the lift?
- $CC8C LD BC,($C87A) ;
- $CC90 LD A,($CFCA)  ; Get the current room. (#R$CFCA)
+ $CC8C LD BC,($C87A) ; Put the lift flags (#R$C87B) in #REGb
+                     ; and the time until the lift moves (#R$C87A) in #REGc.
+ $CC90 LD A,($CFCA)  ; Put the current room (#R$CFCA) in #REGh.
  $CC93 LD H,A        ;
- $CC94 LD DE,($C87C) ;
- $CC98 LD A,C        ;
- $CC99 AND A         ;
- $CC9A JR Z,$CCA8    ;
- $CC9C DEC C         ;
- $CC9D LD A,H        ;
- $CC9E CP D          ;
- $CC9F JP NZ,$CD1B   ;
-*$CCA2 CALL $CD2B    ;
- $CCA5 JP $CD1B      ;
+ $CC94 LD DE,($C87C) ; Put the lift's room (#R$C87D) in #REGd and the Y co-ordinate (#R$C87C) in #REGe.
+ $CC98 LD A,C        ; Get the wait time.
+ $CC99 AND A         ; Is it zero.
+ $CC9A JR Z,$CCA8    ; Jump forward if it is.
+ $CC9C DEC C         ; Otherwise decrement the wait time.
+ $CC9D LD A,H        ; { Is the lift in this room?
+ $CC9E CP D          ; }
+ $CC9F JP NZ,$CD1B   ; If not, just update the settings and return.
+; The lift is in this room, so it needs drawing. 
+*$CCA2 CALL $CD2B    ; Draw the lift.
+ $CCA5 JP $CD1B      ; Update the settings and return.
+; The lift needs moving.
 *$CCA8 BIT 1,B       ;
  $CCAA JR NZ,$CCA2   ;
- $CCAC BIT 0,B       ;
- $CCAE JR NZ,$CCE5   ;
- $CCB0 DEC E         ;
- $CCB1 DEC E         ;
- $CCB2 LD A,E        ;
- $CCB3 CP $FE        ;
- $CCB5 JR NZ,$CCC5   ;
- $CCB7 LD A,D        ;
+ $CCAC BIT 0,B       ; Is the lift moving up?
+ $CCAE JR NZ,$CCE5   ; Jump if so.
+; Move the lift down.
+ $CCB0 DEC E         ; { Decrease the Y co-ordinate by 2.
+ $CCB1 DEC E         ; }
+ $CCB2 LD A,E        ; { Has the lift reached the bottom of the screen?
+ $CCB3 CP $FE        ; }
+ $CCB5 JR NZ,$CCC5   ; Jump if not.
+ $CCB7 LD A,D        ; { Move down a room.
  $CCB8 ADD A,$08     ;
- $CCBA LD D,A        ;
- $CCBB LD E,$9E      ;
- $CCBD SUB $08       ;
- $CCBF CP H          ;
- $CCC0 JR NZ,$CCC5   ;
- $CCC2 XOR A         ;
- $CCC3 JR $CCE0      ;
-*$CCC5 CALL $D1B2    ;
+ $CCBA LD D,A        ; }
+ $CCBB LD E,$9E      ; Set the new Y co-ordinate.
+ $CCBD SUB $08       ; { Is the lift now in another room?
+ $CCBF CP H          ; }
+ $CCC0 JR NZ,$CCC5   ; Skip the next code if not.
+ $CCC2 XOR A         ; { The lift is now off-screen. 
+ $CCC3 JR $CCE0      ; Reset all flags and jump forward. }
+*$CCC5 CALL $D1B2    ; Check to see if the lift has reached the top or bottom.
  $CCC8 LD A,D        ;
  $CCC9 CP H          ;
  $CCCA JR Z,$CCD7    ;
@@ -6919,22 +6932,23 @@ c$CC89 CALL $DC71    ; Is Dan standing by the lift?
  $CCDF INC A         ;
 *$CCE0 CALL $CD24    ;
  $CCE3 JR $CD1B      ;
-*$CCE5 INC E         ;
- $CCE6 INC E         ;
- $CCE7 LD A,E        ;
- $CCE8 CP $A0        ;
- $CCEA JR NZ,$CCFD   ;
- $CCEC LD A,D        ;
+; Move the lift up.
+*$CCE5 INC E         ; { Increase the Y co-ordinate by 2.
+ $CCE6 INC E         ; }
+ $CCE7 LD A,E        ; { Has the lift reached the top of the screen?
+ $CCE8 CP $A0        ; }
+ $CCEA JR NZ,$CCFD   ; Jump if not.
+ $CCEC LD A,D        ; { Move up a room.
  $CCED SUB $08       ;
- $CCEF LD D,A        ;
- $CCF0 LD E,$00      ;
- $CCF2 ADD A,$08     ;
- $CCF4 CP H          ;
- $CCF5 JR NZ,$CCFD   ;
+ $CCEF LD D,A        ; }
+ $CCF0 LD E,$00      ; Set the new Y co-ordinate.
+ $CCF2 ADD A,$08     ; { Is the lift now in another room?
+ $CCF4 CP H          ; }
+ $CCF5 JR NZ,$CCFD   ; Skip the next code if not.
  $CCF7 LD E,$1A      ;
  $CCF9 LD A,$9E      ;
  $CCFB JR $CD18      ;
-*$CCFD CALL $D1B2    ;
+*$CCFD CALL $D1B2    ; Check to see if the lift has reached the top or bottom.
  $CD00 LD A,H        ;
  $CD01 CP D          ;
  $CD02 JR Z,$CD0F    ;
@@ -6942,23 +6956,27 @@ c$CC89 CALL $DC71    ; Is Dan standing by the lift?
  $CD05 JR C,$CD1B    ;
  $CD07 CP $10        ;
  $CD09 JR C,$CD1B    ;
- $CD0B RES 0,B       ;
+ $CD0B RES 0,B       ; 
  $CD0D JR $CD1B      ;
 *$CD0F CALL $CD2B    ;
  $CD12 CALL $CD5C    ;
  $CD15 LD A,E        ;
  $CD16 DEC A         ;
  $CD17 DEC A         ;
-*$CD18 CALL $CD24    ;
-*$CD1B LD ($C87C),DE ;
- $CD1F LD ($C87A),BC ;
+*$CD18 CALL $CD24    ; Redraw the lift.
+*$CD1B LD ($C87C),DE ; Set the new y co-ordinate and room.
+ $CD1F LD ($C87A),BC ; Set the new wait time and flags.
  $CD23 RET           ;
 
 ; Redraw the lift
 ;
 ; Used by the routines at #R$CC89 and #R$D16F.
 ;
-; DE New lift position
+;
+; B On exit, holds new flags.
+; C On exit, holds new wait time before moving.
+; D On exit, holds new room.
+; E On exit, holds new y co-ordinate.
 c$CD24 EXX           ;
  $CD25 LD E,A        ;
  $CD26 LD HL,$CD7E   ;
@@ -7351,9 +7369,9 @@ c$CEF0 LD DE,$CEE8   ;
  $CF66 LD A,($C876)  ;
  $CF69 AND A         ;
  $CF6A RET NZ        ;
- $CF6B LD A,($C874)  ;
- $CF6E BIT 5,A       ;
- $CF70 RET NZ        ;
+ $CF6B LD A,($C874)  ; Get some flags. (#R$C874)
+ $CF6E BIT 5,A       ; Is bit 5 (Dan is safe) set?
+ $CF70 RET NZ        ; Return if it is.
  $CF71 LD HL,$C87F   ;
  $CF74 SET 0,(HL)    ;
  $CF76 RET           ;
@@ -7425,76 +7443,79 @@ c$CFD9 LD A,($C87E)  ; Get some flags. (#R$C87E)
  $CFDC BIT 7,A       ; Is bit 7 (Dan has the plans) reset?
  $CFDE RET NZ        ; Return if so - once Dan's in the blimp, no need to move.
  $CFDF LD A,($C874)  ; Get some more flags. (#R$C874)
- $CFE2 BIT 7,A       ; Is Dan above water?
- $CFE4 JP NZ,$DBEE   ; If not, he's in the river and drowning - jump forward.
+ $CFE2 BIT 7,A       ; Is Dan drowning?
+ $CFE4 JP NZ,$DBEE   ; Jump forward if so.
  $CFE7 BIT 5,A       ; Is Dan in a safe spot?
  $CFE9 CALL NZ,$CD9A ; If not, he must be in trouble, so update a frame of the
                      ; "lose a life" sequence.
- $CFEC LD A,($C87F)  ;
- $CFEF BIT 0,A       ;
- $CFF1 JP NZ,$D08A   ;
- $CFF4 CALL $DC71    ;
- $CFF7 CALL $D895    ;
- $CFFA LD A,($C87A)  ;
- $CFFD AND A         ;
- $CFFE JR NZ,$D008   ;
- $D000 LD A,($C87B)  ;
- $D003 BIT 2,A       ;
- $D005 JP NZ,$D16F   ;
-*$D008 LD A,($C874)  ;
- $D00B BIT 4,A       ;
- $D00D JP NZ,$D0DC   ;
- $D010 BIT 7,A       ;
- $D012 JP NZ,$DBEE   ;
- $D015 BIT 0,A       ;
- $D017 JP NZ,$D123   ;
- $D01A BIT 6,A       ;
- $D01C JR NZ,$D079   ;
- $D01E CALL $E9BC    ;
- $D021 LD A,C        ;
- $D022 CP $05        ;
- $D024 JR Z,$D076    ;
- $D026 CP $04        ;
- $D028 JR Z,$D044    ;
- $D02A CP $03        ;
- $D02C JR Z,$D03E    ;
- $D02E CP $02        ;
- $D030 JR Z,$D05B    ;
- $D032 CP $01        ;
- $D034 JR Z,$D038    ;
- $D036 JR $D04B      ;
+ $CFEC LD A,($C87F)  ; Get some more flags. (#R$C87F)
+ $CFEF BIT 0,A       ; Is bit 0 (rainbow lifts operating) set?
+ $CFF1 JP NZ,$D08A   ; Jump forward if it is.
+ $CFF4 CALL $DC71    ; Check if Dan is standing by a lift.
+ $CFF7 CALL $D895    ; Respond to anything Dan is standing on.
+ $CFFA LD A,($C87A)  ; Get the time for the lift to move. (#R$C87A)
+ $CFFD AND A         ; Is it zero?
+ $CFFE JR NZ,$D008   ; Jump forward if not.
+; The lift needs moving.
+ $D000 LD A,($C87B)  ; Get the lift flags. (#R$C87B)
+ $D003 BIT 2,A       ; Is Dan standing on the lift?
+ $D005 JP NZ,$D16F   ; If so, move him on it.
+; See if Dan has passed over any special objects.
+*$D008 LD A,($C874)  ; Get some more flags. (#R$C874)
+ $D00B BIT 4,A       ; Is bit 4 (Dan on a trampoline) set?
+ $D00D JP NZ,$D0DC   ; Jump forward if it is.
+ $D010 BIT 7,A       ; Is bit 7 (Dan drowning) set?
+ $D012 JP NZ,$DBEE   ; Jump forward if it is.
+ $D015 BIT 0,A       ; Is bit 0 (Dan jumping) set?
+ $D017 JP NZ,$D123   ; Jump foward if it is.
+ $D01A BIT 6,A       ; Is bit 6 (Dan falling) set?
+ $D01C JR NZ,$D079   ; Jump foward if it is
+ $D01E CALL $E9BC    ; { Get the player input and put it in #REGa.
+ $D021 LD A,C        ; }
+ $D022 CP $05        ; Is there no action?
+ $D024 JR Z,$D076    ; Jump forward if so.
+ $D026 CP $04        ; Is Dan jumping straight ahead?
+ $D028 JR Z,$D044    ; Jump forward if so.
+ $D02A CP $03        ; Is Dan moving left?
+ $D02C JR Z,$D03E    ; Jump forward if so.
+ $D02E CP $02        ; Is Dan jumping left?
+ $D030 JR Z,$D05B    ; Jump forward if so.
+ $D032 CP $01        ; Is Dan moving right?
+ $D034 JR Z,$D038    ; Jump forward if so.
+ $D036 JR $D04B      ; Otherwise Dan must be jumping right.
 ; Move right
-*$D038 CALL $D4B5    ;
- $D03B JP $D1CE      ;
+*$D038 CALL $D4B5    ; Move Dan right.
+ $D03B JP $D1CE      ; Draw Dan and check for any collision detection.
 ; Move left
-*$D03E CALL $D3EC    ;
- $D041 JP $D1CE      ;
+*$D03E CALL $D3EC    ; Move Dan left.
+ $D041 JP $D1CE      ; Draw Dan and check for any collision detection.
 ; Jump
-*$D044 LD HL,$C874   ;
- $D047 SET 0,(HL)    ;
- $D049 JR $D069      ;
+*$D044 LD HL,$C874   ; Get some flags (#R$C874)
+ $D047 SET 0,(HL)    ; Set bit 0 (Dan is jumping)
+ $D049 JR $D069      ; Move forward to do the jump.
 ; Jump right
-*$D04B LD A,($C874)  ;
- $D04E BIT 1,A       ;
- $D050 JR Z,$D038    ;
- $D052 AND $20       ;
- $D054 ADD A,$0B     ;
- $D056 LD ($C874),A  ;
- $D059 JR $D069      ;
+*$D04B LD A,($C874)  ; Get some flags (#R$C874)
+ $D04E BIT 1,A       ; Is Dan facing right?
+ $D050 JR Z,$D038    ; If not, just do a normal jump.
+ $D052 AND $20       ; Turn off all flags except bit 5 (Dan safe).
+ $D054 ADD A,$0B     ; { Set bits 0 (jumping), 1 (facing right) and 4 (trampolining)
+ $D056 LD ($C874),A  ; }
+ $D059 JR $D069      ; Move forward to do the jump.
 ; Jump left
-*$D05B LD A,($C874)  ;
- $D05E BIT 1,A       ;
- $D060 JR NZ,$D03E   ;
- $D062 AND $20       ;
- $D064 ADD A,$09     ;
- $D066 LD ($C874),A  ;
-*$D069 LD A,$0C      ;
- $D06B LD ($CFCB),A  ;
- $D06E LD A,$0E      ;
- $D070 LD ($DBED),A  ;
- $D073 JP $D123      ;
+*$D05B LD A,($C874)  ; Get some flags (#R$C874)
+ $D05E BIT 1,A       ; Is Dan facing right?
+ $D060 JR NZ,$D03E   ; If so, just do a normal jump.
+ $D062 AND $20       ; Turn off all flags except bit 5 (Dan safe).
+ $D064 ADD A,$09     ; { Set bits 0 (jumping) and 4 (trampolining).
+ $D066 LD ($C874),A  ; }
+; Dan has jumped.
+*$D069 LD A,$0C      ; { Set the current note to play while jumping (#R$CFCB)
+ $D06B LD ($CFCB),A  ; to the default of #N$C. }
+ $D06E LD A,$0E      ; { Set Dan to be #N$0E lines above the river.
+ $D070 LD ($DBED),A  ; (#R$DBED). }
+ $D073 JP $D123      ; Make Dan jump.
 ; No action
-*$D076 JP $D1CE      ;
+*$D076 JP $D1CE      ; Draw Dan and check for any collision detection.
 
 ; Increase the height fallen and adjust position
 ;
@@ -7552,7 +7573,7 @@ c$D08A LD A,$0E      ;
 ; Adjust height while on a trampoline
 ;
 ; Used by the routine at #R$CFD9.
-c$D0DC LD A,($C874)  ;
+c$D0DC LD A,($C874)  ; Get some flags. (#R$C874)
  $D0DF LD B,A        ;
  $D0E0 LD A,($C876)  ;
  $D0E3 LD L,A        ;
@@ -7633,52 +7654,66 @@ c$D123 LD A,($C876)  ;
 ; Move Dan on the lift
 ;
 ; Used by the routine at #R$CFD9.
-c$D16F LD A,($C87B)  ;
- $D172 BIT 0,A       ;
- $D174 JR Z,$D17B    ;
- $D176 CALL $D607    ;
+c$D16F LD A,($C87B)  ; Get the lift flags. (#R$C87B)
+ $D172 BIT 0,A       ; Is the lift moving upwards?
+ $D174 JR Z,$D17B    ; Jump forward if it is.
+; Move Dan on the lift downwards.
+ $D176 CALL $D607    ; Drop Dan down one frame.
  $D179 JR $D17E      ;
-*$D17B CALL $D567    ;
-*$D17E LD A,($C87C)  ;
- $D181 CALL $CD24    ;
- $D184 CALL $D1CE    ;
- $D187 LD DE,($C872) ;
- $D18B LD A,E        ;
+; Move Dan on the lift upwards.
+*$D17B CALL $D567    ; Move Dan upwards.
+; Now update the lift.
+*$D17E LD A,($C87C)  ; Get the Y co-ordinate. (#R$C87C)
+ $D181 CALL $CD24    ; Redraw the lift at this position.
+ $D184 CALL $D1CE    ; Redraw Dan and do any collision detection.
+ $D187 LD DE,($C872) ; Put Dan's X co-ordinate (#R$C872) in #REGd
+                     ; and his Y co-ordinate (#R$C873) in #REGe.
+ $D18B LD A,E        ; { Add #N$1A to the Y co-ordinate.
  $D18C ADD A,$1A     ;
- $D18E LD E,A        ;
- $D18F LD ($C87C),A  ;
+ $D18E LD E,A        ; }
+ $D18F LD ($C87C),A  ; Make this the lift's Y co-ordinate.
  $D192 LD A,($CFCA)  ; Get the current room. (#R$CFCA)
- $D195 LD ($C87D),A  ;
- $D198 CALL $CD2B    ;
- $D19B LD DE,($C87C) ;
- $D19F LD BC,($C87A) ;
- $D1A3 CALL $CD5C    ;
- $D1A6 CALL $D1B2    ;
- $D1A9 LD ($C87C),DE ;
- $D1AD LD ($C87A),BC ;
- $D1B1 RET           ;
+ $D195 LD ($C87D),A  ; Make this the lift's current room.
+ $D198 CALL $CD2B    ; Redraw the lift.
+ $D19B LD DE,($C87C) ; Put the lift's room (#R$C87C) in #REGd and its Y co-ordinate in #REGe.
+ $D19F LD BC,($C87A) ; Put the time before the lift moves (#R$C87A) in #REGc and the flags (#R$C87B) in #REGb.
+ $D1A3 CALL $CD5C    ; Update the lift's attributes.
+ $D1A6 CALL $D1B2    ; Check to see if the lift is at the top or bottom.
+ $D1A9 LD ($C87C),DE ; Set the room and Y co-ordinate.
+ $D1AD LD ($C87A),BC ; Set the wait time and flags.
+ $D1B1 RET           ; Return.
 
 ; Check if the lift has reached the top or bottom
 ;
 ; Used by the routines at #R$CC89 and #R$D16F.
-c$D1B2 LD A,D        ;
- $D1B3 CP $05        ;
- $D1B5 JR NZ,$D1BE   ;
- $D1B7 LD A,E        ;
- $D1B8 CP $48        ;
- $D1BA JR NZ,$D1BE   ;
- $D1BC JR $D1C6      ;
-*$D1BE LD A,D        ;
- $D1BF CP $2D        ;
- $D1C1 RET NZ        ;
- $D1C2 LD A,E        ;
- $D1C3 CP $40        ;
- $D1C5 RET NZ        ;
-*$D1C6 LD C,$64      ;
- $D1C8 LD A,B        ;
+; B lift flags
+; C Current wait time
+; D Current room
+; E Current Y co-ordinate
+;
+; See if the lift has reached the bottom.
+c$D1B2 LD A,D        ; { Is the lift in room 05? (#R$6A22)
+ $D1B3 CP $05        ; }
+ $D1B5 JR NZ,$D1BE   ; Jump if not.
+; The lift has reached the bottom room.
+ $D1B7 LD A,E        ; Get the Y co-ordinate.
+ $D1B8 CP $48        ; Is it the lowest one?
+ $D1BA JR NZ,$D1BE   ; Jump forward if not.
+ $D1BC JR $D1C6      ; Otherwise reverse direction.
+; See if the lift has reached the top.
+*$D1BE LD A,D        ; { Is the lift in room 2D? (#R$6C02)
+ $D1BF CP $2D        ; }
+ $D1C1 RET NZ        ; Return if it isn't, nothing to do in this room.
+; The lift has reached the top room.
+ $D1C2 LD A,E        ; Get the Y co-ordinate.
+ $D1C3 CP $40        ; Is it the highest one?
+ $D1C5 RET NZ        ; Return if it isn't.
+; The lift has reached the bottom or the top and needs reversing direction.
+*$D1C6 LD C,$64      ; Set the wait time back to #N$64.
+ $D1C8 LD A,B        ; { Invert the direction flag.
  $D1C9 XOR $01       ;
- $D1CB LD B,A        ;
- $D1CC RET           ;
+ $D1CB LD B,A        ; }
+ $D1CC RET           ; Return.
 
 ; Collision flags
 ;
@@ -7893,9 +7928,9 @@ c$D2F0 LD A,($C872)  ; Put Dan's Y co-ordinate (#R$C872) in #REGa.
  $D301 LD A,L        ; { Has Dan fallen less than 3 lines?
  $D302 CP $03        ; }
  $D304 JR NC,$D319   ; Jump if so.
- $D306 LD A,($C874)  ;
- $D309 AND $22       ;
- $D30B LD ($C874),A  ;
+ $D306 LD A,($C874)  ; { Turn off all flags except bit 1 (facing right)
+ $D309 AND $22       ; and 5 (safe).
+ $D30B LD ($C874),A  ; }
  $D30E XOR A         ; { Set the height fallen to 0.
  $D30F LD ($C876),A  ; }
  $D312 CALL $D567    ; Propel Dan upwards.
@@ -7925,10 +7960,10 @@ c$D2F0 LD A,($C872)  ; Put Dan's Y co-ordinate (#R$C872) in #REGa.
 ; Having determined the height to fall, find out the direction.
 *$D332 LD ($C879),A  ;
  $D335 BIT 2,C       ; Is Dan jumping straight ahead?
- $D337 RES 3,B       ; Reset bit 3 in #REGb (moving sideways).
+ $D337 RES 3,B       ; Reset bit 3 in #REGb (change direction).
  $D339 JR NZ,$D361   ; Jump foward if Dan is jumping straight ahead.
 ; Dan is jumping or moving in a particular direction.
- $D33B SET 3,B       ; Set bit 3 in #REGb (moving sideways).
+ $D33B SET 3,B       ; Set bit 3 in #REGb (change direction).
  $D33D BIT 1,C       ; Is Dan moving or jumping left?
  $D33F JR NZ,$D34A   ;
  $D341 BIT 1,B       ;
@@ -7938,9 +7973,9 @@ c$D2F0 LD A,($C872)  ; Put Dan's Y co-ordinate (#R$C872) in #REGa.
 *$D34A BIT 1,B       ;
  $D34C JR Z,$D361    ;
  $D34E CALL $D3EC    ;
-*$D351 LD A,($C874)  ;
+*$D351 LD A,($C874)  ; { Reset all flags (#R$C874) except "facing right" and "safe".
  $D354 AND $22       ;
- $D356 LD ($C874),A  ;
+ $D356 LD ($C874),A  ; }
  $D359 LD A,$09      ;
  $D35B LD ($C876),A  ;
  $D35E JP $D1CE      ;
@@ -8000,36 +8035,38 @@ b$D3D4 DEFB $16,$02,$0E,$17,$0E,$1A,$10,$21
 ; Move Dan left
 ;
 ; Used by the routines at #R$CFD9, #R$D08A, #R$D0DC, #R$D123 and #R$D2F0.
-c$D3EC EXX           ;
- $D3ED LD A,($C875)  ;
- $D3F0 LD H,A        ;
- $D3F1 LD A,($C873)  ;
- $D3F4 LD L,A        ;
- $D3F5 LD A,($C874)  ;
- $D3F8 BIT 1,A       ;
- $D3FA JR Z,$D417    ;
- $D3FC RES 1,A       ;
- $D3FE LD ($C874),A  ;
- $D401 LD A,H        ;
- $D402 CP $02        ;
- $D404 JR C,$D40B    ;
- $D406 INC H         ;
- $D407 INC H         ;
- $D408 JP $D4A5      ;
-*$D40B ADD A,$06     ;
- $D40D LD H,A        ;
- $D40E DEC L         ;
- $D40F LD A,L        ;
- $D410 CP $FF        ;
- $D412 JR Z,$D43A    ;
- $D414 JP $D48E      ;
-*$D417 LD A,H        ;
- $D418 CP $05        ;
- $D41A JR NZ,$D432   ;
- $D41C PUSH HL       ;
- $D41D LD D,L        ;
- $D41E CALL $D951    ;
- $D421 POP HL        ;
+c$D3EC EXX           ; Exchange all main registers.
+ $D3ED LD A,($C875)  ; { Put Dan's current animation frame (#R$C875) in #REGh.
+ $D3F0 LD H,A        ; }
+ $D3F1 LD A,($C873)  ; { Put Dan's X co-ordinate in #REGl.
+ $D3F4 LD L,A        ; }
+ $D3F5 LD A,($C874)  ; Get some flags. (#R$C874)
+ $D3F8 BIT 1,A       ; Is Dan facing right?
+ $D3FA JR Z,$D417    ; Jump if not.
+; Dan needs to be turned the right way round.
+ $D3FC RES 1,A       ; { Otherwise reset bit 1 ie: Dan is facing left.
+ $D3FE LD ($C874),A  ; }
+ $D401 LD A,H        ; { Is Dan on frame 3 or above?
+ $D402 CP $02        ; }
+ $D404 JR C,$D40B    ; Jump forward if so.
+ $D406 INC H         ; { Otherwise move forward 2 frames.
+ $D407 INC H         ; }
+ $D408 JP $D4A5      ; Jump forward to update the position.
+*$D40B ADD A,$06     ; { Add 6 frames.
+ $D40D LD H,A        ; }
+ $D40E DEC L         ; Decrement the X co-ordinate.
+ $D40F LD A,L        ; { Is it #N$FF? (ie: overflowed)
+ $D410 CP $FF        ; }
+ $D412 JR Z,$D43A    ; Jump forward if so.
+ $D414 JP $D48E      ; Otherwise jump ???.
+; Dan is facing left, so move.
+*$D417 LD A,H        ; { Is the current frame 5?
+ $D418 CP $05        ; }
+ $D41A JR NZ,$D432   ; Jump if not.
+ $D41C PUSH HL       ; {
+ $D41D LD D,L        ; 
+ $D41E CALL $D951    ; Move to a new cell and see what is there.
+ $D421 POP HL        ; }
  $D422 JR NZ,$D482   ;
  $D424 EXX           ;
  $D425 RES 3,B       ;
@@ -8121,22 +8158,23 @@ c$D4AF DEC BC        ; Drecrement BC.
 ; Move Dan right
 ;
 ; Used by the routines at #R$CFD9, #R$D08A, #R$D0DC, #R$D123 and #R$D2F0.
-c$D4B5 EXX           ;
- $D4B6 LD A,($C875)  ;
- $D4B9 LD H,A        ;
- $D4BA LD A,($C873)  ;
- $D4BD LD L,A        ;
- $D4BE LD A,($C874)  ;
- $D4C1 BIT 1,A       ;
- $D4C3 JR NZ,$D4DF   ;
- $D4C5 SET 1,A       ;
- $D4C7 LD ($C874),A  ;
- $D4CA LD A,H        ;
- $D4CB CP $06        ;
- $D4CD JR NC,$D4D4   ;
- $D4CF DEC H         ;
- $D4D0 DEC H         ;
- $D4D1 JP $D546      ;
+c$D4B5 EXX           ; Exchange all main registers.
+ $D4B6 LD A,($C875)  ; { Put Dan's current animation frame (#R$C875) in #REGh.
+ $D4B9 LD H,A        ; }
+ $D4BA LD A,($C873)  ; { Put Dan's X co-ordinate in #REGl.
+ $D4BD LD L,A        ; }
+ $D4BE LD A,($C874)  ; Get some flags. (#R$C874)
+ $D4C1 BIT 1,A       ; Is Dan facing right?
+ $D4C3 JR NZ,$D4DF   ; Jump forward if he is.
+; Dan needs to be turned the right way round.
+ $D4C5 SET 1,A       ; { Otherwise set that Dan is facing right.
+ $D4C7 LD ($C874),A  ; }
+ $D4CA LD A,H        ; { Is Dan on frame 6 or below?
+ $D4CB CP $06        ; }
+ $D4CD JR NC,$D4D4   ; Jump forward if so.
+ $D4CF DEC H         ; { Otherwise move back 2 frames.
+ $D4D0 DEC H         ; }
+ $D4D1 JP $D546      ; Jump forward to update the position.
 *$D4D4 SUB $06       ;
  $D4D6 LD H,A        ;
  $D4D7 INC L         ;
@@ -8144,15 +8182,16 @@ c$D4B5 EXX           ;
  $D4D9 CP $1E        ;
  $D4DB JR Z,$D505    ;
  $D4DD JR $D52C      ;
-*$D4DF LD A,H        ;
- $D4E0 CP $02        ;
- $D4E2 JR NZ,$D4FC   ;
- $D4E4 LD D,L        ;
+; Dan is facing the right way, so move.
+*$D4DF LD A,H        ; { Is the current frame 2?
+ $D4E0 CP $02        ; }
+ $D4E2 JR NZ,$D4FC   ; Jump if not.
+ $D4E4 LD D,L        ; 
  $D4E5 INC D         ;
  $D4E6 INC D         ;
- $D4E7 PUSH HL       ;
- $D4E8 CALL $D951    ;
- $D4EB POP HL        ;
+ $D4E7 PUSH HL       ; {
+ $D4E8 CALL $D951    ; Move to a new cell and see what is there.
+ $D4EB POP HL        ; }
  $D4EC JR NZ,$D520   ;
  $D4EE EXX           ;
  $D4EF RES 3,B       ;
@@ -8286,8 +8325,8 @@ c$D567 EXX           ;
  $D5BC LD A,($C87F)  ;
  $D5BF BIT 0,A       ;
  $D5C1 JR NZ,$D5DA   ;
- $D5C3 LD A,($C87B)  ;
- $D5C6 BIT 2,A       ;
+ $D5C3 LD A,($C87B)  ; Get the lift flags. (#R$C87B)
+ $D5C6 BIT 2,A       ; Is Dan standing on the lift?
  $D5C8 JR NZ,$D5DA   ;
  $D5CA LD A,($CFCB)  ;
  $D5CD INC A         ;
@@ -8802,160 +8841,174 @@ c$D815 LD A,(DE)     ;
  $D892 JR NZ,$D882   ;
  $D894 RET           ;
 
-; Respond to Dan moving
+; React to what Dan is standing on
 ;
 ; Used by the routine at #R$CFD9.
-c$D895 LD A,($C87B)  ;
- $D898 BIT 2,A       ;
- $D89A JP NZ,$D92C   ;
- $D89D LD DE,($C872) ;
- $D8A1 LD A,$1A      ;
- $D8A3 ADD A,E       ;
- $D8A4 LD E,A        ;
- $D8A5 CALL $E909    ;
- $D8A8 LD A,($C875)  ;
- $D8AB CP $04        ;
+c$D895 LD A,($C87B)  ; Get the lift flags. (#R$C87B)
+ $D898 BIT 2,A       ; Is Dan standing on the lift?
+ $D89A JP NZ,$D92C   ; Jump forward if so.
+ $D89D LD DE,($C872) ; Get Dan's co-ordinate (#R$C872, #R$C873)
+ $D8A1 LD A,$1A      ; { Add #N$1A to the Y co-ordinate
+ $D8A3 ADD A,E       ; and store it in #REGe. This will make #REGde
+ $D8A4 LD E,A        ; hold a valid screen address.}
+ $D8A5 CALL $E909    ; Convert this into an attribute address.
+ $D8A8 LD A,($C875)  ; Get Dan's current animation frame.
+ $D8AB CP $04        ; { Jump forward if is it 4 or less than 2.
  $D8AD JR Z,$D8B4    ;
  $D8AF CP $03        ;
- $D8B1 JR C,$D8B4    ;
- $D8B3 INC E         ;
-*$D8B4 LD A,(DE)     ;
- $D8B5 LD B,A        ;
- $D8B6 INC E         ;
- $D8B7 LD A,(DE)     ;
- $D8B8 LD C,A        ;
- $D8B9 LD HL,$CFCC   ;
- $D8BC LD D,$07      ;
-*$D8BE LD E,(HL)     ;
- $D8BF CALL $D9AA    ;
- $D8C2 JR Z,$D917    ;
- $D8C4 INC HL        ;
- $D8C5 DEC D         ;
- $D8C6 JR NZ,$D8BE   ;
- $D8C8 LD A,($CFC9)  ;
- $D8CB LD E,A        ;
- $D8CC CALL $D9AA    ;
- $D8CF JP Z,$DBB8    ;
- $D8D2 LD E,$38      ;
- $D8D4 CALL $D9AA    ;
- $D8D7 JP Z,$DE0B    ;
- $D8DA LD E,$68      ;
- $D8DC CALL $D9AA    ;
- $D8DF JP Z,$DE1B    ;
- $D8E2 LD E,$60      ;
- $D8E4 CALL $D9AA    ;
- $D8E7 JP Z,$DE28    ;
- $D8EA LD E,$02      ;
- $D8EC CALL $D9AA    ;
- $D8EF JR NZ,$D8FE   ;
+ $D8B1 JR C,$D8B4    ; }
+ $D8B3 INC E         ; Otherwise move to the next column.
+*$D8B4 LD A,(DE)     ; { Put the attribute found here in #REGb.
+ $D8B5 LD B,A        ; }
+ $D8B6 INC E         ; Move to the next column.
+ $D8B7 LD A,(DE)     ; { Put the attribute found here in #REGc.
+ $D8B8 LD C,A        ; }
+; See if there is a floor here.
+ $D8B9 LD HL,$CFCC   ; Point #REGhl to the list of global floor attributes.
+ $D8BC LD D,$07      ; 7 entries to check.
+*$D8BE LD E,(HL)     ; Get the attribute.
+ $D8BF CALL $D9AA    ; Does either attribute Dan's standing by match?
+ $D8C2 JR Z,$D917    ; Jump forward if it does.
+ $D8C4 INC HL        ; Move to the next entry.
+ $D8C5 DEC D         ; { Loop while there are more entries to check.
+ $D8C6 JR NZ,$D8BE   ; }
+; Check for Dan passing over special items.
+ $D8C8 LD A,($CFC9)  ; { Put the food attribute for this room in #REGe.
+ $D8CB LD E,A        ; }
+ $D8CC CALL $D9AA    ; Is Dan near enough the food?
+ $D8CF JP Z,$DBB8    ; Jump forward if so.
+ $D8D2 LD E,$38      ; { Is Dan standing by an oxygen tank?
+ $D8D4 CALL $D9AA    ; }
+ $D8D7 JP Z,$DE0B    ; Jump forward if so.
+ $D8DA LD E,$68      ; { Is Dan standing by a bank card?
+ $D8DC CALL $D9AA    ; }
+ $D8DF JP Z,$DE1B    ; Jump forward if so.
+ $D8E2 LD E,$60      ; { Is Dan standing by an aerosol?
+ $D8E4 CALL $D9AA    ; }
+ $D8E7 JP Z,$DE28    ; Jump if so.
+ $D8EA LD E,$02      ; { Is Dan standing on something red on black?
+ $D8EC CALL $D9AA    ; }
+ $D8EF JR NZ,$D8FE   ; Jump if not.
+; Dan's standing on a red on black object. On the bottom 8 screens,
+; this is the raft - elsewhere it's a trampoline.
  $D8F1 LD A,($CFCA)  ; Get the current room. (#R$CFCA)
  $D8F4 CP $08        ; Is it less than 8?
- $D8F6 JP NC,$D2F0   ; Jump forward if it isn't.
- $D8F9 LD A,$0D      ;
- $D8FB JP $D919      ;
-*$D8FE LD E,$4F      ;
- $D900 CALL $D9AA    ;
- $D903 JR Z,$D938    ;
- $D905 LD A,($C874)  ;
- $D908 LD B,A        ;
- $D909 AND $51       ;
- $D90B JR NZ,$D912   ;
- $D90D LD A,$18      ;
- $D90F LD ($CFCB),A  ;
-*$D912 LD A,B        ;
- $D913 SET 6,A       ;
- $D915 JR $D94D      ;
-*$D917 LD A,$0E      ;
-*$D919 LD ($DBED),A  ;
- $D91C LD A,($C872)  ;
- $D91F AND $07       ;
- $D921 CP $06        ;
- $D923 JR NZ,$D950   ;
- $D925 LD A,($C874)  ;
- $D928 AND $11       ;
- $D92A JR NZ,$D944   ;
-*$D92C LD A,($C876)  ;
- $D92F CP $1C        ;
- $D931 JR C,$D944    ;
- $D933 CALL $CD8A    ;
- $D936 JR $D944      ;
-*$D938 LD A,$0D      ;
- $D93A LD ($DBED),A  ;
- $D93D LD A,($C874)  ;
- $D940 SET 7,A       ;
- $D942 JR $D94D      ;
-*$D944 XOR A         ;
- $D945 LD ($C876),A  ;
- $D948 LD A,($C874)  ;
- $D94B AND $22       ;
-*$D94D LD ($C874),A  ;
+ $D8F6 JP NC,$D2F0   ; Jump forward if it isn't - it's a trampoline.
+; Dan's standing on the raft.
+ $D8F9 LD A,$0D      ; Set the height above the water to #N$0D.
+ $D8FB JP $D919      ; Jump forward.
+*$D8FE LD E,$4F      ; { Has Dan hit the river?
+ $D900 CALL $D9AA    ; }
+ $D903 JR Z,$D938    ; Jump forward if so.
+ $D905 LD A,($C874)  ; { Put some flags (#R$C874) in #REGb.
+ $D908 LD B,A        ; }
+ $D909 AND $51       ; Reset all flags except bits 0 (jumping),
+                     ; 4 (rising off a trampoline) and 6 (mid-air).
+ $D90B JR NZ,$D912   ; Jump forward if no flags remain.
+ $D90D LD A,$18      ; { Set the note to play while in mid-air (#R$CFCB)
+ $D90F LD ($CFCB),A  ; to #N$18. }
+*$D912 LD A,B        ; Get a copy of the flags from earlier.
+ $D913 SET 6,A       ; Set bit 6 (in mid-air and falling).
+ $D915 JR $D94D      ; Move forward to write the flags to memory.
+*$D917 LD A,$0E      ; { Set the height above the water to #N$0D.
+*$D919 LD ($DBED),A  ; }
+ $D91C LD A,($C872)  ; { Get the lowest 3 bits of the Y co-ordinate.
+ $D91F AND $07       ; }
+ $D921 CP $06        ; Are only bits 2 and 3 set?
+ $D923 JR NZ,$D950   ; Jump forward if not the case.
+ $D925 LD A,($C874)  ; Get some flags. (#R$C874)
+ $D928 AND $11       ; Reset all flags except bits 0 (jumping)
+                     ; and 4 (rising off trampoline)
+ $D92A JR NZ,$D944   ; Jump forward if flags remain.
+; Check Dan hasn't fallen too far.
+*$D92C LD A,($C876)  ; Get the height fallen by. (#R$C876)
+ $D92F CP $1C        ; It is less than #N$1C?
+ $D931 JR C,$D944    ; Jump forward if so.
+ $D933 CALL $CD8A    ; Otherwise, Dan has fallen too far, so lose a life.
+ $D936 JR $D944      ; Jump forward to set the flags.
+; Dan has fallen in the river. Oh dear.
+*$D938 LD A,$0D      ; { Set the height above the river to #N$0D.
+ $D93A LD ($DBED),A  ; }
+ $D93D LD A,($C874)  ; Get some flags. (#R$C874)
+ $D940 SET 7,A       ; Set bit 7 (drowning)
+ $D942 JR $D94D      ; Jump forward to write the flags to memory.
+; Dan has landed safely, so reset the height fallen.
+*$D944 XOR A         ; { Set the height to 0.
+ $D945 LD ($C876),A  ; }
+ $D948 LD A,($C874)  ; Get some flags. (#R$C874)
+ $D94B AND $22       ; Reset everything except bit 1 (facing right)
+                     ; and 5 (safe).
+*$D94D LD ($C874),A  ; Write the flags back to memory.
 ; This entry point is used by the routine at #R$D2F0.
 *$D950 RET           ;
 
-; Move into a new 8x8 cell
+; Move into a new 8x8 cell and check what is there.
 ;
 ; Used by the routines at #R$D3EC and #R$D4B5.
-c$D951 LD A,($C872)  ;
- $D954 LD E,A        ;
- $D955 INC E         ;
- $D956 INC E         ;
- $D957 CALL $E909    ;
- $D95A EX DE,HL      ;
- $D95B LD DE,$0020   ;
- $D95E LD A,($C876)  ;
- $D961 CP $05        ;
- $D963 JR C,$D96F    ;
- $D965 LD A,($C872)  ;
- $D968 AND $07       ;
- $D96A CP $06        ;
- $D96C JR Z,$D96F    ;
- $D96E ADD HL,DE     ;
-*$D96F LD B,(HL)     ;
- $D970 ADD HL,DE     ;
- $D971 LD C,(HL)     ;
- $D972 ADD HL,DE     ;
- $D973 LD D,(HL)     ;
- $D974 LD HL,$CFD3   ;
- $D977 LD A,$06      ;
-*$D979 EX AF,AF'     ;
- $D97A LD E,(HL)     ;
- $D97B CALL $D9A7    ;
- $D97E RET Z         ;
- $D97F INC HL        ;
- $D980 EX AF,AF'     ;
- $D981 DEC A         ;
- $D982 JR NZ,$D979   ;
- $D984 LD E,$38      ;
- $D986 CALL $D9A7    ;
- $D989 JP Z,$DE0B    ;
- $D98C LD E,$68      ;
- $D98E CALL $D9A7    ;
- $D991 JP Z,$DE1B    ;
- $D994 LD E,$60      ;
- $D996 CALL $D9A7    ;
- $D999 JP Z,$DE28    ;
- $D99C LD A,($CFC9)  ;
+;
+; D High word of the current screen address
+; AF On return, the zero flag is set if there's a wall in the way
+c$D951 LD A,($C872)  ; { Put Dan's Y co-ordinate (#R$C872) in #REGe.
+ $D954 LD E,A        ; }
+ $D955 INC E         ; { Move forward two rows to get a valid screen address.
+ $D956 INC E         ; }
+ $D957 CALL $E909    ; Convert to get an attribute address.
+ $D95A EX DE,HL      ; Put this in #REGhl.
+ $D95B LD DE,$0020   ; Set #REGde to the offset for the next row.
+ $D95E LD A,($C876)  ; Get the height fallen. (#R$C876)
+ $D961 CP $05        ; Is it less than 5?
+ $D963 JR C,$D96F    ; Jump if so.
+ $D965 LD A,($C872)  ; { Get bits 0-3 of the Y co-ordinate.
+ $D968 AND $07       ; }
+ $D96A CP $06        ; Are bits 1-2 set, but not bit 0?
+ $D96C JR Z,$D96F    ; Jump forward if so.
+ $D96E ADD HL,DE     ; Move to the next row.
+*$D96F LD B,(HL)     ; Put the attribute address in #REGb.
+ $D970 ADD HL,DE     ; Move to the next row.
+ $D971 LD C,(HL)     ; Put the attribute address in #REGc.
+ $D972 ADD HL,DE     ; Move to the next row.
+ $D973 LD D,(HL)     ; Put the attribute address in #REGd.
+ $D974 LD HL,$CFD3   ; Point #REGhl at the wall attributes.
+ $D977 LD A,$06      ; 6 entries to check.
+*$D979 EX AF,AF'     ; Swap #REGaf for the shadow set, to stop #REGa getting overwritten.
+ $D97A LD E,(HL)     ; { Does the attribute match the current one?
+ $D97B CALL $D9A7    ; }
+ $D97E RET Z         ; Return if it does, Dan can't move as there's a wall in the way.
+ $D97F INC HL        ; Otherwise move to the next entry.
+ $D980 EX AF,AF'     ; Swap #REGaf back.
+ $D981 DEC A         ; { Loop while there are more entries to check.
+ $D982 JR NZ,$D979   ; }
+ $D984 LD E,$38      ; { Is there an oxygen tank here?
+ $D986 CALL $D9A7    ; }
+ $D989 JP Z,$DE0B    ; Jump if so.
+ $D98C LD E,$68      ; { Is there a bank card here?
+ $D98E CALL $D9A7    ; }
+ $D991 JP Z,$DE1B    ; Jump if so.
+ $D994 LD E,$60      ; { Is there an aerosol here?
+ $D996 CALL $D9A7    ; }
+ $D999 JP Z,$DE28    ; Jump if so.
+ $D99C LD A,($CFC9)  ; { Is there food here?
  $D99F LD E,A        ;
- $D9A0 CALL $D9A7    ;
- $D9A3 JP Z,$DBB8    ;
- $D9A6 RET           ;
+ $D9A0 CALL $D9A7    ; }
+ $D9A3 JP Z,$DBB8    ; Jump if so.
+ $D9A6 RET           ; Otherwise return.
 
 ; Set the zero flag if D equals E
 ;
 ; Used by the routine at #R$D951.
-c$D9A7 LD A,D        ;
- $D9A8 CP E          ;
- $D9A9 RET Z         ;
+c$D9A7 LD A,D        ; { Compare #REGd with #REGe.
+ $D9A8 CP E          ; }
+ $D9A9 RET Z         ; Return if there's a match, otherwise continue to #R$D9AA.
 
 ; Set the zero flag if B or C equals E
 ;
 ; Used by the routines at #R$CD5C, #R$D567 and #R$D895.
-c$D9AA LD A,C        ;
- $D9AB CP E          ;
- $D9AC RET Z         ;
- $D9AD LD A,B        ;
- $D9AE CP E          ;
- $D9AF RET           ;
+c$D9AA LD A,C        ; { Compare #REGc with #REGe.
+ $D9AB CP E          ; }
+ $D9AC RET Z         ; Return if there's a match.
+ $D9AD LD A,B        ; { Compare #REGb with #REGe.
+ $D9AE CP E          ; }
+ $D9AF RET           ; Return with the zero flag set.
 
 ; Reverse direction of a horizontally moving sprite
 ;
@@ -9406,46 +9459,51 @@ g$DBED DEFB $0E
 ; Dan has fallen in the river
 ;
 ; Used by the routine at #R$CFD9.
-c$DBEE LD HL,$DA8A   ;
- $DBF1 RES 1,(HL)    ;
- $DBF3 LD HL,$C874   ;
- $DBF6 RES 5,(HL)    ;
- $DBF8 XOR A         ;
- $DBF9 LD ($C880),A  ;
- $DBFC LD HL,$DBED   ;
- $DBFF DEC (HL)      ;
- $DC00 JR NZ,$DC0A   ;
- $DC02 LD HL,$EE63   ;
- $DC05 CALL $DB0B    ;
- $DC08 JR $DC18      ;
-*$DC0A LD A,(HL)     ;
- $DC0B CP $0F        ;
- $DC0D JR NC,$DC18   ;
- $DC0F LD A,($C872)  ;
- $DC12 CALL $D61E    ;
- $DC15 JP $D1CE      ;
-*$DC18 CP $DC        ;
- $DC1A JR NZ,$DC45   ;
- $DC1C LD A,$0E      ;
- $DC1E LD ($DBED),A  ;
- $DC21 LD HL,$C87E   ;
- $DC24 BIT 6,(HL)    ;
- $DC26 JR Z,$DC41    ;
- $DC28 BIT 1,(HL)    ;
- $DC2A JR NZ,$DC41   ;
- $DC2C RES 6,(HL)    ;
- $DC2E LD HL,$1016   ;
- $DC31 LD ($C872),HL ;
- $DC34 LD HL,$C874   ;
- $DC37 LD A,(HL)     ;
+c$DBEE LD HL,$DA8A   ; Get the current sound state. (#R$DA8A)
+ $DBF1 RES 1,(HL)    ; Reset bit 1 to mark "losing a life".
+ $DBF3 LD HL,$C874   ; Get some flags. (#R$C874)
+ $DBF6 RES 5,(HL)    ; Reset bit 5, Dan will at least lose a life.
+ $DBF8 XOR A         ; { Set the frames in the "touched moving object"
+ $DBF9 LD ($C880),A  ; sequence (#R$C880) to 0. }
+ $DBFC LD HL,$DBED   ; Get Dan's height above the river. (#R$DBED)
+ $DBFF DEC (HL)      ; Decrease it by 1.
+ $DC00 JR NZ,$DC0A   ; Skip the next bit if it is not yet zero.
+; Play the "drowned" tune.
+ $DC02 LD HL,$EE63   ; Point #REGhl at the tune.
+ $DC05 CALL $DB0B    ; Play it.
+ $DC08 JR $DC18      ; Skip the next bit.
+; Dan has not hit the river bottom yet, so update his position.
+*$DC0A LD A,(HL)     ; Put the height above the river in #REGa.
+ $DC0B CP $0F        ; Is it greater than #N$0F?
+ $DC0D JR NC,$DC18   ; Jump forward if it is.
+ $DC0F LD A,($C872)  ; Put Dan's Y co-ordinate (#R$C872) in #REGa.
+ $DC12 CALL $D61E    ; Fall one frame through the air
+ $DC15 JP $D1CE      ; Redraw Dan and check for any collision detection.
+*$DC18 CP $DC        ; Is the height above the river #N$DC?
+ $DC1A JR NZ,$DC45   ; Jump forward if it isn't.
+ $DC1C LD A,$0E      ; { Set Dan's height above the river to #N$0E.
+ $DC1E LD ($DBED),A  ; }
+; Dan can survive falling in the river if he has an oxygen tank
+; AND if he doesn't have the plans.
+ $DC21 LD HL,$C87E   ; Get some flags. (#R$C87E)
+ $DC24 BIT 6,(HL)    ; Does Dan have an oxygen tank?
+ $DC26 JR Z,$DC41    ; Jump forward if not.
+ $DC28 BIT 1,(HL)    ; Does Dan have the plans?
+ $DC2A JR NZ,$DC41   ; Jump forward if so.
+; Dan has survived the river.
+ $DC2C RES 6,(HL)    ; Remove the oxygen tank as it has been used.
+ $DC2E LD HL,$1016   ; { Reset Dan's position to inside the blimp.
+ $DC31 LD ($C872),HL ; }
+ $DC34 LD HL,$C874   ; Point #REGhl at some flags. (#R$C874)
+ $DC37 LD A,(HL)     ; { Reset all flags except bit 1.
  $DC38 AND $02       ;
- $DC3A LD (HL),A     ;
- $DC3B LD A,$2B      ;
+ $DC3A LD (HL),A     ; }
+ $DC3B LD A,$2B      ; { Put Dan back in the start room and return.
  $DC3D CALL $CBBD    ;
- $DC40 RET           ;
+ $DC40 RET           ; }
 ; Dan has drowned. Game over.
-*$DC41 POP HL        ; Tidy up the stack so returning 
- $DC42 JP $CDDA      ;
+*$DC41 POP HL        ; Tidy up the stack.
+ $DC42 JP $CDDA      ; Display the "game over" screen.
 ; Dan is submerged; display the "air bubble" graphic while drowning
 *$DC45 LD A,($DBED)  ; Get Dan's height above the waterline.
  $DC48 CPL           ; { Invert the bits and shift left to give
