@@ -7686,7 +7686,8 @@ c$D16F LD A,($C87B)  ; Get the lift flags. (#R$C87B)
 ; Check if the lift has reached the top or bottom
 ;
 ; Used by the routines at #R$CC89 and #R$D16F.
-; B lift flags
+;
+; B Lift flags
 ; C Current wait time
 ; D Current room
 ; E Current Y co-ordinate
