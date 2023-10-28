@@ -6838,7 +6838,7 @@ c$CC36 LD A,($CFCA)  ; Get the current room. (#R$CFCA)
  $CC5B DJNZ $CC59    ; { Loop until all the columns have had attributes set.
  $CC5D RET           ; }
 
-; Current animation frame for the river (1-3)
+; Tick count for updating the river (1-3)
 ;
 ; Used by the routine at #R$CC5F
 g$CC5E DEFB $03
@@ -6849,32 +6849,33 @@ g$CC5E DEFB $03
 c$CC5F LD A,($CFCA)  ; Get the current room. (#R$CFCA).
  $CC62 CP $08        ; Is it greater than 8?
  $CC64 RET NC        ; Return if it is, the room's not by the river.
- $CC65 LD HL,$CC5E   ;
- $CC68 DEC (HL)      ;
+ $CC65 LD HL,$CC5E   ; Get the river's animation frame. (#R$CC5E)
+ $CC68 DEC (HL)      ; { Decrement it, and return if it's not zero.
  $CC69 JR Z,$CC6C    ;
- $CC6B RET           ;
-*$CC6C LD (HL),$03   ;
- $CC6E LD DE,$5060   ;
- $CC71 LD C,$03      ;
-*$CC73 PUSH DE       ;
- $CC74 LD A,(DE)     ;
- $CC75 LD H,A        ;
- $CC76 INC E         ;
- $CC77 LD B,$1F      ;
-*$CC79 LD A,(DE)     ;
+ $CC6B RET           ; }
+; The river needs updating.
+*$CC6C LD (HL),$03   ; Set the tick count back to 3.
+ $CC6E LD DE,$5060   ; Load #REGde at the correct place on screen.
+ $CC71 LD C,$03      ; 3 rows to update.
+*$CC73 PUSH DE       ; Remember #REGde.
+ $CC74 LD A,(DE)     ; Get the next byte of the river.
+ $CC75 LD H,A        ; Store it in #REGh.
+ $CC76 INC E         ; Move to the next column.
+ $CC77 LD B,$1F      ; #N$1F columns to update.
+*$CC79 LD A,(DE)     ; { Move this graphic data to the previous column.
  $CC7A DEC E         ;
- $CC7B LD (DE),A     ;
- $CC7C INC E         ;
- $CC7D INC E         ;
- $CC7E DJNZ $CC79    ;
- $CC80 DEC E         ;
- $CC81 LD A,H        ;
- $CC82 LD (DE),A     ;
- $CC83 POP DE        ;
- $CC84 INC D         ;
- $CC85 DEC C         ;
+ $CC7B LD (DE),A     ; }
+ $CC7C INC E         ; { Move back to this column, then onto the next one.
+ $CC7D INC E         ; }
+ $CC7E DJNZ $CC79    ; Loop while there are more columns to copy.
+ $CC80 DEC E         ; Move back to the last column.
+ $CC81 LD A,H        ; { Put the old value of the first column (that was in #REGh)
+ $CC82 LD (DE),A     ; here. }
+ $CC83 POP DE        ; Restore #REGde.
+ $CC84 INC D         ; Move up a row.
+ $CC85 DEC C         ; { Loop until all row have been updated.
  $CC86 JR NZ,$CC73   ;
- $CC88 RET           ;
+ $CC88 RET           ; }
 
 ; Move the lift
 ;
@@ -7295,15 +7296,17 @@ g$CEEC DEFB $7E,$0D,$1C,$28
 ; Move the rainbow lifts
 ;
 ; Used by the routines at #R$CEDC, #R$CEE1 and #R$CF77.
-c$CEF0 LD DE,$CEE8   ;
+;
+; HL Position to move the lifts to.
+c$CEF0 LD DE,$CEE8   ; { Copy the current screen positions to #REGde.
  $CEF3 LD BC,$0008   ;
- $CEF6 LDIR          ;
- $CEF8 LD HL,$CEE7   ;
- $CEFB INC (HL)      ;
- $CEFC LD A,(HL)     ;
- $CEFD LD HL,$CEE6   ;
- $CF00 BIT 7,A       ;
- $CF02 JR NZ,$CF0E   ;
+ $CEF6 LDIR          ; }
+ $CEF8 LD HL,$CEE7   ; Get the current tick count for the lifts. (#R$CEE7)
+ $CEFB INC (HL)      ; Increment the tick count.
+ $CEFC LD A,(HL)     ; Put the count in #REGa.
+ $CEFD LD HL,$CEE6   ; Re-point #REGhl at the current attribute.
+ $CF00 BIT 7,A       ; Is bit 7 set? ie: lifts need moving.
+ $CF02 JR NZ,$CF0E   ; Jump forward if it is.
  $CF04 INC (HL)      ;
  $CF05 LD A,(HL)     ;
  $CF06 CP $08        ;
@@ -7555,10 +7558,10 @@ c$D08A LD A,$0E      ;
  $D0B5 LD A,D        ;
  $D0B6 CP B          ;
  $D0B7 JR C,$D0BF    ;
- $D0B9 CALL $D3EC    ;
- $D0BC JP $D1CE      ;
-*$D0BF CALL $D4B5    ;
- $D0C2 JP $D1CE      ;
+ $D0B9 CALL $D3EC    ; { Move Dan left and do any updates.
+ $D0BC JP $D1CE      ; }
+*$D0BF CALL $D4B5    ; { Move Dan right and do any updates.
+ $D0C2 JP $D1CE      ; }
 *$D0C5 LD HL,$C876   ;
  $D0C8 INC (HL)      ;
  $D0C9 LD A,($CEEF)  ;
@@ -8671,9 +8674,11 @@ c$D732 AND A         ; { Return if there are zero objects to draw.
 ; Used by the routine at #R$D732.
 ;
 ; IY Pointer to the sprite attribute data
-c$D7A2 LD E,(IY+$00) ;
- $D7A5 CALL $E8E3    ;
- $D7A8 EX DE,HL      ;
+;
+; D current column to draw
+c$D7A2 LD E,(IY+$00) ; Get the fixed row.
+ $D7A5 CALL $E8E3    ; Convert this to an attribute address.
+ $D7A8 EX DE,HL      ; Swap #REGde and #REGhl.
  $D7A9 LD DE,$0020   ;
  $D7AC LD A,($D72E)  ;
  $D7AF LD B,A        ;
@@ -8713,8 +8718,9 @@ c$D7B7 LD A,E        ;
 ; Used by the routine at #R$D6BF.
 ;
 ; IY pointer to sprite attribute data
-c$D7D6 LD D,(IY+$01) ;
- $D7D9 CALL $E8E3    ;
+; E current row to draw
+c$D7D6 LD D,(IY+$01) ; Get the fixed column.
+ $D7D9 CALL $E8E3    ; Convert this to an attribute address.
  $D7DC LD A,($D6BC)  ;
  $D7DF LD B,A        ;
  $D7E0 LD A,$45      ;
@@ -8767,49 +8773,49 @@ g$D813 DEFW $0000
 ; HL Buffer to copy the sprite to
 ; DE Address of the sprite's graphic data
 ; BC Location of the sprite
-c$D815 LD A,(DE)     ;
- $D816 AND $0C       ;
+c$D815 LD A,(DE)     ; { Put the depth in #REGc
+ $D816 AND $0C       ; and write it to the buffer.
  $D818 RRCA          ;
  $D819 RRCA          ;
- $D81A LD C,A        ;
- $D81B LD (HL),A     ;
- $D81C INC HL        ;
- $D81D LD A,(DE)     ;
- $D81E AND $03       ;
+ $D81A LD C,A        ; 
+ $D81B LD (HL),A     ; }
+ $D81C INC HL        ; Move to the next entry.
+ $D81D LD A,(DE)     ; { Put the width in #REGb
+ $D81E AND $03       ; and write it to the buffer.
  $D820 INC A         ;
- $D821 LD B,A        ;
- $D822 LD (HL),A     ;
- $D823 LD ($D72E),BC ;
- $D827 LD A,C        ;
- $D828 ADD A,A       ;
+ $D821 LD B,A        ; 
+ $D822 LD (HL),A     ; }
+ $D823 LD ($D72E),BC ; Store these as the current co-ordinates. (#R$D72E, #R$D72F)
+ $D827 LD A,C        ; Get the depth.
+ $D828 ADD A,A       ; { Multiply by 8 to get an appropriate offset.
  $D829 ADD A,A       ;
- $D82A ADD A,A       ;
- $D82B LD ($D813),A  ;
- $D82E LD C,A        ;
- $D82F XOR A         ;
-*$D830 ADD A,C       ;
- $D831 DJNZ $D830    ;
- $D833 LD ($D814),A  ;
- $D836 INC DE        ;
- $D837 PUSH DE       ;
- $D838 INC HL        ;
- $D839 LD ($D730),HL ;
- $D83C LD E,L        ;
- $D83D LD D,H        ;
- $D83E INC DE        ;
- $D83F LD (HL),$00   ;
+ $D82A ADD A,A       ; }
+ $D82B LD ($D813),A  ; { Store this (#R$D813)
+ $D82E LD C,A        ; and put it in #REGc. }
+ $D82F XOR A         ; { Make #REGa the total size (width * depth * 8) 
+*$D830 ADD A,C       ; 
+ $D831 DJNZ $D830    ; }
+ $D833 LD ($D814),A  ; Store this.
+ $D836 INC DE        ; Move to the next entry in the sprite data.
+ $D837 PUSH DE       ; Remember #REGde as the position in the data.
+ $D838 INC HL        ; Move to the next point in the buffer.
+ $D839 LD ($D730),HL ; Store this. (#R$D730)
+ $D83C LD E,L        ; { Clear all data in the buffer.
+ $D83D LD D,H        ; 
+ $D83E INC DE        ; 
+ $D83F LD (HL),$00   ; 
  $D841 LD BC,$023F   ;
- $D844 LDIR          ;
- $D846 POP DE        ;
+ $D844 LDIR          ; }
+ $D846 POP DE        ; Restore #REGde.
  $D847 LD A,$04      ;
  $D849 LD HL,($D730) ;
  $D84C LD BC,$0048   ;
 *$D84F EX AF,AF'     ;
- $D850 PUSH BC       ;
+ $D850 PUSH BC       ; {
  $D851 PUSH HL       ;
- $D852 CALL $DB83    ;
+ $D852 CALL $DB83    ; Draw a moving sprite.
  $D855 POP HL        ;
- $D856 POP BC        ;
+ $D856 POP BC        ; }
  $D857 ADD HL,BC     ;
  $D858 EX AF,AF'     ;
  $D859 DEC A         ;
@@ -8820,7 +8826,7 @@ c$D815 LD A,(DE)     ;
 *$D864 EX AF,AF'     ;
  $D865 PUSH BC       ;
  $D866 PUSH HL       ;
- $D867 CALL $DB9B    ;
+ $D867 CALL $DB9B    ; Clear the area now the sprite has been drawn.
  $D86A POP HL        ;
  $D86B POP BC        ;
  $D86C ADD HL,BC     ;
@@ -9025,8 +9031,8 @@ c$D9AA LD A,C        ; { Compare #REGc with #REGe.
 ;
 ; Used by the routine at #R$D815.
 c$D9B0 PUSH HL       ;
- $D9B1 LD A,($D72F)  ;
- $D9B4 LD B,A        ;
+ $D9B1 LD A,($D72F)  ; { Put the Y co-ordinate (#R$D72F) in #REGb.
+ $D9B4 LD B,A        ; }
  $D9B5 PUSH HL       ;
  $D9B6 EXX           ;
  $D9B7 POP HL        ;
@@ -9409,8 +9415,8 @@ c$DB83 LD A,($D72F)  ;
 ; Clear area after a horizontal sprite has moved
 ;
 ; Used by the routine at #R$D815.
-c$DB9B LD A,($D72F)  ;
- $DB9E LD D,A        ;
+c$DB9B LD A,($D72F)  ; { Put the Y co-ordinate in #REGd.
+ $DB9E LD D,A        ; }
  $DB9F LD A,($D813)  ;
  $DBA2 LD C,A        ;
  $DBA3 EX AF,AF'     ;
@@ -9436,33 +9442,34 @@ c$DB9B LD A,($D72F)  ;
 ; Each item of food scores (ID + 1) * 5 points
 ;
 ; Pointer to current room data
-c$DBB8 LD E,(IX+$05)  ;
- $DBBB LD D,(IX+$06)  ;
- $DBBE RES 3,(IX+$04) ;
- $DBC2 LD A,(IX+$04)  ;
- $DBC5 AND $07        ;
- $DBC7 PUSH AF        ;
- $DBC8 CALL $DCE8     ;
- $DBCB LD B,(HL)      ;
+c$DBB8 LD E,(IX+$05)  ; Put the X co-ordinate in #REGe.
+ $DBBB LD D,(IX+$06)  ; Put the Y co-ordinate in #REGd.
+ $DBBE RES 3,(IX+$04) ; Reset the "food in room" flag.
+ $DBC2 LD A,(IX+$04)  ; { Get bits 0-2 of the room flags,
+ $DBC5 AND $07        ; which contain the food index. }
+ $DBC7 PUSH AF        ; Store #REGa with the food ID.
+ $DBC8 CALL $DCE8     ; Convert this to a graphic address in #REGhl.
+ $DBCB LD B,(HL)      ; { Put the actual address referenced in #REGbc.
  $DBCC INC HL         ;
- $DBCD LD C,(HL)      ;
- $DBCE CALL $E897     ;
- $DBD1 POP AF         ;
- $DBD2 INC A          ;
- $DBD3 LD B,A         ;
- $DBD4 ADD A,A        ;
- $DBD5 ADD A,A        ;
- $DBD6 ADD A,B        ;
- $DBD7 LD HL,$C86B    ;
- $DBDA ADD A,(HL)     ;
- $DBDB LD (HL),A      ;
- $DBDC LD HL,$EE46    ;
- $DBDF CALL $DB0B     ;
- $DBE2 LD A,$08       ;
- $DBE4 LD ($C86D),A   ;
- $DBE7 LD A,$C8       ;
- $DBE9 LD ($C86F),A   ;
- $DBEC RET            ;
+ $DBCD LD C,(HL)      ; }
+ $DBCE CALL $E897     ; Remove the food from screen.
+ $DBD1 POP AF         ; Restore #REGa.
+; Now add points based on the type of food.
+ $DBD2 INC A          ; { Increment by 1, then multiply by 5 to get the score to add.
+ $DBD3 LD B,A         ; 
+ $DBD4 ADD A,A        ; 
+ $DBD5 ADD A,A        ; 
+ $DBD6 ADD A,B        ; }
+ $DBD7 LD HL,$C86B    ; Point #REGhl at the score to add. (#R$C86B)
+ $DBDA ADD A,(HL)     ; { Add on this score.
+ $DBDB LD (HL),A      ; }
+ $DBDC LD HL,$EE46    ; { Play the "picked up the food" tune.
+ $DBDF CALL $DB0B     ; }
+ $DBE2 LD A,$08       ; { Restore the energy (#R$C86D) to 8.
+ $DBE4 LD ($C86D),A   ; }
+ $DBE7 LD A,$C8       ; { Reset the tick count before energy is decreased
+ $DBE9 LD ($C86F),A   ; (#R$C86F) to the maximum of #N$C8. }
+ $DBEC RET            ; Return.
 
 ; Height (in lines) of Dan above the river waterline
 g$DBED DEFB $0E
@@ -9595,26 +9602,26 @@ c$DC71 LD DE,($C87C) ; Put the lift's co-ordinate and room (#R$C87C, #R$C87D) in
 ; Used by the routine at #R$CBBD.
 ;
 ; IX Pointer to room data
-c$DCC1 LD A,(IX+$04) ;
- $DCC4 BIT 3,A       ;
- $DCC6 JR NZ,$DCCC   ;
- $DCC8 LD A,$FF      ;
- $DCCA JR $DCE4      ;
+c$DCC1 LD A,(IX+$04) ; { Is there food in the room?
+ $DCC4 BIT 3,A       ; }
+ $DCC6 JR NZ,$DCCC   ; Jump forward if there is.
+ $DCC8 LD A,$FF      ; { Set "no attribute" for food in this room.
+ $DCCA JR $DCE4      ; }
 ; This entry point is used by the routine at #R$DCF6.
-*$DCCC AND $07       ;
- $DCCE PUSH AF       ;
- $DCCF CALL $DCE8    ;
- $DCD2 LD E,(IX+$05) ;
- $DCD5 LD D,(IX+$06) ;
- $DCD8 CALL $E84E    ;
- $DCDB POP AF        ;
- $DCDC LD C,A        ;
- $DCDD LD B,$00      ;
- $DCDF LD HL,$65EA   ;
- $DCE2 ADD HL,BC     ;
- $DCE3 LD A,(HL)     ;
-*$DCE4 LD ($CFC9),A  ;
- $DCE7 RET           ;
+*$DCCC AND $07       ; Get the bottom 3 bits, containing the food ID.
+ $DCCE PUSH AF       ; Remember this value in #REGa.
+ $DCCF CALL $DCE8    ; Convert the food ID to its graphic address.
+ $DCD2 LD E,(IX+$05) ; { Put the location in #REGde.
+ $DCD5 LD D,(IX+$06) ; }
+ $DCD8 CALL $E84E    ; Draw the graphic.
+ $DCDB POP AF        ; Restore the food ID in #REGa.
+ $DCDC LD C,A        ; { Put the ID in #REGbc.
+ $DCDD LD B,$00      ; }
+ $DCDF LD HL,$65EA   ; { Add the base address of the food attribute buffer (#R$65EA)
+ $DCE2 ADD HL,BC     ; and store it in #REGhl. }
+ $DCE3 LD A,(HL)     ; Put the attribute in #REGa.
+*$DCE4 LD ($CFC9),A  ; { Update the attribute marking food
+ $DCE7 RET           ; (#R$CFC9) and return. }
 
 ; Convert a food item ID to its graphic address
 ;
